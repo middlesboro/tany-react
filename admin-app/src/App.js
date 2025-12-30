@@ -1,5 +1,7 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/Home';
+import AdminLayout from './components/AdminLayout';
 import Products from './pages/Products';
 import ProductEdit from './pages/ProductEdit';
 import Categories from './pages/Categories';
@@ -13,45 +15,25 @@ import OrderEdit from './pages/OrderEdit';
 function App() {
   return (
     <Router>
-      <div className="flex">
-        <nav className="w-64 h-screen bg-gray-800 text-white p-4">
-          <h1 className="text-2xl font-bold mb-4">Admin</h1>
-          <ul>
-            <li className="mb-2">
-              <Link to="/admin/products" className="hover:text-gray-300">Products</Link>
-            </li>
-            <li className="mb-2">
-              <Link to="/admin/categories" className="hover:text-gray-300">Categories</Link>
-            </li>
-            <li className="mb-2">
-              <Link to="/admin/customers" className="hover:text-gray-300">Customers</Link>
-            </li>
-            <li className="mb-2">
-              <Link to="/admin/carts" className="hover:text-gray-300">Carts</Link>
-            </li>
-            <li className="mb-2">
-              <Link to="/admin/orders" className="hover:text-gray-300">Orders</Link>
-            </li>
-          </ul>
-        </nav>
-        <main className="flex-1 p-4">
-          <Routes>
-            <Route path="/admin/products" element={<Products />} />
-            <Route path="/admin/products/new" element={<ProductEdit />} />
-            <Route path="/admin/products/:id" element={<ProductEdit />} />
-            <Route path="/admin/categories" element={<Categories />} />
-            <Route path="/admin/categories/new" element={<CategoryEdit />} />
-            <Route path="/admin/categories/:id" element={<CategoryEdit />} />
-            <Route path="/admin/customers" element={<Customers />} />
-            <Route path="/admin/customers/new" element={<CustomerEdit />} />
-            <Route path="/admin/customers/:id" element={<CustomerEdit />} />
-            <Route path="/admin/carts" element={<Carts />} />
-            <Route path="/admin/orders" element={<Orders />} />
-            <Route path="/admin/orders/new" element={<OrderEdit />} />
-            <Route path="/admin/orders/:id" element={<OrderEdit />} />
-          </Routes>
-        </main>
-      </div>
+      <Routes>
+        <Route path="/" element={<Home />} />
+
+        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="products" element={<Products />} />
+          <Route path="products/new" element={<ProductEdit />} />
+          <Route path="products/:id" element={<ProductEdit />} />
+          <Route path="categories" element={<Categories />} />
+          <Route path="categories/new" element={<CategoryEdit />} />
+          <Route path="categories/:id" element={<CategoryEdit />} />
+          <Route path="customers" element={<Customers />} />
+          <Route path="customers/new" element={<CustomerEdit />} />
+          <Route path="customers/:id" element={<CustomerEdit />} />
+          <Route path="carts" element={<Carts />} />
+          <Route path="orders" element={<Orders />} />
+          <Route path="orders/new" element={<OrderEdit />} />
+          <Route path="orders/:id" element={<OrderEdit />} />
+        </Route>
+      </Routes>
     </Router>
   );
 }
