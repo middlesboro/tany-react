@@ -1,26 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getCategories, deleteCategory } from '../services/categoryService';
+import { getOrders, deleteOrder } from '../services/orderService';
 
-const CategoryList = () => {
-  const [categories, setCategories] = useState([]);
+const OrderList = () => {
+  const [orders, setOrders] = useState([]);
   const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [sort, setSort] = useState('title,asc');
+  const [sort, setSort] = useState('id,asc');
 
   useEffect(() => {
-    const fetchCategories = async () => {
-      const data = await getCategories(page, sort);
-      setCategories(data.content);
+    const fetchOrders = async () => {
+      const data = await getOrders(page, sort);
+      setOrders(data.content);
       setTotalPages(data.totalPages);
     };
-    fetchCategories();
+    fetchOrders();
   }, [page, sort]);
 
   const handleDelete = async (id) => {
-    if (window.confirm('Are you sure you want to delete this category?')) {
-      await deleteCategory(id);
-      setCategories(categories.filter((category) => category.id !== id));
+    if (window.confirm('Are you sure you want to delete this order?')) {
+      await deleteOrder(id);
+      setOrders(orders.filter((order) => order.id !== id));
     }
   };
 
@@ -38,26 +38,30 @@ const CategoryList = () => {
       <table className="min-w-full bg-white">
         <thead>
           <tr>
-            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('title')}>
-              Title
+            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('id')}>
+              Order ID
             </th>
-            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('description')}>
-              Description
+            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('finalPrice')}>
+              Final Price
+            </th>
+            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('customerId')}>
+              Customer ID
             </th>
             <th className="py-2 px-4 border-b">Actions</th>
           </tr>
         </thead>
         <tbody>
-          {categories.map((category) => (
-            <tr key={category.id}>
-              <td className="py-2 px-4 border-b">{category.title}</td>
-              <td className="py-2 px-4 border-b">{category.description}</td>
+          {orders.map((order) => (
+            <tr key={order.id}>
+              <td className="py-2 px-4 border-b">{order.id}</td>
+              <td className="py-2 px-4 border-b">{order.finalPrice}</td>
+              <td className="py-2 px-4 border-b">{order.customerId}</td>
               <td className="py-2 px-4 border-b">
-                <Link to={`/admin/categories/${category.id}`} className="bg-blue-500 text-white px-2 py-1 rounded mr-2">
-                  Edit
+                <Link to={`/admin/orders/${order.id}`} className="bg-blue-500 text-white px-2 py-1 rounded mr-2">
+                  View/Edit
                 </Link>
                 <button
-                  onClick={() => handleDelete(category.id)}
+                  onClick={() => handleDelete(order.id)}
                   className="bg-red-500 text-white px-2 py-1 rounded"
                 >
                   Delete
@@ -90,4 +94,4 @@ const CategoryList = () => {
   );
 };
 
-export default CategoryList;
+export default OrderList;

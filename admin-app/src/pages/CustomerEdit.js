@@ -35,7 +35,7 @@ const CustomerEdit = () => {
     } else {
       await createCustomer(customer);
     }
-    navigate('/customers');
+    navigate('/admin/customers');
   };
 
   return (

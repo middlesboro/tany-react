@@ -7,7 +7,7 @@ const Categories = () => {
     <div>
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Category Management</h1>
-        <Link to="/categories/new" className="bg-green-500 text-white px-4 py-2 rounded">
+        <Link to="/admin/categories/new" className="bg-green-500 text-white px-4 py-2 rounded">
           Create Category
         </Link>
       </div>

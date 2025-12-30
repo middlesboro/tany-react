@@ -18,8 +18,10 @@ const ProductList = () => {
   }, [page, sort]);
 
   const handleDelete = async (id) => {
-    await deleteProduct(id);
-    setProducts(products.filter((product) => product.id !== id));
+    if (window.confirm('Are you sure you want to delete this product?')) {
+      await deleteProduct(id);
+      setProducts(products.filter((product) => product.id !== id));
+    }
   };
 
   const handleSort = (field) => {
@@ -55,7 +57,7 @@ const ProductList = () => {
               <td className="py-2 px-4 border-b">{product.price}</td>
               <td className="py-2 px-4 border-b">{product.quantity}</td>
               <td className="py-2 px-4 border-b">
-                <Link to={`/products/${product.id}`} className="bg-blue-500 text-white px-2 py-1 rounded mr-2">
+                <Link to={`/admin/products/${product.id}`} className="bg-blue-500 text-white px-2 py-1 rounded mr-2">
                   Edit
                 </Link>
                 <button

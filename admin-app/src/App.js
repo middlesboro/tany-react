@@ -7,6 +7,8 @@ import CategoryEdit from './pages/CategoryEdit';
 import Customers from './pages/Customers';
 import CustomerEdit from './pages/CustomerEdit';
 import Carts from './pages/Carts';
+import Orders from './pages/Orders';
+import OrderEdit from './pages/OrderEdit';
 
 function App() {
   return (
@@ -16,31 +18,37 @@ function App() {
           <h1 className="text-2xl font-bold mb-4">Admin</h1>
           <ul>
             <li className="mb-2">
-              <Link to="/products" className="hover:text-gray-300">Products</Link>
+              <Link to="/admin/products" className="hover:text-gray-300">Products</Link>
             </li>
             <li className="mb-2">
-              <Link to="/categories" className="hover:text-gray-300">Categories</Link>
+              <Link to="/admin/categories" className="hover:text-gray-300">Categories</Link>
             </li>
             <li className="mb-2">
-              <Link to="/customers" className="hover:text-gray-300">Customers</Link>
+              <Link to="/admin/customers" className="hover:text-gray-300">Customers</Link>
             </li>
             <li className="mb-2">
-              <Link to="/carts" className="hover:text-gray-300">Carts</Link>
+              <Link to="/admin/carts" className="hover:text-gray-300">Carts</Link>
+            </li>
+            <li className="mb-2">
+              <Link to="/admin/orders" className="hover:text-gray-300">Orders</Link>
             </li>
           </ul>
         </nav>
         <main className="flex-1 p-4">
           <Routes>
-            <Route path="/products" element={<Products />} />
-            <Route path="/products/new" element={<ProductEdit />} />
-            <Route path="/products/:id" element={<ProductEdit />} />
-            <Route path="/categories" element={<Categories />} />
-            <Route path="/categories/new" element={<CategoryEdit />} />
-            <Route path="/categories/:id" element={<CategoryEdit />} />
-            <Route path="/customers" element={<Customers />} />
-            <Route path="/customers/new" element={<CustomerEdit />} />
-            <Route path="/customers/:id" element={<CustomerEdit />} />
-            <Route path="/carts" element={<Carts />} />
+            <Route path="/admin/products" element={<Products />} />
+            <Route path="/admin/products/new" element={<ProductEdit />} />
+            <Route path="/admin/products/:id" element={<ProductEdit />} />
+            <Route path="/admin/categories" element={<Categories />} />
+            <Route path="/admin/categories/new" element={<CategoryEdit />} />
+            <Route path="/admin/categories/:id" element={<CategoryEdit />} />
+            <Route path="/admin/customers" element={<Customers />} />
+            <Route path="/admin/customers/new" element={<CustomerEdit />} />
+            <Route path="/admin/customers/:id" element={<CustomerEdit />} />
+            <Route path="/admin/carts" element={<Carts />} />
+            <Route path="/admin/orders" element={<Orders />} />
+            <Route path="/admin/orders/new" element={<OrderEdit />} />
+            <Route path="/admin/orders/:id" element={<OrderEdit />} />
           </Routes>
         </main>
       </div>

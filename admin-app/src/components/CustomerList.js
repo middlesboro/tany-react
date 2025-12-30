@@ -18,8 +18,10 @@ const CustomerList = () => {
   }, [page, sort]);
 
   const handleDelete = async (id) => {
-    await deleteCustomer(id);
-    setCustomers(customers.filter((customer) => customer.id !== id));
+    if (window.confirm('Are you sure you want to delete this customer?')) {
+      await deleteCustomer(id);
+      setCustomers(customers.filter((customer) => customer.id !== id));
+    }
   };
 
   const handleSort = (field) => {
@@ -51,7 +53,7 @@ const CustomerList = () => {
               <td className="py-2 px-4 border-b">{customer.firstname} {customer.lastname}</td>
               <td className="py-2 px-4 border-b">{customer.email}</td>
               <td className="py-2 px-4 border-b">
-                <Link to={`/customers/${customer.id}`} className="bg-blue-500 text-white px-2 py-1 rounded mr-2">
+                <Link to={`/admin/customers/${customer.id}`} className="bg-blue-500 text-white px-2 py-1 rounded mr-2">
                   Edit
                 </Link>
                 <button

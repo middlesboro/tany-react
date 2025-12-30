@@ -33,7 +33,7 @@ const CategoryEdit = () => {
     } else {
       await createCategory(category);
     }
-    navigate('/categories');
+    navigate('/admin/categories');
   };
 
   return (

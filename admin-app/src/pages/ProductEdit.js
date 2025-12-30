@@ -36,7 +36,7 @@ const ProductEdit = () => {
     } else {
       await createProduct(product);
     }
-    navigate('/products');
+    navigate('/admin/products');
   };
 
   return (
