@@ -2,7 +2,8 @@ const API_URL = `${process.env.REACT_APP_API_URL}/categories`;
 
 export const getCategories = async () => {
   const response = await fetch(API_URL);
-  return response.json();
+  const data = await response.json();
+  return data.content;
 };
 
 export const getCategory = async (id) => {
