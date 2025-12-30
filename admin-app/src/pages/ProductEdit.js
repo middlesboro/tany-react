@@ -52,10 +52,24 @@ const ProductEdit = () => {
     navigate('/admin/products');
   };
 
+  const handleSaveAndStay = async () => {
+    if (id) {
+      await updateProduct(id, product);
+    } else {
+      const newProduct = await createProduct(product);
+      navigate(`/admin/products/${newProduct.id}`, { replace: true });
+    }
+  };
+
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">{id ? 'Edit Product' : 'Create Product'}</h1>
-      <ProductForm product={product} handleChange={handleChange} handleSubmit={handleSubmit} />
+      <ProductForm
+        product={product}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        handleSaveAndStay={handleSaveAndStay}
+      />
       {id && (
         <ProductImageManager
           productId={id}
