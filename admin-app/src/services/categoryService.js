@@ -1,7 +1,7 @@
 const API_URL = `${process.env.REACT_APP_API_URL}/categories`;
 
-export const getCategories = async (page = 0, sort = 'title,asc') => {
-  const response = await fetch(`${API_URL}?page=${page}&sort=${sort}`);
+export const getCategories = async (page = 0, sort = 'title,asc', size = 20) => {
+  const response = await fetch(`${API_URL}?page=${page}&size=${size}&sort=${sort}`);
   return response.json();
 };
 

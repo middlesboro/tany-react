@@ -1,7 +1,7 @@
 const API_URL = `${process.env.REACT_APP_API_URL}/customers`;
 
-export const getCustomers = async (page = 0, sort = 'lastname,asc') => {
-  const response = await fetch(`${API_URL}?page=${page}&sort=${sort}`);
+export const getCustomers = async (page = 0, sort = 'lastname,asc', size = 20) => {
+  const response = await fetch(`${API_URL}?page=${page}&size=${size}&sort=${sort}`);
   return response.json();
 };
 
