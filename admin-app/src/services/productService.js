@@ -1,9 +1,8 @@
 const API_URL = `${process.env.REACT_APP_API_URL}/products`;
 
-export const getProducts = async () => {
-  const response = await fetch(API_URL);
-  const data = await response.json();
-  return data.content;
+export const getProducts = async (page = 0, sort = 'title,asc') => {
+  const response = await fetch(`${API_URL}?page=${page}&sort=${sort}`);
+  return response.json();
 };
 
 export const getProduct = async (id) => {
