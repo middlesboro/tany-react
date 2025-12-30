@@ -37,3 +37,17 @@ export const deleteProduct = async (id) => {
     method: 'DELETE',
   });
 };
+
+export const uploadProductImages = async (id, files) => {
+  const formData = new FormData();
+  for (let i = 0; i < files.length; i++) {
+    formData.append('files', files[i]);
+  }
+  const response = await fetch(`${API_URL}/${id}/images`, {
+    method: 'POST',
+    body: formData,
+  });
+  if (!response.ok) {
+    throw new Error('Failed to upload images');
+  }
+};

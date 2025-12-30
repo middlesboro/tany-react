@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getProduct, createProduct, updateProduct } from '../services/productService';
 import ProductForm from '../components/ProductForm';
+import ProductImageManager from '../components/ProductImageManager';
 
 const ProductEdit = () => {
   const { id } = useParams();
@@ -12,21 +13,33 @@ const ProductEdit = () => {
     description: '',
     price: '',
     quantity: '',
+    images: [],
   });
 
   useEffect(() => {
     if (id) {
-      const fetchProduct = async () => {
+      const fetchProductData = async () => {
         const data = await getProduct(id);
-        setProduct(data);
+        setProduct({ ...data, images: data.images || [] });
       };
-      fetchProduct();
+      fetchProductData();
     }
   }, [id]);
+
+  const refreshImages = async () => {
+    if (id) {
+      const data = await getProduct(id);
+      setProduct(prevProduct => ({ ...prevProduct, images: data.images || [] }));
+    }
+  };
 
   const handleChange = (e) => {
     const { name, value } = e.target;
     setProduct({ ...product, [name]: value });
+  };
+
+  const handleImagesChange = (newImages) => {
+    setProduct({ ...product, images: newImages });
   };
 
   const handleSubmit = async (e) => {
@@ -43,6 +56,14 @@ const ProductEdit = () => {
     <div>
       <h1 className="text-2xl font-bold mb-4">{id ? 'Edit Product' : 'Create Product'}</h1>
       <ProductForm product={product} handleChange={handleChange} handleSubmit={handleSubmit} />
+      {id && (
+        <ProductImageManager
+          productId={id}
+          images={product.images}
+          onImagesChange={handleImagesChange}
+          onUploadSuccess={refreshImages}
+        />
+      )}
     </div>
   );
 };
