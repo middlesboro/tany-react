@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getCategory, createCategory, updateCategory } from '../services/categoryService';
+import { getCategory, createCategory, updateCategory } from '../services/categoryAdminService';
 import CategoryForm from '../components/CategoryForm';
 
 const CategoryEdit = () => {

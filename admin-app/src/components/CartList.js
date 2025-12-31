@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { getCarts } from '../services/cartService';
+import { getCarts } from '../services/cartAdminService';
 
 const CartList = () => {
   const [carts, setCarts] = useState([]);
