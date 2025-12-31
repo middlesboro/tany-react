@@ -1,7 +1,7 @@
-const API_URL = `${process.env.REACT_APP_API_URL}/login`;
+const API_URL = `${process.env.REACT_APP_API_URL}`;
 
 export const login = async (email) => {
-  const response = await fetch(API_URL, {
+  const response = await fetch(`${API_URL}/login`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -11,6 +11,21 @@ export const login = async (email) => {
   if (!response.ok) {
     throw new Error('Login failed');
   }
+};
+
+export const exchangeToken = async (authorizationCode) => {
+  const response = await fetch(`${API_URL}/exchange`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ authorizationCode }),
+  });
+  if (!response.ok) {
+    throw new Error('Token exchange failed');
+  }
+  const data = await response.json();
+  return data.token;
 };
 
 export const setToken = (token) => {
