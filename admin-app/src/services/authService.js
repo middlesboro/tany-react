@@ -43,3 +43,23 @@ export const removeToken = () => {
 export const isAuthenticated = () => {
   return !!localStorage.getItem('auth_token');
 };
+
+export const getUserEmail = () => {
+  const token = getToken();
+  if (!token) return null;
+  try {
+    const payload = token.split('.')[1];
+    if (!payload) return null;
+
+    const base64 = payload.replace(/-/g, '+').replace(/_/g, '/');
+    const jsonPayload = decodeURIComponent(window.atob(base64).split('').map(function(c) {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+    }).join(''));
+
+    const decoded = JSON.parse(jsonPayload);
+    return decoded.email || decoded.sub || null;
+  } catch (error) {
+    console.error('Failed to decode token:', error);
+    return null;
+  }
+};

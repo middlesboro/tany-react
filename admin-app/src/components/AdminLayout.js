@@ -1,9 +1,10 @@
 import React from 'react';
 import { Outlet, Link, Navigate, useNavigate } from 'react-router-dom';
-import { isAuthenticated, removeToken } from '../services/authService';
+import { isAuthenticated, removeToken, getUserEmail } from '../services/authService';
 
 const AdminLayout = () => {
   const navigate = useNavigate();
+  const userEmail = getUserEmail();
 
   if (!isAuthenticated()) {
     return <Navigate to="/login" replace />;
@@ -38,6 +39,11 @@ const AdminLayout = () => {
           </ul>
         </div>
         <div>
+          {userEmail && (
+            <div className="mb-2 text-sm text-gray-400 break-words">
+              {userEmail}
+            </div>
+          )}
           <button
             onClick={handleLogout}
             className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
