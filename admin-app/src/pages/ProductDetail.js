@@ -12,7 +12,7 @@ const ProductDetail = () => {
     const fetchProduct = async () => {
       setLoading(true);
       try {
-        const data = await getProduct(id);
+        const data = await getProduct(id, false);
         setProduct(data);
       } catch (err) {
         setError("Failed to load product details.");
