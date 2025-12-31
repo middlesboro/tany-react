@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getProducts } from '../services/productService';
 
 const Home = () => {
@@ -77,26 +78,29 @@ const Home = () => {
         <>
           <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {products.map((product) => (
-              <div key={product.id} className="border rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200 overflow-hidden bg-white flex flex-col">
-                <div className="h-48 bg-gray-200 flex items-center justify-center overflow-hidden">
+              <Link to={`/products/${product.id}`} key={product.id} className="group border rounded-lg shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden bg-white flex flex-col">
+                <div className="h-48 bg-gray-200 flex items-center justify-center overflow-hidden relative">
+                   {/* Overlay on hover */}
+                   <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-10 transition-opacity duration-300"></div>
+
                   {product.images && product.images.length > 0 ? (
                     <img
                       src={product.images[0]}
                       alt={product.title}
-                      className="w-full h-full object-cover"
+                      className="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500"
                     />
                   ) : (
                     <span className="text-gray-400">No Image</span>
                   )}
                 </div>
                 <div className="p-4 flex flex-col flex-grow">
-                  <h3 className="text-lg font-semibold mb-2 truncate" title={product.title}>{product.title}</h3>
+                  <h3 className="text-lg font-semibold mb-2 truncate group-hover:text-blue-600 transition-colors" title={product.title}>{product.title}</h3>
                   <div className="mt-auto flex justify-between items-center">
                     <span className="text-xl font-bold text-blue-600">${product.price.toFixed(2)}</span>
-                    {/* Add to cart button could go here in future */}
+                    <span className="text-sm text-gray-500 underline opacity-0 group-hover:opacity-100 transition-opacity">View Details</span>
                   </div>
                 </div>
-              </div>
+              </Link>
             ))}
           </div>
 
