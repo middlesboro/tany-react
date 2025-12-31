@@ -1,17 +1,19 @@
+import { authFetch } from '../utils/authFetch';
+
 const API_URL = `${process.env.REACT_APP_API_URL}/categories`;
 
 export const getCategories = async (page = 0, sort = 'title,asc', size = 20) => {
-  const response = await fetch(`${API_URL}?page=${page}&size=${size}&sort=${sort}`);
+  const response = await authFetch(`${API_URL}?page=${page}&size=${size}&sort=${sort}`);
   return response.json();
 };
 
 export const getCategory = async (id) => {
-  const response = await fetch(`${API_URL}/${id}`);
+  const response = await authFetch(`${API_URL}/${id}`);
   return response.json();
 };
 
 export const createCategory = async (category) => {
-  const response = await fetch(API_URL, {
+  const response = await authFetch(API_URL, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -22,7 +24,7 @@ export const createCategory = async (category) => {
 };
 
 export const updateCategory = async (id, category) => {
-  const response = await fetch(`${API_URL}/${id}`, {
+  const response = await authFetch(`${API_URL}/${id}`, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -33,7 +35,7 @@ export const updateCategory = async (id, category) => {
 };
 
 export const deleteCategory = async (id) => {
-  await fetch(`${API_URL}/${id}`, {
+  await authFetch(`${API_URL}/${id}`, {
     method: 'DELETE',
   });
 };

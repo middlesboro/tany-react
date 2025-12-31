@@ -13,6 +13,8 @@ import CustomerEdit from './pages/CustomerEdit';
 import Carts from './pages/Carts';
 import Orders from './pages/Orders';
 import OrderEdit from './pages/OrderEdit';
+import Login from './pages/Login';
+import AuthenticationSuccess from './pages/AuthenticationSuccess';
 
 function App() {
   return (
@@ -21,6 +23,8 @@ function App() {
         <Route element={<PublicLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/products/:id" element={<ProductDetail />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/authentication/success" element={<AuthenticationSuccess />} />
         </Route>
 
         <Route path="/admin" element={<AdminLayout />}>
