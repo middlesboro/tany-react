@@ -14,7 +14,7 @@ export const login = async (email) => {
 };
 
 export const exchangeToken = async (authorizationCode) => {
-  const response = await fetch(`${API_URL}/exchange`, {
+  const response = await fetch(`${API_URL}/login/exchange`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
