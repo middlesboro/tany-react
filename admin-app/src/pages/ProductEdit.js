@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getProduct, createProduct, updateProduct } from '../services/productService';
+import { getProduct, createProduct, updateProduct } from '../services/productAdminService';
 import ProductForm from '../components/ProductForm';
 import ProductImageManager from '../components/ProductImageManager';
 
