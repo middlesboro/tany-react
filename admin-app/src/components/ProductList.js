@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getProducts, deleteProduct } from '../services/productService';
+import { getAdminProducts, deleteProduct } from '../services/productService';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -11,7 +11,7 @@ const ProductList = () => {
 
   useEffect(() => {
     const fetchProducts = async () => {
-      const data = await getProducts(page, sort, size);
+      const data = await getAdminProducts(page, sort, size);
       setProducts(data.content);
       setTotalPages(data.totalPages);
     };
