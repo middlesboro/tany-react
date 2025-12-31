@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getOrders, deleteOrder } from '../services/orderService';
+import { getOrders, deleteOrder } from '../services/orderAdminService';
 
 const OrderList = () => {
   const [orders, setOrders] = useState([]);

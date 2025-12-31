@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getCustomer, createCustomer, updateCustomer } from '../services/customerService';
+import { getCustomer, createCustomer, updateCustomer } from '../services/customerAdminService';
 import CustomerForm from '../components/CustomerForm';
 
 const CustomerEdit = () => {

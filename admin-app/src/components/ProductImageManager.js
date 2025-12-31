@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { uploadProductImages } from '../services/productService';
+import { uploadProductImages } from '../services/productAdminService';
 
 const ProductImageManager = ({ productId, images = [], onImagesChange, onUploadSuccess }) => {
   const [selectedFiles, setSelectedFiles] = useState(null);
