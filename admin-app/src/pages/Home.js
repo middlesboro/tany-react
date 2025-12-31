@@ -14,7 +14,7 @@ const Home = () => {
     const fetchProducts = async () => {
       setLoading(true);
       try {
-        const data = await getProducts(page, sort, size, false);
+        const data = await getProducts(page, sort, size);
         setProducts(data.content);
         setTotalPages(data.totalPages);
       } catch (error) {

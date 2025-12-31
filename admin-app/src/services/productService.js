@@ -2,17 +2,13 @@ import { authFetch } from '../utils/authFetch';
 
 const API_URL = `${process.env.REACT_APP_API_URL}/products`;
 
-export const getProducts = async (page = 0, sort = 'title,asc', size = 20, authenticated = true) => {
-  const response = await authFetch(`${API_URL}?page=${page}&size=${size}&sort=${sort}`, {
-    skipAuth: !authenticated,
-  });
+export const getProducts = async (page = 0, sort = 'title,asc', size = 20) => {
+  const response = await authFetch(`${API_URL}?page=${page}&size=${size}&sort=${sort}`);
   return response.json();
 };
 
-export const getProduct = async (id, authenticated = true) => {
-  const response = await authFetch(`${API_URL}/${id}`, {
-    skipAuth: !authenticated,
-  });
+export const getProduct = async (id) => {
+  const response = await authFetch(`${API_URL}/${id}`);
   return response.json();
 };
 
