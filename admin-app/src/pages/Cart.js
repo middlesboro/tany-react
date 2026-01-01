@@ -1,6 +1,7 @@
 import React from 'react';
 import { useCart } from '../context/CartContext';
 import { Link } from 'react-router-dom';
+import CartItem from '../components/CartItem';
 
 const Cart = () => {
   const { cart, loading } = useCart();
@@ -52,35 +53,7 @@ const Cart = () => {
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {cart.products.map((item) => (
-              <tr key={item.id || item.productId}> {/* Fallback to productId if item.id missing */}
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="flex items-center">
-                    <div className="flex-shrink-0 h-10 w-10">
-                      {item.images ? (
-                         <img className="h-10 w-10 rounded-full object-cover" src={item.images[0]} alt={item.productName} />
-                      ) : (
-                         <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs">No Img</div>
-                      )}
-                    </div>
-                    <div className="ml-4">
-                      <Link to={`/products/${item.productId}`} className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline">
-                        {item.productName}
-                      </Link>
-                    </div>
-                  </div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{item.price ? item.price.toFixed(2) : '0.00'} €</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">{item.quantity}</div>
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">
-                    {(item.price * item.quantity).toFixed(2)} €
-                  </div>
-                </td>
-              </tr>
+              <CartItem key={item.id || item.productId} item={item} />
             ))}
           </tbody>
         </table>
