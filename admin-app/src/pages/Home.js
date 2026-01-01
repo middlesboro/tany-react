@@ -5,7 +5,7 @@ import ProductCard from '../components/ProductCard';
 const Home = () => {
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
+  const [size, setSize] = useState(12); // Use 12 to fit 3 or 4 columns nicely
   const [totalPages, setTotalPages] = useState(0);
   const [sort, setSort] = useState('title,asc');
   const [loading, setLoading] = useState(true);
@@ -37,79 +37,91 @@ const Home = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6 text-center">Our Products</h1>
+      {/* Optional: Add a Banner or Slider placeholder here to match tany.sk layout */}
 
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
-        {/* Sorting */}
-        <div className="flex items-center">
-          <label htmlFor="sort" className="mr-2 font-medium">Sort by:</label>
-          <select
-            id="sort"
-            value={sort}
-            onChange={handleSortChange}
-            className="border rounded p-2 bg-white"
-          >
-            <option value="title,asc">Title (A-Z)</option>
-            <option value="title,desc">Title (Z-A)</option>
-            <option value="price,asc">Price (Low to High)</option>
-            <option value="price,desc">Price (High to Low)</option>
-          </select>
-        </div>
+      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 border-b border-gray-200 pb-4">
+        <h1 className="text-xl font-bold uppercase text-gray-800">Všetky produkty</h1>
 
-        {/* Page Size */}
-        <div className="flex items-center">
-          <label htmlFor="size" className="mr-2 font-medium">Show:</label>
-          <select
-            id="size"
-            value={size}
-            onChange={handleSizeChange}
-            className="border rounded p-2 bg-white"
-          >
-            <option value={10}>10</option>
-            <option value={25}>25</option>
-            <option value={50}>50</option>
-          </select>
+        <div className="flex gap-4">
+            {/* Sorting */}
+            <div className="flex items-center text-sm">
+            <label htmlFor="sort" className="mr-2 text-gray-600">Zoradiť podľa:</label>
+            <select
+                id="sort"
+                value={sort}
+                onChange={handleSortChange}
+                className="border border-gray-300 rounded-sm p-1 text-gray-700 focus:outline-none focus:border-tany-green"
+            >
+                <option value="title,asc">Názov (A-Z)</option>
+                <option value="title,desc">Názov (Z-A)</option>
+                <option value="price,asc">Cena (od najlacnejšieho)</option>
+                <option value="price,desc">Cena (od najdrahšieho)</option>
+            </select>
+            </div>
+
+            {/* Page Size */}
+            <div className="flex items-center text-sm">
+            <label htmlFor="size" className="mr-2 text-gray-600">Zobraziť:</label>
+            <select
+                id="size"
+                value={size}
+                onChange={handleSizeChange}
+                className="border border-gray-300 rounded-sm p-1 text-gray-700 focus:outline-none focus:border-tany-green"
+            >
+                <option value={12}>12</option>
+                <option value={24}>24</option>
+                <option value={48}>48</option>
+            </select>
+            </div>
         </div>
       </div>
 
       {loading ? (
-        <div className="text-center py-10">Loading products...</div>
+        <div className="text-center py-20 text-gray-500">Načítavam produkty...</div>
       ) : (
         <>
-          <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-6">
-            {products.map((product) => (
-              <ProductCard key={product.id} product={product} />
-            ))}
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-0 border-t border-l border-gray-100">
+             {/* Using gap-0 and border logic to create a grid with borders between items if desired,
+                 or standard gap. tany.sk often has distinct cards.
+                 Let's stick to standard gap for cleaner responsive behavior but use the card's internal borders.
+              */}
+              {products.map((product) => (
+                 <div key={product.id} className="p-2">
+                    <ProductCard product={product} />
+                 </div>
+              ))}
           </div>
 
           {/* Pagination */}
-          <div className="flex justify-center items-center mt-8 gap-4">
-            <button
-              onClick={() => setPage(page - 1)}
-              disabled={page === 0}
-              className={`px-4 py-2 rounded ${
-                page === 0
-                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
-              }`}
-            >
-              Previous
-            </button>
-            <span className="text-gray-700">
-              Page {page + 1} of {totalPages}
-            </span>
-            <button
-              onClick={() => setPage(page + 1)}
-              disabled={page + 1 >= totalPages}
-              className={`px-4 py-2 rounded ${
-                page + 1 >= totalPages
-                  ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                  : 'bg-blue-600 text-white hover:bg-blue-700'
-              }`}
-            >
-              Next
-            </button>
-          </div>
+          {totalPages > 1 && (
+            <div className="flex justify-center items-center mt-12 gap-2 text-sm">
+                <button
+                onClick={() => setPage(page - 1)}
+                disabled={page === 0}
+                className={`px-3 py-2 rounded-sm border ${
+                    page === 0
+                    ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                    : 'border-gray-300 text-gray-600 hover:bg-tany-green hover:text-white hover:border-tany-green'
+                }`}
+                >
+                Predchádzajúca
+                </button>
+                <span className="text-gray-700 font-bold mx-2">
+                Strana {page + 1} z {totalPages}
+                </span>
+                <button
+                onClick={() => setPage(page + 1)}
+                disabled={page + 1 >= totalPages}
+                className={`px-3 py-2 rounded-sm border ${
+                    page + 1 >= totalPages
+                    ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                    : 'border-gray-300 text-gray-600 hover:bg-tany-green hover:text-white hover:border-tany-green'
+                }`}
+                >
+                Ďalšia
+                </button>
+            </div>
+          )}
         </>
       )}
     </div>
