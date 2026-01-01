@@ -14,7 +14,7 @@ const Cart = () => {
     );
   }
 
-  if (!cart || !cart.products || cart.products.length === 0) {
+  if (!cart || !cart.items || cart.items.length === 0) {
     return (
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
@@ -51,31 +51,33 @@ const Cart = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {cart.products.map((item) => (
+            {cart.items.map((item) => (
               <tr key={item.id || item.productId}> {/* Fallback to productId if item.id missing */}
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div className="flex-shrink-0 h-10 w-10">
-                      {item.images ? (
-                         <img className="h-10 w-10 rounded-full object-cover" src={item.images[0]} alt={item.productName} />
+                      {item.productImage ? (
+                         <img className="h-10 w-10 rounded-full object-cover" src={item.productImage} alt={item.productName} />
                       ) : (
                          <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs">No Img</div>
                       )}
                     </div>
                     <div className="ml-4">
-                      <div className="text-sm font-medium text-gray-900">{item.productName}</div>
+                      <Link to={`/products/${item.productId}`} className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline">
+                        {item.productName}
+                      </Link>
                     </div>
                   </div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
-                  <div className="text-sm text-gray-900">${item.price ? item.price.toFixed(2) : '0.00'}</div>
+                  <div className="text-sm text-gray-900">{item.price ? item.price.toFixed(2) : '0.00'} €</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-900">{item.quantity}</div>
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="text-sm text-gray-900">
-                    ${(item.price * item.quantity).toFixed(2)}
+                    {(item.price * item.quantity).toFixed(2)} €
                   </div>
                 </td>
               </tr>
@@ -85,7 +87,7 @@ const Cart = () => {
 
         <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end items-center">
            <span className="text-lg font-bold mr-4">Total:</span>
-           <span className="text-xl font-bold text-blue-600">${cart.totalPrice ? cart.totalPrice.toFixed(2) : '0.00'}</span>
+           <span className="text-xl font-bold text-blue-600">{cart.totalPrice ? cart.totalPrice.toFixed(2) : '0.00'} €</span>
         </div>
       </div>
 

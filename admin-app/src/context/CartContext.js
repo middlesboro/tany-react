@@ -16,8 +16,8 @@ export const CartProvider = ({ children }) => {
       const data = await getCustomerContext(storedCartId);
 
       if (data.cartDto) {
-          if (data.cartDto.cartId) {
-              localStorage.setItem('cartId', data.cartDto.cartId);
+          if (data.cartDto.id) {
+              localStorage.setItem('cartId', data.cartDto.id);
           }
           setCart(data.cartDto);
       }
@@ -38,7 +38,7 @@ export const CartProvider = ({ children }) => {
       const newCartId = await addToCartService(storedCartId, productId, quantity);
 
       if (newCartId) {
-          const idToSave = typeof newCartId === 'object' ? newCartId.cartId : newCartId;
+          const idToSave = typeof newCartId === 'object' ? newCartId.id : newCartId;
           localStorage.setItem('cartId', idToSave);
 
           // Refresh context to show updated cart
