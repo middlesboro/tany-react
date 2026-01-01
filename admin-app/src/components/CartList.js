@@ -26,7 +26,6 @@ const CartList = () => {
           {carts.map((cart) => (
             <tr key={cart.cartId}>
               <td className="py-2 px-4 border-b">{cart.cartId}</td>
-              <td className="py-2 px-4 border-b">{cart.productIds.join(', ')}</td>
             </tr>
           ))}
         </tbody>
