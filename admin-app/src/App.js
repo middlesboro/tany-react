@@ -13,6 +13,10 @@ import CustomerEdit from './pages/CustomerEdit';
 import Carts from './pages/Carts';
 import Orders from './pages/Orders';
 import OrderEdit from './pages/OrderEdit';
+import Brands from './pages/Brands';
+import BrandEdit from './pages/BrandEdit';
+import Suppliers from './pages/Suppliers';
+import SupplierEdit from './pages/SupplierEdit';
 import Login from './pages/Login';
 import AuthenticationSuccess from './pages/AuthenticationSuccess';
 import Cart from './pages/Cart';
@@ -41,6 +45,12 @@ function App() {
           <Route path="customers" element={<Customers />} />
           <Route path="customers/new" element={<CustomerEdit />} />
           <Route path="customers/:id" element={<CustomerEdit />} />
+          <Route path="brands" element={<Brands />} />
+          <Route path="brands/new" element={<BrandEdit />} />
+          <Route path="brands/:id" element={<BrandEdit />} />
+          <Route path="suppliers" element={<Suppliers />} />
+          <Route path="suppliers/new" element={<SupplierEdit />} />
+          <Route path="suppliers/:id" element={<SupplierEdit />} />
           <Route path="carts" element={<Carts />} />
           <Route path="orders" element={<Orders />} />
           <Route path="orders/new" element={<OrderEdit />} />
