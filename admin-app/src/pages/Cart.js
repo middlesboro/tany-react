@@ -14,7 +14,7 @@ const Cart = () => {
     );
   }
 
-  if (!cart || !cart.items || cart.items.length === 0) {
+  if (!cart || !cart.products || cart.products.length === 0) {
     return (
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
@@ -51,13 +51,13 @@ const Cart = () => {
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {cart.items.map((item) => (
+            {cart.products.map((item) => (
               <tr key={item.id || item.productId}> {/* Fallback to productId if item.id missing */}
                 <td className="px-6 py-4 whitespace-nowrap">
                   <div className="flex items-center">
                     <div className="flex-shrink-0 h-10 w-10">
-                      {item.productImage ? (
-                         <img className="h-10 w-10 rounded-full object-cover" src={item.productImage} alt={item.productName} />
+                      {item.images ? (
+                         <img className="h-10 w-10 rounded-full object-cover" src={item.images[0]} alt={item.productName} />
                       ) : (
                          <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs">No Img</div>
                       )}

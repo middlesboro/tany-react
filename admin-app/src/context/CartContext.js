@@ -16,8 +16,8 @@ export const CartProvider = ({ children }) => {
       const data = await getCustomerContext(storedCartId);
 
       if (data.cartDto) {
-          if (data.cartDto.id) {
-              localStorage.setItem('cartId', data.cartDto.id);
+          if (data.cartDto.cartId) {
+              localStorage.setItem('cartId', data.cartDto.cartId);
           }
           setCart(data.cartDto);
       }
