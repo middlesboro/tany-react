@@ -55,11 +55,11 @@ const ProductEdit = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setProduct({ ...product, [name]: value });
+    setProduct(prevProduct => ({ ...prevProduct, [name]: value }));
   };
 
   const handleImagesChange = (newImages) => {
-    setProduct({ ...product, images: newImages });
+    setProduct(prevProduct => ({ ...prevProduct, images: newImages }));
   };
 
   const handleSubmit = async (e) => {

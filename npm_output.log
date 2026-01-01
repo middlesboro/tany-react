@@ -50,3 +50,66 @@ See https://nodejs.org/api/errors.html#errors_common_system_errors for more info
 Proxy error: Could not proxy request /api/customer/context from localhost:3000 to http://localhost:8080.
 See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
 
+Proxy error: Could not proxy request /admin/products/123 from localhost:3000 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/customer/context from localhost:3000 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/customer/context from localhost:3000 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/customer/context from localhost:3000 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/customer/context from localhost:3000 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/customer/context from localhost:3000 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/customer/context from localhost:3000 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Compiling...
+Compiled with warnings.
+
+[eslint]
+src/components/PublicLayout.js
+  Line 53:15:  The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md  jsx-a11y/anchor-is-valid
+  Line 54:15:  The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md  jsx-a11y/anchor-is-valid
+  Line 55:15:  The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md  jsx-a11y/anchor-is-valid
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint]
+src/components/PublicLayout.js
+  Line 53:15:  The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md  jsx-a11y/anchor-is-valid
+  Line 54:15:  The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md  jsx-a11y/anchor-is-valid
+  Line 55:15:  The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md  jsx-a11y/anchor-is-valid
+
+webpack compiled with 1 warning
+Proxy error: Could not proxy request /api/customer/context from localhost:3000 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/customer/context from localhost:3000 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/customer/context from localhost:3000 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/customer/context from localhost:3000 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/customer/context from localhost:3000 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/customer/context from localhost:3000 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/customer/context from localhost:3000 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/customer/context from localhost:3000 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
