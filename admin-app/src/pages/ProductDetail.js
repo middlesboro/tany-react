@@ -68,7 +68,7 @@ const ProductDetail = () => {
             <h1 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">{product.title}</h1>
 
             <div className="text-2xl font-bold text-blue-600 mb-6">
-              ${product.price ? product.price.toFixed(2) : '0.00'}
+              {product.price ? product.price.toFixed(2) : '0.00'} €
             </div>
 
             <div className="prose prose-sm text-gray-600 mb-8">
