@@ -1,6 +1,6 @@
 import { authFetch } from '../utils/authFetch';
 
-const API_URL = `${process.env.REACT_APP_API_URL}/customers`;
+const API_URL = `${process.env.REACT_APP_API_URL}/customer`;
 
 export const getCustomerContext = async (cartId) => {
   let url = `${API_URL}/context`;
