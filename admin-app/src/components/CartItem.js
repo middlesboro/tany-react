@@ -20,10 +20,9 @@ const CartItem = ({ item }) => {
 
     if (newQuantity === item.quantity) return;
 
-    const delta = newQuantity - item.quantity;
     setUpdating(true);
     try {
-      await addToCart(item.productId, delta);
+      await addToCart(item.productId, newQuantity);
     } catch (error) {
       console.error("Failed to update cart item", error);
       setQuantity(item.quantity);
