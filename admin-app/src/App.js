@@ -20,6 +20,7 @@ import SupplierEdit from './pages/SupplierEdit';
 import Login from './pages/Login';
 import AuthenticationSuccess from './pages/AuthenticationSuccess';
 import Cart from './pages/Cart';
+import Checkout from './pages/Checkout';
 import { CartProvider } from './context/CartContext';
 
 function App() {
@@ -30,6 +31,7 @@ function App() {
           <Route element={<PublicLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/order" element={<Checkout />} />
             <Route path="/products/:id" element={<ProductDetail />} />
             <Route path="/login" element={<Login />} />
             <Route path="/authentication/success" element={<AuthenticationSuccess />} />
