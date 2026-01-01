@@ -22,7 +22,7 @@ const CartItem = ({ item }) => {
 
     setUpdating(true);
     try {
-      await addToCart(item.productId, newQuantity);
+      await addToCart(item.id, newQuantity);
     } catch (error) {
       console.error("Failed to update cart item", error);
       setQuantity(item.quantity);
