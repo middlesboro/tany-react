@@ -15,19 +15,23 @@ import Orders from './pages/Orders';
 import OrderEdit from './pages/OrderEdit';
 import Login from './pages/Login';
 import AuthenticationSuccess from './pages/AuthenticationSuccess';
+import Cart from './pages/Cart';
+import { CartProvider } from './context/CartContext';
 
 function App() {
   return (
-    <Router>
-      <Routes>
-        <Route element={<PublicLayout />}>
-          <Route path="/" element={<Home />} />
-          <Route path="/products/:id" element={<ProductDetail />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/authentication/success" element={<AuthenticationSuccess />} />
-        </Route>
+    <CartProvider>
+      <Router>
+        <Routes>
+          <Route element={<PublicLayout />}>
+            <Route path="/" element={<Home />} />
+            <Route path="/cart" element={<Cart />} />
+            <Route path="/products/:id" element={<ProductDetail />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/authentication/success" element={<AuthenticationSuccess />} />
+          </Route>
 
-        <Route path="/admin" element={<AdminLayout />}>
+          <Route path="/admin" element={<AdminLayout />}>
           <Route path="products" element={<Products />} />
           <Route path="products/new" element={<ProductEdit />} />
           <Route path="products/:id" element={<ProductEdit />} />
@@ -41,9 +45,10 @@ function App() {
           <Route path="orders" element={<Orders />} />
           <Route path="orders/new" element={<OrderEdit />} />
           <Route path="orders/:id" element={<OrderEdit />} />
-        </Route>
-      </Routes>
-    </Router>
+          </Route>
+        </Routes>
+      </Router>
+    </CartProvider>
   );
 }
 

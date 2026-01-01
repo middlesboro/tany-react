@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getProducts } from '../services/productService';
+import { useCart } from '../context/CartContext';
 
 const Home = () => {
+  const { addToCart } = useCart();
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
@@ -97,7 +99,15 @@ const Home = () => {
                   <h3 className="text-lg font-semibold mb-2 truncate group-hover:text-blue-600 transition-colors" title={product.title}>{product.title}</h3>
                   <div className="mt-auto flex justify-between items-center">
                     <span className="text-xl font-bold text-blue-600">${product.price.toFixed(2)}</span>
-                    <span className="text-sm text-gray-500 underline opacity-0 group-hover:opacity-100 transition-opacity">View Details</span>
+                    <button
+                      onClick={(e) => {
+                        e.preventDefault();
+                        addToCart(product.id, 1);
+                      }}
+                      className="px-4 py-2 bg-blue-600 text-white text-sm rounded hover:bg-blue-700 transition-colors z-10"
+                    >
+                      Add to Cart
+                    </button>
                   </div>
                 </div>
               </Link>
