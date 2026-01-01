@@ -3,12 +3,13 @@ import { authFetch } from '../utils/authFetch';
 const API_URL = `${process.env.REACT_APP_API_URL}/carts`;
 
 export const addToCart = async (cartId, productId, quantity) => {
+  let url = `${API_URL}/items`;
   const body = { productId, quantity };
   if (cartId) {
     body.cartId = cartId;
   }
 
-  const response = await authFetch(API_URL, {
+  const response = await authFetch(url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
