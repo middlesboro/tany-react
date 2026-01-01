@@ -12,12 +12,17 @@ const AuthenticationSuccess = () => {
 
     const authenticate = async () => {
       try {
+        const redirectPath = localStorage.getItem('post_login_redirect');
+
         if (authorizationCode) {
           const token = await exchangeToken(authorizationCode);
           setToken(token);
-          navigate('/admin', { replace: true });
+
+          localStorage.removeItem('post_login_redirect');
+          navigate(redirectPath || '/', { replace: true });
         } else {
-          navigate('/login', { replace: true });
+          const fallbackLogin = redirectPath === '/admin/carts' ? '/admin/login' : '/login';
+          navigate(fallbackLogin, { replace: true });
         }
       } catch (err) {
         console.error(err);
