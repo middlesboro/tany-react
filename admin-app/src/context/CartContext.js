@@ -38,7 +38,7 @@ export const CartProvider = ({ children }) => {
       const newCartId = await addToCartService(storedCartId, productId, quantity);
 
       if (newCartId) {
-          const idToSave = typeof newCartId === 'object' ? newCartId.id : newCartId;
+          const idToSave = typeof newCartId === 'object' ? newCartId.cartId : newCartId;
           localStorage.setItem('cartId', idToSave);
 
           // Refresh context to show updated cart
