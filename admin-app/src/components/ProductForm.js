@@ -1,8 +1,9 @@
 import React from 'react';
 import ReactQuill from 'react-quill-new';
+import SearchSelect from './SearchSelect';
 import 'react-quill-new/dist/quill.snow.css';
 
-const ProductForm = ({ product, handleChange, handleSubmit, handleSaveAndStay }) => {
+const ProductForm = ({ product, brands, suppliers, handleChange, handleSubmit, handleSaveAndStay }) => {
   const modules = {
     toolbar: [
       [{ 'header': [1, 2, false] }],
@@ -23,6 +24,15 @@ const ProductForm = ({ product, handleChange, handleSubmit, handleSaveAndStay })
     });
   };
 
+  const handleSelectChange = (name) => (value) => {
+    handleChange({
+      target: {
+        name,
+        value
+      }
+    });
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="mb-4">
@@ -35,6 +45,24 @@ const ProductForm = ({ product, handleChange, handleSubmit, handleSaveAndStay })
           className="w-full px-3 py-2 border rounded"
         />
       </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <SearchSelect
+          label="Brand"
+          options={brands}
+          value={product.brandId}
+          onChange={handleSelectChange('brandId')}
+          placeholder="Search for a brand..."
+        />
+        <SearchSelect
+          label="Supplier"
+          options={suppliers}
+          value={product.supplierId}
+          onChange={handleSelectChange('supplierId')}
+          placeholder="Search for a supplier..."
+        />
+      </div>
+
       <div className="mb-4">
         <label className="block text-gray-700">Short Description</label>
         <ReactQuill

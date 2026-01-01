@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getProduct, createProduct, updateProduct } from '../services/productAdminService';
+import { getBrands } from '../services/brandAdminService';
+import { getSuppliers } from '../services/supplierAdminService';
 import ProductForm from '../components/ProductForm';
 import ProductImageManager from '../components/ProductImageManager';
 
@@ -14,13 +16,31 @@ const ProductEdit = () => {
     price: '',
     quantity: '',
     images: [],
+    brandId: '',
+    supplierId: '',
   });
 
+  const [brands, setBrands] = useState([]);
+  const [suppliers, setSuppliers] = useState([]);
+
   useEffect(() => {
+    const fetchBrandsAndSuppliers = async () => {
+      const brandsData = await getBrands(0, 'name,asc', 1000);
+      setBrands(brandsData.content);
+      const suppliersData = await getSuppliers(0, 'name,asc', 1000);
+      setSuppliers(suppliersData.content);
+    };
+    fetchBrandsAndSuppliers();
+
     if (id) {
       const fetchProductData = async () => {
         const data = await getProduct(id);
-        setProduct({ ...data, images: data.images || [] });
+        setProduct({
+          ...data,
+          images: data.images || [],
+          brandId: data.brandId || '',
+          supplierId: data.supplierId || ''
+        });
       };
       fetchProductData();
     }
@@ -66,6 +86,8 @@ const ProductEdit = () => {
       <h1 className="text-2xl font-bold mb-4">{id ? 'Edit Product' : 'Create Product'}</h1>
       <ProductForm
         product={product}
+        brands={brands}
+        suppliers={suppliers}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
         handleSaveAndStay={handleSaveAndStay}
