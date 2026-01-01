@@ -9,7 +9,9 @@ const ProductCard = ({ product }) => {
 
   useEffect(() => {
     if (cart && cart.products) {
-      const cartItem = cart.products.find(item => item.productId === product.id);
+      // Loose comparison in case of string/number mismatch
+      const cartItem = cart.products.find(item => item.productId == product.id);
+
       if (cartItem) {
         setQuantity(cartItem.quantity);
       } else {
