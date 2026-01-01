@@ -64,11 +64,13 @@ const Cart = () => {
         </div>
       </div>
 
-      <div className="mt-6 flex justify-end">
-         <Link to="/" className="text-blue-600 hover:text-blue-800 font-medium mr-4">
+      <div className="mt-6 flex justify-end items-center">
+         <Link to="/" className="text-blue-600 hover:text-blue-800 font-medium mr-6">
             Continue Shopping
           </Link>
-          {/* Checkout button could go here */}
+          <Link to="/order" className="bg-green-600 text-white font-bold py-3 px-8 rounded hover:bg-green-700">
+            Continue to Order
+          </Link>
       </div>
     </div>
   );
