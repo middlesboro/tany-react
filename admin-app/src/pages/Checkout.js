@@ -108,7 +108,7 @@ const Checkout = () => {
                             <div className="text-sm text-gray-500">{carrier.description}</div>
                         </div>
                         <div className="font-bold whitespace-nowrap">
-                            {price === 0 ? 'Free' : `${price.toFixed(2)} €`}
+                            {price === 0 ? 'Zadarmo' : `${price.toFixed(2)} €`}
                         </div>
                     </label>
                  );
@@ -138,11 +138,9 @@ const Checkout = () => {
                                 <div className="font-bold">{payment.name}</div>
                                 <div className="text-sm text-gray-500">{payment.description}</div>
                             </div>
-                            {price > 0 && (
-                                <div className="font-bold whitespace-nowrap">
-                                    {price.toFixed(2)} €
-                                </div>
-                            )}
+                            <div className="font-bold whitespace-nowrap">
+                                {price === 0 ? 'Zadarmo' : `${price.toFixed(2)} €`}
+                            </div>
                         </label>
                     );
                 })}
