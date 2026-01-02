@@ -44,7 +44,7 @@ export const isAuthenticated = () => {
   return !!localStorage.getItem('auth_token');
 };
 
-export const getUserEmail = () => {
+export const getDecodedToken = () => {
   const token = getToken();
   if (!token) return null;
   try {
@@ -56,10 +56,14 @@ export const getUserEmail = () => {
         return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
     }).join(''));
 
-    const decoded = JSON.parse(jsonPayload);
-    return decoded.email || decoded.sub || null;
+    return JSON.parse(jsonPayload);
   } catch (error) {
     console.error('Failed to decode token:', error);
     return null;
   }
+};
+
+export const getUserEmail = () => {
+  const decoded = getDecodedToken();
+  return decoded ? (decoded.email || decoded.sub || null) : null;
 };

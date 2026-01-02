@@ -29,6 +29,7 @@ function App() {
       <Router>
         <Routes>
           <Route path="/admin/login" element={<Login isAdmin={true} />} />
+          <Route path="/authentication/success" element={<AuthenticationSuccess />} />
 
           <Route element={<PublicLayout />}>
             <Route path="/" element={<Home />} />
@@ -36,7 +37,6 @@ function App() {
             <Route path="/order" element={<Checkout />} />
             <Route path="/products/:id" element={<ProductDetail />} />
             <Route path="/login" element={<Login isAdmin={false} />} />
-            <Route path="/authentication/success" element={<AuthenticationSuccess />} />
           </Route>
 
           <Route path="/admin" element={<AdminLayout />}>

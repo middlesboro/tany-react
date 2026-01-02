@@ -35,7 +35,7 @@ const PublicLayout = () => {
             </span>
           </div>
           <div className="flex space-x-4">
-             <Link to="/login" state={{ from: location }} className="hover:text-tany-green transition-colors">Prihlásenie</Link>
+             <Link to="/login" className="hover:text-tany-green transition-colors">Prihlásenie</Link>
              <Link to="/admin" className="hover:text-tany-green transition-colors">Admin</Link>
           </div>
         </div>

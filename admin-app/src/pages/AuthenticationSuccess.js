@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { setToken, exchangeToken } from '../services/authService';
+import { setToken, exchangeToken, getDecodedToken } from '../services/authService';
 
 const AuthenticationSuccess = () => {
   const [searchParams] = useSearchParams();
@@ -19,7 +19,27 @@ const AuthenticationSuccess = () => {
           setToken(token);
 
           localStorage.removeItem('post_login_redirect');
-          navigate(redirectPath || '/', { replace: true });
+
+          let targetPath = redirectPath;
+          if (!targetPath) {
+             const decoded = getDecodedToken();
+             if (decoded) {
+                 const roles = decoded.roles || decoded.authorities || [];
+                 // Check for common admin role patterns
+                 const isAdmin = Array.isArray(roles) && (roles.includes('ADMIN') || roles.includes('ROLE_ADMIN'));
+                 const isSimpleAdmin = decoded.isAdmin === true;
+
+                 if (isAdmin || isSimpleAdmin) {
+                     targetPath = '/admin/carts';
+                 } else {
+                     targetPath = '/';
+                 }
+             } else {
+                 targetPath = '/';
+             }
+          }
+
+          navigate(targetPath, { replace: true });
         } else {
           const fallbackLogin = redirectPath === '/admin/carts' ? '/admin/login' : '/login';
           navigate(fallbackLogin, { replace: true });
