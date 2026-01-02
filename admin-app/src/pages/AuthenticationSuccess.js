@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
-import { setToken, exchangeToken } from '../services/authService';
+import { setToken, exchangeToken, getDecodedToken } from '../services/authService';
 
 const AuthenticationSuccess = () => {
   const [searchParams] = useSearchParams();
@@ -12,12 +12,37 @@ const AuthenticationSuccess = () => {
 
     const authenticate = async () => {
       try {
+        const redirectPath = localStorage.getItem('post_login_redirect');
+
         if (authorizationCode) {
           const token = await exchangeToken(authorizationCode);
           setToken(token);
-          navigate('/admin', { replace: true });
+
+          localStorage.removeItem('post_login_redirect');
+
+          let targetPath = redirectPath;
+          if (!targetPath) {
+             const decoded = getDecodedToken();
+             if (decoded) {
+                 const roles = decoded.roles || decoded.authorities || [];
+                 // Check for common admin role patterns
+                 const isAdmin = Array.isArray(roles) && (roles.includes('ADMIN') || roles.includes('ROLE_ADMIN'));
+                 const isSimpleAdmin = decoded.isAdmin === true;
+
+                 if (isAdmin || isSimpleAdmin) {
+                     targetPath = '/admin/carts';
+                 } else {
+                     targetPath = '/';
+                 }
+             } else {
+                 targetPath = '/';
+             }
+          }
+
+          navigate(targetPath, { replace: true });
         } else {
-          navigate('/login', { replace: true });
+          const fallbackLogin = redirectPath === '/admin/carts' ? '/admin/login' : '/login';
+          navigate(fallbackLogin, { replace: true });
         }
       } catch (err) {
         console.error(err);

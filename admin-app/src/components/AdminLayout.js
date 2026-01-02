@@ -7,12 +7,12 @@ const AdminLayout = () => {
   const userEmail = getUserEmail();
 
   if (!isAuthenticated()) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/admin/login" replace />;
   }
 
   const handleLogout = () => {
     removeToken();
-    navigate('/login');
+    navigate('/admin/login');
   };
 
   return (

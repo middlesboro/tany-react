@@ -28,13 +28,15 @@ function App() {
     <CartProvider>
       <Router>
         <Routes>
+          <Route path="/admin/login" element={<Login isAdmin={true} />} />
+          <Route path="/authentication/success" element={<AuthenticationSuccess />} />
+
           <Route element={<PublicLayout />}>
             <Route path="/" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/order" element={<Checkout />} />
             <Route path="/products/:id" element={<ProductDetail />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/authentication/success" element={<AuthenticationSuccess />} />
+            <Route path="/login" element={<Login isAdmin={false} />} />
           </Route>
 
           <Route path="/admin" element={<AdminLayout />}>

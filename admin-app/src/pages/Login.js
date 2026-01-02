@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { login } from '../services/authService';
 
-const Login = () => {
+const Login = ({ isAdmin = false }) => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
+  const location = useLocation();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -12,16 +14,30 @@ const Login = () => {
       await login(email);
       setMessage('Check your email for the login link.');
       setError('');
+
+      let redirectPath;
+      if (isAdmin) {
+        redirectPath = '/admin/carts';
+      } else {
+        redirectPath = location.state?.from?.pathname || '/';
+      }
+      localStorage.setItem('post_login_redirect', redirectPath);
     } catch (err) {
       setError('Login failed. Please try again.');
       setMessage('');
     }
   };
 
+  const containerClass = isAdmin
+    ? "flex items-center justify-center min-h-screen bg-gray-100"
+    : "flex items-center justify-center my-10";
+
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+    <div className={containerClass}>
       <div className="bg-white p-8 rounded shadow-md w-full max-w-md">
-        <h2 className="text-2xl font-bold mb-6 text-center">Admin Login</h2>
+        <h2 className="text-2xl font-bold mb-6 text-center">
+          {isAdmin ? "Admin Login" : "Prihlásenie"}
+        </h2>
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
             <label htmlFor="email" className="block text-gray-700 text-sm font-bold mb-2">
