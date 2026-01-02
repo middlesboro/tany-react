@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useCart } from '../context/CartContext';
 
 const Checkout = () => {
-  const { cart } = useCart();
+  const { cart, loading } = useCart();
   const [selectedCarrier, setSelectedCarrier] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [customer, setCustomer] = useState({
@@ -23,18 +23,9 @@ const Checkout = () => {
   });
   const [differentDeliveryAddress, setDifferentDeliveryAddress] = useState(false);
 
-  const carriers = [
-    { id: 'pickup_senec', name: 'Osobný odber - isklad Diaľničná cesta 5, Senec', price: 1.02, freeLimit: 30, desc: 'Doprava zadarmo od 30€. Slúži len ako odberné miesto.' },
-    { id: 'pickup_packeta', name: 'Osobný odber – Zásielkovňa', price: 2.56, freeLimit: 35, desc: 'Doprava zadarmo od 35€' },
-    { id: 'post_office', name: 'Slovenská pošta - Balík na poštu', price: 3.28, freeLimit: 40, desc: 'Doprava zadarmo od 40€' },
-    { id: 'courier', name: 'Kuriér na adresu', price: 3.89, freeLimit: 60, desc: 'Doprava zadarmo od 60€' },
-  ];
-
-  const payments = [
-    { id: 'card', name: 'Card payment online' },
-    { id: 'transfer', name: 'Bank transfer' },
-    { id: 'cod', name: 'Cash on delivery' },
-  ];
+  // Dynamic data from cart
+  const carriers = cart?.carriers || [];
+  const payments = cart?.payments || [];
 
   const handleCustomerChange = (e) => {
     const { name, value } = e.target;
@@ -52,27 +43,43 @@ const Checkout = () => {
   };
 
   const calculateShippingPrice = (carrier) => {
-    if (!carrier) return 0;
-    const total = cart?.totalPrice || 0;
-    if (total >= carrier.freeLimit) return 0;
-    return carrier.price;
+    if (!carrier || !carrier.ranges || carrier.ranges.length === 0) return 0;
+    // Take first price range, if 0 it means free shipping
+    return carrier.ranges[0].price;
+  };
+
+  const calculatePaymentPrice = (payment) => {
+      if (!payment) return 0;
+      return payment.price || 0;
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const carrierObj = carriers.find(c => c.id === selectedCarrier);
+    const paymentObj = payments.find(p => p.id === selectedPayment);
+    const shippingPrice = calculateShippingPrice(carrierObj);
+    const paymentPrice = calculatePaymentPrice(paymentObj);
+
+    // cart.totalProductPrice comes from the API
+    const productTotal = cart?.totalProductPrice || 0;
+
     const orderData = {
-      cartId: cart?.id,
+      cartId: cart?.cartId, // API uses cartId
       customer,
       invoiceAddress,
       deliveryAddress: differentDeliveryAddress ? deliveryAddress : invoiceAddress,
-      carrier: selectedCarrier,
-      payment: selectedPayment,
-      shippingPrice: calculateShippingPrice(carriers.find(c => c.id === selectedCarrier)),
-      totalPrice: (cart?.totalPrice || 0) + calculateShippingPrice(carriers.find(c => c.id === selectedCarrier))
+      carrier: selectedCarrier, // ID
+      payment: selectedPayment, // ID
+      shippingPrice: shippingPrice,
+      totalPrice: productTotal + shippingPrice + paymentPrice
     };
     console.log('Order Submitted:', orderData);
     alert('Order submitted (check console for details). Confirmation page coming soon!');
   };
+
+  if (loading) {
+      return <div className="container mx-auto px-4 py-8">Loading checkout...</div>;
+  }
 
   return (
     <div className="container mx-auto px-4 py-8">
@@ -83,6 +90,7 @@ const Checkout = () => {
         <section>
           <h2 className="text-xl font-bold mb-4">1. DOPRAVA A PLATBA</h2>
           <div className="bg-white rounded shadow p-4 space-y-4">
+             {carriers.length === 0 && <p>No carriers available.</p>}
              {carriers.map(carrier => {
                  const price = calculateShippingPrice(carrier);
                  return (
@@ -97,7 +105,7 @@ const Checkout = () => {
                         />
                         <div className="flex-1">
                             <div className="font-bold">{carrier.name}</div>
-                            <div className="text-sm text-gray-500">{carrier.desc}</div>
+                            <div className="text-sm text-gray-500">{carrier.description}</div>
                         </div>
                         <div className="font-bold whitespace-nowrap">
                             {price === 0 ? 'Free' : `${price.toFixed(2)} €`}
@@ -113,19 +121,31 @@ const Checkout = () => {
             <section>
             <h2 className="text-xl font-bold mb-4">2. PAYMENT METHOD</h2>
             <div className="bg-white rounded shadow p-4 space-y-4">
-                {payments.map(payment => (
-                    <label key={payment.id} className={`flex items-center p-4 border rounded cursor-pointer hover:bg-gray-50 ${selectedPayment === payment.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}>
-                        <input
-                            type="radio"
-                            name="payment"
-                            value={payment.id}
-                            checked={selectedPayment === payment.id}
-                            onChange={() => setSelectedPayment(payment.id)}
-                            className="h-5 w-5 text-blue-600 mr-4"
-                        />
-                        <div className="font-bold">{payment.name}</div>
-                    </label>
-                ))}
+                {payments.length === 0 && <p>No payments available.</p>}
+                {payments.map(payment => {
+                    const price = calculatePaymentPrice(payment);
+                    return (
+                        <label key={payment.id} className={`flex items-center p-4 border rounded cursor-pointer hover:bg-gray-50 ${selectedPayment === payment.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}>
+                            <input
+                                type="radio"
+                                name="payment"
+                                value={payment.id}
+                                checked={selectedPayment === payment.id}
+                                onChange={() => setSelectedPayment(payment.id)}
+                                className="h-5 w-5 text-blue-600 mr-4"
+                            />
+                            <div className="flex-1">
+                                <div className="font-bold">{payment.name}</div>
+                                <div className="text-sm text-gray-500">{payment.description}</div>
+                            </div>
+                            {price > 0 && (
+                                <div className="font-bold whitespace-nowrap">
+                                    {price.toFixed(2)} €
+                                </div>
+                            )}
+                        </label>
+                    );
+                })}
             </div>
             </section>
         )}
