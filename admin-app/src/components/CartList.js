@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getCarts } from '../services/cartAdminService';
 
 const CartList = () => {
@@ -18,14 +19,24 @@ const CartList = () => {
       <table className="min-w-full bg-white">
         <thead>
           <tr>
-            <th className="py-2 px-4 border-b">Cart ID</th>
-            <th className="py-2 px-4 border-b">Product IDs</th>
+            <th className="py-2 px-4 border-b text-left">Cart ID</th>
+            <th className="py-2 px-4 border-b text-left">Customer Name</th>
+            <th className="py-2 px-4 border-b text-left">Actions</th>
           </tr>
         </thead>
         <tbody>
           {carts.map((cart) => (
             <tr key={cart.cartId}>
               <td className="py-2 px-4 border-b">{cart.cartId}</td>
+              <td className="py-2 px-4 border-b">{cart.customerName}</td>
+              <td className="py-2 px-4 border-b">
+                <Link
+                  to={`/admin/carts/${cart.cartId}`}
+                  className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded"
+                >
+                  Detail
+                </Link>
+              </td>
             </tr>
           ))}
         </tbody>
