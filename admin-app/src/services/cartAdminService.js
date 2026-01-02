@@ -6,3 +6,8 @@ export const getCarts = async () => {
   const response = await authFetch(API_URL);
   return response.json();
 };
+
+export const getCartById = async (id) => {
+  const response = await authFetch(`${API_URL}/${id}`);
+  return response.json();
+};
