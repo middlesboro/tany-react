@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+  import React, { useState, useEffect } from 'react';
 import { useCart } from '../context/CartContext';
 
 const Checkout = () => {
@@ -27,6 +27,23 @@ const Checkout = () => {
   const carriers = cart?.carriers || [];
   const payments = cart?.payments || [];
 
+  useEffect(() => {
+      if (cart) {
+          if (!selectedCarrier && cart.carriers) {
+              const preSelectedCarrier = cart.carriers.find(c => c.selected);
+              if (preSelectedCarrier) {
+                  setSelectedCarrier(preSelectedCarrier.id);
+              }
+          }
+          if (!selectedPayment && cart.payments) {
+              const preSelectedPayment = cart.payments.find(p => p.selected);
+              if (preSelectedPayment) {
+                  setSelectedPayment(preSelectedPayment.id);
+              }
+          }
+      }
+  }, [cart, selectedCarrier, selectedPayment]);
+
   const handleCustomerChange = (e) => {
     const { name, value } = e.target;
     setCustomer(prev => ({ ...prev, [name]: value }));
@@ -43,9 +60,16 @@ const Checkout = () => {
   };
 
   const calculateShippingPrice = (carrier) => {
-    if (!carrier || !carrier.ranges || carrier.ranges.length === 0) return 0;
-    // Take first price range, if 0 it means free shipping
-    return carrier.ranges[0].price;
+    if (!carrier) return 0;
+    // New API structure: price is directly on the carrier object
+    if (typeof carrier.price === 'number') {
+        return carrier.price;
+    }
+    // Fallback for old structure
+    if (carrier.ranges && carrier.ranges.length > 0) {
+        return carrier.ranges[0].price;
+    }
+    return 0;
   };
 
   const calculatePaymentPrice = (payment) => {
