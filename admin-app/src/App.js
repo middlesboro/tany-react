@@ -18,6 +18,10 @@ import Brands from './pages/Brands';
 import BrandEdit from './pages/BrandEdit';
 import Suppliers from './pages/Suppliers';
 import SupplierEdit from './pages/SupplierEdit';
+import Carriers from './pages/Carriers';
+import CarrierEdit from './pages/CarrierEdit';
+import Payments from './pages/Payments';
+import PaymentEdit from './pages/PaymentEdit';
 import Login from './pages/Login';
 import AuthenticationSuccess from './pages/AuthenticationSuccess';
 import Cart from './pages/Cart';
@@ -56,6 +60,12 @@ function App() {
           <Route path="suppliers" element={<Suppliers />} />
           <Route path="suppliers/new" element={<SupplierEdit />} />
           <Route path="suppliers/:id" element={<SupplierEdit />} />
+          <Route path="carriers" element={<Carriers />} />
+          <Route path="carriers/new" element={<CarrierEdit />} />
+          <Route path="carriers/:id" element={<CarrierEdit />} />
+          <Route path="payments" element={<Payments />} />
+          <Route path="payments/new" element={<PaymentEdit />} />
+          <Route path="payments/:id" element={<PaymentEdit />} />
           <Route path="carts" element={<Carts />} />
           <Route path="carts/:id" element={<CartDetail />} />
           <Route path="orders" element={<Orders />} />
