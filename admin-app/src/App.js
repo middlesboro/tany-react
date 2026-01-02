@@ -11,6 +11,7 @@ import CategoryEdit from './pages/CategoryEdit';
 import Customers from './pages/Customers';
 import CustomerEdit from './pages/CustomerEdit';
 import Carts from './pages/Carts';
+import CartDetail from './pages/CartDetail';
 import Orders from './pages/Orders';
 import OrderEdit from './pages/OrderEdit';
 import Brands from './pages/Brands';
@@ -56,6 +57,7 @@ function App() {
           <Route path="suppliers/new" element={<SupplierEdit />} />
           <Route path="suppliers/:id" element={<SupplierEdit />} />
           <Route path="carts" element={<Carts />} />
+          <Route path="carts/:id" element={<CartDetail />} />
           <Route path="orders" element={<Orders />} />
           <Route path="orders/new" element={<OrderEdit />} />
           <Route path="orders/:id" element={<OrderEdit />} />
