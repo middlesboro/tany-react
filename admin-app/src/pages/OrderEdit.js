@@ -9,8 +9,13 @@ const OrderEdit = () => {
   const [order, setOrder] = useState({
     cartId: '',
     customerId: '',
-    productIds: [],
     finalPrice: '',
+    items: [],
+    carrierId: '',
+    paymentId: '',
+    deliveryAddress: { street: '', city: '', zip: '' },
+    invoiceAddress: { street: '', city: '', zip: '' },
+    deliveryAddressSameAsInvoiceAddress: false
   });
 
   useEffect(() => {
@@ -24,8 +29,21 @@ const OrderEdit = () => {
   }, [id]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setOrder({ ...order, [name]: value });
+    const { name, value, type, checked } = e.target;
+    const val = type === 'checkbox' ? checked : value;
+
+    if (name.includes('.')) {
+      const [parent, child] = name.split('.');
+      setOrder(prev => ({
+        ...prev,
+        [parent]: {
+          ...prev[parent],
+          [child]: val
+        }
+      }));
+    } else {
+      setOrder(prev => ({ ...prev, [name]: val }));
+    }
   };
 
   const handleSubmit = async (e) => {
