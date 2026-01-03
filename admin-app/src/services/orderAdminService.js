@@ -39,3 +39,8 @@ export const deleteOrder = async (id) => {
     method: 'DELETE',
   });
 };
+
+export const downloadInvoice = async (id) => {
+  const response = await authFetch(`${API_URL}/${id}/invoice`);
+  return response;
+};

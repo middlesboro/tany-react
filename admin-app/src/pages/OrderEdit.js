@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getOrder, createOrder, updateOrder } from '../services/orderAdminService';
+import { getOrder, createOrder, updateOrder, downloadInvoice } from '../services/orderAdminService';
 import OrderForm from '../components/OrderForm';
 
 const OrderEdit = () => {
@@ -56,9 +56,40 @@ const OrderEdit = () => {
     navigate('/admin/orders');
   };
 
+  const handleDownloadInvoice = async () => {
+    try {
+      const response = await downloadInvoice(id);
+      if (response.ok) {
+        const blob = await response.blob();
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `invoice-${id}.pdf`;
+        document.body.appendChild(a);
+        a.click();
+        a.remove();
+        window.URL.revokeObjectURL(url);
+      } else {
+        console.error('Failed to download invoice');
+      }
+    } catch (error) {
+      console.error('Error downloading invoice:', error);
+    }
+  };
+
   return (
     <div>
-      <h1 className="text-2xl font-bold mb-4">{id ? 'Edit Order' : 'Create Order'}</h1>
+      <div className="flex justify-between items-center mb-4">
+        <h1 className="text-2xl font-bold">{id ? 'Edit Order' : 'Create Order'}</h1>
+        {id && (
+          <button
+            onClick={handleDownloadInvoice}
+            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow transition duration-150 ease-in-out"
+          >
+            Download Invoice
+          </button>
+        )}
+      </div>
       <OrderForm order={order} handleChange={handleChange} handleSubmit={handleSubmit} />
     </div>
   );
