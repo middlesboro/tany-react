@@ -99,7 +99,14 @@ const Checkout = () => {
       deliveryAddressSameAsInvoiceAddress: !differentDeliveryAddress,
       carrierId: selectedCarrier,
       paymentId: selectedPayment,
-      finalPrice: finalPrice
+      finalPrice: finalPrice,
+      items: cart?.products?.map(p => ({
+        productId: p.id,
+        name: p.title,
+        price: p.price,
+        quantity: p.quantity,
+        image: p.image
+      })) || []
     };
 
     try {
