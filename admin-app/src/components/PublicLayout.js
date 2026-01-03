@@ -1,8 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { getCategories } from '../services/categoryService';
+import { useCart } from '../context/CartContext';
 
 const PublicLayout = () => {
+  const { cart } = useCart();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -90,7 +92,9 @@ const PublicLayout = () => {
               </div>
               <div className="ml-2 hidden lg:block">
                 <span className="block text-xs text-gray-500">Nákupný košík</span>
-                <span className="block text-sm font-bold group-hover:text-tany-green">0,00 €</span>
+                <span className="block text-sm font-bold group-hover:text-tany-green">
+                  {cart?.totalProductPrice ? `${cart.totalProductPrice.toFixed(2)} €` : '0,00 €'}
+                </span>
               </div>
             </Link>
           </div>

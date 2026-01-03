@@ -1,8 +1,11 @@
   import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { createOrder } from '../services/orderService';
 
 const Checkout = () => {
-  const { cart, loading } = useCart();
+  const navigate = useNavigate();
+  const { cart, loading, clearCart } = useCart();
   const [selectedCarrier, setSelectedCarrier] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [customer, setCustomer] = useState({
@@ -77,7 +80,7 @@ const Checkout = () => {
       return payment.price || 0;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     const carrierObj = carriers.find(c => c.id === selectedCarrier);
     const paymentObj = payments.find(p => p.id === selectedPayment);
@@ -86,19 +89,34 @@ const Checkout = () => {
 
     // cart.totalProductPrice comes from the API
     const productTotal = cart?.totalProductPrice || 0;
+    const finalPrice = productTotal + shippingPrice + paymentPrice;
 
     const orderData = {
-      cartId: cart?.cartId, // API uses cartId
+      cartId: cart?.cartId,
       customer,
       invoiceAddress,
       deliveryAddress: differentDeliveryAddress ? deliveryAddress : invoiceAddress,
-      carrier: selectedCarrier, // ID
-      payment: selectedPayment, // ID
-      shippingPrice: shippingPrice,
-      totalPrice: productTotal + shippingPrice + paymentPrice
+      deliveryAddressSameAsInvoiceAddress: !differentDeliveryAddress,
+      carrierId: selectedCarrier,
+      paymentId: selectedPayment,
+      finalPrice: finalPrice,
+      items: cart?.products?.map(p => ({
+        productId: p.id,
+        name: p.title,
+        price: p.price,
+        quantity: p.quantity,
+        image: p.image
+      })) || []
     };
-    console.log('Order Submitted:', orderData);
-    alert('Order submitted (check console for details). Confirmation page coming soon!');
+
+    try {
+      const createdOrder = await createOrder(orderData);
+      clearCart();
+      navigate(`/order/confirmation/${createdOrder.id}`);
+    } catch (error) {
+      console.error('Order creation failed', error);
+      alert('Failed to create order. Please try again.');
+    }
   };
 
   if (loading) {

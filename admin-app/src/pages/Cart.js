@@ -60,7 +60,7 @@ const Cart = () => {
 
         <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end items-center">
            <span className="text-lg font-bold mr-4">Total:</span>
-           <span className="text-xl font-bold text-blue-600">{cart.totalPrice ? cart.totalPrice.toFixed(2) : '0.00'} €</span>
+           <span className="text-xl font-bold text-blue-600">{cart.totalProductPrice ? cart.totalProductPrice.toFixed(2) : '0.00'} €</span>
         </div>
       </div>
 

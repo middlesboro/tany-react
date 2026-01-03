@@ -26,6 +26,7 @@ import Login from './pages/Login';
 import AuthenticationSuccess from './pages/AuthenticationSuccess';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
+import OrderConfirmation from './pages/OrderConfirmation';
 import CategoryProducts from './pages/CategoryProducts';
 import { CartProvider } from './context/CartContext';
 
@@ -41,6 +42,7 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/cart" element={<Cart />} />
             <Route path="/order" element={<Checkout />} />
+            <Route path="/order/confirmation/:id" element={<OrderConfirmation />} />
             <Route path="/category/:slug" element={<CategoryProducts />} />
             <Route path="/products/:id" element={<ProductDetail />} />
             <Route path="/login" element={<Login isAdmin={false} />} />
