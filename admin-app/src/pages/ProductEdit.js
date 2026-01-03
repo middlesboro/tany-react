@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getProduct, createProduct, updateProduct } from '../services/productAdminService';
 import { getBrands } from '../services/brandAdminService';
 import { getSuppliers } from '../services/supplierAdminService';
+import { getCategories } from '../services/categoryAdminService';
 import ProductForm from '../components/ProductForm';
 import ProductImageManager from '../components/ProductImageManager';
 
@@ -18,19 +19,28 @@ const ProductEdit = () => {
     images: [],
     brandId: '',
     supplierId: '',
+    categoryIds: [],
   });
 
   const [brands, setBrands] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   useEffect(() => {
-    const fetchBrandsAndSuppliers = async () => {
+    const fetchData = async () => {
       const brandsData = await getBrands(0, 'name,asc', 1000);
       setBrands(brandsData.content);
       const suppliersData = await getSuppliers(0, 'name,asc', 1000);
       setSuppliers(suppliersData.content);
+      const categoriesData = await getCategories(0, 'title,asc', 1000);
+      // Map categories to have 'name' property for consistency with SearchSelect/MultiSearchSelect
+      const mappedCategories = categoriesData.content.map(c => ({
+        ...c,
+        name: c.title
+      }));
+      setCategories(mappedCategories);
     };
-    fetchBrandsAndSuppliers();
+    fetchData();
 
     if (id) {
       const fetchProductData = async () => {
@@ -39,7 +49,8 @@ const ProductEdit = () => {
           ...data,
           images: data.images || [],
           brandId: data.brandId || '',
-          supplierId: data.supplierId || ''
+          supplierId: data.supplierId || '',
+          categoryIds: data.categoryIds || []
         });
       };
       fetchProductData();
@@ -88,6 +99,7 @@ const ProductEdit = () => {
         product={product}
         brands={brands}
         suppliers={suppliers}
+        categories={categories}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
         handleSaveAndStay={handleSaveAndStay}
