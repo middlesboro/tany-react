@@ -24,7 +24,7 @@ const PublicLayout = () => {
     { name: "Všetky produkty", path: "/", highlight: true },
     ...categories.map(cat => ({
       name: cat.title,
-      path: "#", // Placeholder as requested
+      path: `/category/${cat.slug}`,
       // We could add logic here to map special categories to colors if needed, but for now just title
     }))
   ];
