@@ -1,22 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
-
-const CATEGORIES = [
-  { name: "Všetky produkty", path: "/", highlight: true },
-  { name: "VÝPREDAJ", path: "#", color: "text-tany-red" },
-  { name: "Ajurvédska kozmetika", path: "#" },
-  { name: "Leto s Tany", path: "#" },
-  { name: "Henna na vlasy", path: "#" },
-  { name: "Profesionálna kozmetika", path: "#" },
-  { name: "Vlasová kozmetika", path: "#" },
-  { name: "Pleťová kozmetika", path: "#" },
-  { name: "Telová kozmetika", path: "#" },
-  { name: "Eko domácnosť", path: "#" }
-];
+import { getCategories } from '../services/categoryService';
 
 const PublicLayout = () => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [categories, setCategories] = useState([]);
+
+  useEffect(() => {
+    const fetchCategories = async () => {
+      try {
+        const data = await getCategories();
+        setCategories(data);
+      } catch (error) {
+        console.error("Failed to fetch categories", error);
+      }
+    };
+    fetchCategories();
+  }, []);
+
+  // Prepare the display list with "All Products" prepended
+  const displayCategories = [
+    { name: "Všetky produkty", path: "/", highlight: true },
+    ...categories.map(cat => ({
+      name: cat.title,
+      path: `/category/${cat.slug}`,
+      // We could add logic here to map special categories to colors if needed, but for now just title
+    }))
+  ];
 
   // Determine if sidebar should be shown (everywhere except /cart and /order)
   const showSidebar = !['/cart', '/order'].includes(location.pathname);
@@ -118,7 +129,7 @@ const PublicLayout = () => {
         {mobileMenuOpen && (
           <div className="md:hidden bg-white text-gray-800 border-t border-gray-200">
              <ul className="flex flex-col">
-               {CATEGORIES.map((cat, index) => (
+               {displayCategories.map((cat, index) => (
                  <li key={index} className="border-b border-gray-100">
                    <Link
                      to={cat.path}
@@ -147,7 +158,7 @@ const PublicLayout = () => {
                         Kategórie
                       </div>
                       <ul className="divide-y divide-gray-100">
-                        {CATEGORIES.map((cat, index) => (
+                        {displayCategories.map((cat, index) => (
                           <li key={index}>
                             <Link
                               to={cat.path}

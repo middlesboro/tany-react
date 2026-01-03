@@ -11,3 +11,8 @@ export const getProduct = async (id) => {
   const response = await authFetch(`${API_URL}/${id}`);
   return response.json();
 };
+
+export const getProductsByCategory = async (categoryId, page = 0, sort = 'title,asc', size = 20) => {
+  const response = await authFetch(`${API_URL}/category/${categoryId}?page=${page}&size=${size}&sort=${sort}`);
+  return response.json();
+};
