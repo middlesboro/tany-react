@@ -28,6 +28,8 @@ import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import OrderConfirmation from './pages/OrderConfirmation';
 import CategoryProducts from './pages/CategoryProducts';
+import ShopSettings from './pages/ShopSettings';
+import ShopSettingsEdit from './pages/ShopSettingsEdit';
 import { CartProvider } from './context/CartContext';
 
 function App() {
@@ -49,6 +51,9 @@ function App() {
           </Route>
 
           <Route path="/admin" element={<AdminLayout />}>
+          <Route path="shop-settings" element={<ShopSettings />} />
+          <Route path="shop-settings/new" element={<ShopSettingsEdit />} />
+          <Route path="shop-settings/:id" element={<ShopSettingsEdit />} />
           <Route path="products" element={<Products />} />
           <Route path="products/new" element={<ProductEdit />} />
           <Route path="products/:id" element={<ProductEdit />} />
