@@ -1,9 +1,10 @@
 import React from 'react';
 import ReactQuill from 'react-quill-new';
 import SearchSelect from './SearchSelect';
+import MultiSearchSelect from './MultiSearchSelect';
 import 'react-quill-new/dist/quill.snow.css';
 
-const ProductForm = ({ product, brands, suppliers, handleChange, handleSubmit, handleSaveAndStay }) => {
+const ProductForm = ({ product, brands, suppliers, categories, handleChange, handleSubmit, handleSaveAndStay }) => {
   const modules = {
     toolbar: [
       [{ 'header': [1, 2, false] }],
@@ -25,6 +26,15 @@ const ProductForm = ({ product, brands, suppliers, handleChange, handleSubmit, h
   };
 
   const handleSelectChange = (name) => (value) => {
+    handleChange({
+      target: {
+        name,
+        value
+      }
+    });
+  };
+
+  const handleMultiSelectChange = (name) => (value) => {
     handleChange({
       target: {
         name,
@@ -60,6 +70,16 @@ const ProductForm = ({ product, brands, suppliers, handleChange, handleSubmit, h
           value={product.supplierId}
           onChange={handleSelectChange('supplierId')}
           placeholder="Search for a supplier..."
+        />
+      </div>
+
+      <div className="mb-4">
+        <MultiSearchSelect
+          label="Categories"
+          options={categories}
+          value={product.categoryIds}
+          onChange={handleMultiSelectChange('categoryIds')}
+          placeholder="Search for categories..."
         />
       </div>
 
