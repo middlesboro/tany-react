@@ -50,8 +50,13 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  const clearCart = async () => {
+    localStorage.removeItem('cartId');
+    await fetchContext();
+  };
+
   return (
-    <CartContext.Provider value={{ cart, addToCart, loading }}>
+    <CartContext.Provider value={{ cart, addToCart, clearCart, loading }}>
       {children}
     </CartContext.Provider>
   );

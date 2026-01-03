@@ -5,7 +5,7 @@ import { createOrder } from '../services/orderService';
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { cart, loading } = useCart();
+  const { cart, loading, clearCart } = useCart();
   const [selectedCarrier, setSelectedCarrier] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [customer, setCustomer] = useState({
@@ -111,6 +111,7 @@ const Checkout = () => {
 
     try {
       const createdOrder = await createOrder(orderData);
+      clearCart();
       navigate(`/order/confirmation/${createdOrder.id}`);
     } catch (error) {
       console.error('Order creation failed', error);
