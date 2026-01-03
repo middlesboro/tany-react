@@ -1,10 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getOrder } from '../services/orderService';
+import { getPaymentInfo } from '../services/paymentService';
 
 const OrderConfirmation = () => {
   const { id } = useParams();
   const [order, setOrder] = useState(null);
+  const [paymentInfo, setPaymentInfo] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -13,6 +15,15 @@ const OrderConfirmation = () => {
       try {
         const data = await getOrder(id);
         setOrder(data);
+
+        try {
+            const paymentData = await getPaymentInfo(id);
+            setPaymentInfo(paymentData);
+        } catch (paymentErr) {
+            console.error("Failed to load payment info", paymentErr);
+            // We don't block the order view if payment info fails
+        }
+
       } catch (err) {
         console.error(err);
         setError('Failed to load order details.');
@@ -58,6 +69,16 @@ const OrderConfirmation = () => {
           ) : <p>N/A</p>}
         </div>
       </div>
+
+      {paymentInfo && paymentInfo.qrCode && (
+          <div className="bg-white shadow rounded p-6 mb-8">
+              <h2 className="text-xl font-bold mb-4">Payment Information</h2>
+              <div className="flex flex-col items-center">
+                  <p className="mb-4 text-gray-700">Scan the QR code to pay:</p>
+                  <img src={`data:image/png;base64,${paymentInfo.qrCode}`} alt="Payment QR Code" className="w-64 h-64 border border-gray-200 rounded" />
+              </div>
+          </div>
+      )}
 
       <div className="bg-white shadow rounded p-6 mb-8">
         <h2 className="text-xl font-bold mb-4">Order Items</h2>
