@@ -27,6 +27,7 @@ import AuthenticationSuccess from './pages/AuthenticationSuccess';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import OrderConfirmation from './pages/OrderConfirmation';
+import GlobalPaymentsCallback from './pages/GlobalPaymentsCallback';
 import CategoryProducts from './pages/CategoryProducts';
 import ShopSettings from './pages/ShopSettings';
 import ShopSettingsEdit from './pages/ShopSettingsEdit';
@@ -45,6 +46,7 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/order" element={<Checkout />} />
             <Route path="/order/confirmation/:id" element={<OrderConfirmation />} />
+            <Route path="/global-payments-callback" element={<GlobalPaymentsCallback />} />
             <Route path="/category/:slug" element={<CategoryProducts />} />
             <Route path="/products/:id" element={<ProductDetail />} />
             <Route path="/login" element={<Login isAdmin={false} />} />
