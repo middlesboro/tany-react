@@ -112,7 +112,7 @@ const Checkout = () => {
     try {
       const createdOrder = await createOrder(orderData);
       clearCart();
-      navigate(`/order/confirmation/${createdOrder.id}`);
+      navigate(`/order/confirmation/${createdOrder.id}`, { state: { newOrder: true } });
     } catch (error) {
       console.error('Order creation failed', error);
       alert('Failed to create order. Please try again.');
