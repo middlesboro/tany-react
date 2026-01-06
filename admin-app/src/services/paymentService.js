@@ -9,3 +9,18 @@ export const getPaymentInfo = async (orderId) => {
   }
   return response.json();
 };
+
+export const verifyGlobalPayment = async (params) => {
+  const response = await authFetch(`${API_URL}/global-payments-callback`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(params),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to verify global payment');
+  }
+  return response.json();
+};
