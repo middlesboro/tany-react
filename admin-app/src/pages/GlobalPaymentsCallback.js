@@ -15,12 +15,12 @@ const GlobalPaymentsCallback = () => {
 
       try {
         const response = await verifyGlobalPayment(params);
-        // Assuming params has MERORDERNUM which maps to order ID
-        const orderId = params.MERORDERNUM;
+        // Assuming params has MD which maps to order ID
+        const orderId = params.MD;
         if (orderId) {
             navigate(`/order/confirmation/${orderId}?paymentStatus=${response.status}`);
         } else {
-            console.error("Order ID (MERORDERNUM) missing in callback params");
+            console.error("Order ID (MD) missing in callback params");
             // Fallback or error page? For now, redirect to home or some error
              navigate('/');
         }
@@ -29,7 +29,7 @@ const GlobalPaymentsCallback = () => {
         // Even on error, we might want to redirect back to order to show error?
         // But if verification fails, we might not know the status.
         // If we have orderId, let's go back with error.
-        const orderId = params.MERORDERNUM;
+        const orderId = params.MD;
         if (orderId) {
              navigate(`/order/confirmation/${orderId}?paymentStatus=ERROR`);
         } else {

@@ -90,9 +90,9 @@ const OrderConfirmation = () => {
               <h2 className="text-xl font-bold mb-4">Payment Information</h2>
               <div className="flex flex-col items-center">
                   <p className="mb-4 text-gray-700">Please pay for your order using Global Payments:</p>
-                  <form action={paymentInfo.globalPaymentDetails.url} method="POST">
+                  <form action={paymentInfo.globalPaymentDetails.paymentUrl} method="POST">
                       {Object.entries(paymentInfo.globalPaymentDetails).map(([key, value]) => {
-                          if (key === 'url') return null;
+                          if (key === 'paymentUrl') return null;
                           return <input key={key} type="hidden" name={key.toUpperCase()} value={value} />;
                       })}
                       <button type="submit" className="bg-blue-600 text-white font-bold py-2 px-6 rounded hover:bg-blue-700">
