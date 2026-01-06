@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { getCategories } from '../services/categoryService';
 import { useCart } from '../context/CartContext';
+import ProductSearch from './ProductSearch';
 
 const PublicLayout = () => {
   const { cart } = useCart();
@@ -66,21 +67,8 @@ const PublicLayout = () => {
             />
           </Link>
 
-          {/* Search Bar (Placeholder) */}
-          <div className="flex-grow max-w-xl w-full mx-4">
-            <div className="relative">
-              <input
-                type="text"
-                placeholder="Hľadať v obchode..."
-                className="w-full border border-gray-300 rounded-sm py-2 px-4 focus:outline-none focus:border-tany-green"
-              />
-              <button className="absolute right-0 top-0 h-full bg-tany-green text-white px-4 hover:bg-green-700 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-                </svg>
-              </button>
-            </div>
-          </div>
+          {/* Search Bar */}
+          <ProductSearch />
 
           {/* Cart */}
           <div className="flex-shrink-0">

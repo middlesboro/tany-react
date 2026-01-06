@@ -16,3 +16,8 @@ export const getProductsByCategory = async (categoryId, page = 0, sort = 'title,
   const response = await authFetch(`${API_URL}/category/${categoryId}?page=${page}&size=${size}&sort=${sort}`);
   return response.json();
 };
+
+export const searchProducts = async (query) => {
+  const response = await authFetch(`${API_URL}/search?query=${encodeURIComponent(query)}`);
+  return response.json();
+};
