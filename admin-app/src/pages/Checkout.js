@@ -25,10 +25,22 @@ const Checkout = () => {
     zip: '',
   });
   const [differentDeliveryAddress, setDifferentDeliveryAddress] = useState(false);
+  const [selectedPickupPoint, setSelectedPickupPoint] = useState(null);
 
   // Dynamic data from cart
   const carriers = cart?.carriers || [];
   const payments = cart?.payments || [];
+
+  useEffect(() => {
+    const scriptId = 'packeta-widget-script';
+    if (!document.getElementById(scriptId)) {
+        const script = document.createElement('script');
+        script.id = scriptId;
+        script.src = 'https://widget.packeta.com/v6/www/js/library.js';
+        script.async = true;
+        document.body.appendChild(script);
+    }
+  }, []);
 
   useEffect(() => {
       if (cart) {
@@ -80,12 +92,38 @@ const Checkout = () => {
       return payment.price || 0;
   };
 
+  const openPacketaWidget = () => {
+      const packetaApiKey = 'XXX XXX XXX96cee6278e535aa508c6be174a4d6d03';
+      const packetaOptions = {
+          country: "sk",
+          language: "sk",
+          valueFormat: "\"Packeta\",id,carrierId,carrierPickupPointId,name,city,street",
+          view: "modal"
+      };
+
+      if (window.Packeta && window.Packeta.Widget) {
+          window.Packeta.Widget.pick(packetaApiKey, (point) => {
+            if (point) {
+                setSelectedPickupPoint(point);
+            }
+          }, packetaOptions);
+      } else {
+          console.error("Packeta widget script not loaded yet.");
+          alert("Packeta widget is loading, please try again in a moment.");
+      }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     const carrierObj = carriers.find(c => c.id === selectedCarrier);
     const paymentObj = payments.find(p => p.id === selectedPayment);
     const shippingPrice = calculateShippingPrice(carrierObj);
     const paymentPrice = calculatePaymentPrice(paymentObj);
+
+    if (carrierObj?.type === 'PACKETA' && !selectedPickupPoint) {
+        alert("Please select a pick-up point.");
+        return;
+    }
 
     // cart.totalProductPrice comes from the API
     const productTotal = cart?.totalProductPrice || 0;
@@ -100,6 +138,7 @@ const Checkout = () => {
       carrierId: selectedCarrier,
       paymentId: selectedPayment,
       finalPrice: finalPrice,
+      selectedPickupPointId: carrierObj?.type === 'PACKETA' ? selectedPickupPoint?.id : null,
       items: cart?.products?.map(p => ({
         productId: p.id,
         name: p.title,
@@ -135,24 +174,45 @@ const Checkout = () => {
              {carriers.length === 0 && <p>No carriers available.</p>}
              {carriers.map(carrier => {
                  const price = calculateShippingPrice(carrier);
+                 const isPacketa = carrier.type === 'PACKETA';
+                 const isSelected = selectedCarrier === carrier.id;
+
                  return (
-                    <label key={carrier.id} className={`flex items-center p-4 border rounded cursor-pointer hover:bg-gray-50 ${selectedCarrier === carrier.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}>
-                        <input
-                            type="radio"
-                            name="carrier"
-                            value={carrier.id}
-                            checked={selectedCarrier === carrier.id}
-                            onChange={() => setSelectedCarrier(carrier.id)}
-                            className="h-5 w-5 text-blue-600 mr-4"
-                        />
-                        <div className="flex-1">
-                            <div className="font-bold">{carrier.name}</div>
-                            <div className="text-sm text-gray-500">{carrier.description}</div>
-                        </div>
-                        <div className="font-bold whitespace-nowrap">
-                            {price === 0 ? 'Zadarmo' : `${price.toFixed(2)} €`}
-                        </div>
-                    </label>
+                    <div key={carrier.id} className={`p-4 border rounded ${isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}>
+                        <label className="flex items-center cursor-pointer">
+                            <input
+                                type="radio"
+                                name="carrier"
+                                value={carrier.id}
+                                checked={isSelected}
+                                onChange={() => setSelectedCarrier(carrier.id)}
+                                className="h-5 w-5 text-blue-600 mr-4"
+                            />
+                            <div className="flex-1">
+                                <div className="font-bold">{carrier.name}</div>
+                                <div className="text-sm text-gray-500">{carrier.description}</div>
+                            </div>
+                            <div className="font-bold whitespace-nowrap">
+                                {price === 0 ? 'Zadarmo' : `${price.toFixed(2)} €`}
+                            </div>
+                        </label>
+                        {isSelected && isPacketa && (
+                            <div className="mt-4 pl-9">
+                                <button
+                                    type="button"
+                                    onClick={openPacketaWidget}
+                                    className="bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                >
+                                    Select pick-up point
+                                </button>
+                                {selectedPickupPoint && (
+                                    <div className="mt-2 text-sm text-gray-700">
+                                        <strong>Selected Point:</strong> {selectedPickupPoint.formatedValue || selectedPickupPoint.name}
+                                    </div>
+                                )}
+                            </div>
+                        )}
+                    </div>
                  );
              })}
           </div>
