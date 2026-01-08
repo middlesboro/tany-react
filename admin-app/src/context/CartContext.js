@@ -8,6 +8,7 @@ export const useCart = () => useContext(CartContext);
 
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(null);
+  const [customer, setCustomer] = useState(null);
   const [loading, setLoading] = useState(true);
 
   const fetchContext = async () => {
@@ -20,6 +21,9 @@ export const CartProvider = ({ children }) => {
               localStorage.setItem('cartId', data.cartDto.cartId);
           }
           setCart(data.cartDto);
+      }
+      if (data.customerDto) {
+          setCustomer(data.customerDto);
       }
     } catch (error) {
       console.error("Failed to fetch customer context", error);
@@ -56,7 +60,7 @@ export const CartProvider = ({ children }) => {
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, clearCart, loading }}>
+    <CartContext.Provider value={{ cart, customer, addToCart, clearCart, loading }}>
       {children}
     </CartContext.Provider>
   );
