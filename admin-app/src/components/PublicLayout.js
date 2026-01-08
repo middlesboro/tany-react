@@ -5,7 +5,7 @@ import { useCart } from '../context/CartContext';
 import ProductSearch from './ProductSearch';
 
 const PublicLayout = () => {
-  const { cart } = useCart();
+  const { cart, customer } = useCart();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -49,7 +49,11 @@ const PublicLayout = () => {
             </span>
           </div>
           <div className="flex space-x-4">
-             <Link to="/login" className="hover:text-tany-green transition-colors">Prihlásenie</Link>
+             {customer ? (
+                <Link to="/account" className="hover:text-tany-green transition-colors">{customer.email}</Link>
+             ) : (
+                <Link to="/login" className="hover:text-tany-green transition-colors">Prihlásenie</Link>
+             )}
              <Link to="/admin" className="hover:text-tany-green transition-colors">Admin</Link>
           </div>
         </div>
