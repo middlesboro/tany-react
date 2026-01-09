@@ -6,7 +6,7 @@ import { debounce } from '../utils/debounce';
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { cart, loading, clearCart, updateCart } = useCart();
+  const { cart, customer: customerContext, loading, clearCart, updateCart } = useCart();
   const [selectedCarrier, setSelectedCarrier] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [customer, setCustomer] = useState({
@@ -69,52 +69,82 @@ const Checkout = () => {
               }
           }
 
+          const profile = customerContext || {};
+
           // Initialize Customer
-          if (cart.firstname || cart.lastname || cart.email || cart.phone) {
-              setCustomer(prev => ({
-                  firstname: cart.firstname || prev.firstname,
-                  lastname: cart.lastname || prev.lastname,
-                  email: cart.email || prev.email,
-                  phone: cart.phone || prev.phone
-              }));
-          }
+          setCustomer(prev => ({
+              firstname: cart.firstname || profile.firstname || prev.firstname,
+              lastname: cart.lastname || profile.lastname || prev.lastname,
+              email: cart.email || profile.email || prev.email,
+              phone: cart.phone || profile.phone || prev.phone
+          }));
 
           // Initialize Invoice Address
-          if (cart.invoiceAddress) {
-              setInvoiceAddress(prev => ({
-                  street: cart.invoiceAddress.street || prev.street,
-                  city: cart.invoiceAddress.city || prev.city,
-                  zip: cart.invoiceAddress.zip || prev.zip
-              }));
-          }
+          const cartInvoice = cart.invoiceAddress || {};
+          const profileInvoice = profile.invoiceAddress || {};
+
+          setInvoiceAddress(prev => ({
+              street: cartInvoice.street || profileInvoice.street || prev.street,
+              city: cartInvoice.city || profileInvoice.city || prev.city,
+              zip: cartInvoice.zip || profileInvoice.zip || prev.zip
+          }));
 
           // Initialize Delivery Address
-          // Logic: If deliveryAddress is present and at least one field is non-empty, we consider it.
-          // We also check if it's different from invoiceAddress to toggle the checkbox.
-          // Note: Backend might return null or same object.
-          if (cart.deliveryAddress) {
-               const hasDeliveryData = cart.deliveryAddress.street || cart.deliveryAddress.city || cart.deliveryAddress.zip;
-               if (hasDeliveryData) {
-                   setDeliveryAddress(prev => ({
-                       street: cart.deliveryAddress.street || prev.street,
-                       city: cart.deliveryAddress.city || prev.city,
-                       zip: cart.deliveryAddress.zip || prev.zip
-                   }));
+          const cartDelivery = cart.deliveryAddress || {};
+          // Only use profile delivery address if it has data.
+          // Typically profile.deliveryAddress is same as invoice unless specified.
+          const profileDelivery = profile.deliveryAddress || {};
 
-                   // Determine if different
-                   // Simple check: if fields differ from invoice address (if invoice is also present)
-                   // Or just trust if it's there.
-                   // Let's compare loosely.
-                   const inv = cart.invoiceAddress || {};
-                   const del = cart.deliveryAddress;
-                   const isDifferent = del.street !== inv.street || del.city !== inv.city || del.zip !== inv.zip;
+          // Check if cart has specific delivery address data
+          const hasCartDeliveryData = cartDelivery.street || cartDelivery.city || cartDelivery.zip;
+
+          if (hasCartDeliveryData) {
+               setDeliveryAddress(prev => ({
+                   street: cartDelivery.street || prev.street,
+                   city: cartDelivery.city || prev.city,
+                   zip: cartDelivery.zip || prev.zip
+               }));
+
+               // Check difference with whatever invoice address we settled on (cart or profile)
+               // Note: 'invoiceAddress' state isn't updated yet in this render cycle, so we calculate what it will be.
+               const targetInvoice = {
+                    street: cartInvoice.street || profileInvoice.street || '',
+                    city: cartInvoice.city || profileInvoice.city || '',
+                    zip: cartInvoice.zip || profileInvoice.zip || ''
+               };
+
+               const isDifferent = cartDelivery.street !== targetInvoice.street ||
+                                   cartDelivery.city !== targetInvoice.city ||
+                                   cartDelivery.zip !== targetInvoice.zip;
+               setDifferentDeliveryAddress(isDifferent);
+          } else {
+              // If cart doesn't have delivery data, check profile delivery data
+              const hasProfileDeliveryData = profileDelivery.street || profileDelivery.city || profileDelivery.zip;
+
+              if (hasProfileDeliveryData) {
+                  setDeliveryAddress(prev => ({
+                      street: profileDelivery.street || prev.street,
+                      city: profileDelivery.city || prev.city,
+                      zip: profileDelivery.zip || prev.zip
+                  }));
+
+                   // Check difference with invoice address
+                   const targetInvoice = {
+                        street: cartInvoice.street || profileInvoice.street || '',
+                        city: cartInvoice.city || profileInvoice.city || '',
+                        zip: cartInvoice.zip || profileInvoice.zip || ''
+                   };
+
+                   const isDifferent = profileDelivery.street !== targetInvoice.street ||
+                                       profileDelivery.city !== targetInvoice.city ||
+                                       profileDelivery.zip !== targetInvoice.zip;
                    setDifferentDeliveryAddress(isDifferent);
-               }
+              }
           }
 
           initialized.current = true;
       }
-  }, [cart, selectedCarrier, selectedPayment]);
+  }, [cart, customerContext, selectedCarrier, selectedPayment]);
 
   // Debounced update function
   const debouncedUpdate = useCallback(
@@ -234,7 +264,7 @@ const Checkout = () => {
       finalPrice: finalPrice,
       selectedPickupPointId: carrierObj?.type === 'PACKETA' ? selectedPickupPoint?.id : null,
       items: cart?.products?.map(p => ({
-        productId: p.id,
+        id: p.id,
         name: p.title,
         price: p.price,
         quantity: p.quantity,
