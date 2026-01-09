@@ -143,6 +143,31 @@ const OrderConfirmation = () => {
 
       <h1 className="text-3xl font-bold mb-6">Order #{order.id}</h1>
 
+      {/* Personal Info */}
+      <div className="bg-white shadow rounded p-6 mb-8">
+          <h2 className="text-xl font-bold mb-4">Personal Information</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div>
+                  <span className="block text-sm font-medium text-gray-500">Name</span>
+                  <span className="block text-gray-900">{order.firstname} {order.lastname}</span>
+              </div>
+              <div>
+                  <span className="block text-sm font-medium text-gray-500">Email</span>
+                  <span className="block text-gray-900">{order.email}</span>
+              </div>
+              <div>
+                  <span className="block text-sm font-medium text-gray-500">Phone</span>
+                  <span className="block text-gray-900">{order.phone}</span>
+              </div>
+              {order.selectedPickupPointId && (
+                  <div>
+                      <span className="block text-sm font-medium text-gray-500">Pickup Point ID</span>
+                      <span className="block text-gray-900">{order.selectedPickupPointId}</span>
+                  </div>
+              )}
+          </div>
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         <div className="bg-white shadow rounded p-6">
           <h2 className="text-xl font-bold mb-4">Delivery Address</h2>
