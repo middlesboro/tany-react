@@ -22,3 +22,18 @@ export const addToCart = async (cartId, productId, quantity) => {
   }
   return response.json();
 };
+
+export const updateCart = async (cartData) => {
+  const response = await authFetch(API_URL, {
+    method: 'PUT',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(cartData),
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to update cart');
+  }
+  return response.json();
+};

@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import { getCustomerContext } from '../services/customerService';
-import { addToCart as addToCartService } from '../services/cartService';
+import { addToCart as addToCartService, updateCart as updateCartService } from '../services/cartService';
 
 const CartContext = createContext();
 
@@ -54,13 +54,23 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  const updateCart = async (cartData) => {
+      try {
+          await updateCartService(cartData);
+          await fetchContext();
+      } catch (error) {
+          console.error("Failed to update cart", error);
+          throw error;
+      }
+  };
+
   const clearCart = async () => {
     localStorage.removeItem('cartId');
     await fetchContext();
   };
 
   return (
-    <CartContext.Provider value={{ cart, customer, addToCart, clearCart, loading }}>
+    <CartContext.Provider value={{ cart, customer, addToCart, updateCart, clearCart, loading }}>
       {children}
     </CartContext.Provider>
   );
