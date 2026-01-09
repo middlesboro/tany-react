@@ -1,11 +1,12 @@
-  import React, { useState, useEffect } from 'react';
+  import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { createOrder } from '../services/orderService';
+import { debounce } from '../utils/debounce';
 
 const Checkout = () => {
   const navigate = useNavigate();
-  const { cart, loading, clearCart } = useCart();
+  const { cart, loading, clearCart, updateCart } = useCart();
   const [selectedCarrier, setSelectedCarrier] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [customer, setCustomer] = useState({
@@ -27,6 +28,9 @@ const Checkout = () => {
   const [differentDeliveryAddress, setDifferentDeliveryAddress] = useState(false);
   const [selectedPickupPoint, setSelectedPickupPoint] = useState(null);
 
+  // Track if we have initialized from cart to avoid overwriting user input
+  const initialized = useRef(false);
+
   // Dynamic data from cart
   const carriers = cart?.carriers || [];
   const payments = cart?.payments || [];
@@ -42,22 +46,109 @@ const Checkout = () => {
     }
   }, []);
 
+  // Initialize state from cart data
   useEffect(() => {
-      if (cart) {
-          if (!selectedCarrier && cart.carriers) {
+      if (cart && !initialized.current) {
+          // Initialize Carriers
+          if (cart.selectedCarrierId) {
+              setSelectedCarrier(cart.selectedCarrierId);
+          } else if (!selectedCarrier && cart.carriers) {
               const preSelectedCarrier = cart.carriers.find(c => c.selected);
               if (preSelectedCarrier) {
                   setSelectedCarrier(preSelectedCarrier.id);
               }
           }
-          if (!selectedPayment && cart.payments) {
+
+          // Initialize Payments
+          if (cart.selectedPaymentId) {
+               setSelectedPayment(cart.selectedPaymentId);
+          } else if (!selectedPayment && cart.payments) {
               const preSelectedPayment = cart.payments.find(p => p.selected);
               if (preSelectedPayment) {
                   setSelectedPayment(preSelectedPayment.id);
               }
           }
+
+          // Initialize Customer
+          if (cart.firstname || cart.lastname || cart.email || cart.phone) {
+              setCustomer(prev => ({
+                  firstname: cart.firstname || prev.firstname,
+                  lastname: cart.lastname || prev.lastname,
+                  email: cart.email || prev.email,
+                  phone: cart.phone || prev.phone
+              }));
+          }
+
+          // Initialize Invoice Address
+          if (cart.invoiceAddress) {
+              setInvoiceAddress(prev => ({
+                  street: cart.invoiceAddress.street || prev.street,
+                  city: cart.invoiceAddress.city || prev.city,
+                  zip: cart.invoiceAddress.zip || prev.zip
+              }));
+          }
+
+          // Initialize Delivery Address
+          // Logic: If deliveryAddress is present and at least one field is non-empty, we consider it.
+          // We also check if it's different from invoiceAddress to toggle the checkbox.
+          // Note: Backend might return null or same object.
+          if (cart.deliveryAddress) {
+               const hasDeliveryData = cart.deliveryAddress.street || cart.deliveryAddress.city || cart.deliveryAddress.zip;
+               if (hasDeliveryData) {
+                   setDeliveryAddress(prev => ({
+                       street: cart.deliveryAddress.street || prev.street,
+                       city: cart.deliveryAddress.city || prev.city,
+                       zip: cart.deliveryAddress.zip || prev.zip
+                   }));
+
+                   // Determine if different
+                   // Simple check: if fields differ from invoice address (if invoice is also present)
+                   // Or just trust if it's there.
+                   // Let's compare loosely.
+                   const inv = cart.invoiceAddress || {};
+                   const del = cart.deliveryAddress;
+                   const isDifferent = del.street !== inv.street || del.city !== inv.city || del.zip !== inv.zip;
+                   setDifferentDeliveryAddress(isDifferent);
+               }
+          }
+
+          initialized.current = true;
       }
   }, [cart, selectedCarrier, selectedPayment]);
+
+  // Debounced update function
+  const debouncedUpdate = useCallback(
+      debounce((data) => {
+          if (data.cartId) {
+             updateCart(data).catch(err => console.error("Auto-save failed", err));
+          }
+      }, 1000), // 1 second debounce
+      [updateCart] // dependency on updateCart (stable from context)
+  );
+
+  // Effect to trigger update when fields change
+  useEffect(() => {
+      if (!initialized.current || !cart) return;
+
+      const carrierObj = carriers.find(c => c.id === selectedCarrier);
+
+      const dataToSave = {
+          cartId: cart.cartId,
+          firstname: customer.firstname,
+          lastname: customer.lastname,
+          email: customer.email,
+          phone: customer.phone,
+          invoiceAddress: invoiceAddress,
+          deliveryAddress: differentDeliveryAddress ? deliveryAddress : invoiceAddress, // Send proper delivery address
+          selectedCarrierId: selectedCarrier,
+          selectedPaymentId: selectedPayment,
+          selectedPickupPointId: carrierObj?.type === 'PACKETA' ? selectedPickupPoint?.id : null
+      };
+
+      debouncedUpdate(dataToSave);
+
+  }, [customer, invoiceAddress, deliveryAddress, differentDeliveryAddress, selectedCarrier, selectedPayment, selectedPickupPoint, cart?.cartId, debouncedUpdate]);
+
 
   const handleCustomerChange = (e) => {
     const { name, value } = e.target;
