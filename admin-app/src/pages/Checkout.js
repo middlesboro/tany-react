@@ -264,7 +264,7 @@ const Checkout = () => {
       finalPrice: finalPrice,
       selectedPickupPointId: carrierObj?.type === 'PACKETA' ? selectedPickupPoint?.id : null,
       items: cart?.products?.map(p => ({
-        productId: p.id,
+        id: p.id,
         name: p.title,
         price: p.price,
         quantity: p.quantity,
