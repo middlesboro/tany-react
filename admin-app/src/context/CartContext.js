@@ -1,4 +1,4 @@
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { getCustomerContext } from '../services/customerService';
 import { addToCart as addToCartService, updateCart as updateCartService } from '../services/cartService';
 
@@ -11,7 +11,7 @@ export const CartProvider = ({ children }) => {
   const [customer, setCustomer] = useState(null);
   const [loading, setLoading] = useState(true);
 
-  const fetchContext = async () => {
+  const fetchContext = useCallback(async () => {
     try {
       const storedCartId = localStorage.getItem('cartId');
       const data = await getCustomerContext(storedCartId);
@@ -30,13 +30,13 @@ export const CartProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchContext();
-  }, []);
+  }, [fetchContext]);
 
-  const addToCart = async (productId, quantity) => {
+  const addToCart = useCallback(async (productId, quantity) => {
     try {
       const storedCartId = localStorage.getItem('cartId');
       const newCartId = await addToCartService(storedCartId, productId, quantity);
@@ -52,9 +52,9 @@ export const CartProvider = ({ children }) => {
       console.error("Failed to add to cart", error);
       throw error; // Re-throw so component can handle it if needed
     }
-  };
+  }, [fetchContext]);
 
-  const updateCart = async (cartData) => {
+  const updateCart = useCallback(async (cartData) => {
       try {
           await updateCartService(cartData);
           await fetchContext();
@@ -62,12 +62,12 @@ export const CartProvider = ({ children }) => {
           console.error("Failed to update cart", error);
           throw error;
       }
-  };
+  }, [fetchContext]);
 
-  const clearCart = async () => {
+  const clearCart = useCallback(async () => {
     localStorage.removeItem('cartId');
     await fetchContext();
-  };
+  }, [fetchContext]);
 
   return (
     <CartContext.Provider value={{ cart, customer, addToCart, updateCart, clearCart, loading }}>

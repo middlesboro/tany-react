@@ -130,6 +130,8 @@ const Checkout = () => {
   useEffect(() => {
       if (!initialized.current || !cart) return;
 
+      const carrierObj = carriers.find(c => c.id === selectedCarrier);
+
       const dataToSave = {
           cartId: cart.cartId,
           firstname: customer.firstname,
@@ -139,22 +141,13 @@ const Checkout = () => {
           invoiceAddress: invoiceAddress,
           deliveryAddress: differentDeliveryAddress ? deliveryAddress : invoiceAddress, // Send proper delivery address
           selectedCarrierId: selectedCarrier,
-          selectedPaymentId: selectedPayment
+          selectedPaymentId: selectedPayment,
+          selectedPickupPointId: carrierObj?.type === 'PACKETA' ? selectedPickupPoint?.id : null
       };
-
-      // We trigger update. Ideally, we want immediate update for carrier/payment/checkbox
-      // and debounced for text fields.
-      // But putting everything in one effect with debounce is simplest for code, but latency for carrier selection might be annoying if it doesn't refresh price immediately.
-      // However, price calculation is client-side based on `cart.carriers` which is already loaded.
-      // Wait, `calculateShippingPrice` uses `carrier.price`.
-      // The `cart` update is mainly for persistence.
-      // So debouncing everything is fine, EXCEPT if changing carrier requires backend validation?
-      // No, `Checkout` calculates price locally.
-      // So debouncing is fine.
 
       debouncedUpdate(dataToSave);
 
-  }, [customer, invoiceAddress, deliveryAddress, differentDeliveryAddress, selectedCarrier, selectedPayment, cart?.cartId, debouncedUpdate]);
+  }, [customer, invoiceAddress, deliveryAddress, differentDeliveryAddress, selectedCarrier, selectedPayment, selectedPickupPoint, cart?.cartId, debouncedUpdate]);
 
 
   const handleCustomerChange = (e) => {
