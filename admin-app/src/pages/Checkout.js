@@ -131,7 +131,10 @@ const Checkout = () => {
 
     const orderData = {
       cartId: cart?.cartId,
-      customer,
+      firstname: customer.firstname,
+      lastname: customer.lastname,
+      email: customer.email,
+      phone: customer.phone,
       invoiceAddress,
       deliveryAddress: differentDeliveryAddress ? deliveryAddress : invoiceAddress,
       deliveryAddressSameAsInvoiceAddress: !differentDeliveryAddress,
