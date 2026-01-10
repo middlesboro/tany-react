@@ -342,7 +342,7 @@ const Checkout = () => {
                                 </button>
                                 {selectedPickupPoint && (
                                     <div className="mt-2 text-sm text-gray-700">
-                                        <strong>Selected Point:</strong> {selectedPickupPoint.formatedValue || selectedPickupPoint.name || selectedPickupPoint.id}
+                                        <strong>Selected Point:</strong> {selectedPickupPoint.name}
                                     </div>
                                 )}
                             </div>
