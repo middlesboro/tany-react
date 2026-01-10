@@ -1,4 +1,4 @@
-  import React, { useState, useEffect, useCallback, useRef } from 'react';
+  import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { createOrder } from '../services/orderService';
@@ -29,7 +29,9 @@ const Checkout = () => {
   const [selectedPickupPoint, setSelectedPickupPoint] = useState(null);
 
   // Track if we have initialized from cart to avoid overwriting user input
-  const initialized = useRef(false);
+  // We use state instead of ref to ensure that after initialization, the component re-renders
+  // and subsequent effects (like the auto-save) see the updated initialized value AND updated state.
+  const [initialized, setInitialized] = useState(false);
 
   // Dynamic data from cart
   const carriers = cart?.carriers || [];
@@ -48,7 +50,7 @@ const Checkout = () => {
 
   // Initialize state from cart data
   useEffect(() => {
-      if (cart && !initialized.current) {
+      if (cart && !initialized) {
           // Initialize Carriers
           if (cart.selectedCarrierId) {
               setSelectedCarrier(cart.selectedCarrierId);
@@ -150,9 +152,9 @@ const Checkout = () => {
               }
           }
 
-          initialized.current = true;
+          setInitialized(true);
       }
-  }, [cart, customerContext, selectedCarrier, selectedPayment]);
+  }, [cart, customerContext, selectedCarrier, selectedPayment, initialized]);
 
   // Debounced update function
   const debouncedUpdate = useCallback(
@@ -166,7 +168,7 @@ const Checkout = () => {
 
   // Effect to trigger update when fields change
   useEffect(() => {
-      if (!initialized.current || !cart) return;
+      if (!initialized || !cart) return;
 
       const carrierObj = carriers.find(c => c.id === selectedCarrier);
 
@@ -185,7 +187,7 @@ const Checkout = () => {
 
       debouncedUpdate(dataToSave);
 
-  }, [customer, invoiceAddress, deliveryAddress, differentDeliveryAddress, selectedCarrier, selectedPayment, selectedPickupPoint, cart?.cartId, debouncedUpdate]);
+  }, [customer, invoiceAddress, deliveryAddress, differentDeliveryAddress, selectedCarrier, selectedPayment, selectedPickupPoint, cart?.cartId, debouncedUpdate, initialized]);
 
 
   const handleCustomerChange = (e) => {
