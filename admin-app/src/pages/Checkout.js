@@ -95,7 +95,7 @@ const Checkout = () => {
           if (cart.selectedPickupPointId) {
              setSelectedPickupPoint({
                  id: cart.selectedPickupPointId,
-                 name: "Uložené výdajné miesto"
+                 name: cart.selectedPickupPointName || "Uložené výdajné miesto"
              });
           }
 
@@ -182,7 +182,8 @@ const Checkout = () => {
           deliveryAddress: differentDeliveryAddress ? deliveryAddress : invoiceAddress, // Send proper delivery address
           selectedCarrierId: selectedCarrier,
           selectedPaymentId: selectedPayment,
-          selectedPickupPointId: carrierObj?.type === 'PACKETA' ? selectedPickupPoint?.id : null
+          selectedPickupPointId: carrierObj?.type === 'PACKETA' ? selectedPickupPoint?.id : null,
+          selectedPickupPointName: carrierObj?.type === 'PACKETA' ? (selectedPickupPoint?.name || selectedPickupPoint?.formatedValue) : null
       };
 
       debouncedUpdate(dataToSave);
