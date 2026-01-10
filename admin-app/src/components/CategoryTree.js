@@ -1,9 +1,26 @@
-import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useState, useEffect, useMemo } from 'react';
+import { Link, useLocation } from 'react-router-dom';
 
 const CategoryTreeItem = ({ category }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const location = useLocation();
   const hasChildren = category.children && category.children.length > 0;
+
+  const isActive = location.pathname === `/category/${category.slug}`;
+
+  const hasActiveDescendant = useMemo(() => {
+    const check = (cats) => {
+      if (!cats) return false;
+      return cats.some((c) => `/category/${c.slug}` === location.pathname || check(c.children));
+    };
+    return check(category.children);
+  }, [category.children, location.pathname]);
+
+  useEffect(() => {
+    if (hasActiveDescendant) {
+      setIsOpen(true);
+    }
+  }, [hasActiveDescendant]);
 
   const handleToggle = (e) => {
     e.preventDefault();
@@ -13,17 +30,17 @@ const CategoryTreeItem = ({ category }) => {
 
   return (
     <li className="border-b border-gray-100 last:border-0">
-      <div className="flex items-center justify-between hover:bg-gray-50 transition-colors">
+      <div className={`flex items-center justify-between transition-colors ${isActive ? 'bg-gray-50' : 'hover:bg-gray-50'}`}>
         <Link
           to={`/category/${category.slug}`}
-          className="block py-3 px-4 text-sm text-gray-700 hover:text-tany-green flex-grow"
+          className={`block py-3 px-4 text-sm flex-grow ${isActive ? 'font-bold text-tany-green' : 'text-gray-700 hover:text-tany-green'}`}
         >
           {category.title}
         </Link>
         {hasChildren && (
           <button
             onClick={handleToggle}
-            className="py-3 px-4 text-gray-500 hover:text-tany-green focus:outline-none font-bold"
+            className="py-3 px-4 text-gray-500 hover:text-tany-green focus:outline-none font-bold flex-shrink-0"
           >
             {isOpen ? '−' : '+'}
           </button>
