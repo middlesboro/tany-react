@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getAdminProducts, deleteProduct } from '../services/productAdminService';
+import { getAdminProducts, deleteProduct, patchProduct } from '../services/productAdminService';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -8,6 +8,8 @@ const ProductList = () => {
   const [size, setSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
   const [sort, setSort] = useState('title,asc');
+  const [editingId, setEditingId] = useState(null);
+  const [editFormData, setEditFormData] = useState({});
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -34,6 +36,35 @@ const ProductList = () => {
     }
   };
 
+  const handleEditClick = (product) => {
+    setEditingId(product.id);
+    setEditFormData({
+      title: product.title,
+      price: product.price,
+      quantity: product.quantity,
+    });
+  };
+
+  const handleCancelClick = () => {
+    setEditingId(null);
+    setEditFormData({});
+  };
+
+  const handleSaveClick = async (id) => {
+    const updatedProduct = await patchProduct(id, editFormData);
+    setProducts(products.map((p) => (p.id === id ? updatedProduct : p)));
+    setEditingId(null);
+    setEditFormData({});
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setEditFormData({
+      ...editFormData,
+      [name]: value,
+    });
+  };
+
   return (
     <div>
       <table className="min-w-full bg-white">
@@ -54,20 +85,77 @@ const ProductList = () => {
         <tbody>
           {products.map((product) => (
             <tr key={product.id}>
-              <td className="py-2 px-4 border-b">{product.title}</td>
-              <td className="py-2 px-4 border-b">{product.price}</td>
-              <td className="py-2 px-4 border-b">{product.quantity}</td>
-              <td className="py-2 px-4 border-b">
-                <Link to={`/admin/products/${product.id}`} className="bg-blue-500 text-white px-2 py-1 rounded mr-2">
-                  Edit
-                </Link>
-                <button
-                  onClick={() => handleDelete(product.id)}
-                  className="bg-red-500 text-white px-2 py-1 rounded"
-                >
-                  Delete
-                </button>
-              </td>
+              {editingId === product.id ? (
+                <>
+                  <td className="py-2 px-4 border-b">
+                    <input
+                      type="text"
+                      name="title"
+                      value={editFormData.title}
+                      onChange={handleInputChange}
+                      className="border rounded p-1 w-full"
+                    />
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    <input
+                      type="number"
+                      name="price"
+                      value={editFormData.price}
+                      onChange={handleInputChange}
+                      className="border rounded p-1 w-full"
+                    />
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    <input
+                      type="number"
+                      name="quantity"
+                      value={editFormData.quantity}
+                      onChange={handleInputChange}
+                      className="border rounded p-1 w-full"
+                    />
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    <button
+                      onClick={() => handleSaveClick(product.id)}
+                      className="bg-green-500 text-white px-2 py-1 rounded mr-2"
+                    >
+                      Save
+                    </button>
+                    <button
+                      onClick={handleCancelClick}
+                      className="bg-gray-500 text-white px-2 py-1 rounded"
+                    >
+                      Cancel
+                    </button>
+                  </td>
+                </>
+              ) : (
+                <>
+                  <td className="py-2 px-4 border-b">{product.title}</td>
+                  <td className="py-2 px-4 border-b">{product.price}</td>
+                  <td className="py-2 px-4 border-b">{product.quantity}</td>
+                  <td className="py-2 px-4 border-b">
+                    <Link
+                      to={`/admin/products/${product.id}`}
+                      className="bg-blue-500 text-white px-2 py-1 rounded mr-2"
+                    >
+                      Edit
+                    </Link>
+                    <button
+                      onClick={() => handleEditClick(product)}
+                      className="bg-yellow-500 text-white px-2 py-1 rounded mr-2"
+                    >
+                      Quick Edit
+                    </button>
+                    <button
+                      onClick={() => handleDelete(product.id)}
+                      className="bg-red-500 text-white px-2 py-1 rounded"
+                    >
+                      Delete
+                    </button>
+                  </td>
+                </>
+              )}
             </tr>
           ))}
         </tbody>

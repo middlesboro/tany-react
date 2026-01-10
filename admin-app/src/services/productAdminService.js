@@ -40,6 +40,17 @@ export const deleteProduct = async (id) => {
   });
 };
 
+export const patchProduct = async (id, patchDto) => {
+  const response = await authFetch(`${API_ADMIN_URL}/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(patchDto),
+  });
+  return response.json();
+};
+
 export const uploadProductImages = async (id, files) => {
   const formData = new FormData();
   for (let i = 0; i < files.length; i++) {
