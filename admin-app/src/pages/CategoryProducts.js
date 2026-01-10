@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCategories } from '../services/categoryService';
 import { getProductsByCategory } from '../services/productService';
+import { findCategoryBySlug } from '../utils/categoryUtils';
 import ProductCard from '../components/ProductCard';
 
 const CategoryProducts = () => {
@@ -23,7 +24,7 @@ const CategoryProducts = () => {
         // 1. Fetch all categories to resolve slug to ID
         // (Optimization: In a real app, we might want a specific API to get category by slug)
         const categories = await getCategories();
-        const foundCategory = categories.find(c => c.slug === slug);
+        const foundCategory = findCategoryBySlug(categories, slug);
 
         if (!foundCategory) {
           setError("Kategória sa nenašla."); // Category not found
