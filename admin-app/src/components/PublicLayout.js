@@ -3,6 +3,7 @@ import { Outlet, Link, useLocation } from 'react-router-dom';
 import { getCategories } from '../services/categoryService';
 import { useCart } from '../context/CartContext';
 import ProductSearch from './ProductSearch';
+import CategoryTree from './CategoryTree';
 
 const PublicLayout = () => {
   const { cart, customer } = useCart();
@@ -22,13 +23,15 @@ const PublicLayout = () => {
     fetchCategories();
   }, []);
 
-  // Prepare the display list with "All Products" prepended
+  // Prepare the display list with "All Products" prepended (for mobile menu - still flat for now or maybe we should use the tree there too?
+  // User only asked for left side tree view. Mobile menu implementation is tricky with tree, keeping it flat for top level for now or I can try to flatten it if needed.
+  // But wait, the previous implementation was only showing top level categories anyway because it was just mapping `categories`.
+  // If `categories` is now a tree, `categories.map` only iterates top level. So the mobile menu will show top level categories, which is acceptable.)
   const displayCategories = [
     { name: "Všetky produkty", path: "/", highlight: true },
     ...categories.map(cat => ({
       name: cat.title,
       path: `/category/${cat.slug}`,
-      // We could add logic here to map special categories to colors if needed, but for now just title
     }))
   ];
 
@@ -149,23 +152,7 @@ const PublicLayout = () => {
               {/* Left Sidebar - Categories */}
               {showSidebar && (
                 <aside className="hidden md:block w-full md:w-1/4 lg:w-1/5 flex-shrink-0">
-                   <div className="bg-white border border-gray-200 rounded-sm overflow-hidden">
-                      <div className="bg-tany-dark-grey text-white font-bold uppercase py-3 px-4">
-                        Kategórie
-                      </div>
-                      <ul className="divide-y divide-gray-100">
-                        {displayCategories.map((cat, index) => (
-                          <li key={index}>
-                            <Link
-                              to={cat.path}
-                              className={`block py-3 px-4 text-sm hover:text-tany-green hover:bg-gray-50 transition-colors ${cat.color || ''}`}
-                            >
-                              {cat.name}
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                   </div>
+                   <CategoryTree categories={categories} />
 
                    {/* Banner placeholder often found in left column */}
                    <div className="mt-6 bg-gray-100 h-64 flex items-center justify-center text-gray-400 text-sm border border-gray-200">
