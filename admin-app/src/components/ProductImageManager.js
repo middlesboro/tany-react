@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { uploadProductImages } from '../services/productAdminService';
+import { uploadProductImages, deleteProductImage } from '../services/productAdminService';
 
 const ProductImageManager = ({ productId, images = [], onImagesChange, onUploadSuccess }) => {
   const [selectedFiles, setSelectedFiles] = useState(null);
@@ -22,6 +22,20 @@ const ProductImageManager = ({ productId, images = [], onImagesChange, onUploadS
     } catch (error) {
       console.error("Failed to upload images", error);
       alert("Failed to upload images");
+    }
+  };
+
+  const handleDelete = async (imageUrl) => {
+    if (!window.confirm("Are you sure you want to delete this image?")) return;
+
+    try {
+      await deleteProductImage(productId, imageUrl);
+      if (onUploadSuccess) {
+        onUploadSuccess();
+      }
+    } catch (error) {
+      console.error("Failed to delete image", error);
+      alert("Failed to delete image");
     }
   };
 
@@ -69,6 +83,13 @@ const ProductImageManager = ({ productId, images = [], onImagesChange, onUploadS
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
           {images.map((img, index) => (
             <div key={index} className="relative border p-2 rounded group">
+              <button
+                onClick={() => handleDelete(img)}
+                className="absolute top-2 right-2 bg-red-600 text-white rounded-full w-6 h-6 flex items-center justify-center opacity-75 hover:opacity-100 z-10"
+                title="Delete Image"
+              >
+                &times;
+              </button>
               <img
                 src={img}
                 alt={`Product ${index}`}

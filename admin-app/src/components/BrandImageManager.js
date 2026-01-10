@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { uploadBrandImage } from '../services/brandAdminService';
+import { uploadBrandImage, deleteBrandImage } from '../services/brandAdminService';
 
 const BrandImageManager = ({ brandId, image, onUploadSuccess }) => {
   const [selectedFile, setSelectedFile] = useState(null);
@@ -22,6 +22,20 @@ const BrandImageManager = ({ brandId, image, onUploadSuccess }) => {
     } catch (error) {
       console.error("Failed to upload image", error);
       alert("Failed to upload image");
+    }
+  };
+
+  const handleDelete = async () => {
+    if (!window.confirm("Are you sure you want to delete this image?")) return;
+
+    try {
+      await deleteBrandImage(brandId);
+      if (onUploadSuccess) {
+        onUploadSuccess();
+      }
+    } catch (error) {
+      console.error("Failed to delete image", error);
+      alert("Failed to delete image");
     }
   };
 
@@ -62,6 +76,12 @@ const BrandImageManager = ({ brandId, image, onUploadSuccess }) => {
              alt="Brand"
              className="w-full h-auto object-cover rounded"
            />
+           <button
+             onClick={handleDelete}
+             className="mt-2 w-full bg-red-600 text-white py-1 rounded hover:bg-red-700"
+           >
+             Delete Image
+           </button>
         </div>
       ) : (
         <p className="text-gray-500">No image available.</p>

@@ -53,3 +53,9 @@ export const uploadProductImages = async (id, files) => {
     throw new Error('Failed to upload images');
   }
 };
+
+export const deleteProductImage = async (id, imageUrl) => {
+  await authFetch(`${API_ADMIN_URL}/${id}/images?url=${encodeURIComponent(imageUrl)}`, {
+    method: 'DELETE',
+  });
+};
