@@ -52,3 +52,9 @@ export const uploadBrandImage = async (id, file) => {
     throw new Error('Failed to upload image');
   }
 };
+
+export const deleteBrandImage = async (id) => {
+  await authFetch(`${API_ADMIN_URL}/${id}/image`, {
+    method: 'DELETE',
+  });
+};

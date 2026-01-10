@@ -54,3 +54,9 @@ export const uploadCarrierImage = async (id, file) => {
   }
   return response.json();
 };
+
+export const deleteCarrierImage = async (id) => {
+  await authFetch(`${API_ADMIN_URL}/${id}/image`, {
+    method: 'DELETE',
+  });
+};
