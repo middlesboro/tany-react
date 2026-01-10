@@ -89,6 +89,14 @@ const Checkout = () => {
               zip: cartInvoice.zip || profileInvoice.zip || prev.zip
           }));
 
+          // Initialize Pickup Point
+          if (cart.selectedPickupPointId) {
+             setSelectedPickupPoint({
+                 id: cart.selectedPickupPointId,
+                 name: "Uložené výdajné miesto"
+             });
+          }
+
           // Initialize Delivery Address
           const cartDelivery = cart.deliveryAddress || {};
           // Only use profile delivery address if it has data.
@@ -331,7 +339,7 @@ const Checkout = () => {
                                 </button>
                                 {selectedPickupPoint && (
                                     <div className="mt-2 text-sm text-gray-700">
-                                        <strong>Selected Point:</strong> {selectedPickupPoint.formatedValue || selectedPickupPoint.name}
+                                        <strong>Selected Point:</strong> {selectedPickupPoint.formatedValue || selectedPickupPoint.name || selectedPickupPoint.id}
                                     </div>
                                 )}
                             </div>
