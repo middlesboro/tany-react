@@ -14,6 +14,26 @@ const SupplierForm = ({ supplier, handleChange, handleSubmit, handleSaveAndStay 
           required
         />
       </div>
+      <div className="mb-4">
+        <label className="block text-gray-700">Meta Title</label>
+        <input
+          type="text"
+          name="metaTitle"
+          value={supplier.metaTitle || ''}
+          onChange={handleChange}
+          className="w-full px-3 py-2 border rounded"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700">Meta Description</label>
+        <textarea
+          name="metaDescription"
+          value={supplier.metaDescription || ''}
+          onChange={handleChange}
+          className="w-full px-3 py-2 border rounded"
+          rows="3"
+        />
+      </div>
       <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
         Save
       </button>

@@ -8,6 +8,8 @@ const SupplierEdit = () => {
   const navigate = useNavigate();
   const [supplier, setSupplier] = useState({
     name: '',
+    metaTitle: '',
+    metaDescription: '',
   });
 
   useEffect(() => {

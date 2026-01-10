@@ -9,6 +9,9 @@ const BrandEdit = () => {
   const navigate = useNavigate();
   const [brand, setBrand] = useState({
     name: '',
+    metaTitle: '',
+    metaDescription: '',
+    active: true,
     image: '',
   });
 
@@ -30,8 +33,9 @@ const BrandEdit = () => {
   };
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setBrand({ ...brand, [name]: value });
+    const { name, value, type, checked } = e.target;
+    const val = type === 'checkbox' ? checked : value;
+    setBrand({ ...brand, [name]: val });
   };
 
   const handleSubmit = async (e) => {
