@@ -15,6 +15,7 @@ const ShopSettingsForm = () => {
     ico: '',
     dic: '',
     vatNumber: '',
+    vat: '',
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -38,6 +39,7 @@ const ShopSettingsForm = () => {
           ico: data.ico || '',
           dic: data.dic || '',
           vatNumber: data.vatNumber || '',
+          vat: data.vat || '',
         });
       } catch (err) {
         setError('Failed to fetch shop settings');
@@ -249,6 +251,20 @@ const ShopSettingsForm = () => {
               value={formData.vatNumber}
               onChange={handleChange}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="vat">
+              Shop Vat
+            </label>
+            <input
+                type="number"
+                name="vat"
+                id="vat"
+                value={formData.vat}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
         </div>
