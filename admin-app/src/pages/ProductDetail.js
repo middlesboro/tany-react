@@ -1,16 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getProduct } from '../services/productService';
+import { getReviewsByProduct, createReview } from '../services/reviewService';
+import { getUserEmail } from '../services/authService';
 import { useCart } from '../context/CartContext';
 import AddToCartButton from '../components/AddToCartButton';
-
-// Mock Reviews Data
-const MOCK_REVIEWS = [
-  { id: 1, user: 'Saniya', date: '23.01.2025', rating: 5, text: 'Vlasy zafarbil veľmi dobre, môžem odporučiť.' },
-  { id: 2, user: 'Daniela', date: '15.10.2023', rating: 5, text: 'Hennu na farbenie vlasov používam už roky a objednaný tovar mi vyhovuje momentálne najviac. Hadam najviac pre mňa zavážilo, že mi prestali vlasy padať a henna spolu s indigom celkom dobre zakryjú šediny. Som spokojná.' },
-  { id: 3, user: 'Zuzana', date: '05.10.2023', rating: 5, text: 'Zdravé a lesklé vlasy! Prestali vypadávať' },
-  { id: 4, user: 'Tatiana', date: '13.02.2023', rating: 4, text: '+ Po opakovanom pouziti jemnejsie vlasy, lesk, kvalita.\n- Na sedive vlasy treba viac x opakovat pouzitie, kedy sa dostavi adekvatny vysledok.' },
-];
 
 const REASONS = [
   "Sme malá Slovenská spoločnosť. Každú objednávku si vážime rovnako a tak k nej aj pristupujeme",
@@ -21,11 +15,16 @@ const REASONS = [
   "Doprava zadarmo už od 30€"
 ];
 
-const StarRating = ({ rating, size = "w-4 h-4" }) => {
+const StarRating = ({ rating, size = "w-4 h-4", onClick, interactive = false }) => {
   return (
     <div className="flex text-tany-yellow">
       {[...Array(5)].map((_, i) => (
-        <svg key={i} className={`${size} ${i < rating ? 'fill-current' : 'text-gray-300 fill-current'}`} viewBox="0 0 24 24">
+        <svg
+          key={i}
+          onClick={() => interactive && onClick && onClick(i + 1)}
+          className={`${size} ${i < rating ? 'fill-current' : 'text-gray-300 fill-current'} ${interactive ? 'cursor-pointer hover:scale-110 transition-transform' : ''}`}
+          viewBox="0 0 24 24"
+        >
           <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" />
         </svg>
       ))}
@@ -33,8 +32,82 @@ const StarRating = ({ rating, size = "w-4 h-4" }) => {
   );
 };
 
-const ProductReviews = () => {
-  const averageRating = MOCK_REVIEWS.reduce((acc, r) => acc + r.rating, 0) / MOCK_REVIEWS.length;
+const ProductReviews = ({ productId }) => {
+  const [reviews, setReviews] = useState([]);
+  const [stats, setStats] = useState({ averageRating: 0, reviewsCount: 0 });
+  const [loading, setLoading] = useState(true);
+
+  // Review Form State
+  const [newReview, setNewReview] = useState({
+    rating: 5,
+    title: '',
+    email: getUserEmail() || '',
+    text: ''
+  });
+  const [submitting, setSubmitting] = useState(false);
+  const [error, setError] = useState(null);
+  const [success, setSuccess] = useState(false);
+
+  const fetchReviews = React.useCallback(async () => {
+    setLoading(true);
+    try {
+      const data = await getReviewsByProduct(productId);
+      setReviews(data.reviews.content);
+      setStats({
+        averageRating: data.averageRating || 0,
+        reviewsCount: data.reviewsCount || 0
+      });
+    } catch (err) {
+      console.error("Failed to fetch reviews", err);
+    } finally {
+      setLoading(false);
+    }
+  }, [productId]);
+
+  useEffect(() => {
+    if (productId) {
+      fetchReviews();
+    }
+  }, [productId, fetchReviews]);
+
+  const handleReviewChange = (e) => {
+    const { name, value } = e.target;
+    setNewReview(prev => ({ ...prev, [name]: value }));
+  };
+
+  const handleRatingChange = (rating) => {
+    setNewReview(prev => ({ ...prev, rating }));
+  };
+
+  const handleReviewSubmit = async (e) => {
+    e.preventDefault();
+    if (!newReview.email || !newReview.title || !newReview.text) {
+        setError('Vyplňte všetky polia.');
+        return;
+    }
+    setSubmitting(true);
+    setError(null);
+    setSuccess(false);
+
+    try {
+      await createReview({
+        productId,
+        ...newReview
+      });
+      setSuccess(true);
+      setNewReview({
+        rating: 5,
+        title: '',
+        email: getUserEmail() || '',
+        text: ''
+      });
+      fetchReviews();
+    } catch (err) {
+      setError('Nepodarilo sa odoslať hodnotenie. Skúste to prosím neskôr.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
   return (
     <div className="mt-12">
@@ -42,38 +115,93 @@ const ProductReviews = () => {
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
         <div className="bg-gray-50 p-6 rounded-lg text-center">
-          <div className="text-4xl font-bold text-gray-800 mb-2">{averageRating.toFixed(2)}/5</div>
+          <div className="text-4xl font-bold text-gray-800 mb-2">{stats.averageRating ? stats.averageRating.toFixed(2) : '0.00'}/5</div>
           <div className="flex justify-center mb-2">
-            <StarRating rating={Math.round(averageRating)} size="w-6 h-6" />
+            <StarRating rating={Math.round(stats.averageRating)} size="w-6 h-6" />
           </div>
-          <p className="text-gray-500">Počet hodnotení: {MOCK_REVIEWS.length}</p>
+          <p className="text-gray-500">Počet hodnotení: {stats.reviewsCount}</p>
         </div>
 
         <div className="md:col-span-2">
-           {/* Visual "Write Review" Form - purely visual as requested */}
-           <div className="bg-white border rounded-lg p-6">
+           <form onSubmit={handleReviewSubmit} className="bg-white border rounded-lg p-6">
              <h4 className="font-semibold text-lg mb-4">Napísať hodnotenie</h4>
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-               <input type="text" placeholder="Meno" className="border p-2 rounded w-full" />
-               <input type="email" placeholder="Email" className="border p-2 rounded w-full" />
+
+             {error && <div className="bg-red-50 text-red-600 p-3 rounded mb-4 text-sm">{error}</div>}
+             {success && <div className="bg-green-50 text-green-600 p-3 rounded mb-4 text-sm">Hodnotenie bolo úspešne pridané!</div>}
+
+             <div className="mb-4">
+                <label className="block text-sm font-medium text-gray-700 mb-1">Hodnotenie</label>
+                <StarRating rating={newReview.rating} onClick={handleRatingChange} interactive={true} size="w-6 h-6" />
              </div>
-             <textarea placeholder="Text hodnotenia" className="border p-2 rounded w-full h-24 mb-4"></textarea>
-             <button className="bg-tany-green text-white px-6 py-2 rounded hover:bg-green-700 transition">
-               Pridať hodnotenie
+
+             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+               <div>
+                   <label className="block text-sm font-medium text-gray-700 mb-1">Nadpis</label>
+                   <input
+                    type="text"
+                    name="title"
+                    value={newReview.title}
+                    onChange={handleReviewChange}
+                    placeholder="Zhrnutie hodnotenia"
+                    className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-tany-green"
+                    required
+                   />
+               </div>
+               <div>
+                   <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                   <input
+                    type="email"
+                    name="email"
+                    value={newReview.email}
+                    onChange={handleReviewChange}
+                    placeholder="Váš email"
+                    className="border p-2 rounded w-full focus:outline-none focus:ring-1 focus:ring-tany-green"
+                    required
+                   />
+               </div>
+             </div>
+
+             <div className="mb-4">
+                 <label className="block text-sm font-medium text-gray-700 mb-1">Text hodnotenia</label>
+                 <textarea
+                    name="text"
+                    value={newReview.text}
+                    onChange={handleReviewChange}
+                    placeholder="Napíšte nám vaše skúsenosti..."
+                    className="border p-2 rounded w-full h-24 focus:outline-none focus:ring-1 focus:ring-tany-green"
+                    required
+                 ></textarea>
+             </div>
+
+             <button
+                type="submit"
+                disabled={submitting}
+                className="bg-tany-green text-white px-6 py-2 rounded hover:bg-green-700 transition disabled:opacity-50"
+             >
+               {submitting ? 'Odosielam...' : 'Pridať hodnotenie'}
              </button>
-           </div>
+           </form>
         </div>
       </div>
 
       <div className="space-y-6">
-        {MOCK_REVIEWS.map(review => (
+        {loading && <p className="text-gray-500">Načítavam hodnotenia...</p>}
+        {!loading && reviews.length === 0 && (
+          <p className="text-gray-500 italic">Zatiaľ žiadne hodnotenia.</p>
+        )}
+        {!loading && reviews.map(review => (
           <div key={review.id} className="border-b pb-6 last:border-0">
-            <div className="flex items-center justify-between mb-2">
-              <div className="flex items-center gap-2">
-                <StarRating rating={review.rating} />
-                <span className="font-semibold text-gray-800">od {review.user}</span>
+            <div className="flex flex-col mb-2">
+              <div className="flex items-center justify-between">
+                 <div className="flex items-center gap-2">
+                   <StarRating rating={review.rating} />
+                   <span className="font-semibold text-gray-800">
+                     {review.title && <span className="mr-2">{review.title}</span>}
+                     <span className="text-gray-500 font-normal text-sm">od {review.email ? review.email.split('@')[0] : 'Anonym'}</span>
+                   </span>
+                 </div>
+                 <span className="text-sm text-gray-500">dňa {new Date(review.createDate).toLocaleDateString('sk-SK')}</span>
               </div>
-              <span className="text-sm text-gray-500">dňa {review.date}</span>
             </div>
             <p className="text-gray-600 whitespace-pre-line">{review.text}</p>
           </div>
@@ -252,7 +380,7 @@ const ProductDetail = () => {
             />
           </div>
 
-          <ProductReviews />
+          <ProductReviews productId={product.id} />
       </div>
     </div>
   );
