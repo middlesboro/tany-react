@@ -107,6 +107,8 @@ const ProductDetail = () => {
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
   const [adding, setAdding] = useState(false);
+  const [selectedImage, setSelectedImage] = useState(null);
+  const [isFullViewOpen, setIsFullViewOpen] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -114,6 +116,9 @@ const ProductDetail = () => {
       try {
         const data = await getProduct(id);
         setProduct(data);
+        if (data.images && data.images.length > 0) {
+          setSelectedImage(data.images[0]);
+        }
       } catch (err) {
         setError("Failed to load product details.");
         console.error(err);
@@ -170,11 +175,14 @@ const ProductDetail = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
 
           {/* Left Column: Image */}
-          <div className="flex items-center justify-center bg-white p-8 border-b md:border-b-0 md:border-r border-gray-100">
-            <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center">
-              {product.images && product.images.length > 0 ? (
+          <div className="flex flex-col bg-white p-8 border-b md:border-b-0 md:border-r border-gray-100">
+            <div
+              className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center mb-6 cursor-zoom-in"
+              onClick={() => selectedImage && setIsFullViewOpen(true)}
+            >
+              {selectedImage ? (
                 <img
-                  src={product.images[0]}
+                  src={selectedImage}
                   alt={product.title}
                   className="max-w-full max-h-full object-contain"
                 />
@@ -184,6 +192,28 @@ const ProductDetail = () => {
                 </div>
               )}
             </div>
+
+            {product.images && product.images.length > 1 && (
+              <div className="flex gap-2 overflow-x-auto pb-2 justify-center thumbnail-gallery">
+                {product.images.map((img, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setSelectedImage(img)}
+                    className={`border-2 rounded-lg p-1 w-20 h-20 flex-shrink-0 flex items-center justify-center bg-white overflow-hidden transition-all ${
+                      selectedImage === img
+                        ? 'border-tany-green shadow-md'
+                        : 'border-transparent hover:border-gray-200'
+                    }`}
+                  >
+                    <img
+                      src={img}
+                      alt={`${product.title} - ${index + 1}`}
+                      className="max-w-full max-h-full object-contain"
+                    />
+                  </button>
+                ))}
+              </div>
+            )}
           </div>
 
           {/* Right Column: Info */}
@@ -254,6 +284,29 @@ const ProductDetail = () => {
 
           <ProductReviews />
       </div>
+
+      {/* Full View Modal */}
+      {isFullViewOpen && selectedImage && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4"
+          onClick={() => setIsFullViewOpen(false)}
+        >
+          <div className="relative w-full max-w-5xl h-full flex items-center justify-center">
+             <button
+                className="absolute top-4 right-4 text-white hover:text-gray-300 z-50 p-2"
+                onClick={() => setIsFullViewOpen(false)}
+             >
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"></path></svg>
+             </button>
+             <img
+               src={selectedImage}
+               alt={product.title}
+               className="max-w-full max-h-full object-contain"
+               onClick={(e) => e.stopPropagation()} // Prevent closing when clicking the image itself
+             />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
