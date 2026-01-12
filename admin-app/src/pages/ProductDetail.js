@@ -197,7 +197,7 @@ const ProductReviews = ({ productId }) => {
                    <StarRating rating={review.rating} />
                    <span className="font-semibold text-gray-800">
                      {review.title && <span className="mr-2">{review.title}</span>}
-                     <span className="text-gray-500 font-normal text-sm">od {review.email ? review.email.split('@')[0] : 'Anonym'}</span>
+                     <span className="text-gray-500 font-normal text-sm">od {review.customerName ? review.email.split('@')[0] : 'Anonym'}</span>
                    </span>
                  </div>
                  <span className="text-sm text-gray-500">dňa {new Date(review.createDate).toLocaleDateString('sk-SK')}</span>
