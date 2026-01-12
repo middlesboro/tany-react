@@ -108,6 +108,7 @@ const ProductDetail = () => {
   const [quantity, setQuantity] = useState(1);
   const [adding, setAdding] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
+  const [isFullViewOpen, setIsFullViewOpen] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -175,7 +176,10 @@ const ProductDetail = () => {
 
           {/* Left Column: Image */}
           <div className="flex flex-col bg-white p-8 border-b md:border-b-0 md:border-r border-gray-100">
-            <div className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center mb-6">
+            <div
+              className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center mb-6 cursor-zoom-in"
+              onClick={() => selectedImage && setIsFullViewOpen(true)}
+            >
               {selectedImage ? (
                 <img
                   src={selectedImage}
@@ -280,6 +284,29 @@ const ProductDetail = () => {
 
           <ProductReviews />
       </div>
+
+      {/* Full View Modal */}
+      {isFullViewOpen && selectedImage && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4"
+          onClick={() => setIsFullViewOpen(false)}
+        >
+          <div className="relative w-full max-w-5xl h-full flex items-center justify-center">
+             <button
+                className="absolute top-4 right-4 text-white hover:text-gray-300 z-50 p-2"
+                onClick={() => setIsFullViewOpen(false)}
+             >
+                <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"></path></svg>
+             </button>
+             <img
+               src={selectedImage}
+               alt={product.title}
+               className="max-w-full max-h-full object-contain"
+               onClick={(e) => e.stopPropagation()} // Prevent closing when clicking the image itself
+             />
+          </div>
+        </div>
+      )}
     </div>
   );
 };
