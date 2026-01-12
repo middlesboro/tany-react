@@ -96,7 +96,7 @@ const Home = () => {
         <div className="text-center py-20 text-gray-500">Načítavam produkty...</div>
       ) : (
         <>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-0 border-t border-l border-gray-100">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-0 border-t border-l border-gray-100">
              {/* Using gap-0 and border logic to create a grid with borders between items if desired,
                  or standard gap. tany.sk often has distinct cards.
                  Let's stick to standard gap for cleaner responsive behavior but use the card's internal borders.
