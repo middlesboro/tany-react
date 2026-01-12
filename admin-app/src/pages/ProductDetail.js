@@ -11,6 +11,15 @@ const MOCK_REVIEWS = [
   { id: 4, user: 'Tatiana', date: '13.02.2023', rating: 4, text: '+ Po opakovanom pouziti jemnejsie vlasy, lesk, kvalita.\n- Na sedive vlasy treba viac x opakovat pouzitie, kedy sa dostavi adekvatny vysledok.' },
 ];
 
+const REASONS = [
+  "Sme malá Slovenská spoločnosť. Každú objednávku si vážime rovnako a tak k nej aj pristupujeme",
+  "Nakúpite u nás všetky henna produkty na jednom mieste",
+  "Najlacnejšia doprava už od 2€",
+  "Blesková doprava. Objednávky sa snažíme odosielať ešte v ten istý (pracovný) deň",
+  "Viac ako 320 odberných miest po celom Slovensku",
+  "Doprava zadarmo už od 30€"
+];
+
 const StarRating = ({ rating, size = "w-4 h-4" }) => {
   return (
     <div className="flex text-tany-yellow">
@@ -72,6 +81,22 @@ const ProductReviews = () => {
     </div>
   );
 };
+
+const ReasonsToBuy = () => (
+    <div className="mt-10 border-t border-gray-100 pt-6">
+        <h3 className="text-lg font-bold text-gray-800 mb-4">6 dôvodov prečo nakúpiť na Tany.sk</h3>
+        <ul className="space-y-3">
+            {REASONS.map((reason, index) => (
+                <li key={index} className="flex items-start text-sm text-gray-600">
+                    <svg className="w-5 h-5 text-tany-green mr-2 flex-shrink-0" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                    </svg>
+                    <span>{reason}</span>
+                </li>
+            ))}
+        </ul>
+    </div>
+);
 
 const ProductDetail = () => {
   const { id } = useParams();
@@ -186,7 +211,7 @@ const ProductDetail = () => {
                 </div>
             </div>
 
-            <div className="mt-auto border-t border-gray-100 pt-8">
+            <div className="border-t border-gray-100 pt-8">
                 <div className="flex flex-col sm:flex-row gap-4">
                     {/* Quantity Selector */}
                     <div className="flex items-center border border-gray-300 rounded">
@@ -221,6 +246,9 @@ const ProductDetail = () => {
                     </button>
                 </div>
             </div>
+
+            {/* Reasons to Buy Section */}
+            <ReasonsToBuy />
           </div>
         </div>
       </div>
