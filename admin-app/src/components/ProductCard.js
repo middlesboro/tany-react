@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import AddToCartButton from './AddToCartButton';
 
 const ProductCard = ({ product }) => {
   const { addToCart, cart } = useCart();
@@ -62,30 +63,27 @@ const ProductCard = ({ product }) => {
           </h3>
         </Link>
 
-        <div className="mt-auto flex flex-col items-center">
+        <div className="mt-auto flex flex-col items-center w-full">
           <div className="mb-3 text-lg font-bold text-gray-900 group-hover:text-tany-red transition-colors">
              {product.price.toFixed(2)} €
           </div>
 
-          {/* Add to Cart Section - styled to look cleaner */}
-          <div className="w-full flex items-center justify-center gap-2 opacity-100 lg:opacity-0 lg:group-hover:opacity-100 transition-opacity duration-300 transform lg:translate-y-4 lg:group-hover:translate-y-0">
+          {/* Add to Cart Section - Always visible */}
+          <div className="w-full flex items-center justify-center gap-2">
              <input
               type="number"
               min="1"
               value={quantity}
               onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
               disabled={adding}
-              className="w-12 border border-gray-300 text-center text-sm py-1 focus:border-tany-green focus:outline-none"
+              className="w-12 h-10 border border-gray-300 text-center text-sm focus:border-tany-green focus:outline-none"
             />
-            <button
+            <AddToCartButton
               onClick={handleAddToCart}
-              disabled={adding}
-              className={`px-4 py-1 text-white text-sm font-bold uppercase tracking-wider transition-colors ${
-                adding ? 'bg-gray-400 cursor-not-allowed' : 'bg-tany-green hover:bg-green-700'
-              }`}
-            >
-              {adding ? '...' : 'Do košíka'}
-            </button>
+              adding={adding}
+              text="Do košíka"
+              className="h-10 px-4 flex-grow rounded-sm text-sm"
+            />
           </div>
         </div>
       </div>
