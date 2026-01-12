@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { getProducts } from '../services/productService';
 import ProductCard from '../components/ProductCard';
+import ImageSlider from '../components/ImageSlider';
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -35,9 +36,24 @@ const Home = () => {
     setPage(0);
   };
 
+  const slides = [
+    {
+      url: 'https://www.tany.sk/themes/leo_tea/assets/img/modules/appagebuilder/images/1.jpg',
+      link: 'https://www.tany.sk/23-vlasova-kozmetika?q=Značka-Indian Natural Hair Care'
+    },
+    {
+      url: 'https://www.tany.sk/themes/leo_tea/assets/img/modules/appagebuilder/images/3.jpg',
+      link: 'https://www.tany.sk/244-tuli-a-tuli'
+    },
+    {
+      url: 'https://www.tany.sk/themes/leo_tea/assets/img/modules/appagebuilder/images/2.jpg',
+      link: 'https://www.tany.sk/99_ponio'
+    }
+  ];
+
   return (
     <div className="container mx-auto px-4 py-8">
-      {/* Optional: Add a Banner or Slider placeholder here to match tany.sk layout */}
+      <ImageSlider slides={slides} />
 
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 border-b border-gray-200 pb-4">
         <h1 className="text-xl font-bold uppercase text-gray-800">Všetky produkty</h1>
