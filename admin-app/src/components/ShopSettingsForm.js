@@ -1,9 +1,7 @@
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import { createShopSettings, getShopSetting, updateShopSettings } from '../services/shopSettingsService';
+import { getShopSettings, updateShopSettings } from '../services/shopSettingsService';
 
-const ShopSettingsForm = ({ id }) => {
-  const navigate = useNavigate();
+const ShopSettingsForm = () => {
   const [formData, setFormData] = useState({
     bankName: '',
     bankAccount: '',
@@ -25,7 +23,7 @@ const ShopSettingsForm = ({ id }) => {
     const fetchSetting = async () => {
       setLoading(true);
       try {
-        const data = await getShopSetting(id);
+        const data = await getShopSettings();
         // Ensure all fields are present to control the inputs
         setFormData({
           bankName: data.bankName || '',
@@ -42,17 +40,15 @@ const ShopSettingsForm = ({ id }) => {
           vatNumber: data.vatNumber || '',
         });
       } catch (err) {
-        setError('Failed to fetch shop setting');
+        setError('Failed to fetch shop settings');
         console.error(err);
       } finally {
         setLoading(false);
       }
     };
 
-    if (id) {
-      fetchSetting();
-    }
-  }, [id]);
+    fetchSetting();
+  }, []);
 
 
   const handleChange = (e) => {
@@ -69,14 +65,8 @@ const ShopSettingsForm = ({ id }) => {
     setError(null);
 
     try {
-      if (id) {
-        await updateShopSettings(id, formData);
-        alert('Settings updated successfully');
-      } else {
-        const newSetting = await createShopSettings(formData);
-        alert('Settings created successfully');
-        navigate(`/admin/shop-settings/${newSetting.id}`, { replace: true });
-      }
+      await updateShopSettings(formData);
+      alert('Settings updated successfully');
     } catch (err) {
       setError('Failed to save shop settings');
       console.error(err);
@@ -85,7 +75,7 @@ const ShopSettingsForm = ({ id }) => {
     }
   };
 
-  if (loading && id && !formData.organizationName) {
+  if (loading && !formData.organizationName) {
     return <div>Loading...</div>;
   }
 
@@ -269,7 +259,7 @@ const ShopSettingsForm = ({ id }) => {
             type="submit"
             disabled={loading}
           >
-            {loading ? 'Saving...' : id ? 'Update Settings' : 'Create Settings'}
+            {loading ? 'Saving...' : 'Update Settings'}
           </button>
         </div>
       </form>
