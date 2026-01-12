@@ -113,7 +113,7 @@ const CategoryProducts = () => {
             {products.length === 0 ? (
                 <div className="text-center py-20 text-gray-500">V tejto kategórii nie sú žiadne produkty.</div>
             ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-0 border-t border-l border-gray-100">
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-0 border-t border-l border-gray-100">
                     {products.map((product) => (
                         <div key={product.id} className="p-2">
                             <ProductCard product={product} />
