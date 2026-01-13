@@ -35,8 +35,8 @@ const PublicLayout = () => {
     }))
   ];
 
-  // Determine if sidebar should be shown (everywhere except /cart and /order)
-  const showSidebar = !['/cart', '/order'].includes(location.pathname);
+  // Determine if sidebar should be shown (everywhere except /cart and /order and /order/confirmation/*)
+  const showSidebar = !['/cart', '/order'].includes(location.pathname) && !location.pathname.startsWith('/order/confirmation');
 
   return (
     <div className="flex flex-col min-h-screen font-sans text-gray-700">
