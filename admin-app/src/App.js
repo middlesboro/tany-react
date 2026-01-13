@@ -16,6 +16,8 @@ import Orders from './pages/Orders';
 import OrderEdit from './pages/OrderEdit';
 import Brands from './pages/Brands';
 import BrandEdit from './pages/BrandEdit';
+import Blogs from './pages/Blogs';
+import BlogEdit from './pages/BlogEdit';
 import Suppliers from './pages/Suppliers';
 import SupplierEdit from './pages/SupplierEdit';
 import Carriers from './pages/Carriers';
@@ -69,6 +71,9 @@ function App() {
           <Route path="brands" element={<Brands />} />
           <Route path="brands/new" element={<BrandEdit />} />
           <Route path="brands/:id" element={<BrandEdit />} />
+          <Route path="blogs" element={<Blogs />} />
+          <Route path="blogs/new" element={<BlogEdit />} />
+          <Route path="blogs/:id" element={<BlogEdit />} />
           <Route path="suppliers" element={<Suppliers />} />
           <Route path="suppliers/new" element={<SupplierEdit />} />
           <Route path="suppliers/:id" element={<SupplierEdit />} />
