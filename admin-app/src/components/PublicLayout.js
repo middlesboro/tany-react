@@ -118,9 +118,10 @@ const PublicLayout = () => {
                   Domov
                 </Link>
              </li>
-             {/* We can keep a few main links here */}
-             <li><a href="#" className="block py-4 px-5 hover:text-tany-green transition-colors text-tany-red">VÝPREDAJ</a></li>
-             <li><a href="#" className="block py-4 px-5 hover:text-tany-green transition-colors">Kontakt</a></li>
+             <li><Link to="/doprava" className="block py-4 px-5 hover:text-tany-green transition-colors">Doprava</Link></li>
+             <li><Link to="/moznosti-platby" className="block py-4 px-5 hover:text-tany-green transition-colors">Možnosti platby</Link></li>
+             <li><Link to="/akcie" className="block py-4 px-5 hover:text-tany-green transition-colors text-tany-red">Akcie</Link></li>
+             <li><Link to="/obchodne-podmienky" className="block py-4 px-5 hover:text-tany-green transition-colors">Obchodné podmienky</Link></li>
            </ul>
         </div>
 

@@ -36,6 +36,7 @@ import BesteronCallback from './pages/BesteronCallback';
 import CategoryProducts from './pages/CategoryProducts';
 import ShopSettings from './pages/ShopSettings';
 import Account from './pages/Account';
+import PublicPage from './pages/PublicPage';
 import { CartProvider } from './context/CartContext';
 
 function App() {
@@ -57,6 +58,7 @@ function App() {
             <Route path="/products/:id" element={<ProductDetail />} />
             <Route path="/login" element={<Login isAdmin={false} />} />
             <Route path="/account" element={<Account />} />
+            <Route path="/:slug" element={<PublicPage />} />
           </Route>
 
           <Route path="/admin" element={<AdminLayout />}>
