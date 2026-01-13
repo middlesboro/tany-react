@@ -31,6 +31,16 @@ const CartItem = ({ item }) => {
     }
   };
 
+  const handleRemove = async () => {
+    setUpdating(true);
+    try {
+      await addToCart(item.id, 0);
+    } catch (error) {
+      console.error("Failed to remove item", error);
+      setUpdating(false);
+    }
+  };
+
   const handleKeyDown = (e) => {
     if (e.key === 'Enter') {
       e.target.blur();
@@ -77,6 +87,15 @@ const CartItem = ({ item }) => {
         <div className="text-sm text-gray-900">
           {(item.price * item.quantity).toFixed(2)} €
         </div>
+      </td>
+      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+        <button
+          onClick={handleRemove}
+          disabled={updating}
+          className="text-red-600 hover:text-red-900"
+        >
+          Remove
+        </button>
       </td>
     </tr>
   );
