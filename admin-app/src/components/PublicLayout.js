@@ -114,14 +114,14 @@ const PublicLayout = () => {
            {/* Desktop Horizontal Menu - Optional, user asked for vertical, but keeping top menu is standard practice */}
            <ul className="hidden md:flex flex-wrap text-sm font-bold uppercase tracking-wide">
              <li className="group relative">
-                <Link to="/" className="block py-4 px-5 bg-tany-green hover:bg-green-700 transition-colors">
+                <Link to="/" className={`block py-4 px-3 hover:bg-green-700 transition-colors ${location.pathname === '/' ? 'bg-tany-green' : 'hover:text-tany-green'}`}>
                   Domov
                 </Link>
              </li>
-             <li><Link to="/doprava" className="block py-4 px-5 hover:text-tany-green transition-colors">Doprava</Link></li>
-             <li><Link to="/moznosti-platby" className="block py-4 px-5 hover:text-tany-green transition-colors">Možnosti platby</Link></li>
-             <li><Link to="/akcie" className="block py-4 px-5 hover:text-tany-green transition-colors text-tany-red">Akcie</Link></li>
-             <li><Link to="/obchodne-podmienky" className="block py-4 px-5 hover:text-tany-green transition-colors">Obchodné podmienky</Link></li>
+             <li><Link to="/doprava" className={`block py-4 px-3 hover:bg-green-700 transition-colors ${location.pathname === '/doprava' ? 'bg-tany-green' : 'hover:text-tany-green'}`}>Doprava</Link></li>
+             <li><Link to="/moznosti-platby" className={`block py-4 px-3 hover:bg-green-700 transition-colors ${location.pathname === '/moznosti-platby' ? 'bg-tany-green' : 'hover:text-tany-green'}`}>Možnosti platby</Link></li>
+             <li><Link to="/akcie" className={`block py-4 px-3 hover:bg-green-700 transition-colors ${location.pathname === '/akcie' ? 'bg-tany-green' : 'hover:text-tany-green text-tany-red'}`}>Akcie</Link></li>
+             <li><Link to="/obchodne-podmienky" className={`block py-4 px-3 hover:bg-green-700 transition-colors ${location.pathname === '/obchodne-podmienky' ? 'bg-tany-green' : 'hover:text-tany-green'}`}>Obchodné podmienky</Link></li>
            </ul>
         </div>
 
