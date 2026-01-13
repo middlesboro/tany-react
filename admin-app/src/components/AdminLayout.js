@@ -34,6 +34,9 @@ const AdminLayout = () => {
               <Link to="/admin/brands" className="hover:text-gray-300">Brands</Link>
             </li>
             <li className="mb-2">
+              <Link to="/admin/pages" className="hover:text-gray-300">Pages</Link>
+            </li>
+            <li className="mb-2">
               <Link to="/admin/blogs" className="hover:text-gray-300">Blogs</Link>
             </li>
             <li className="mb-2">
