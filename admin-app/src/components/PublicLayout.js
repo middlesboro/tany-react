@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { Outlet, Link, useLocation } from 'react-router-dom';
 import { getCategories } from '../services/categoryService';
+import { getBlogs } from '../services/blogService';
 import { useCart } from '../context/CartContext';
 import ProductSearch from './ProductSearch';
 import CategoryTree from './CategoryTree';
+import BlogSlider from './BlogSlider';
 
 const PublicLayout = () => {
   const { cart, customer } = useCart();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [categories, setCategories] = useState([]);
+  const [blogs, setBlogs] = useState([]);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -21,6 +24,20 @@ const PublicLayout = () => {
       }
     };
     fetchCategories();
+  }, []);
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const data = await getBlogs();
+        // Filter visible blogs
+        const visibleBlogs = data.filter(blog => blog.visible);
+        setBlogs(visibleBlogs);
+      } catch (error) {
+        console.error("Failed to fetch blogs", error);
+      }
+    };
+    fetchBlogs();
   }, []);
 
   // Prepare the display list with "All Products" prepended (for mobile menu - still flat for now or maybe we should use the tree there too?
@@ -168,6 +185,13 @@ const PublicLayout = () => {
 
            </div>
         </div>
+
+        {/* Blog Section */}
+        {blogs.length > 0 && (
+           <div className="border-t border-gray-200 mt-12">
+             <BlogSlider blogs={blogs} />
+           </div>
+        )}
       </div>
 
       {/* Footer */}
