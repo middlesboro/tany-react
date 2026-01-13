@@ -1,6 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { getCustomerContext } from '../services/customerService';
-import { addToCart as addToCartService, updateCart as updateCartService } from '../services/cartService';
+import { addToCart as addToCartService, updateCart as updateCartService, removeFromCart as removeFromCartService } from '../services/cartService';
 
 const CartContext = createContext();
 
@@ -54,6 +54,19 @@ export const CartProvider = ({ children }) => {
     }
   }, [fetchContext]);
 
+  const removeFromCart = useCallback(async (productId) => {
+    try {
+      const storedCartId = localStorage.getItem('cartId');
+      if (!storedCartId) return;
+
+      await removeFromCartService(storedCartId, productId);
+      await fetchContext();
+    } catch (error) {
+      console.error("Failed to remove from cart", error);
+      throw error;
+    }
+  }, [fetchContext]);
+
   const updateCart = useCallback(async (cartData) => {
       try {
           await updateCartService(cartData);
@@ -70,7 +83,7 @@ export const CartProvider = ({ children }) => {
   }, [fetchContext]);
 
   return (
-    <CartContext.Provider value={{ cart, customer, addToCart, updateCart, clearCart, loading }}>
+    <CartContext.Provider value={{ cart, customer, addToCart, removeFromCart, updateCart, clearCart, loading }}>
       {children}
     </CartContext.Provider>
   );
