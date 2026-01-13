@@ -23,6 +23,24 @@ export const addToCart = async (cartId, productId, quantity) => {
   return response.json();
 };
 
+export const removeFromCart = async (cartId, productId) => {
+  let url = `${API_URL}/items`;
+  const body = { productId, cartId };
+
+  const response = await authFetch(url, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  if (!response.ok) {
+     throw new Error('Failed to remove from cart');
+  }
+  return response.json();
+};
+
 export const updateCart = async (cartData) => {
   const response = await authFetch(API_URL, {
     method: 'PUT',
