@@ -48,12 +48,12 @@ const PublicPage = () => {
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
+    <div className="container mx-auto px-4 py-8 overflow-x-hidden">
       {page && (
         <>
           <h1 className="text-3xl font-bold mb-6 text-gray-800">{page.title}</h1>
           <div
-            className="prose max-w-none text-gray-700"
+            className="prose text-gray-700 break-words"
             dangerouslySetInnerHTML={{ __html: page.description }}
           />
         </>
