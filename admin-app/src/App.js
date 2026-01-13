@@ -18,6 +18,8 @@ import Brands from './pages/Brands';
 import BrandEdit from './pages/BrandEdit';
 import Blogs from './pages/Blogs';
 import BlogEdit from './pages/BlogEdit';
+import Pages from './pages/Pages';
+import PageEdit from './pages/PageEdit';
 import Suppliers from './pages/Suppliers';
 import SupplierEdit from './pages/SupplierEdit';
 import Carriers from './pages/Carriers';
@@ -71,6 +73,9 @@ function App() {
           <Route path="brands" element={<Brands />} />
           <Route path="brands/new" element={<BrandEdit />} />
           <Route path="brands/:id" element={<BrandEdit />} />
+          <Route path="pages" element={<Pages />} />
+          <Route path="pages/new" element={<PageEdit />} />
+          <Route path="pages/:id" element={<PageEdit />} />
           <Route path="blogs" element={<Blogs />} />
           <Route path="blogs/new" element={<BlogEdit />} />
           <Route path="blogs/:id" element={<BlogEdit />} />
