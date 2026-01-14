@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import { Outlet, Link, NavLink, useLocation } from 'react-router-dom';
 import { getCategories } from '../services/categoryService';
 import { getBlogs } from '../services/blogService';
 import { useCart } from '../context/CartContext';
@@ -129,15 +129,48 @@ const PublicLayout = () => {
            </button>
 
            {/* Desktop Horizontal Menu - Optional, user asked for vertical, but keeping top menu is standard practice */}
-           <ul className="hidden md:flex flex-wrap text-sm font-bold uppercase tracking-wide">
+           <ul className="hidden md:flex flex-wrap text-sm font-bold uppercase">
              <li className="group relative">
-                <Link to="/" className="block py-4 px-5 bg-tany-green hover:bg-green-700 transition-colors">
+                <NavLink
+                  to="/"
+                  end
+                  className={({ isActive }) => `block py-4 px-3 transition-colors ${isActive ? 'bg-tany-green hover:bg-green-700 text-white' : 'hover:text-tany-green'}`}
+                >
                   Domov
-                </Link>
+                </NavLink>
              </li>
-             {/* We can keep a few main links here */}
-             <li><a href="#" className="block py-4 px-5 hover:text-tany-green transition-colors text-tany-red">VÝPREDAJ</a></li>
-             <li><a href="#" className="block py-4 px-5 hover:text-tany-green transition-colors">Kontakt</a></li>
+             <li>
+                <NavLink
+                  to="/doprava"
+                  className={({ isActive }) => `block py-4 px-3 transition-colors ${isActive ? 'bg-tany-green hover:bg-green-700 text-white' : 'hover:text-tany-green'}`}
+                >
+                  Doprava
+                </NavLink>
+             </li>
+             <li>
+                <NavLink
+                  to="/moznosti-platby"
+                  className={({ isActive }) => `block py-4 px-3 transition-colors ${isActive ? 'bg-tany-green hover:bg-green-700 text-white' : 'hover:text-tany-green'}`}
+                >
+                  Možnosti platby
+                </NavLink>
+             </li>
+             <li>
+                <NavLink
+                  to="/akcie"
+                  className={({ isActive }) => `block py-4 px-3 transition-colors ${isActive ? 'bg-tany-green hover:bg-green-700 text-white' : 'hover:text-tany-green text-tany-red'}`}
+                >
+                  Akcie
+                </NavLink>
+             </li>
+             <li>
+                <NavLink
+                  to="/obchodne-podmienky"
+                  className={({ isActive }) => `block py-4 px-3 transition-colors ${isActive ? 'bg-tany-green hover:bg-green-700 text-white' : 'hover:text-tany-green'}`}
+                >
+                  Obchodné podmienky
+                </NavLink>
+             </li>
            </ul>
         </div>
 

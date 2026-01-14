@@ -37,6 +37,7 @@ import CategoryProducts from './pages/CategoryProducts';
 import BlogDetail from './pages/BlogDetail';
 import ShopSettings from './pages/ShopSettings';
 import Account from './pages/Account';
+import PublicPage from './pages/PublicPage';
 import { CartProvider } from './context/CartContext';
 
 function App() {
@@ -59,6 +60,7 @@ function App() {
             <Route path="/blog/:id" element={<BlogDetail />} />
             <Route path="/login" element={<Login isAdmin={false} />} />
             <Route path="/account" element={<Account />} />
+            <Route path="/:slug" element={<PublicPage />} />
           </Route>
 
           <Route path="/admin" element={<AdminLayout />}>
