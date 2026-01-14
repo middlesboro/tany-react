@@ -1,20 +1,11 @@
 import React from 'react';
 import ReactQuill from 'react-quill-new';
 import SearchSelect from './SearchSelect';
+import { quillModules } from '../utils/quillConfig';
 import 'react-quill-new/dist/quill.snow.css';
 
 const CategoryForm = ({ category, handleChange, handleSubmit, categories = [], handleParentChange }) => {
   const parentOptions = categories.map((c) => ({ id: c.id, name: c.title }));
-
-  const modules = {
-    toolbar: [
-      [{ 'header': [1, 2, false] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-      ['link', 'image', 'video'],
-      ['clean']
-    ],
-  };
 
   const handleQuillChange = (name) => (value) => {
     // ReactQuill returns the HTML value directly
@@ -54,7 +45,7 @@ const CategoryForm = ({ category, handleChange, handleSubmit, categories = [], h
           theme="snow"
           value={category.description || ''}
           onChange={handleQuillChange('description')}
-          modules={modules}
+          modules={quillModules}
           className="bg-white"
         />
       </div>
