@@ -34,6 +34,7 @@ import OrderConfirmation from './pages/OrderConfirmation';
 import GlobalPaymentsCallback from './pages/GlobalPaymentsCallback';
 import BesteronCallback from './pages/BesteronCallback';
 import CategoryProducts from './pages/CategoryProducts';
+import BlogDetail from './pages/BlogDetail';
 import ShopSettings from './pages/ShopSettings';
 import Account from './pages/Account';
 import { CartProvider } from './context/CartContext';
@@ -55,6 +56,7 @@ function App() {
             <Route path="/besteron-callback" element={<BesteronCallback />} />
             <Route path="/category/:slug" element={<CategoryProducts />} />
             <Route path="/products/:id" element={<ProductDetail />} />
+            <Route path="/blog/:id" element={<BlogDetail />} />
             <Route path="/login" element={<Login isAdmin={false} />} />
             <Route path="/account" element={<Account />} />
           </Route>

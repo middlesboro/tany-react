@@ -8,3 +8,14 @@ export const getBlogs = async () => {
   }
   return response.json();
 };
+
+export const getBlog = async (id) => {
+  const response = await fetch(`${API_URL}/${id}`);
+  if (!response.ok) {
+      if (response.status === 404) {
+          return null;
+      }
+      throw new Error('Failed to fetch blog');
+  }
+  return response.json();
+};
