@@ -40,6 +40,16 @@ export const deleteProduct = async (id) => {
   });
 };
 
+export const searchProducts = async (query) => {
+  const response = await authFetch(`${API_ADMIN_URL}/search?query=${encodeURIComponent(query)}`);
+  return response.json();
+};
+
+export const getProductsByFilterValue = async (filterParameterValueId) => {
+  const response = await authFetch(`${API_ADMIN_URL}/by-filter-value/${filterParameterValueId}`);
+  return response.json();
+};
+
 export const patchProduct = async (id, patchDto) => {
   const response = await authFetch(`${API_ADMIN_URL}/${id}`, {
     method: 'PATCH',
