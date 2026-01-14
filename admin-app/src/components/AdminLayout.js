@@ -75,8 +75,8 @@ const AdminLayout = () => {
   };
 
   return (
-    <div className="flex">
-      <nav className="w-64 h-screen bg-gray-800 text-white p-4 flex flex-col justify-between overflow-y-auto">
+    <div className="flex min-h-screen">
+      <nav className="w-64 h-screen bg-gray-800 text-white p-4 flex flex-col justify-between overflow-y-auto sticky top-0 flex-shrink-0">
         <div>
           <h1 className="text-2xl font-bold mb-4">Admin</h1>
           <ul>
@@ -132,7 +132,7 @@ const AdminLayout = () => {
           </button>
         </div>
       </nav>
-      <main className="flex-1 p-4 overflow-auto h-screen">
+      <main className="flex-1 p-4">
         <Outlet />
       </main>
     </div>
