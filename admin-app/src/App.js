@@ -22,6 +22,8 @@ import Pages from './pages/Pages';
 import PageEdit from './pages/PageEdit';
 import Suppliers from './pages/Suppliers';
 import SupplierEdit from './pages/SupplierEdit';
+import FilterParameters from './pages/FilterParameters';
+import FilterParameterEdit from './pages/FilterParameterEdit';
 import Carriers from './pages/Carriers';
 import CarrierEdit from './pages/CarrierEdit';
 import Payments from './pages/Payments';
@@ -86,6 +88,9 @@ function App() {
           <Route path="suppliers" element={<Suppliers />} />
           <Route path="suppliers/new" element={<SupplierEdit />} />
           <Route path="suppliers/:id" element={<SupplierEdit />} />
+          <Route path="filter-parameters" element={<FilterParameters />} />
+          <Route path="filter-parameters/new" element={<FilterParameterEdit />} />
+          <Route path="filter-parameters/:id" element={<FilterParameterEdit />} />
           <Route path="carriers" element={<Carriers />} />
           <Route path="carriers/new" element={<CarrierEdit />} />
           <Route path="carriers/:id" element={<CarrierEdit />} />
