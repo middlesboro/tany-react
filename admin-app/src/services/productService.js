@@ -12,8 +12,25 @@ export const getProduct = async (id) => {
   return response.json();
 };
 
-export const getProductsByCategory = async (categoryId, page = 0, sort = 'title,asc', size = 20) => {
-  const response = await authFetch(`${API_URL}/category/${categoryId}?page=${page}&size=${size}&sort=${sort}`);
+export const getProductsByCategory = async (categoryId, page = 0, sort = 'title,asc', size = 20, filters = []) => {
+  let url = `${API_URL}/category/${categoryId}?page=${page}&size=${size}&sort=${sort}`;
+
+  // Serialize filters into query parameters
+  // Expected format: filter_{paramId}={valueId1},{valueId2}
+  if (filters && filters.length > 0) {
+    const params = new URLSearchParams();
+    filters.forEach(f => {
+      if (f.filterParameterValueIds && f.filterParameterValueIds.length > 0) {
+        params.append(`filter_${f.id}`, f.filterParameterValueIds.join(','));
+      }
+    });
+    const filterQuery = params.toString();
+    if (filterQuery) {
+        url += `&${filterQuery}`;
+    }
+  }
+
+  const response = await authFetch(url);
   return response.json();
 };
 

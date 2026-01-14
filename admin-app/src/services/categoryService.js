@@ -6,3 +6,14 @@ export const getCategories = async () => {
   const response = await authFetch(API_URL);
   return response.json();
 };
+
+export const filterCategories = async (categoryId, filterRequest) => {
+    const response = await authFetch(`${API_URL}/${categoryId}/filter`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(filterRequest),
+    });
+    return response.json();
+};
