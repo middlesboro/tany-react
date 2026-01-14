@@ -1,18 +1,9 @@
 import React from 'react';
 import ReactQuill from 'react-quill-new';
+import { quillModules } from '../utils/quillConfig';
 import 'react-quill-new/dist/quill.snow.css';
 
 const BlogForm = ({ blog, handleChange, handleSubmit, handleSaveAndStay }) => {
-  const modules = {
-    toolbar: [
-      [{ 'header': [1, 2, false] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-      ['link', 'image'],
-      ['clean']
-    ],
-  };
-
   const handleQuillChange = (name) => (value) => {
     // ReactQuill returns the HTML value directly
     handleChange({
@@ -65,7 +56,7 @@ const BlogForm = ({ blog, handleChange, handleSubmit, handleSaveAndStay }) => {
           theme="snow"
           value={blog.shortDescription}
           onChange={handleQuillChange('shortDescription')}
-          modules={modules}
+          modules={quillModules}
           className="bg-white"
         />
       </div>
@@ -76,7 +67,7 @@ const BlogForm = ({ blog, handleChange, handleSubmit, handleSaveAndStay }) => {
           theme="snow"
           value={blog.description}
           onChange={handleQuillChange('description')}
-          modules={modules}
+          modules={quillModules}
           className="bg-white"
         />
       </div>

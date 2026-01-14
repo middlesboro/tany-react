@@ -2,19 +2,10 @@ import React from 'react';
 import ReactQuill from 'react-quill-new';
 import SearchSelect from './SearchSelect';
 import MultiSearchSelect from './MultiSearchSelect';
+import { quillModules } from '../utils/quillConfig';
 import 'react-quill-new/dist/quill.snow.css';
 
 const ProductForm = ({ product, brands, suppliers, categories, handleChange, handleSubmit, handleSaveAndStay }) => {
-  const modules = {
-    toolbar: [
-      [{ 'header': [1, 2, false] }],
-      ['bold', 'italic', 'underline', 'strike', 'blockquote'],
-      [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
-      ['link', 'image'],
-      ['clean']
-    ],
-  };
-
   const handleQuillChange = (name) => (value) => {
     // ReactQuill returns the HTML value directly
     handleChange({
@@ -89,7 +80,7 @@ const ProductForm = ({ product, brands, suppliers, categories, handleChange, han
           theme="snow"
           value={product.shortDescription}
           onChange={handleQuillChange('shortDescription')}
-          modules={modules}
+          modules={quillModules}
           className="bg-white"
         />
       </div>
@@ -99,7 +90,7 @@ const ProductForm = ({ product, brands, suppliers, categories, handleChange, han
           theme="snow"
           value={product.description}
           onChange={handleQuillChange('description')}
-          modules={modules}
+          modules={quillModules}
           className="bg-white"
         />
       </div>
