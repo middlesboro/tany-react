@@ -79,8 +79,8 @@ const FilterParameterForm = ({ filterParameter, handleChange, handleSubmit, isEd
           >
             <option value="">Select Type</option>
             {/* Adjust these types based on actual Enum in backend */}
-            <option value="CHECKBOX">Checkbox</option>
-            <option value="RADIO">Radio</option>
+            <option value="AVAILABILITY">AVAILABILITY</option>
+            <option value="TAG">TAG</option>
              {/* Add other types if known */}
           </select>
         </div>
