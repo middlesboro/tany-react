@@ -11,6 +11,7 @@ const menuItems = [
       { title: 'Brands', path: '/admin/brands' },
       { title: 'Suppliers', path: '/admin/suppliers' },
       { title: 'Filter Parameters', path: '/admin/filter-parameters' },
+      { title: 'Filter Values', path: '/admin/filter-parameter-values' },
     ]
   },
   {
