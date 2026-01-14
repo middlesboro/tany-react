@@ -37,7 +37,11 @@ const FilterParameterForm = ({ filterParameter, handleChange, handleSubmit, isEd
   const handleCreateValue = async () => {
       if (!newValueName.trim()) return;
       try {
-          const newValue = await createFilterParameterValue({ name: newValueName, active: true });
+          const payload = { name: newValueName, active: true };
+          if (filterParameter.id) {
+            payload.filterParameterId = filterParameter.id;
+          }
+          const newValue = await createFilterParameterValue(payload);
           setAllValues([...allValues, newValue]);
 
           // Also automatically add it to the current filter parameter

@@ -1,8 +1,21 @@
 import React from 'react';
+import SearchSelect from './SearchSelect';
 
-const FilterParameterValueForm = ({ filterParameterValue, handleChange, handleSubmit }) => {
+const FilterParameterValueForm = ({ filterParameterValue, handleChange, handleSubmit, filterParameters }) => {
   return (
     <form onSubmit={handleSubmit}>
+      <div className="mb-4">
+        {filterParameters && (
+          <SearchSelect
+            label="Filter Parameter"
+            options={filterParameters.map(p => ({ id: p.id, name: p.name }))}
+            value={filterParameterValue.filterParameterId || ''}
+            onChange={(val) => handleChange({ target: { name: 'filterParameterId', value: val } })}
+            placeholder="Select Filter Parameter"
+          />
+        )}
+      </div>
+
       <div className="mb-4">
         <label htmlFor="name" className="block text-gray-700">Name</label>
         <input
