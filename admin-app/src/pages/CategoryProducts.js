@@ -19,7 +19,6 @@ const CategoryProducts = () => {
 
   // Filter state
   const [filterParameters, setFilterParameters] = useState([]);
-  // selectedFilters: Map<paramId, Set<valueId>>
   const [selectedFilters, setSelectedFilters] = useState({});
 
   useEffect(() => {
@@ -27,7 +26,6 @@ const CategoryProducts = () => {
       setLoading(true);
       setError(null);
       try {
-        // 1. Fetch all categories to resolve slug to ID
         const categories = await getCategories();
         const foundCategory = findCategoryBySlug(categories, slug);
 
@@ -44,19 +42,12 @@ const CategoryProducts = () => {
         } else {
             setFilterParameters([]);
         }
-        setSelectedFilters({}); // Reset selection on category change
+        setSelectedFilters({});
 
-        // 2. Fetch products for this category (initially without filters)
-        // We set initial params to match default state (page 0, etc)
-        // But since we have a dedicated effect for fetching data based on dependencies,
-        // we might not need to fetch here IF that effect runs.
-        // However, the dedicated effect has a check for isFirstRun.
-        // So we do initial fetch here.
         const data = await getProductsByCategory(foundCategory.id, 0, 'title,asc', 12, []);
         setProducts(data.content);
         setTotalPages(data.totalPages);
 
-        // Reset local state to defaults to match
         setPage(0);
         setSize(12);
         setSort('title,asc');
@@ -92,8 +83,6 @@ const CategoryProducts = () => {
             const updatedFilters = await filterCategories(currentCategory.id, { filterParameters: filterRequest });
             setFilterParameters(updatedFilters);
         } else {
-            // If filters are cleared, we might want to reset to original category filters
-            // or fetch default state.
              const updatedFilters = await filterCategories(currentCategory.id, { filterParameters: [] });
              setFilterParameters(updatedFilters);
         }
@@ -107,9 +96,7 @@ const CategoryProducts = () => {
 
   const isFirstRun = React.useRef(true);
 
-  // Unified effect for data fetching
   useEffect(() => {
-    // Skip the first run because initial load is handled by the slug effect
     if (isFirstRun.current) {
         isFirstRun.current = false;
         return;
@@ -121,12 +108,8 @@ const CategoryProducts = () => {
   }, [page, sort, size, selectedFilters, category, fetchFilteredData]);
 
   const handleFilterChange = (paramId, valueId, checked) => {
-      // Use functional update to ensure we work with latest state if needed,
-      // but here we have selectedFilters in scope.
-      // Crucial: Create DEEP COPY for Sets
       const newSelectedFilters = { ...selectedFilters };
 
-      // Ensure we have a new Set instance for the specific param
       if (newSelectedFilters[paramId]) {
           newSelectedFilters[paramId] = new Set(newSelectedFilters[paramId]);
       } else {
@@ -142,17 +125,7 @@ const CategoryProducts = () => {
           }
       }
 
-      // Update state
       setSelectedFilters(newSelectedFilters);
-      // Reset page to 0.
-      // NOTE: setting page to 0 will trigger the useEffect because 'page' is a dependency.
-      // If page was already 0, it won't change, so we rely on 'selectedFilters' being a dependency too.
-      // The useEffect listens to [page, sort, size, selectedFilters].
-      // So modifying selectedFilters triggers it.
-      // Modifying page triggers it.
-      // If we modify both, React batching usually handles it, but if page changes, we get one run.
-      // If page is already 0, only selectedFilters changes -> one run.
-      // If page is 1, page becomes 0 -> both change -> one run (batched).
       setPage(0);
   };
 
@@ -176,55 +149,56 @@ const CategoryProducts = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 border-b border-gray-200 pb-4">
+      {/* Top Bar: Title on Left, Filters + Sorting on Right */}
+      <div className="flex flex-col xl:flex-row justify-between items-start xl:items-center mb-6 gap-4 border-b border-gray-200 pb-4">
         <h1 className="text-xl font-bold uppercase text-gray-800">{category?.title}</h1>
 
-        <div className="flex gap-4">
-            {/* Sorting */}
-            <div className="flex items-center text-sm">
-            <label htmlFor="sort" className="mr-2 text-gray-600">Zoradiť podľa:</label>
-            <select
-                id="sort"
-                value={sort}
-                onChange={handleSortChange}
-                className="border border-gray-300 rounded-sm p-1 text-gray-700 focus:outline-none focus:border-tany-green"
-            >
-                <option value="title,asc">Názov (A-Z)</option>
-                <option value="title,desc">Názov (Z-A)</option>
-                <option value="price,asc">Cena (od najlacnejšieho)</option>
-                <option value="price,desc">Cena (od najdrahšieho)</option>
-            </select>
+        <div className="flex flex-col md:flex-row gap-4 items-start md:items-center w-full xl:w-auto justify-end">
+            {/* Filters */}
+            <div className="flex-1 md:flex-none">
+                <CategoryFilter
+                    filterParameters={filterParameters}
+                    selectedFilters={selectedFilters}
+                    onChange={handleFilterChange}
+                />
             </div>
 
-            {/* Page Size */}
-            <div className="flex items-center text-sm">
-            <label htmlFor="size" className="mr-2 text-gray-600">Zobraziť:</label>
-            <select
-                id="size"
-                value={size}
-                onChange={handleSizeChange}
-                className="border border-gray-300 rounded-sm p-1 text-gray-700 focus:outline-none focus:border-tany-green"
-            >
-                <option value={12}>12</option>
-                <option value={24}>24</option>
-                <option value={48}>48</option>
-            </select>
+            <div className="flex gap-4 items-center">
+                {/* Sorting */}
+                <div className="flex items-center text-sm whitespace-nowrap">
+                <label htmlFor="sort" className="mr-2 text-gray-600">Zoradiť:</label>
+                <select
+                    id="sort"
+                    value={sort}
+                    onChange={handleSortChange}
+                    className="border border-gray-300 rounded-sm p-1 text-gray-700 focus:outline-none focus:border-tany-green"
+                >
+                    <option value="title,asc">Názov (A-Z)</option>
+                    <option value="title,desc">Názov (Z-A)</option>
+                    <option value="price,asc">Najlacnejšie</option>
+                    <option value="price,desc">Najdrahšie</option>
+                </select>
+                </div>
+
+                {/* Page Size */}
+                <div className="flex items-center text-sm whitespace-nowrap">
+                <label htmlFor="size" className="mr-2 text-gray-600">Zobraziť:</label>
+                <select
+                    id="size"
+                    value={size}
+                    onChange={handleSizeChange}
+                    className="border border-gray-300 rounded-sm p-1 text-gray-700 focus:outline-none focus:border-tany-green"
+                >
+                    <option value={12}>12</option>
+                    <option value={24}>24</option>
+                    <option value={48}>48</option>
+                </select>
+                </div>
             </div>
         </div>
       </div>
 
-      <div className="flex flex-col md:flex-row gap-6">
-          {/* Sidebar Filters */}
-          <div className="w-full md:w-1/4">
-             <CategoryFilter
-                filterParameters={filterParameters}
-                selectedFilters={selectedFilters}
-                onChange={handleFilterChange}
-             />
-          </div>
-
-          {/* Product Grid */}
-          <div className="w-full md:w-3/4">
+      <div className="w-full">
             {loading && products.length === 0 ? (
                 <div className="text-center py-20 text-gray-500">Načítavam produkty...</div>
             ) : (
@@ -232,7 +206,7 @@ const CategoryProducts = () => {
                     {products.length === 0 ? (
                         <div className="text-center py-20 text-gray-500">V tejto kategórii nie sú žiadne produkty vyhovujúce filtrom.</div>
                     ) : (
-                        <div className={`grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-0 border-t border-l border-gray-100 ${loading ? 'opacity-50' : ''}`}>
+                        <div className={`grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-0 border-t border-l border-gray-100 ${loading ? 'opacity-50' : ''}`}>
                             {products.map((product) => (
                                 <div key={product.id} className="p-2">
                                     <ProductCard product={product} />
@@ -273,7 +247,6 @@ const CategoryProducts = () => {
                 )}
                 </>
             )}
-          </div>
       </div>
     </div>
   );
