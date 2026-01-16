@@ -2,9 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link, useSearchParams, useLocation } from 'react-router-dom';
 import { getOrder } from '../services/orderService';
 import { getPaymentInfo, checkBesteronStatus } from '../services/paymentService';
+import { useBreadcrumbs } from '../context/BreadcrumbContext';
 
 const OrderConfirmation = () => {
   const { id } = useParams();
+  const { setBreadcrumbs } = useBreadcrumbs();
   const [searchParams] = useSearchParams();
   const location = useLocation();
   const paymentStatus = searchParams.get('paymentStatus');
@@ -17,6 +19,13 @@ const OrderConfirmation = () => {
   const [isPaid, setIsPaid] = useState(false);
   const [verifyingPayment, setVerifyingPayment] = useState(false);
   const [verificationMessage, setVerificationMessage] = useState('');
+
+  useEffect(() => {
+    setBreadcrumbs([
+        { label: 'Domov', path: '/' },
+        { label: 'Potvrdenie objednávky', path: null }
+    ]);
+  }, [setBreadcrumbs]);
 
   // Handle order fetching and initial paid status check
   useEffect(() => {

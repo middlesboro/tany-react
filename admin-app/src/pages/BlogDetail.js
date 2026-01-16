@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getBlog } from '../services/blogService';
+import { useBreadcrumbs } from '../context/BreadcrumbContext';
 
 const BlogDetail = () => {
   const { id } = useParams();
+  const { setBreadcrumbs } = useBreadcrumbs();
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -14,6 +16,10 @@ const BlogDetail = () => {
         const data = await getBlog(id);
         if (data) {
           setBlog(data);
+          setBreadcrumbs([
+            { label: 'Domov', path: '/' },
+            { label: data.title, path: null } // Or { label: 'Blog', path: '/blog' }, { label: data.title, path: null } if a blog index exists
+          ]);
         } else {
           setError('Blog not found');
         }

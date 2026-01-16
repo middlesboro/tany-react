@@ -1,12 +1,23 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { login } from '../services/authService';
+import { useBreadcrumbs } from '../context/BreadcrumbContext';
 
 const Login = ({ isAdmin = false }) => {
+  const { setBreadcrumbs } = useBreadcrumbs();
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
   const [error, setError] = useState('');
   const location = useLocation();
+
+  useEffect(() => {
+    if (!isAdmin) {
+      setBreadcrumbs([
+        { label: 'Domov', path: '/' },
+        { label: 'Prihlásenie', path: null }
+      ]);
+    }
+  }, [setBreadcrumbs, isAdmin]);
 
   const handleSubmit = async (e) => {
     e.preventDefault();

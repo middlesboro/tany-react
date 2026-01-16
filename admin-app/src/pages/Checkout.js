@@ -1,12 +1,14 @@
   import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import { createOrder } from '../services/orderService';
 import { debounce } from '../utils/debounce';
 
 const Checkout = () => {
   const navigate = useNavigate();
   const { cart, customer: customerContext, loading, clearCart, updateCart } = useCart();
+  const { setBreadcrumbs } = useBreadcrumbs();
   const [selectedCarrier, setSelectedCarrier] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [customer, setCustomer] = useState({
@@ -36,6 +38,13 @@ const Checkout = () => {
   // Dynamic data from cart
   const carriers = cart?.carriers || [];
   const payments = cart?.payments || [];
+
+  useEffect(() => {
+    setBreadcrumbs([
+      { label: 'Domov', path: '/' },
+      { label: 'Objednávka', path: null }
+    ]);
+  }, [setBreadcrumbs]);
 
   useEffect(() => {
     const scriptId = 'packeta-widget-script';

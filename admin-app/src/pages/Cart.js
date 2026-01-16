@@ -1,10 +1,19 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useCart } from '../context/CartContext';
+import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import { Link } from 'react-router-dom';
 import CartItem from '../components/CartItem';
 
 const Cart = () => {
   const { cart, loading } = useCart();
+  const { setBreadcrumbs } = useBreadcrumbs();
+
+  useEffect(() => {
+    setBreadcrumbs([
+      { label: 'Domov', path: '/' },
+      { label: 'Nákupný košík', path: null }
+    ]);
+  }, [setBreadcrumbs]);
 
   if (loading) {
     return (

@@ -2,8 +2,11 @@ import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getProduct } from '../services/productService';
 import { getReviewsByProduct, createReview } from '../services/reviewService';
+import { getCategories } from '../services/categoryService';
+import { findCategoryPath } from '../utils/categoryUtils';
 import { getUserEmail } from '../services/authService';
 import { useCart } from '../context/CartContext';
+import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import AddToCartButton from '../components/AddToCartButton';
 
 const REASONS = [
@@ -230,6 +233,7 @@ const ReasonsToBuy = () => (
 const ProductDetail = () => {
   const { id } = useParams();
   const { addToCart } = useCart();
+  const { setBreadcrumbs } = useBreadcrumbs();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -247,6 +251,52 @@ const ProductDetail = () => {
         if (data.images && data.images.length > 0) {
           setSelectedImage(data.images[0]);
         }
+
+        // Set Breadcrumbs
+        const categories = await getCategories();
+        // Assuming we can find the category path if we knew the category slug or ID.
+        // Product DTO usually contains categoryId or category object.
+        // Let's assume data.categoryId exists.
+        // If not, we can't easily build the path without fetching product's category separately if it's not in the payload.
+        // However, standard implementation suggests product has category info.
+        // If data.category is object or data.categoryId is present.
+
+        let path = [];
+        if (data.category && data.category.slug) {
+            path = findCategoryPath(categories, data.category.slug);
+        } else if (data.categoryId) {
+             // We need to find category by ID first from the tree
+             // This is harder with just findCategoryPath which takes slug.
+             // But we can traverse the tree to find the category by ID and then get its slug or just build path.
+             // For now, let's assume we can rely on `data.category` being populated or search by ID.
+             // If `getCategories` returns flat list or tree? Memory says tree.
+             // We'll try to find by ID recursively if needed.
+             // But simplified approach:
+             const findById = (cats, catId) => {
+                 for (const c of cats) {
+                     if (c.id === catId) return c;
+                     if (c.children) {
+                         const found = findById(c.children, catId);
+                         if (found) return found;
+                     }
+                 }
+                 return null;
+             };
+             const cat = findById(categories, data.categoryId);
+             if (cat) {
+                 path = findCategoryPath(categories, cat.slug);
+             }
+        }
+
+        const crumbs = [{ label: 'Domov', path: '/' }];
+        if (path) {
+            path.forEach(p => {
+                crumbs.push({ label: p.title, path: `/category/${p.slug}` });
+            });
+        }
+        crumbs.push({ label: data.title, path: null }); // Current product
+        setBreadcrumbs(crumbs);
+
       } catch (err) {
         setError("Failed to load product details.");
         console.error(err);
