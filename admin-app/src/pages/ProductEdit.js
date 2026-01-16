@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getProduct, createProduct, updateProduct } from '../services/productAdminService';
+import { getProduct, createProduct, updateProduct, patchProduct } from '../services/productAdminService';
 import { getBrands } from '../services/brandAdminService';
 import { getSuppliers } from '../services/supplierAdminService';
 import { getCategories } from '../services/categoryAdminService';
+import { getFilterParameters } from '../services/filterParameterAdminService';
+import { getFilterParameterValues } from '../services/filterParameterValueAdminService';
 import ProductForm from '../components/ProductForm';
 import ProductImageManager from '../components/ProductImageManager';
 
@@ -20,11 +22,14 @@ const ProductEdit = () => {
     brandId: '',
     supplierId: '',
     categoryIds: [],
+    productFilterParameters: [],
   });
 
   const [brands, setBrands] = useState([]);
   const [suppliers, setSuppliers] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [filterParameters, setFilterParameters] = useState([]);
+  const [filterParameterValues, setFilterParameterValues] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,6 +44,10 @@ const ProductEdit = () => {
         name: c.title
       }));
       setCategories(mappedCategories);
+      const filterParametersData = await getFilterParameters(0, 'name,asc', 1000);
+      setFilterParameters(filterParametersData.content);
+      const filterParameterValuesData = await getFilterParameterValues(0, 'name,asc', 1000);
+      setFilterParameterValues(filterParameterValuesData.content);
     };
     fetchData();
 
@@ -50,7 +59,8 @@ const ProductEdit = () => {
           images: data.images || [],
           brandId: data.brandId || '',
           supplierId: data.supplierId || '',
-          categoryIds: data.categoryIds || []
+          categoryIds: data.categoryIds || [],
+          productFilterParameters: data.productFilterParameters || [],
         });
       };
       fetchProductData();
@@ -75,20 +85,35 @@ const ProductEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (id) {
-      await updateProduct(id, product);
-    } else {
-      await createProduct(product);
-    }
-    navigate('/admin/products');
-  };
-
-  const handleSaveAndStay = async () => {
+    let productId = id;
     if (id) {
       await updateProduct(id, product);
     } else {
       const newProduct = await createProduct(product);
+      productId = newProduct.id;
+    }
+
+    // Save filter parameters via PATCH
+    if (product.productFilterParameters) {
+        await patchProduct(productId, { productFilterParameters: product.productFilterParameters });
+    }
+
+    navigate('/admin/products');
+  };
+
+  const handleSaveAndStay = async () => {
+    let productId = id;
+    if (id) {
+      await updateProduct(id, product);
+    } else {
+      const newProduct = await createProduct(product);
+      productId = newProduct.id;
       navigate(`/admin/products/${newProduct.id}`, { replace: true });
+    }
+
+    // Save filter parameters via PATCH
+    if (product.productFilterParameters) {
+        await patchProduct(productId, { productFilterParameters: product.productFilterParameters });
     }
   };
 
@@ -100,6 +125,8 @@ const ProductEdit = () => {
         brands={brands}
         suppliers={suppliers}
         categories={categories}
+        filterParameters={filterParameters}
+        filterParameterValues={filterParameterValues}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
         handleSaveAndStay={handleSaveAndStay}
