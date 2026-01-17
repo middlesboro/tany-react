@@ -4,6 +4,7 @@ import { getCategories } from '../services/categoryService';
 import { getProductsByCategory } from '../services/productService';
 import { findCategoryBySlug, findCategoryPath } from '../utils/categoryUtils';
 import ProductCard from '../components/ProductCard';
+import CategoryFilter from '../components/CategoryFilter';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 
 const CategoryProducts = () => {
@@ -11,6 +12,8 @@ const CategoryProducts = () => {
   const { setBreadcrumbs } = useBreadcrumbs();
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState(null);
+  const [filterParameters, setFilterParameters] = useState([]);
+  const [selectedFilters, setSelectedFilters] = useState({});
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(12);
   const [totalPages, setTotalPages] = useState(0);
@@ -24,8 +27,27 @@ const CategoryProducts = () => {
       setError(null);
       try {
         // 1. Fetch all categories to resolve slug to ID
-        // (Optimization: In a real app, we might want a specific API to get category by slug)
-        const categories = await getCategories();
+        // Note: getCategories(request) now returns { categories, filterParameters }
+        // We pass the current selected filters to get updated available filters/categories if needed.
+        // For now, we fetch initial structure.
+
+        // Prepare request object for filters
+        const filterRequest = {
+            filterParameters: Object.keys(selectedFilters).map(key => ({
+                id: key,
+                filterParameterValueIds: selectedFilters[key]
+            }))
+        };
+
+        const response = await getCategories(filterRequest);
+        const categories = response.categories || [];
+        // Only set filter parameters if they are returned and we don't want to overwrite them if empty?
+        // Or should we update them based on selection?
+        // Usually faceted search updates available filters.
+        if (response.filterParameters) {
+            setFilterParameters(response.filterParameters);
+        }
+
         const foundCategory = findCategoryBySlug(categories, slug);
 
         if (!foundCategory) {
@@ -50,7 +72,21 @@ const CategoryProducts = () => {
         setCategory(foundCategory);
 
         // 2. Fetch products for this category
-        const data = await getProductsByCategory(foundCategory.id, page, sort, size);
+        // Construct query string for filters
+        // Format: filter_{paramId}={valueId1},{valueId2}
+        let filterQuery = '';
+        Object.keys(selectedFilters).forEach(paramId => {
+            const valueIds = selectedFilters[paramId];
+            if (valueIds && valueIds.length > 0) {
+                filterQuery += `&filter_${paramId}=${valueIds.join(',')}`;
+            }
+        });
+
+        // Append filters to the sort parameter to include them in the query string
+        // without modifying the getProductsByCategory signature.
+        const sortWithFilters = `${sort}${filterQuery}`;
+
+        const data = await getProductsByCategory(foundCategory.id, page, sortWithFilters, size);
         setProducts(data.content);
         setTotalPages(data.totalPages);
 
@@ -63,7 +99,28 @@ const CategoryProducts = () => {
     };
 
     fetchCategoryAndProducts();
-  }, [slug, page, sort, size]);
+  }, [slug, page, sort, size, selectedFilters]); // Added selectedFilters dependency
+
+  const handleFilterChange = (paramId, valueId, checked) => {
+      setSelectedFilters(prev => {
+          const currentValues = prev[paramId] || [];
+          let newValues;
+          if (checked) {
+              newValues = [...currentValues, valueId];
+          } else {
+              newValues = currentValues.filter(id => id !== valueId);
+          }
+
+          const newState = { ...prev };
+          if (newValues.length > 0) {
+              newState[paramId] = newValues;
+          } else {
+              delete newState[paramId];
+          }
+          return newState;
+      });
+      setPage(0); // Reset page on filter change
+  };
 
   const handleSortChange = (e) => {
     setSort(e.target.value);
@@ -84,6 +141,12 @@ const CategoryProducts = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <CategoryFilter
+        filterParameters={filterParameters}
+        selectedFilters={selectedFilters}
+        onFilterChange={handleFilterChange}
+      />
+
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 border-b border-gray-200 pb-4">
         <h1 className="text-xl font-bold uppercase text-gray-800">{category?.title}</h1>
 
