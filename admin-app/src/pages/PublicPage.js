@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getPageBySlug } from '../services/pageService';
+import { useBreadcrumbs } from '../context/BreadcrumbContext';
 
 const PublicPage = () => {
   const { slug } = useParams();
+  const { setBreadcrumbs } = useBreadcrumbs();
   const [page, setPage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -16,6 +18,10 @@ const PublicPage = () => {
         const data = await getPageBySlug(slug);
         if (data) {
           setPage(data);
+          setBreadcrumbs([
+            { label: 'Domov', path: '/' },
+            { label: data.title, path: null }
+          ]);
         } else {
           setError('Stránka neexistuje.');
         }

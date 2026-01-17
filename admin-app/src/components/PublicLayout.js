@@ -6,6 +6,7 @@ import { useCart } from '../context/CartContext';
 import ProductSearch from './ProductSearch';
 import CategoryTree from './CategoryTree';
 import BlogSlider from './BlogSlider';
+import Breadcrumbs from './Breadcrumbs';
 
 const PublicLayout = () => {
   const { cart, customer } = useCart();
@@ -196,6 +197,9 @@ const PublicLayout = () => {
 
       {/* Main Content Area */}
       <div className="flex-grow bg-white pb-12">
+        {/* Breadcrumbs */}
+        <Breadcrumbs />
+
         <div className="container mx-auto px-4 pt-6">
            <div className="flex flex-col md:flex-row gap-8">
 

@@ -15,6 +15,13 @@ jest.mock('../context/CartContext', () => ({
   useCart: jest.fn(),
 }));
 
+// Mock the BreadcrumbContext
+jest.mock('../context/BreadcrumbContext', () => ({
+  useBreadcrumbs: () => ({
+    setBreadcrumbs: jest.fn(),
+  }),
+}));
+
 // Mock the debounce function
 jest.mock('../utils/debounce', () => ({
   debounce: (func) => {

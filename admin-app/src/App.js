@@ -43,12 +43,14 @@ import ShopSettings from './pages/ShopSettings';
 import Account from './pages/Account';
 import PublicPage from './pages/PublicPage';
 import { CartProvider } from './context/CartContext';
+import { BreadcrumbProvider } from './context/BreadcrumbContext';
 
 function App() {
   return (
     <CartProvider>
-      <Router>
-        <Routes>
+      <BreadcrumbProvider>
+        <Router>
+          <Routes>
           <Route path="/admin/login" element={<Login isAdmin={true} />} />
           <Route path="/authentication/success" element={<AuthenticationSuccess />} />
 
@@ -109,7 +111,8 @@ function App() {
           <Route path="orders/:id" element={<OrderEdit />} />
           </Route>
         </Routes>
-      </Router>
+        </Router>
+      </BreadcrumbProvider>
     </CartProvider>
   );
 }

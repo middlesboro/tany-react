@@ -2,11 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCategories } from '../services/categoryService';
 import { getProductsByCategory } from '../services/productService';
-import { findCategoryBySlug } from '../utils/categoryUtils';
+import { findCategoryBySlug, findCategoryPath } from '../utils/categoryUtils';
 import ProductCard from '../components/ProductCard';
+import { useBreadcrumbs } from '../context/BreadcrumbContext';
 
 const CategoryProducts = () => {
   const { slug } = useParams();
+  const { setBreadcrumbs } = useBreadcrumbs();
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState(null);
   const [page, setPage] = useState(0);
@@ -30,6 +32,19 @@ const CategoryProducts = () => {
           setError("Kategória sa nenašla."); // Category not found
           setLoading(false);
           return;
+        }
+
+        // Breadcrumbs
+        const path = findCategoryPath(categories, slug);
+        if (path) {
+           const crumbs = [
+              { label: 'Domov', path: '/' },
+              ...path.map(cat => ({
+                  label: cat.title,
+                  path: `/category/${cat.slug}`
+              }))
+           ];
+           setBreadcrumbs(crumbs);
         }
 
         setCategory(foundCategory);

@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { getCustomer, updateCustomer } from '../services/customerService';
+import { useBreadcrumbs } from '../context/BreadcrumbContext';
 
 const Account = () => {
+  const { setBreadcrumbs } = useBreadcrumbs();
   const [customer, setCustomer] = useState({
     firstname: '',
     lastname: '',
@@ -13,6 +15,13 @@ const Account = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
+
+  useEffect(() => {
+    setBreadcrumbs([
+      { label: 'Domov', path: '/' },
+      { label: 'Môj účet', path: null }
+    ]);
+  }, [setBreadcrumbs]);
 
   useEffect(() => {
     const fetchCustomer = async () => {
