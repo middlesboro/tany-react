@@ -29,6 +29,7 @@ const Checkout = () => {
   });
   const [differentDeliveryAddress, setDifferentDeliveryAddress] = useState(false);
   const [selectedPickupPoint, setSelectedPickupPoint] = useState(null);
+  const [note, setNote] = useState('');
 
   // Track if we have initialized from cart to avoid overwriting user input
   // We use state instead of ref to ensure that after initialization, the component re-renders
@@ -89,6 +90,10 @@ const Checkout = () => {
               email: cart.email || profile.email || prev.email,
               phone: cart.phone || profile.phone || prev.phone
           }));
+
+          if (cart.note) {
+              setNote(cart.note);
+          }
 
           // Initialize Invoice Address
           const cartInvoice = cart.invoiceAddress || {};
@@ -187,6 +192,7 @@ const Checkout = () => {
           lastname: customer.lastname,
           email: customer.email,
           phone: customer.phone,
+          note: note,
           invoiceAddress: invoiceAddress,
           deliveryAddress: differentDeliveryAddress ? deliveryAddress : invoiceAddress, // Send proper delivery address
           selectedCarrierId: selectedCarrier,
@@ -197,7 +203,7 @@ const Checkout = () => {
 
       debouncedUpdate(dataToSave);
 
-  }, [customer, invoiceAddress, deliveryAddress, differentDeliveryAddress, selectedCarrier, selectedPayment, selectedPickupPoint, cart?.cartId, debouncedUpdate, initialized]);
+  }, [customer, invoiceAddress, deliveryAddress, differentDeliveryAddress, selectedCarrier, selectedPayment, selectedPickupPoint, note, cart?.cartId, debouncedUpdate, initialized]);
 
 
   const handleCustomerChange = (e) => {
@@ -276,6 +282,7 @@ const Checkout = () => {
       lastname: customer.lastname,
       email: customer.email,
       phone: customer.phone,
+      note: note,
       invoiceAddress,
       deliveryAddress: differentDeliveryAddress ? deliveryAddress : invoiceAddress,
       deliveryAddressSameAsInvoiceAddress: !differentDeliveryAddress,
@@ -542,6 +549,21 @@ const Checkout = () => {
             </div>
             </section>
         )}
+
+        {/* Note Section */}
+        <section>
+          <h2 className="text-xl font-bold mb-4">6. POZNÁMKA</h2>
+          <div className="bg-white rounded shadow p-6">
+             <label className="block text-sm font-medium text-gray-700 mb-1">Poznámka k objednávke</label>
+             <textarea
+                name="note"
+                value={note}
+                onChange={(e) => setNote(e.target.value)}
+                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                rows="4"
+             />
+          </div>
+        </section>
 
         {/* Submit Button */}
         <div className="flex justify-end pt-6">
