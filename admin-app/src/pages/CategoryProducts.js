@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCategories } from '../services/categoryService';
-import { getProductsByCategory } from '../services/productService';
+import { searchProductsByCategory } from '../services/productService';
 import { findCategoryBySlug, findCategoryPath } from '../utils/categoryUtils';
 import ProductCard from '../components/ProductCard';
 import CategoryFilter from '../components/CategoryFilter';
@@ -27,26 +27,10 @@ const CategoryProducts = () => {
       setError(null);
       try {
         // 1. Fetch all categories to resolve slug to ID
-        // Note: getCategories(request) now returns { categories, filterParameters }
-        // We pass the current selected filters to get updated available filters/categories if needed.
-        // For now, we fetch initial structure.
-
-        // Prepare request object for filters
-        const filterRequest = {
-            filterParameters: Object.keys(selectedFilters).map(key => ({
-                id: key,
-                filterParameterValueIds: selectedFilters[key]
-            }))
-        };
-
-        const response = await getCategories(filterRequest);
-        const categories = response.categories || [];
-        // Only set filter parameters if they are returned and we don't want to overwrite them if empty?
-        // Or should we update them based on selection?
-        // Usually faceted search updates available filters.
-        if (response.filterParameters) {
-            setFilterParameters(response.filterParameters);
-        }
+        // We call getCategories() without args just to get the tree and find the ID.
+        // We will use searchProductsByCategory for the actual filtering and facets.
+        const catResponse = await getCategories();
+        const categories = catResponse.categories || [];
 
         const foundCategory = findCategoryBySlug(categories, slug);
 
@@ -71,24 +55,26 @@ const CategoryProducts = () => {
 
         setCategory(foundCategory);
 
-        // 2. Fetch products for this category
-        // Construct query string for filters
-        // Format: filter_{paramId}={valueId1},{valueId2}
-        let filterQuery = '';
-        Object.keys(selectedFilters).forEach(paramId => {
-            const valueIds = selectedFilters[paramId];
-            if (valueIds && valueIds.length > 0) {
-                filterQuery += `&filter_${paramId}=${valueIds.join(',')}`;
-            }
-        });
+        // 2. Fetch products and filters for this category using the search endpoint
+        // Prepare request object for filters
+        const filterRequest = {
+            filterParameters: Object.keys(selectedFilters).map(key => ({
+                id: key,
+                filterParameterValueIds: selectedFilters[key]
+            }))
+        };
 
-        // Append filters to the sort parameter to include them in the query string
-        // without modifying the getProductsByCategory signature.
-        const sortWithFilters = `${sort}${filterQuery}`;
+        const data = await searchProductsByCategory(foundCategory.id, filterRequest, page, sort, size);
 
-        const data = await getProductsByCategory(foundCategory.id, page, sortWithFilters, size);
-        setProducts(data.content);
-        setTotalPages(data.totalPages);
+        // Handle response
+        // data.products is a Page object (based on user snippet which maps result.getProducts())
+        setProducts(data.products?.content || []);
+        setTotalPages(data.products?.totalPages || 0);
+
+        // data.filterParameters is the list of available filters
+        if (data.filterParameters) {
+            setFilterParameters(data.filterParameters);
+        }
 
       } catch (err) {
         console.error("Failed to fetch category data", err);

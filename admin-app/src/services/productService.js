@@ -21,3 +21,14 @@ export const searchProducts = async (query) => {
   const response = await authFetch(`${API_URL}/search?query=${encodeURIComponent(query)}`);
   return response.json();
 };
+
+export const searchProductsByCategory = async (categoryId, filterRequest, page = 0, sort = 'title,asc', size = 20) => {
+  const response = await authFetch(`${API_URL}/category/${categoryId}/search?page=${page}&size=${size}&sort=${sort}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(filterRequest),
+  });
+  return response.json();
+};
