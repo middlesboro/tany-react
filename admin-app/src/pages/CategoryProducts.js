@@ -29,8 +29,7 @@ const CategoryProducts = () => {
         // 1. Fetch all categories to resolve slug to ID
         // We call getCategories() without args just to get the tree and find the ID.
         // We will use searchProductsByCategory for the actual filtering and facets.
-        const catResponse = await getCategories();
-        const categories = catResponse.categories || [];
+        const categories = await getCategories();
 
         const foundCategory = findCategoryBySlug(categories, slug);
 

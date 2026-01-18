@@ -19,7 +19,7 @@ const PublicLayout = () => {
     const fetchCategories = async () => {
       try {
         const data = await getCategories();
-        setCategories(data || []);
+        setCategories(data);
       } catch (error) {
         console.error("Failed to fetch categories", error);
       }
