@@ -33,7 +33,7 @@ const CategoryFilter = ({ filterParameters, selectedFilters, onFilterChange }) =
                         className="h-4 w-4 text-tany-green focus:ring-tany-green border-gray-300 rounded"
                       />
                       <label htmlFor={`filter-${param.id}-${val.id}`} className="ml-2 text-sm text-gray-600 cursor-pointer hover:text-tany-green">
-                        {val.value}
+                        {val.name}
                       </label>
                     </li>
                   );
