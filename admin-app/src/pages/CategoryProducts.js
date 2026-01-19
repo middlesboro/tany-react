@@ -1,9 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getCategories } from '../services/categoryService';
-import { getProductsByCategory } from '../services/productService';
+import { searchProductsByCategory } from '../services/productService';
 import { findCategoryBySlug, findCategoryPath } from '../utils/categoryUtils';
 import ProductCard from '../components/ProductCard';
+import CategoryFilter from '../components/CategoryFilter';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 
 const CategoryProducts = () => {
@@ -11,6 +12,8 @@ const CategoryProducts = () => {
   const { setBreadcrumbs } = useBreadcrumbs();
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState(null);
+  const [filterParameters, setFilterParameters] = useState([]);
+  const [selectedFilters, setSelectedFilters] = useState({});
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(12);
   const [totalPages, setTotalPages] = useState(0);
@@ -24,8 +27,10 @@ const CategoryProducts = () => {
       setError(null);
       try {
         // 1. Fetch all categories to resolve slug to ID
-        // (Optimization: In a real app, we might want a specific API to get category by slug)
+        // We call getCategories() without args just to get the tree and find the ID.
+        // We will use searchProductsByCategory for the actual filtering and facets.
         const categories = await getCategories();
+
         const foundCategory = findCategoryBySlug(categories, slug);
 
         if (!foundCategory) {
@@ -49,10 +54,26 @@ const CategoryProducts = () => {
 
         setCategory(foundCategory);
 
-        // 2. Fetch products for this category
-        const data = await getProductsByCategory(foundCategory.id, page, sort, size);
-        setProducts(data.content);
-        setTotalPages(data.totalPages);
+        // 2. Fetch products and filters for this category using the search endpoint
+        // Prepare request object for filters
+        const filterRequest = {
+            filterParameters: Object.keys(selectedFilters).map(key => ({
+                id: key,
+                filterParameterValueIds: selectedFilters[key]
+            }))
+        };
+
+        const data = await searchProductsByCategory(foundCategory.id, filterRequest, page, sort, size);
+
+        // Handle response
+        // data.products is a Page object (based on user snippet which maps result.getProducts())
+        setProducts(data.products?.content || []);
+        setTotalPages(data.products?.totalPages || 0);
+
+        // data.filterParameters is the list of available filters
+        if (data.filterParameters) {
+            setFilterParameters(data.filterParameters);
+        }
 
       } catch (err) {
         console.error("Failed to fetch category data", err);
@@ -63,7 +84,28 @@ const CategoryProducts = () => {
     };
 
     fetchCategoryAndProducts();
-  }, [slug, page, sort, size]);
+  }, [slug, page, sort, size, selectedFilters]); // Added selectedFilters dependency
+
+  const handleFilterChange = (paramId, valueId, checked) => {
+      setSelectedFilters(prev => {
+          const currentValues = prev[paramId] || [];
+          let newValues;
+          if (checked) {
+              newValues = [...currentValues, valueId];
+          } else {
+              newValues = currentValues.filter(id => id !== valueId);
+          }
+
+          const newState = { ...prev };
+          if (newValues.length > 0) {
+              newState[paramId] = newValues;
+          } else {
+              delete newState[paramId];
+          }
+          return newState;
+      });
+      setPage(0); // Reset page on filter change
+  };
 
   const handleSortChange = (e) => {
     setSort(e.target.value);
@@ -84,6 +126,12 @@ const CategoryProducts = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <CategoryFilter
+        filterParameters={filterParameters}
+        selectedFilters={selectedFilters}
+        onFilterChange={handleFilterChange}
+      />
+
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 border-b border-gray-200 pb-4">
         <h1 className="text-xl font-bold uppercase text-gray-800">{category?.title}</h1>
 
