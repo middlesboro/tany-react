@@ -126,54 +126,48 @@ const CategoryProducts = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <div className="flex flex-col lg:flex-row gap-8">
-        {/* Sidebar */}
-        <aside className="w-full lg:w-1/4">
-          <CategoryFilter
-            filterParameters={filterParameters}
-            selectedFilters={selectedFilters}
-            onFilterChange={handleFilterChange}
-          />
-        </aside>
+      <CategoryFilter
+        filterParameters={filterParameters}
+        selectedFilters={selectedFilters}
+        onFilterChange={handleFilterChange}
+      />
 
-        {/* Main Content */}
-        <div className="w-full lg:w-3/4">
-          <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 border-b border-gray-200 pb-4">
-            <h1 className="text-xl font-bold uppercase text-gray-800">{category?.title}</h1>
+      <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 border-b border-gray-200 pb-4">
+        <h1 className="text-xl font-bold uppercase text-gray-800">{category?.title}</h1>
 
-            <div className="flex gap-4">
-                {/* Sorting */}
-                <div className="flex items-center text-sm">
-                <label htmlFor="sort" className="mr-2 text-gray-600">Zoradiť podľa:</label>
-                <select
-                    id="sort"
-                    value={sort}
-                    onChange={handleSortChange}
-                    className="border border-gray-300 rounded-sm p-1 text-gray-700 focus:outline-none focus:border-tany-green"
-                >
-                    <option value="title,asc">Názov (A-Z)</option>
-                    <option value="title,desc">Názov (Z-A)</option>
-                    <option value="price,asc">Cena (od najlacnejšieho)</option>
-                    <option value="price,desc">Cena (od najdrahšieho)</option>
-                </select>
-                </div>
-
-                {/* Page Size */}
-                <div className="flex items-center text-sm">
-                <label htmlFor="size" className="mr-2 text-gray-600">Zobraziť:</label>
-                <select
-                    id="size"
-                    value={size}
-                    onChange={handleSizeChange}
-                    className="border border-gray-300 rounded-sm p-1 text-gray-700 focus:outline-none focus:border-tany-green"
-                >
-                    <option value={12}>12</option>
-                    <option value={24}>24</option>
-                    <option value={48}>48</option>
-                </select>
-                </div>
-            </div>
+        <div className="flex gap-4">
+          {/* Sorting */}
+          <div className="flex items-center text-sm">
+            <label htmlFor="sort" className="mr-2 text-gray-600">Zoradiť podľa:</label>
+            <select
+              id="sort"
+              value={sort}
+              onChange={handleSortChange}
+              className="border border-gray-300 rounded-sm p-1 text-gray-700 focus:outline-none focus:border-tany-green"
+            >
+              <option value="title,asc">Názov (A-Z)</option>
+              <option value="title,desc">Názov (Z-A)</option>
+              <option value="price,asc">Cena (od najlacnejšieho)</option>
+              <option value="price,desc">Cena (od najdrahšieho)</option>
+            </select>
           </div>
+
+          {/* Page Size */}
+          <div className="flex items-center text-sm">
+            <label htmlFor="size" className="mr-2 text-gray-600">Zobraziť:</label>
+            <select
+              id="size"
+              value={size}
+              onChange={handleSizeChange}
+              className="border border-gray-300 rounded-sm p-1 text-gray-700 focus:outline-none focus:border-tany-green"
+            >
+              <option value={12}>12</option>
+              <option value={24}>24</option>
+              <option value={48}>48</option>
+            </select>
+          </div>
+        </div>
+      </div>
 
           {loading ? (
             <div className="text-center py-20 text-gray-500">Načítavam produkty...</div>
@@ -223,8 +217,6 @@ const CategoryProducts = () => {
               )}
             </>
           )}
-        </div>
-      </div>
     </div>
   );
 };

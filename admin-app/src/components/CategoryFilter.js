@@ -22,8 +22,7 @@ const CategoryFilter = ({ filterParameters, selectedFilters, onFilterChange }) =
 
   return (
     <div className="flex flex-col gap-0 border-b border-gray-200 bg-white">
-      {/* Optional Header for the Sidebar */}
-      {/* <h3 className="font-bold uppercase text-gray-800 p-4 border-b border-gray-200">Filtre</h3> */}
+      <h3 className="font-bold uppercase text-gray-800 p-4 border-b border-gray-200">Filter</h3>
 
       {filterParameters.map((param) => {
         // Skip rendering if no values are available
