@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getAdminProducts, deleteProduct, patchProduct } from '../services/productAdminService';
+import { getBrands } from '../services/brandAdminService';
+import SearchSelect from './SearchSelect';
 
 const ProductList = () => {
   const [products, setProducts] = useState([]);
@@ -11,14 +13,72 @@ const ProductList = () => {
   const [editingId, setEditingId] = useState(null);
   const [editFormData, setEditFormData] = useState({});
 
+  // Filter states
+  const [filter, setFilter] = useState({
+    query: '',
+    priceFrom: '',
+    priceTo: '',
+    brandId: '',
+    id: '',
+    externalStock: '',
+    quantity: '',
+    active: '',
+  });
+  const [appliedFilter, setAppliedFilter] = useState({});
+  const [brands, setBrands] = useState([]);
+
+  useEffect(() => {
+    const fetchBrands = async () => {
+      const data = await getBrands(0, 'name,asc', 100);
+      setBrands(data.content);
+    };
+    fetchBrands();
+  }, []);
+
   useEffect(() => {
     const fetchProducts = async () => {
-      const data = await getAdminProducts(page, sort, size);
+      const data = await getAdminProducts(page, sort, size, appliedFilter);
       setProducts(data.content);
       setTotalPages(data.totalPages);
     };
     fetchProducts();
-  }, [page, sort, size]);
+  }, [page, sort, size, appliedFilter]);
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilter({
+      ...filter,
+      [name]: value,
+    });
+  };
+
+  const handleBrandChange = (value) => {
+    setFilter({
+      ...filter,
+      brandId: value,
+    });
+  };
+
+  const handleFilterSubmit = () => {
+    setAppliedFilter(filter);
+    setPage(0);
+  };
+
+  const handleClearFilter = () => {
+    const emptyFilter = {
+      query: '',
+      priceFrom: '',
+      priceTo: '',
+      brandId: '',
+      id: '',
+      externalStock: '',
+      quantity: '',
+      active: '',
+    };
+    setFilter(emptyFilter);
+    setAppliedFilter({});
+    setPage(0);
+  };
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
@@ -67,6 +127,117 @@ const ProductList = () => {
 
   return (
     <div>
+      {/* Filter Section */}
+      <div className="bg-gray-100 p-4 mb-4 rounded shadow">
+        <h2 className="text-lg font-bold mb-2">Filter Products</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <div>
+            <label className="block text-gray-700">Query</label>
+            <input
+              type="text"
+              name="query"
+              value={filter.query}
+              onChange={handleFilterChange}
+              placeholder="Search by name..."
+              className="w-full px-3 py-2 border rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700">ID</label>
+            <input
+              type="text"
+              name="id"
+              value={filter.id}
+              onChange={handleFilterChange}
+              placeholder="Product ID"
+              className="w-full px-3 py-2 border rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700">Price From</label>
+            <input
+              type="number"
+              name="priceFrom"
+              value={filter.priceFrom}
+              onChange={handleFilterChange}
+              placeholder="Min Price"
+              className="w-full px-3 py-2 border rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700">Price To</label>
+            <input
+              type="number"
+              name="priceTo"
+              value={filter.priceTo}
+              onChange={handleFilterChange}
+              placeholder="Max Price"
+              className="w-full px-3 py-2 border rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700">Quantity</label>
+            <input
+              type="number"
+              name="quantity"
+              value={filter.quantity}
+              onChange={handleFilterChange}
+              placeholder="Quantity"
+              className="w-full px-3 py-2 border rounded"
+            />
+          </div>
+          <div>
+            <SearchSelect
+              label="Brand"
+              options={brands}
+              value={filter.brandId}
+              onChange={handleBrandChange}
+              placeholder="Select Brand"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700">External Stock</label>
+            <select
+              name="externalStock"
+              value={filter.externalStock}
+              onChange={handleFilterChange}
+              className="w-full px-3 py-2 border rounded"
+            >
+              <option value="">All</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+          </div>
+          <div>
+            <label className="block text-gray-700">Active</label>
+            <select
+              name="active"
+              value={filter.active}
+              onChange={handleFilterChange}
+              className="w-full px-3 py-2 border rounded"
+            >
+              <option value="">All</option>
+              <option value="true">Yes</option>
+              <option value="false">No</option>
+            </select>
+          </div>
+        </div>
+        <div className="mt-4 flex gap-2">
+          <button
+            onClick={handleFilterSubmit}
+            className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+          >
+            Filter
+          </button>
+          <button
+            onClick={handleClearFilter}
+            className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+          >
+            Clear
+          </button>
+        </div>
+      </div>
+
       <table className="min-w-full bg-white">
         <thead>
           <tr>

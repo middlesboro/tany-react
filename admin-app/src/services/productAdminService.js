@@ -2,8 +2,23 @@ import { authFetch } from '../utils/authFetch';
 
 const API_ADMIN_URL = `${process.env.REACT_APP_API_URL}/admin/products`;
 
-export const getAdminProducts = async (page = 0, sort = 'title,asc', size = 20) => {
-  const response = await authFetch(`${API_ADMIN_URL}?page=${page}&size=${size}&sort=${sort}`);
+export const getAdminProducts = async (page = 0, sort = 'title,asc', size = 20, filter = {}) => {
+  const params = new URLSearchParams({
+    page,
+    size,
+    sort,
+  });
+
+  if (filter.query) params.append('query', filter.query);
+  if (filter.priceFrom) params.append('priceFrom', filter.priceFrom);
+  if (filter.priceTo) params.append('priceTo', filter.priceTo);
+  if (filter.brandId) params.append('brandId', filter.brandId);
+  if (filter.id) params.append('id', filter.id);
+  if (filter.externalStock !== undefined && filter.externalStock !== '') params.append('externalStock', filter.externalStock);
+  if (filter.quantity) params.append('quantity', filter.quantity);
+  if (filter.active !== undefined && filter.active !== '') params.append('active', filter.active);
+
+  const response = await authFetch(`${API_ADMIN_URL}?${params.toString()}`);
   return response.json();
 };
 
