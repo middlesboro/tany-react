@@ -42,6 +42,8 @@ import BlogDetail from './pages/BlogDetail';
 import ShopSettings from './pages/ShopSettings';
 import Account from './pages/Account';
 import PublicPage from './pages/PublicPage';
+import ProductLabels from './pages/ProductLabels';
+import ProductLabelEdit from './pages/ProductLabelEdit';
 import { CartProvider } from './context/CartContext';
 import { BreadcrumbProvider } from './context/BreadcrumbContext';
 
@@ -92,6 +94,9 @@ function App() {
           <Route path="suppliers" element={<Suppliers />} />
           <Route path="suppliers/new" element={<SupplierEdit />} />
           <Route path="suppliers/:id" element={<SupplierEdit />} />
+          <Route path="product-labels" element={<ProductLabels />} />
+          <Route path="product-labels/new" element={<ProductLabelEdit />} />
+          <Route path="product-labels/:id" element={<ProductLabelEdit />} />
           <Route path="filter-parameters" element={<FilterParameters />} />
           <Route path="filter-parameters/new" element={<FilterParameterEdit />} />
           <Route path="filter-parameters/:id" element={<FilterParameterEdit />} />

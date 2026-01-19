@@ -6,6 +6,7 @@ import { getSuppliers } from '../services/supplierAdminService';
 import { getCategories } from '../services/categoryAdminService';
 import { getFilterParameters } from '../services/filterParameterAdminService';
 import { getFilterParameterValues } from '../services/filterParameterValueAdminService';
+import { getAllProductLabels } from '../services/productLabelAdminService';
 import ProductForm from '../components/ProductForm';
 import ProductImageManager from '../components/ProductImageManager';
 
@@ -23,6 +24,7 @@ const ProductEdit = () => {
     supplierId: '',
     categoryIds: [],
     productFilterParameters: [],
+    productLabelIds: [],
   });
 
   const [brands, setBrands] = useState([]);
@@ -30,6 +32,7 @@ const ProductEdit = () => {
   const [categories, setCategories] = useState([]);
   const [filterParameters, setFilterParameters] = useState([]);
   const [filterParameterValues, setFilterParameterValues] = useState([]);
+  const [productLabels, setProductLabels] = useState([]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -48,6 +51,8 @@ const ProductEdit = () => {
       setFilterParameters(filterParametersData.content);
       const filterParameterValuesData = await getFilterParameterValues(0, 'name,asc', 1000);
       setFilterParameterValues(filterParameterValuesData.content);
+      const productLabelsData = await getAllProductLabels();
+      setProductLabels(productLabelsData.map(l => ({...l, name: l.title})));
     };
     fetchData();
 
@@ -61,6 +66,7 @@ const ProductEdit = () => {
           supplierId: data.supplierId || '',
           categoryIds: data.categoryIds || [],
           productFilterParameters: data.productFilterParameters || [],
+          productLabelIds: data.productLabelIds || [],
         });
       };
       fetchProductData();
@@ -127,6 +133,7 @@ const ProductEdit = () => {
         categories={categories}
         filterParameters={filterParameters}
         filterParameterValues={filterParameterValues}
+        productLabels={productLabels}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
         handleSaveAndStay={handleSaveAndStay}

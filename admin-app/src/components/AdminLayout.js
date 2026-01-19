@@ -10,6 +10,7 @@ const menuItems = [
       { title: 'Categories', path: '/admin/categories' },
       { title: 'Brands', path: '/admin/brands' },
       { title: 'Suppliers', path: '/admin/suppliers' },
+      { title: 'Product Labels', path: '/admin/product-labels' },
       { title: 'Filter Parameters', path: '/admin/filter-parameters' },
       { title: 'Filter Values', path: '/admin/filter-parameter-values' },
     ]

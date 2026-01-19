@@ -12,6 +12,7 @@ const ProductForm = ({
   categories,
   filterParameters,
   filterParameterValues,
+  productLabels,
   handleChange,
   handleSubmit,
   handleSaveAndStay
@@ -112,6 +113,16 @@ const ProductForm = ({
           value={product.categoryIds}
           onChange={handleMultiSelectChange('categoryIds')}
           placeholder="Search for categories..."
+        />
+      </div>
+
+      <div className="mb-4">
+        <MultiSearchSelect
+          label="Product Labels"
+          options={productLabels}
+          value={product.productLabelIds}
+          onChange={handleMultiSelectChange('productLabelIds')}
+          placeholder="Search for labels..."
         />
       </div>
 
