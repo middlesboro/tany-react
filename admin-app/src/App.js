@@ -46,12 +46,14 @@ import ProductLabels from './pages/ProductLabels';
 import ProductLabelEdit from './pages/ProductLabelEdit';
 import { CartProvider } from './context/CartContext';
 import { BreadcrumbProvider } from './context/BreadcrumbContext';
+import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
     <CartProvider>
       <BreadcrumbProvider>
         <Router>
+          <ScrollToTop />
           <Routes>
           <Route path="/admin/login" element={<Login isAdmin={true} />} />
           <Route path="/authentication/success" element={<AuthenticationSuccess />} />
