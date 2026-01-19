@@ -7,7 +7,7 @@ import ProductCard from '../components/ProductCard';
 import CategoryFilter from '../components/CategoryFilter';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 
-const CategoryProducts = () => {
+const CategoryProductsContent = () => {
   const { slug } = useParams();
   const { setBreadcrumbs } = useBreadcrumbs();
   const [products, setProducts] = useState([]);
@@ -219,6 +219,11 @@ const CategoryProducts = () => {
       )}
     </div>
   );
+};
+
+const CategoryProducts = () => {
+    const { slug } = useParams();
+    return <CategoryProductsContent key={slug} />;
 };
 
 export default CategoryProducts;
