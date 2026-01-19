@@ -12,13 +12,13 @@ const CategoryFilter = ({ filterParameters, selectedFilters, onFilterChange }) =
   return (
     <div className="bg-white p-4 border border-gray-200 rounded-sm mb-6">
       <h3 className="font-bold uppercase text-gray-800 mb-4 text-sm">Filtrovať produkty</h3>
-      <div className="space-y-6">
+      <div className="flex flex-wrap gap-6">
         {filterParameters.map((param) => {
            // Skip rendering if no values are available
            if (!param.values || param.values.length === 0) return null;
 
            return (
-            <div key={param.id}>
+            <div key={param.id} className="min-w-[150px]">
               <h4 className="font-bold text-gray-700 text-sm mb-2">{param.name}</h4>
               <ul className="space-y-1">
                 {param.values.map((val) => {
