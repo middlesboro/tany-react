@@ -3,9 +3,11 @@ import { useParams } from 'react-router-dom';
 import { getCategories } from '../services/categoryService';
 import { searchProductsByCategory } from '../services/productService';
 import { findCategoryBySlug, findCategoryPath } from '../utils/categoryUtils';
+import { createPortal } from 'react-dom';
 import ProductCard from '../components/ProductCard';
 import CategoryFilter from '../components/CategoryFilter';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
+import useMediaQuery from '../hooks/useMediaQuery';
 
 const CategoryProducts = () => {
   const { slug } = useParams();
@@ -20,6 +22,13 @@ const CategoryProducts = () => {
   const [sort, setSort] = useState('title,asc');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const isDesktop = useMediaQuery('(min-width: 768px)');
+  const [portalTarget, setPortalTarget] = useState(null);
+
+  useEffect(() => {
+    // Wait for the portal target to exist
+    setPortalTarget(document.getElementById('sidebar-filter-root'));
+  }, []);
 
   useEffect(() => {
     const fetchCategoryAndProducts = async () => {
@@ -126,12 +135,6 @@ const CategoryProducts = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <CategoryFilter
-        filterParameters={filterParameters}
-        selectedFilters={selectedFilters}
-        onFilterChange={handleFilterChange}
-      />
-
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 border-b border-gray-200 pb-4">
         <h1 className="text-xl font-bold uppercase text-gray-800">{category?.title}</h1>
 
@@ -168,6 +171,25 @@ const CategoryProducts = () => {
           </div>
         </div>
       </div>
+
+      {/* Mobile Filter */}
+      {!isDesktop && (
+        <CategoryFilter
+          filterParameters={filterParameters}
+          selectedFilters={selectedFilters}
+          onFilterChange={handleFilterChange}
+        />
+      )}
+
+      {/* Desktop Filter Portal */}
+      {isDesktop && portalTarget && createPortal(
+        <CategoryFilter
+          filterParameters={filterParameters}
+          selectedFilters={selectedFilters}
+          onFilterChange={handleFilterChange}
+        />,
+        portalTarget
+      )}
 
           {loading ? (
             <div className="text-center py-20 text-gray-500">Načítavam produkty...</div>
