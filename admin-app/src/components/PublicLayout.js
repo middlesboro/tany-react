@@ -46,7 +46,6 @@ const PublicLayout = () => {
   // But wait, the previous implementation was only showing top level categories anyway because it was just mapping `categories`.
   // If `categories` is now a tree, `categories.map` only iterates top level. So the mobile menu will show top level categories, which is acceptable.)
   const displayCategories = [
-    { name: "Všetky produkty", path: "/", highlight: true },
     ...categories.map(cat => ({
       name: cat.title,
       path: `/category/${cat.slug}`,
