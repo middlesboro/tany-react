@@ -64,16 +64,6 @@ const CategoryTree = ({ categories }) => {
         Kategórie
       </div>
       <ul className="flex flex-col border-t border-gray-100">
-        {/* Static "All Products" link */}
-        <li className="border-b border-gray-100">
-          <Link
-            to="/"
-            className="block py-3 px-4 text-sm hover:text-tany-green hover:bg-gray-50 transition-colors font-bold"
-          >
-            Všetky produkty
-          </Link>
-        </li>
-
         {/* Dynamic Categories */}
         {categories.map((category) => (
           <CategoryTreeItem key={category.id} category={category} />
