@@ -33,7 +33,7 @@ const ImageSlider = ({ slides }) => {
 
   return (
     <div className="w-full relative group mb-8">
-      <div className="w-full h-[200px] sm:h-[300px] md:h-[400px] lg:h-[500px] relative overflow-hidden rounded-md shadow-sm">
+      <div className="w-full h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] relative overflow-hidden rounded-md shadow-sm">
          <a href={slides[currentIndex].link} className="block w-full h-full">
             <img
                 src={slides[currentIndex].url}

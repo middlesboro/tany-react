@@ -29,6 +29,7 @@ const menuItems = [
       { title: 'Shop Settings', path: '/admin/shop-settings' },
       { title: 'Carriers', path: '/admin/carriers' },
       { title: 'Payments', path: '/admin/payments' },
+      { title: 'Cart Discounts', path: '/admin/cart-discounts' },
     ]
   },
   {

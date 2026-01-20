@@ -55,3 +55,34 @@ export const updateCart = async (cartData) => {
   }
   return response.json();
 };
+
+export const addDiscount = async (cartId, code) => {
+  const url = `${API_URL}/${cartId}/discount?code=${encodeURIComponent(code)}`;
+  const response = await authFetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to add discount');
+  }
+  return response.json();
+};
+
+export const removeDiscount = async (cartId, code) => {
+  const url = `${API_URL}/${cartId}/discount?code=${encodeURIComponent(code)}`;
+  const response = await authFetch(url, {
+    method: 'DELETE',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+  });
+
+  if (!response.ok) {
+    throw new Error('Failed to remove discount');
+  }
+  return response.json();
+};

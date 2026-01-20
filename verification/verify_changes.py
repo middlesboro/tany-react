@@ -1,69 +1,69 @@
-from playwright.sync_api import sync_playwright, expect
 
-def test_changes(page):
-    # Set auth token to bypass login
-    page.add_init_script("""
-        localStorage.setItem('auth_token', 'dummy_token');
-    """)
+from playwright.sync_api import sync_playwright
 
-    # Mock Brands
-    page.route("**/api/admin/brands**", lambda route: route.fulfill(
+def run(playwright):
+    browser = playwright.chromium.launch(headless=True)
+    context = browser.new_context()
+    page = context.new_page()
+
+    # Log in as admin
+    page.goto("http://localhost:3000/admin/login")
+
+    # Mock login success if backend is down
+    page.route("**/api/auth/login", lambda route: route.fulfill(
         status=200,
         content_type="application/json",
-        body='{"content": [{"id": 1, "name": "Test Brand"}], "totalPages": 1}'
+        body='{"token": "fake-jwt-token"}'
     ))
 
-    # Mock Products
-    page.route("**/api/admin/products**", lambda route: route.fulfill(
+    # Mock user details
+    page.evaluate("localStorage.setItem('auth_token', 'fake-jwt-token')")
+
+    # Navigate to Cart Discounts - directly
+    # Mock the list response
+    page.route("**/api/admin/cart-discounts?**", lambda route: route.fulfill(
         status=200,
         content_type="application/json",
-        body='{"content": [{"id": 1, "title": "Test Product", "price": 100, "quantity": 10, "brandId": 1, "externalStock": true, "active": true}], "totalPages": 1}'
+        body='{"content": [{"id": "1", "title": "Test Discount", "code": "TEST10", "discountType": "PERCENTAGE", "value": 10, "active": true, "dateFrom": null, "dateTo": null, "freeShipping": false}], "totalPages": 1}'
     ))
 
-    # Mock Categories
-    page.route("**/api/admin/categories**", lambda route: route.fulfill(
+    page.goto("http://localhost:3000/admin/cart-discounts")
+    page.screenshot(path="verification/cart_discounts_list.png")
+
+    # Go to Create page
+    page.goto("http://localhost:3000/admin/cart-discounts/new")
+    page.fill('input[name="title"]', "New Discount")
+    page.fill('input[name="code"]', "NEW20")
+    page.screenshot(path="verification/cart_discount_create.png")
+
+    # Go to cart page (Public)
+    # Mocking customer context
+    page.route("**/api/customer/context", lambda route: route.fulfill(
+         status=200,
+        content_type="application/json",
+        body='{"cartDto": {"cartId": "cart1", "products": [{"id": 1, "title": "Test Product", "price": 100, "quantity": 1}], "totalProductPrice": 100, "discounts": []}, "customerDto": null}'
+    ))
+
+    # Mock add discount
+    page.route("**/api/cart/cart1/discount?code=TEST10", lambda route: route.fulfill(
         status=200,
         content_type="application/json",
-        body='{"content": [{"id": 1, "title": "Test Category", "description": "Test Description"}], "totalPages": 1}'
+        body='{"cartId": "cart1", "products": [{"id": 1, "title": "Test Product", "price": 100, "quantity": 1}], "totalProductPrice": 90, "discounts": [{"code": "TEST10", "value": 10}]}'
     ))
 
-    # Go to Products
-    page.goto("http://localhost:3000/admin/products")
+    page.goto("http://localhost:3000/cart")
+    page.wait_for_selector('input[placeholder="Enter code"]')
+    page.screenshot(path="verification/cart_page.png")
 
-    # Check that NEW columns are PRESENT
-    expect(page.get_by_role("columnheader", name="Brand")).to_be_visible()
-    expect(page.get_by_role("columnheader", name="Ext. Stock")).to_be_visible()
-    expect(page.get_by_role("columnheader", name="Active")).to_be_visible()
+    # Simulate typing discount code
+    page.fill('input[placeholder="Enter code"]', "TEST10")
+    page.click('button:has-text("Apply")')
 
-    # Check cell content
-    expect(page.get_by_role("cell", name="Test Brand")).to_be_visible()
-    # Check for checkmarks (svgs)
-    # This is tricky with get_by_role, but we can look for the svg in the row
-    # Just assume if the text "-" is not there, and we see SVGs (generic selector), it's likely okay.
-    # Or assert on the table row content text.
+    # Wait for the discount to appear in the list (mocked response)
+    page.wait_for_selector('text=TEST10')
+    page.screenshot(path="verification/cart_page_applied.png")
 
-    # Go to Categories
-    page.goto("http://localhost:3000/admin/categories")
+    browser.close()
 
-    # Check that Description column is MISSING
-    expect(page.get_by_role("columnheader", name="Description")).not_to_be_visible()
-
-    # Check that Filter by Title is PRESENT
-    expect(page.get_by_placeholder("Search by title...")).to_be_visible()
-
-    # Screenshot
-    page.screenshot(path="verification/verification.png")
-
-    print("Verification passed: New columns present, description missing.")
-
-if __name__ == "__main__":
-    with sync_playwright() as p:
-        browser = p.chromium.launch(headless=True)
-        page = browser.new_page()
-        try:
-            test_changes(page)
-        except Exception as e:
-            print(f"Test failed: {e}")
-            exit(1)
-        finally:
-            browser.close()
+with sync_playwright() as playwright:
+    run(playwright)

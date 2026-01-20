@@ -22,7 +22,7 @@ const CartItem = ({ item }) => {
 
     setUpdating(true);
     try {
-      await addToCart(item.id, newQuantity);
+      await addToCart(item.productId || item.id, newQuantity);
     } catch (error) {
       console.error("Failed to update cart item", error);
       setQuantity(item.quantity);
@@ -47,20 +47,24 @@ const CartItem = ({ item }) => {
     }
   };
 
+  // Handle both old (images array, productName) and new (image string, title) structures
+  const displayImage = item.image || (item.images && item.images[0]);
+  const displayName = item.title || item.productName;
+
   return (
     <tr>
-      <td className="px-6 py-4 whitespace-nowrap">
+      <td className="px-6 py-4">
         <div className="flex items-center">
           <div className="flex-shrink-0 h-10 w-10">
-             {item.images ? (
-                <img className="h-10 w-10 rounded-full object-cover" src={item.images[0]} alt={item.productName} />
+             {displayImage ? (
+                <img className="h-10 w-10 rounded-full object-cover" src={displayImage} alt={displayName} />
              ) : (
                 <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs">No Img</div>
              )}
           </div>
           <div className="ml-4">
-            <Link to={`/products/${item.productId}`} className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline">
-              {item.productName}
+            <Link to={`/products/${item.productId || item.id}`} className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline">
+              {displayName}
             </Link>
           </div>
         </div>
