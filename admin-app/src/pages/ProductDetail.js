@@ -37,6 +37,8 @@ const StarRating = ({ rating, size = "w-4 h-4", onClick, interactive = false }) 
 };
 
 const ProductReviews = ({ productId }) => {
+  const reviewsRef = React.useRef(null);
+  const isFirstRun = React.useRef(true);
   const [reviews, setReviews] = useState([]);
   const [stats, setStats] = useState({ averageRating: 0, reviewsCount: 0 });
   const [loading, setLoading] = useState(true);
@@ -77,6 +79,17 @@ const ProductReviews = ({ productId }) => {
       fetchReviews();
     }
   }, [productId, fetchReviews]);
+
+  useEffect(() => {
+    if (isFirstRun.current) {
+      isFirstRun.current = false;
+      return;
+    }
+
+    if (reviewsRef.current) {
+      reviewsRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [page]);
 
   const handleReviewChange = (e) => {
     const { name, value } = e.target;
@@ -119,7 +132,7 @@ const ProductReviews = ({ productId }) => {
   };
 
   return (
-    <div className="mt-12">
+    <div className="mt-12" ref={reviewsRef}>
       <h3 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Hodnotenia</h3>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-10">
