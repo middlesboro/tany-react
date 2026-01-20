@@ -93,7 +93,6 @@ const ProductSearch = () => {
                       </div>
                       <div className="flex-grow">
                         <div className="font-medium text-sm text-gray-800 line-clamp-1">{product.title}</div>
-                        <div className="text-xs text-gray-500 line-clamp-1">{product.shortDescription}</div>
                       </div>
                       <div className="text-sm font-bold text-tany-green whitespace-nowrap">
                         {product.price ? `${product.price.toFixed(2)} €` : ''}
