@@ -206,6 +206,7 @@ const PublicLayout = () => {
               {/* Left Sidebar - Categories */}
               {showSidebar && (
                 <aside className="hidden md:block w-full md:w-1/4 lg:w-1/5 flex-shrink-0">
+                   <div id="sidebar-filter-root" className="mb-6"></div>
                    <CategoryTree categories={categories} />
 
                    {/* Banner placeholder often found in left column */}
