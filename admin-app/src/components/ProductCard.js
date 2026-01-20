@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import AddToCartButton from './AddToCartButton';
+import ProductLabel from './ProductLabel';
 
 const ProductCard = ({ product }) => {
   const { addToCart, cart } = useCart();
@@ -39,6 +40,10 @@ const ProductCard = ({ product }) => {
     <div className="group bg-white flex flex-col h-full border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all duration-300 relative">
         {/* Discount Badge Placeholder (example) */}
         {/* <span className="absolute top-2 left-2 bg-tany-red text-white text-xs font-bold px-2 py-1 z-10">-10%</span> */}
+
+        {product.productLabels && product.productLabels.map((label, index) => (
+            <ProductLabel key={index} label={label} />
+        ))}
 
       <Link to={`/products/${product.id}`} className="block relative overflow-hidden flex-shrink-0 aspect-square">
          {/* Overlay on hover not typically used in this specific prestashop theme, but image zoom/swap is common.
