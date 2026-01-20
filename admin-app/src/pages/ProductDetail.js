@@ -416,9 +416,18 @@ const ProductDetail = () => {
             </div>
 
             <div className="mb-8">
-                <div className="flex items-center text-tany-green font-medium mb-2">
-                    <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"></path></svg>
-                    Skladom > 5 ks
+                <div className={`flex items-center font-medium mb-2 ${product.quantity > 0 ? 'text-tany-green' : 'text-red-500'}`}>
+                    {product.quantity > 0 ? (
+                        <>
+                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"></path></svg>
+                            {product.quantity > 5 ? 'Skladom > 5 ks' : `Skladom ${product.quantity} ks`}
+                        </>
+                    ) : (
+                        <>
+                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"></path></svg>
+                            Vypredané
+                        </>
+                    )}
                 </div>
                 <div className="text-sm text-gray-500">
                     Odosielame približne do 24 hodín
@@ -428,16 +437,17 @@ const ProductDetail = () => {
             <div className="border-t border-gray-100 pt-8">
                 <div className="flex flex-col sm:flex-row gap-4">
                     {/* Quantity Selector */}
-                    <div className="flex items-center border border-gray-300 rounded">
-                        <button onClick={decreaseQty} className="px-4 py-3 text-gray-600 hover:bg-gray-100 transition">-</button>
+                    <div className={`flex items-center border border-gray-300 rounded ${product.quantity <= 0 ? 'opacity-50 pointer-events-none' : ''}`}>
+                        <button onClick={decreaseQty} className="px-4 py-3 text-gray-600 hover:bg-gray-100 transition" disabled={product.quantity <= 0}>-</button>
                         <input
                             type="number"
                             min="1"
                             value={quantity}
                             onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
                             className="w-16 text-center focus:outline-none text-gray-800 font-semibold"
+                            disabled={product.quantity <= 0}
                         />
-                        <button onClick={increaseQty} className="px-4 py-3 text-gray-600 hover:bg-gray-100 transition">+</button>
+                        <button onClick={increaseQty} className="px-4 py-3 text-gray-600 hover:bg-gray-100 transition" disabled={product.quantity <= 0}>+</button>
                     </div>
 
                     {/* Add to Cart Button */}
@@ -445,6 +455,8 @@ const ProductDetail = () => {
                         onClick={handleAddToCart}
                         adding={adding}
                         className="flex-1 py-3 px-6"
+                        disabled={product.quantity <= 0}
+                        text={product.quantity <= 0 ? "Vypredané" : undefined}
                     />
                 </div>
             </div>
