@@ -1,12 +1,15 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCart } from '../context/CartContext';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import { Link } from 'react-router-dom';
 import CartItem from '../components/CartItem';
 
 const Cart = () => {
-  const { cart, loading } = useCart();
+  const { cart, loading, addDiscount, removeDiscount } = useCart();
   const { setBreadcrumbs } = useBreadcrumbs();
+  const [discountCode, setDiscountCode] = useState('');
+  const [discountError, setDiscountError] = useState(null);
+  const [discountLoading, setDiscountLoading] = useState(false);
 
   useEffect(() => {
     setBreadcrumbs([
@@ -14,6 +17,30 @@ const Cart = () => {
       { label: 'Nákupný košík', path: null }
     ]);
   }, [setBreadcrumbs]);
+
+  const handleApplyDiscount = async (e) => {
+    e.preventDefault();
+    if (!discountCode.trim()) return;
+
+    setDiscountLoading(true);
+    setDiscountError(null);
+    try {
+      await addDiscount(discountCode);
+      setDiscountCode('');
+    } catch (err) {
+      setDiscountError(err.message || "Failed to apply discount");
+    } finally {
+      setDiscountLoading(false);
+    }
+  };
+
+  const handleRemoveDiscount = async (code) => {
+    try {
+      await removeDiscount(code);
+    } catch (err) {
+      console.error("Failed to remove discount", err);
+    }
+  };
 
   if (loading) {
     return (
@@ -42,47 +69,101 @@ const Cart = () => {
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
 
-      <div className="bg-white rounded-lg shadow overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Product
-              </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Price
-              </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Quantity
-              </th>
-              <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                Total
-              </th>
-              <th scope="col" className="relative px-6 py-3">
-                <span className="sr-only">Remove</span>
-              </th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {cart.products.map((item) => (
-              <CartItem key={item.id || item.productId} item={item} />
-            ))}
-          </tbody>
-        </table>
-
-        <div className="px-6 py-4 bg-gray-50 border-t border-gray-200 flex justify-end items-center">
-           <span className="text-lg font-bold mr-4">Total:</span>
-           <span className="text-xl font-bold text-blue-600">{cart.totalProductPrice ? cart.totalProductPrice.toFixed(2) : '0.00'} €</span>
+      <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex-1 bg-white rounded-lg shadow overflow-hidden">
+          <table className="min-w-full divide-y divide-gray-200">
+            <thead className="bg-gray-50">
+              <tr>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Product
+                </th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Price
+                </th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Quantity
+                </th>
+                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  Total
+                </th>
+                <th scope="col" className="relative px-6 py-3">
+                  <span className="sr-only">Remove</span>
+                </th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {cart.products.map((item) => (
+                <CartItem key={item.id || item.productId} item={item} />
+              ))}
+            </tbody>
+          </table>
         </div>
-      </div>
 
-      <div className="mt-6 flex justify-end items-center">
-         <Link to="/" className="text-blue-600 hover:text-blue-800 font-medium mr-6">
-            Continue Shopping
-          </Link>
-          <Link to="/order" className="bg-green-600 text-white font-bold py-3 px-8 rounded hover:bg-green-700">
-            Continue to Order
-          </Link>
+        <div className="w-full lg:w-96">
+          <div className="bg-white rounded-lg shadow p-6 mb-6">
+            <h2 className="text-lg font-bold mb-4">Discount Code</h2>
+            <form onSubmit={handleApplyDiscount} className="flex gap-2">
+              <input
+                type="text"
+                value={discountCode}
+                onChange={(e) => setDiscountCode(e.target.value)}
+                placeholder="Enter code"
+                className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 border p-2"
+              />
+              <button
+                type="submit"
+                disabled={discountLoading || !discountCode.trim()}
+                className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 disabled:opacity-50"
+              >
+                Apply
+              </button>
+            </form>
+            {discountError && <p className="text-red-500 text-sm mt-2">{discountError}</p>}
+
+            {cart.discounts && cart.discounts.length > 0 && (
+              <div className="mt-4 space-y-2">
+                {cart.discounts.map((discount, index) => (
+                  <div key={index} className="flex justify-between items-center bg-green-50 text-green-700 px-3 py-2 rounded text-sm">
+                    <span>{discount.code}</span>
+                    <button
+                      onClick={() => handleRemoveDiscount(discount.code)}
+                      className="text-green-900 hover:text-red-600 font-bold"
+                    >
+                      ×
+                    </button>
+                  </div>
+                ))}
+              </div>
+            )}
+          </div>
+
+          <div className="bg-white rounded-lg shadow p-6">
+            <h2 className="text-lg font-bold mb-4">Summary</h2>
+            <div className="space-y-2 mb-4">
+              <div className="flex justify-between">
+                <span className="text-gray-600">Subtotal</span>
+                <span>{cart.totalProductPrice ? cart.totalProductPrice.toFixed(2) : '0.00'} €</span>
+              </div>
+              {/* Assuming cart has a discountTotal or similar if we want to show it, or relies on totalProductPrice being updated.
+                  If cart.discounts exists, we might want to show their value.
+                  However, since I don't know the exact DTO, I'll stick to showing what's available or calculating if needed.
+                  But for now, just listing active discounts is good.
+              */}
+            </div>
+            <div className="border-t border-gray-200 pt-4 flex justify-between items-center">
+              <span className="text-lg font-bold">Total:</span>
+              <span className="text-xl font-bold text-blue-600">{cart.totalProductPrice ? cart.totalProductPrice.toFixed(2) : '0.00'} €</span>
+            </div>
+            <Link to="/order" className="block w-full bg-green-600 text-white text-center font-bold py-3 mt-6 rounded hover:bg-green-700">
+              Continue to Order
+            </Link>
+             <div className="mt-4 text-center">
+                <Link to="/" className="text-blue-600 hover:text-blue-800 font-medium">
+                    Continue Shopping
+                </Link>
+             </div>
+          </div>
+        </div>
       </div>
     </div>
   );

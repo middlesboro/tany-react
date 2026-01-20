@@ -44,6 +44,8 @@ import Account from './pages/Account';
 import PublicPage from './pages/PublicPage';
 import ProductLabels from './pages/ProductLabels';
 import ProductLabelEdit from './pages/ProductLabelEdit';
+import CartDiscounts from './pages/CartDiscounts';
+import CartDiscountEdit from './pages/CartDiscountEdit';
 import { CartProvider } from './context/CartContext';
 import { BreadcrumbProvider } from './context/BreadcrumbContext';
 import ScrollToTop from './components/ScrollToTop';
@@ -99,6 +101,9 @@ function App() {
           <Route path="product-labels" element={<ProductLabels />} />
           <Route path="product-labels/new" element={<ProductLabelEdit />} />
           <Route path="product-labels/:id" element={<ProductLabelEdit />} />
+          <Route path="cart-discounts" element={<CartDiscounts />} />
+          <Route path="cart-discounts/new" element={<CartDiscountEdit />} />
+          <Route path="cart-discounts/:id" element={<CartDiscountEdit />} />
           <Route path="filter-parameters" element={<FilterParameters />} />
           <Route path="filter-parameters/new" element={<FilterParameterEdit />} />
           <Route path="filter-parameters/:id" element={<FilterParameterEdit />} />
