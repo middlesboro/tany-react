@@ -75,13 +75,14 @@ const ProductCard = ({ product }) => {
               min="1"
               value={quantity}
               onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-              disabled={adding}
-              className="w-12 h-10 border border-gray-300 text-center text-sm focus:border-tany-green focus:outline-none"
+              disabled={adding || product.quantity <= 0}
+              className={`w-12 h-10 border border-gray-300 text-center text-sm focus:border-tany-green focus:outline-none ${product.quantity <= 0 ? 'opacity-50' : ''}`}
             />
             <AddToCartButton
               onClick={handleAddToCart}
               adding={adding}
-              text="Do košíka"
+              text={product.quantity <= 0 ? "Vypredané" : "Do košíka"}
+              disabled={product.quantity <= 0}
               className="h-10 px-4 flex-grow rounded-sm text-sm"
             />
           </div>
