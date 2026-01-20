@@ -8,6 +8,7 @@ import { getUserEmail } from '../services/authService';
 import { useCart } from '../context/CartContext';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import AddToCartButton from '../components/AddToCartButton';
+import ProductLabel from '../components/ProductLabel';
 
 const REASONS = [
   "Sme malá Slovenská spoločnosť. Každú objednávku si vážime rovnako a tak k nej aj pristupujeme",
@@ -353,7 +354,11 @@ const ProductDetail = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-0">
 
           {/* Left Column: Image */}
-          <div className="flex flex-col bg-white p-8 border-b md:border-b-0 md:border-r border-gray-100">
+          <div className="flex flex-col bg-white p-8 border-b md:border-b-0 md:border-r border-gray-100 relative">
+            {product.productLabels && product.productLabels.map((label, index) => (
+                <ProductLabel key={index} label={label} />
+            ))}
+
             <div
               className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center mb-6 cursor-zoom-in"
               onClick={() => selectedImage && setIsFullViewOpen(true)}
