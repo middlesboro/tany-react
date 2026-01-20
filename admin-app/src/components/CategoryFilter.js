@@ -4,7 +4,7 @@ const CategoryFilter = ({ filterParameters, selectedFilters, onFilterChange }) =
   // Initialize state for tracking expanded sections
   const [expandedSections, setExpandedSections] = useState({});
   // Initialize state for main filter visibility (collapsed by default)
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpen, setIsOpen] = useState(true);
 
   if (!filterParameters || filterParameters.length === 0) {
     return null;
