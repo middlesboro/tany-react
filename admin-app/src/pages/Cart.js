@@ -51,7 +51,14 @@ const Cart = () => {
     );
   }
 
-  if (!cart || !cart.products || cart.products.length === 0) {
+  // Normalize data access for different DTO versions
+  const cartItems = cart ? (cart.items || cart.products || []) : [];
+  const activeDiscounts = cart ? (cart.appliedDiscounts || cart.discounts || []) : [];
+  const totalDisplayPrice = cart ? (cart.finalPrice !== undefined ? cart.finalPrice : cart.totalProductPrice) : 0;
+  const subTotalDisplayPrice = cart ? (cart.totalPrice !== undefined ? cart.totalPrice : (cart.totalProductPrice || 0)) : 0;
+
+
+  if (!cart || cartItems.length === 0) {
     return (
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
@@ -92,7 +99,7 @@ const Cart = () => {
               </tr>
             </thead>
             <tbody className="bg-white divide-y divide-gray-200">
-              {cart.products.map((item) => (
+              {cartItems.map((item) => (
                 <CartItem key={item.id || item.productId} item={item} />
               ))}
             </tbody>
@@ -120,11 +127,14 @@ const Cart = () => {
             </form>
             {discountError && <p className="text-red-500 text-sm mt-2">{discountError}</p>}
 
-            {cart.discounts && cart.discounts.length > 0 && (
+            {activeDiscounts.length > 0 && (
               <div className="mt-4 space-y-2">
-                {cart.discounts.map((discount, index) => (
+                {activeDiscounts.map((discount, index) => (
                   <div key={index} className="flex justify-between items-center bg-green-50 text-green-700 px-3 py-2 rounded text-sm">
-                    <span>{discount.code}</span>
+                    <div>
+                      <span className="font-bold">{discount.code}</span>
+                      {discount.value && <span className="ml-2">(-{discount.value}{discount.discountType === 'PERCENTAGE' ? '%' : '€'})</span>}
+                    </div>
                     <button
                       onClick={() => handleRemoveDiscount(discount.code)}
                       className="text-green-900 hover:text-red-600 font-bold"
@@ -142,17 +152,18 @@ const Cart = () => {
             <div className="space-y-2 mb-4">
               <div className="flex justify-between">
                 <span className="text-gray-600">Subtotal</span>
-                <span>{cart.totalProductPrice ? cart.totalProductPrice.toFixed(2) : '0.00'} €</span>
+                <span>{subTotalDisplayPrice.toFixed(2)} €</span>
               </div>
-              {/* Assuming cart has a discountTotal or similar if we want to show it, or relies on totalProductPrice being updated.
-                  If cart.discounts exists, we might want to show their value.
-                  However, since I don't know the exact DTO, I'll stick to showing what's available or calculating if needed.
-                  But for now, just listing active discounts is good.
-              */}
+              {cart.totalDiscount > 0 && (
+                 <div className="flex justify-between text-green-600">
+                  <span>Discount</span>
+                  <span>-{cart.totalDiscount.toFixed(2)} €</span>
+                </div>
+              )}
             </div>
             <div className="border-t border-gray-200 pt-4 flex justify-between items-center">
               <span className="text-lg font-bold">Total:</span>
-              <span className="text-xl font-bold text-blue-600">{cart.totalProductPrice ? cart.totalProductPrice.toFixed(2) : '0.00'} €</span>
+              <span className="text-xl font-bold text-blue-600">{totalDisplayPrice.toFixed(2)} €</span>
             </div>
             <Link to="/order" className="block w-full bg-green-600 text-white text-center font-bold py-3 mt-6 rounded hover:bg-green-700">
               Continue to Order
