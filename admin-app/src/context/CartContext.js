@@ -1,6 +1,12 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { getCustomerContext } from '../services/customerService';
-import { addToCart as addToCartService, updateCart as updateCartService, removeFromCart as removeFromCartService } from '../services/cartService';
+import {
+  addToCart as addToCartService,
+  updateCart as updateCartService,
+  removeFromCart as removeFromCartService,
+  addDiscount as addDiscountService,
+  removeDiscount as removeDiscountService
+} from '../services/cartService';
 
 const CartContext = createContext();
 
@@ -82,8 +88,36 @@ export const CartProvider = ({ children }) => {
     await fetchContext();
   }, [fetchContext]);
 
+  const addDiscount = useCallback(async (code) => {
+    try {
+      const storedCartId = localStorage.getItem('cartId');
+      if (!storedCartId) throw new Error("No cart found");
+
+      const updatedCart = await addDiscountService(storedCartId, code);
+      setCart(updatedCart);
+      return updatedCart;
+    } catch (error) {
+      console.error("Failed to add discount", error);
+      throw error;
+    }
+  }, []);
+
+  const removeDiscount = useCallback(async (code) => {
+    try {
+      const storedCartId = localStorage.getItem('cartId');
+      if (!storedCartId) return;
+
+      const updatedCart = await removeDiscountService(storedCartId, code);
+      setCart(updatedCart);
+      return updatedCart;
+    } catch (error) {
+      console.error("Failed to remove discount", error);
+      throw error;
+    }
+  }, []);
+
   return (
-    <CartContext.Provider value={{ cart, customer, addToCart, removeFromCart, updateCart, clearCart, loading }}>
+    <CartContext.Provider value={{ cart, customer, addToCart, removeFromCart, updateCart, clearCart, addDiscount, removeDiscount, loading }}>
       {children}
     </CartContext.Provider>
   );
