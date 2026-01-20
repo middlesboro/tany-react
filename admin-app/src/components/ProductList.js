@@ -102,6 +102,8 @@ const ProductList = () => {
       title: product.title,
       price: product.price,
       quantity: product.quantity,
+      externalStock: product.externalStock,
+      active: product.active,
     });
   };
 
@@ -118,10 +120,10 @@ const ProductList = () => {
   };
 
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const { name, value, type, checked } = e.target;
     setEditFormData({
       ...editFormData,
-      [name]: value,
+      [name]: type === 'checkbox' ? checked : value,
     });
   };
 
@@ -297,22 +299,22 @@ const ProductList = () => {
                     {brands.find(b => b.id === product.brandId)?.name || ''}
                   </td>
                   <td className="py-2 px-4 border-b">
-                    {product.externalStock ? (
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                    ) : (
-                       <span className="text-gray-400">-</span>
-                    )}
+                    <input
+                      type="checkbox"
+                      name="externalStock"
+                      checked={editFormData.externalStock || false}
+                      onChange={handleInputChange}
+                      className="h-5 w-5 text-blue-600"
+                    />
                   </td>
                   <td className="py-2 px-4 border-b">
-                    {product.active ? (
-                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
-                      </svg>
-                    ) : (
-                       <span className="text-gray-400">-</span>
-                    )}
+                    <input
+                      type="checkbox"
+                      name="active"
+                      checked={editFormData.active || false}
+                      onChange={handleInputChange}
+                      className="h-5 w-5 text-blue-600"
+                    />
                   </td>
                   <td className="py-2 px-4 border-b">
                     <button
