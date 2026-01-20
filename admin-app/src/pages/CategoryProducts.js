@@ -19,7 +19,7 @@ const CategoryProductsContent = () => {
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(12);
   const [totalPages, setTotalPages] = useState(0);
-  const [sort, setSort] = useState('NAME_ASC');
+  const [sort, setSort] = useState('BEST_SELLING');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const isDesktop = useMediaQuery('(min-width: 768px)');
