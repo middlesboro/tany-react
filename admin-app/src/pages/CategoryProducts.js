@@ -19,7 +19,7 @@ const CategoryProductsContent = () => {
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(12);
   const [totalPages, setTotalPages] = useState(0);
-  const [sort, setSort] = useState('title,asc');
+  const [sort, setSort] = useState('NAME_ASC');
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const isDesktop = useMediaQuery('(min-width: 768px)');
@@ -69,7 +69,8 @@ const CategoryProductsContent = () => {
             filterParameters: Object.keys(selectedFilters).map(key => ({
                 id: key,
                 filterParameterValueIds: selectedFilters[key]
-            }))
+            })),
+            sort: sort
         };
 
         const data = await searchProductsByCategory(foundCategory.id, filterRequest, page, sort, size);
@@ -148,10 +149,11 @@ const CategoryProductsContent = () => {
               onChange={handleSortChange}
               className="border border-gray-300 rounded-sm p-1 text-gray-700 focus:outline-none focus:border-tany-green"
             >
-              <option value="title,asc">Názov (A-Z)</option>
-              <option value="title,desc">Názov (Z-A)</option>
-              <option value="price,asc">Cena (od najlacnejšieho)</option>
-              <option value="price,desc">Cena (od najdrahšieho)</option>
+              <option value="NAME_ASC">Názov (A-Z)</option>
+              <option value="NAME_DESC">Názov (Z-A)</option>
+              <option value="PRICE_ASC">Cena (od najlacnejšieho)</option>
+              <option value="PRICE_DESC">Cena (od najdrahšieho)</option>
+              <option value="BEST_SELLING">Najpredávanejšie</option>
             </select>
           </div>
 

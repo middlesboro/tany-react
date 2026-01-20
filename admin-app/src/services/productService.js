@@ -23,12 +23,18 @@ export const searchProducts = async (query) => {
 };
 
 export const searchProductsByCategory = async (categoryId, filterRequest, page = 0, sort = 'title,asc', size = 20) => {
-  const response = await authFetch(`${API_URL}/category/${categoryId}/search?page=${page}&size=${size}&sort=${sort}`, {
+  // Add sort to filterRequest
+  const updatedFilterRequest = {
+    ...filterRequest,
+    sort: sort
+  };
+
+  const response = await authFetch(`${API_URL}/category/${categoryId}/search?page=${page}&size=${size}`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
     },
-    body: JSON.stringify(filterRequest),
+    body: JSON.stringify(updatedFilterRequest),
   });
   return response.json();
 };
