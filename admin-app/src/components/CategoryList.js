@@ -9,14 +9,39 @@ const CategoryList = () => {
   const [totalPages, setTotalPages] = useState(0);
   const [sort, setSort] = useState('title,asc');
 
+  // Filter state
+  const [filter, setFilter] = useState({
+    query: '',
+  });
+  const [appliedFilter, setAppliedFilter] = useState({});
+
   useEffect(() => {
     const fetchCategories = async () => {
-      const data = await getCategories(page, sort, size);
+      const data = await getCategories(page, sort, size, appliedFilter);
       setCategories(data.content);
       setTotalPages(data.totalPages);
     };
     fetchCategories();
-  }, [page, sort, size]);
+  }, [page, sort, size, appliedFilter]);
+
+  const handleFilterChange = (e) => {
+    const { name, value } = e.target;
+    setFilter({
+      ...filter,
+      [name]: value,
+    });
+  };
+
+  const handleFilterSubmit = () => {
+    setAppliedFilter(filter);
+    setPage(0);
+  };
+
+  const handleClearFilter = () => {
+    setFilter({ query: '' });
+    setAppliedFilter({});
+    setPage(0);
+  };
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this category?')) {
@@ -36,14 +61,44 @@ const CategoryList = () => {
 
   return (
     <div>
+      {/* Filter Section */}
+      <div className="bg-gray-100 p-4 mb-4 rounded shadow">
+        <h2 className="text-lg font-bold mb-2">Filter Categories</h2>
+        <div className="flex gap-4 items-end">
+          <div className="flex-grow">
+            <label className="block text-gray-700">Title</label>
+            <input
+              type="text"
+              name="query"
+              value={filter.query}
+              onChange={handleFilterChange}
+              onKeyDown={(e) => e.key === 'Enter' && handleFilterSubmit()}
+              placeholder="Search by title..."
+              className="w-full px-3 py-2 border rounded"
+            />
+          </div>
+          <div className="flex gap-2">
+            <button
+              onClick={handleFilterSubmit}
+              className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
+            >
+              Filter
+            </button>
+            <button
+              onClick={handleClearFilter}
+              className="bg-gray-500 text-white px-4 py-2 rounded hover:bg-gray-600"
+            >
+              Clear
+            </button>
+          </div>
+        </div>
+      </div>
+
       <table className="min-w-full bg-white">
         <thead>
           <tr>
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('title')}>
               Title
-            </th>
-            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('description')}>
-              Description
             </th>
             <th className="py-2 px-4 border-b">Actions</th>
           </tr>
@@ -52,7 +107,6 @@ const CategoryList = () => {
           {categories.map((category) => (
             <tr key={category.id}>
               <td className="py-2 px-4 border-b">{category.title}</td>
-              <td className="py-2 px-4 border-b">{category.description}</td>
               <td className="py-2 px-4 border-b">
                 <Link to={`/admin/categories/${category.id}`} className="bg-blue-500 text-white px-2 py-1 rounded mr-2">
                   Edit

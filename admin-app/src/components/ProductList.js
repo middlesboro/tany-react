@@ -138,6 +138,7 @@ const ProductList = () => {
               name="query"
               value={filter.query}
               onChange={handleFilterChange}
+              onKeyDown={(e) => e.key === 'Enter' && handleFilterSubmit()}
               placeholder="Search by name..."
               className="w-full px-3 py-2 border rounded"
             />
@@ -149,6 +150,7 @@ const ProductList = () => {
               name="id"
               value={filter.id}
               onChange={handleFilterChange}
+              onKeyDown={(e) => e.key === 'Enter' && handleFilterSubmit()}
               placeholder="Product ID"
               className="w-full px-3 py-2 border rounded"
             />
@@ -160,6 +162,7 @@ const ProductList = () => {
               name="priceFrom"
               value={filter.priceFrom}
               onChange={handleFilterChange}
+              onKeyDown={(e) => e.key === 'Enter' && handleFilterSubmit()}
               placeholder="Min Price"
               className="w-full px-3 py-2 border rounded"
             />
@@ -171,6 +174,7 @@ const ProductList = () => {
               name="priceTo"
               value={filter.priceTo}
               onChange={handleFilterChange}
+              onKeyDown={(e) => e.key === 'Enter' && handleFilterSubmit()}
               placeholder="Max Price"
               className="w-full px-3 py-2 border rounded"
             />
@@ -182,6 +186,7 @@ const ProductList = () => {
               name="quantity"
               value={filter.quantity}
               onChange={handleFilterChange}
+              onKeyDown={(e) => e.key === 'Enter' && handleFilterSubmit()}
               placeholder="Quantity"
               className="w-full px-3 py-2 border rounded"
             />
@@ -250,6 +255,9 @@ const ProductList = () => {
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('quantity')}>
               Quantity
             </th>
+            <th className="py-2 px-4 border-b">Brand</th>
+            <th className="py-2 px-4 border-b">Ext. Stock</th>
+            <th className="py-2 px-4 border-b">Active</th>
             <th className="py-2 px-4 border-b">Actions</th>
           </tr>
         </thead>
@@ -286,6 +294,27 @@ const ProductList = () => {
                     />
                   </td>
                   <td className="py-2 px-4 border-b">
+                    {brands.find(b => b.id === product.brandId)?.name || ''}
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    {product.externalStock ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                       <span className="text-gray-400">-</span>
+                    )}
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    {product.active ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                       <span className="text-gray-400">-</span>
+                    )}
+                  </td>
+                  <td className="py-2 px-4 border-b">
                     <button
                       onClick={() => handleSaveClick(product.id)}
                       className="bg-green-500 text-white px-2 py-1 rounded mr-2"
@@ -305,6 +334,27 @@ const ProductList = () => {
                   <td className="py-2 px-4 border-b">{product.title}</td>
                   <td className="py-2 px-4 border-b">{product.price}</td>
                   <td className="py-2 px-4 border-b">{product.quantity}</td>
+                  <td className="py-2 px-4 border-b">
+                    {brands.find(b => b.id === product.brandId)?.name || ''}
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    {product.externalStock ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                       <span className="text-gray-400">-</span>
+                    )}
+                  </td>
+                  <td className="py-2 px-4 border-b">
+                    {product.active ? (
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 text-green-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                      </svg>
+                    ) : (
+                       <span className="text-gray-400">-</span>
+                    )}
+                  </td>
                   <td className="py-2 px-4 border-b">
                     <Link
                       to={`/admin/products/${product.id}`}

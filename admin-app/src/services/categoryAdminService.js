@@ -2,8 +2,16 @@ import { authFetch } from '../utils/authFetch';
 
 const API_URL = `${process.env.REACT_APP_API_URL}/admin/categories`;
 
-export const getCategories = async (page = 0, sort = 'title,asc', size = 20) => {
-  const response = await authFetch(`${API_URL}?page=${page}&size=${size}&sort=${sort}`);
+export const getCategories = async (page = 0, sort = 'title,asc', size = 20, filter = {}) => {
+  const params = new URLSearchParams({
+    page,
+    size,
+    sort,
+  });
+
+  if (filter.query) params.append('query', filter.query);
+
+  const response = await authFetch(`${API_URL}?${params.toString()}`);
   return response.json();
 };
 
