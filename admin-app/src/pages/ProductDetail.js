@@ -40,6 +40,8 @@ const ProductReviews = ({ productId }) => {
   const [reviews, setReviews] = useState([]);
   const [stats, setStats] = useState({ averageRating: 0, reviewsCount: 0 });
   const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(0);
+  const [totalPages, setTotalPages] = useState(0);
 
   // Review Form State
   const [newReview, setNewReview] = useState({
@@ -52,11 +54,13 @@ const ProductReviews = ({ productId }) => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
 
-  const fetchReviews = React.useCallback(async () => {
+  const fetchReviews = React.useCallback(async (pageParam) => {
+    const currentPage = typeof pageParam === 'number' ? pageParam : page;
     setLoading(true);
     try {
-      const data = await getReviewsByProduct(productId);
+      const data = await getReviewsByProduct(productId, currentPage);
       setReviews(data.reviews.content);
+      setTotalPages(data.reviews.totalPages);
       setStats({
         averageRating: data.averageRating || 0,
         reviewsCount: data.reviewsCount || 0
@@ -66,7 +70,7 @@ const ProductReviews = ({ productId }) => {
     } finally {
       setLoading(false);
     }
-  }, [productId]);
+  }, [productId, page]);
 
   useEffect(() => {
     if (productId) {
@@ -105,7 +109,8 @@ const ProductReviews = ({ productId }) => {
         email: getUserEmail() || '',
         text: ''
       });
-      fetchReviews();
+      setPage(0);
+      if (page === 0) fetchReviews(0);
     } catch (err) {
       setError('Nepodarilo sa odoslať hodnotenie. Skúste to prosím neskôr.');
     } finally {
@@ -210,6 +215,37 @@ const ProductReviews = ({ productId }) => {
             <p className="text-gray-600 whitespace-pre-line">{review.text}</p>
           </div>
         ))}
+
+        {/* Pagination */}
+        {totalPages > 1 && (
+          <div className="flex justify-center items-center mt-8 gap-2 text-sm">
+            <button
+              onClick={() => setPage(page - 1)}
+              disabled={page === 0}
+              className={`px-3 py-2 rounded-sm border ${
+                page === 0
+                  ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                  : 'border-gray-300 text-gray-600 hover:bg-tany-green hover:text-white hover:border-tany-green'
+              }`}
+            >
+              Predchádzajúca
+            </button>
+            <span className="text-gray-700 font-bold mx-2">
+              Strana {page + 1} z {totalPages}
+            </span>
+            <button
+              onClick={() => setPage(page + 1)}
+              disabled={page + 1 >= totalPages}
+              className={`px-3 py-2 rounded-sm border ${
+                page + 1 >= totalPages
+                  ? 'border-gray-200 text-gray-300 cursor-not-allowed'
+                  : 'border-gray-300 text-gray-600 hover:bg-tany-green hover:text-white hover:border-tany-green'
+              }`}
+            >
+              Ďalšia
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );
