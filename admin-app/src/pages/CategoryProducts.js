@@ -31,6 +31,10 @@ const CategoryProductsContent = () => {
   }, []);
 
   useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [page]);
+
+  useEffect(() => {
     const fetchCategoryAndProducts = async () => {
       setLoading(true);
       setError(null);
