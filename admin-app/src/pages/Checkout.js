@@ -4,6 +4,7 @@ import { useCart } from '../context/CartContext';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import { createOrder } from '../services/orderService';
 import { debounce } from '../utils/debounce';
+import PriceBreakdown from '../components/PriceBreakdown';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -564,6 +565,16 @@ const Checkout = () => {
              />
           </div>
         </section>
+
+        {/* Price Breakdown */}
+        {cart?.priceBreakDown && (
+            <section>
+                <h2 className="text-xl font-bold mb-4">7. SÚHRN</h2>
+                <div className="bg-white rounded shadow p-6">
+                   <PriceBreakdown priceBreakDown={cart.priceBreakDown} showItems={true} />
+                </div>
+            </section>
+        )}
 
         {/* Submit Button */}
         <div className="flex justify-end pt-6">
