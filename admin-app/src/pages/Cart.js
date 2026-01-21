@@ -3,6 +3,7 @@ import { useCart } from '../context/CartContext';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import { Link } from 'react-router-dom';
 import CartItem from '../components/CartItem';
+import PriceBreakdown from '../components/PriceBreakdown';
 
 const Cart = () => {
   const { cart, loading, addDiscount, removeDiscount } = useCart();
@@ -149,22 +150,30 @@ const Cart = () => {
 
           <div className="bg-white rounded-lg shadow p-6">
             <h2 className="text-lg font-bold mb-4">Summary</h2>
-            <div className="space-y-2 mb-4">
-              <div className="flex justify-between">
-                <span className="text-gray-600">Subtotal</span>
-                <span>{subTotalDisplayPrice.toFixed(2)} €</span>
-              </div>
-              {cart.totalDiscount > 0 && (
-                 <div className="flex justify-between text-green-600">
-                  <span>Discount</span>
-                  <span>-{cart.totalDiscount.toFixed(2)} €</span>
+
+            {cart.priceBreakDown ? (
+               <PriceBreakdown priceBreakDown={cart.priceBreakDown} />
+            ) : (
+              <>
+                <div className="space-y-2 mb-4">
+                  <div className="flex justify-between">
+                    <span className="text-gray-600">Subtotal</span>
+                    <span>{subTotalDisplayPrice.toFixed(2)} €</span>
+                  </div>
+                  {cart.totalDiscount > 0 && (
+                     <div className="flex justify-between text-green-600">
+                      <span>Discount</span>
+                      <span>-{cart.totalDiscount.toFixed(2)} €</span>
+                    </div>
+                  )}
                 </div>
-              )}
-            </div>
-            <div className="border-t border-gray-200 pt-4 flex justify-between items-center">
-              <span className="text-lg font-bold">Total:</span>
-              <span className="text-xl font-bold text-blue-600">{totalDisplayPrice.toFixed(2)} €</span>
-            </div>
+                <div className="border-t border-gray-200 pt-4 flex justify-between items-center">
+                  <span className="text-lg font-bold">Total:</span>
+                  <span className="text-xl font-bold text-blue-600">{totalDisplayPrice.toFixed(2)} €</span>
+                </div>
+              </>
+            )}
+
             <Link to="/order" className="block w-full bg-green-600 text-white text-center font-bold py-3 mt-6 rounded hover:bg-green-700">
               Continue to Order
             </Link>

@@ -3,6 +3,7 @@ import { useParams, Link, useSearchParams, useLocation } from 'react-router-dom'
 import { getOrder } from '../services/orderService';
 import { getPaymentInfo, checkBesteronStatus } from '../services/paymentService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
+import PriceBreakdown from '../components/PriceBreakdown';
 
 const OrderConfirmation = () => {
   const { id } = useParams();
@@ -278,6 +279,13 @@ const OrderConfirmation = () => {
             </div>
         </div>
       </div>
+
+      {order.priceBreakDown && (
+          <div className="bg-white shadow rounded p-6 mb-8">
+              <h2 className="text-xl font-bold mb-4">Súhrn ceny</h2>
+              <PriceBreakdown priceBreakDown={order.priceBreakDown} />
+          </div>
+      )}
 
       <div className="text-center">
         <Link to="/" className="inline-block bg-blue-600 text-white font-bold py-3 px-8 rounded hover:bg-blue-700">

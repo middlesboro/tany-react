@@ -105,7 +105,11 @@ const PublicLayout = () => {
               <div className="ml-2 hidden lg:block">
                 <span className="block text-xs text-gray-500">Nákupný košík</span>
                 <span className="block text-sm font-bold group-hover:text-tany-green">
-                  {cart ? (cart.finalPrice !== undefined ? `${cart.finalPrice.toFixed(2)} €` : (cart.totalProductPrice ? `${cart.totalProductPrice.toFixed(2)} €` : '0,00 €')) : '0,00 €'}
+                  {cart ? (
+                    cart.priceBreakDown?.totalPrice !== undefined ? `${cart.priceBreakDown.totalPrice.toFixed(2)} €` :
+                    (cart.finalPrice !== undefined ? `${cart.finalPrice.toFixed(2)} €` :
+                    (cart.totalProductPrice ? `${cart.totalProductPrice.toFixed(2)} €` : '0,00 €'))
+                  ) : '0,00 €'}
                 </span>
               </div>
             </Link>
