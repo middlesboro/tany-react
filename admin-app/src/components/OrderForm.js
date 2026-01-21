@@ -2,7 +2,7 @@ import React from 'react';
 import PriceBreakdown from './PriceBreakdown';
 
 const OrderForm = ({ order, handleChange, handleSubmit, carriers = [], payments = [] }) => {
-  const selectedCarrier = carriers.find(c => c.id === Number(order.carrierId));
+  const selectedCarrier = carriers.find(c => c.id === order.carrierId);
   const isPacketa = selectedCarrier && selectedCarrier.type === 'PACKETA';
 
   return (
