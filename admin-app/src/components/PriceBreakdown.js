@@ -19,8 +19,17 @@ const PriceBreakdown = ({ priceBreakDown, showItems = false }) => {
         {productItems.length > 0 && (
             showItems ? (
                 productItems.map((item, index) => (
-                    <div key={`prod-${index}`} className="flex justify-between">
-                        <span>{item.name} {item.quantity > 1 ? `(${item.quantity} ks)` : ''}</span>
+                    <div key={`prod-${index}`} className="flex justify-between items-center mb-2">
+                        <div className="flex items-center">
+                            {item.image && (
+                                <img
+                                    src={item.image}
+                                    alt={item.name}
+                                    className="w-10 h-10 object-cover mr-3 rounded"
+                                />
+                            )}
+                            <span>{item.name} {item.quantity > 1 ? `(${item.quantity} ks)` : ''}</span>
+                        </div>
                         <span>{(item.priceWithVat * item.quantity).toFixed(2)} €</span>
                     </div>
                 ))
