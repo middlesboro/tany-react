@@ -571,7 +571,7 @@ const Checkout = () => {
             <section>
                 <h2 className="text-xl font-bold mb-4">7. SÚHRN</h2>
                 <div className="bg-white rounded shadow p-6">
-                   <PriceBreakdown priceBreakDown={cart.priceBreakDown} />
+                   <PriceBreakdown priceBreakDown={cart.priceBreakDown} showItems={true} />
                 </div>
             </section>
         )}

@@ -283,7 +283,7 @@ const OrderConfirmation = () => {
       {order.priceBreakDown && (
           <div className="bg-white shadow rounded p-6 mb-8">
               <h2 className="text-xl font-bold mb-4">Súhrn ceny</h2>
-              <PriceBreakdown priceBreakDown={order.priceBreakDown} />
+              <PriceBreakdown priceBreakDown={order.priceBreakDown} showItems={true} />
           </div>
       )}
 
