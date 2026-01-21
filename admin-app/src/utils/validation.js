@@ -55,7 +55,7 @@ export const checkEmailTypos = (email) => {
     // Check for Levenshtein distance 1 (simple typos)
     for (const common of COMMON_DOMAINS) {
         if (getEditDistance(domain, common) === 1) {
-            return `Did you mean ${parts[0]}@${common}?`;
+            return `Mysleli ste ${parts[0]}@${common}?`;
         }
         // Specific check for missing letters like 'gail' instead of 'gmail' which is dist 1
         // 'gmai.com' -> 'gmail.com' (dist 1)
