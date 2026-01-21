@@ -1,11 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getOrder, createOrder, updateOrder, downloadInvoice } from '../services/orderAdminService';
+import { getCarriers } from '../services/carrierAdminService';
+import { getPayments } from '../services/paymentAdminService';
 import OrderForm from '../components/OrderForm';
 
 const OrderEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [carriers, setCarriers] = useState([]);
+  const [payments, setPayments] = useState([]);
   const [order, setOrder] = useState({
     cartId: '',
     customerId: '',
@@ -15,10 +19,26 @@ const OrderEdit = () => {
     paymentId: '',
     deliveryAddress: { street: '', city: '', zip: '' },
     invoiceAddress: { street: '', city: '', zip: '' },
-    deliveryAddressSameAsInvoiceAddress: false
+    deliveryAddressSameAsInvoiceAddress: false,
+    note: '',
+    priceBreakDown: null
   });
 
   useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const [carriersData, paymentsData] = await Promise.all([
+          getCarriers(0, 'name,asc', 100),
+          getPayments(0, 'name,asc', 100)
+        ]);
+        setCarriers(carriersData.content || []);
+        setPayments(paymentsData.content || []);
+      } catch (error) {
+        console.error("Failed to fetch carriers or payments", error);
+      }
+    };
+    fetchData();
+
     if (id) {
       const fetchOrder = async () => {
         const data = await getOrder(id);
@@ -90,7 +110,13 @@ const OrderEdit = () => {
           </button>
         )}
       </div>
-      <OrderForm order={order} handleChange={handleChange} handleSubmit={handleSubmit} />
+      <OrderForm
+        order={order}
+        handleChange={handleChange}
+        handleSubmit={handleSubmit}
+        carriers={carriers}
+        payments={payments}
+      />
     </div>
   );
 };

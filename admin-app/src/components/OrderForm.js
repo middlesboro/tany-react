@@ -1,6 +1,25 @@
 import React from 'react';
+import PriceBreakdown from './PriceBreakdown';
 
-const OrderForm = ({ order, handleChange, handleSubmit }) => {
+const OrderForm = ({ order, handleChange, handleSubmit, carriers = [], payments = [] }) => {
+  const getCarrierDisplay = () => {
+    if (!order.carrierId) return '';
+    const carrier = carriers.find(c => c.id === Number(order.carrierId));
+    if (!carrier) return order.carrierId;
+
+    let display = carrier.name;
+    if (carrier.name.toLowerCase().includes('packeta') && order.selectedPickupPointName) {
+      display += ` (${order.selectedPickupPointName})`;
+    }
+    return display;
+  };
+
+  const getPaymentDisplay = () => {
+    if (!order.paymentId) return '';
+    const payment = payments.find(p => p.id === Number(order.paymentId));
+    return payment ? payment.name : order.paymentId;
+  };
+
   return (
     <form onSubmit={handleSubmit}>
       <div className="bg-white shadow rounded-lg p-6 mb-6">
@@ -27,32 +46,24 @@ const OrderForm = ({ order, handleChange, handleSubmit }) => {
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Carrier ID</label>
-            <input
-              type="text"
-              name="carrierId"
-              value={order.carrierId || ''}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded"
-            />
+            <label className="block text-gray-700">Carrier</label>
+            <div className="w-full px-3 py-2 border rounded bg-gray-50">
+              {getCarrierDisplay() || '-'}
+            </div>
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Payment ID</label>
-            <input
-              type="text"
-              name="paymentId"
-              value={order.paymentId || ''}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded"
-            />
+            <label className="block text-gray-700">Payment</label>
+            <div className="w-full px-3 py-2 border rounded bg-gray-50">
+              {getPaymentDisplay() || '-'}
+            </div>
           </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Final Price</label>
-            <input
-              type="number"
-              name="finalPrice"
-              value={order.finalPrice || ''}
+          <div className="col-span-2 mb-4">
+            <label className="block text-gray-700">Note</label>
+            <textarea
+              name="note"
+              value={order.note || ''}
               onChange={handleChange}
+              rows="3"
               className="w-full px-3 py-2 border rounded"
             />
           </div>
@@ -144,40 +155,12 @@ const OrderForm = ({ order, handleChange, handleSubmit }) => {
       </div>
 
       <div className="bg-white shadow rounded-lg p-6 mb-6">
-        <h2 className="text-xl font-bold mb-4">Items</h2>
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Name</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {order.items && order.items.map((item, index) => (
-                <tr key={item.id || index}>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {item.image ? (
-                      <img src={item.image} alt={item.name} className="h-12 w-12 object-cover rounded" />
-                    ) : (
-                      <div className="h-12 w-12 bg-gray-200 rounded flex items-center justify-center text-gray-400">No Img</div>
-                    )}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.name}</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.price} €</td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.quantity}</td>
-                </tr>
-              ))}
-              {(!order.items || order.items.length === 0) && (
-                 <tr>
-                   <td colSpan="4" className="px-6 py-4 text-center text-sm text-gray-500">No items in this order.</td>
-                 </tr>
-              )}
-            </tbody>
-          </table>
-        </div>
+        <h2 className="text-xl font-bold mb-4">Price Breakdown</h2>
+        {order.priceBreakDown ? (
+            <PriceBreakdown priceBreakDown={order.priceBreakDown} showItems={true} />
+        ) : (
+            <div className="text-gray-500">No price breakdown available.</div>
+        )}
       </div>
 
       <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
