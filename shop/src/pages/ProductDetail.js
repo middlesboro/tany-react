@@ -5,6 +5,7 @@ import { getReviewsByProduct, createReview } from '../services/reviewService';
 import { getCategories } from '../services/categoryService';
 import { findCategoryPath } from '../utils/categoryUtils';
 import { getUserEmail } from '../services/authService';
+import { createEmailNotification } from '../services/customerService';
 import { useCart } from '../context/CartContext';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import AddToCartButton from '../components/AddToCartButton';
@@ -33,6 +34,69 @@ const StarRating = ({ rating, size = "w-4 h-4", onClick, interactive = false }) 
         </svg>
       ))}
     </div>
+  );
+};
+
+const StockNotificationForm = ({ productId }) => {
+  const [email, setEmail] = useState(getUserEmail() || '');
+  const [submitting, setSubmitting] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState(null);
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!email) {
+      setError('Zadajte prosím email');
+      return;
+    }
+    setSubmitting(true);
+    setError(null);
+    try {
+      await createEmailNotification({ productId, email });
+      setSuccess(true);
+    } catch (err) {
+      setError('Nepodarilo sa vytvoriť upozornenie. Skúste to neskôr.');
+    } finally {
+      setSubmitting(false);
+    }
+  };
+
+  if (success) {
+    return (
+      <div className="bg-green-50 text-green-700 p-4 rounded-lg flex items-center">
+        <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+        </svg>
+        <span>Budeme vás informovať, keď bude produkt naskladnený.</span>
+      </div>
+    );
+  }
+
+  return (
+    <form onSubmit={handleSubmit} className="bg-gray-50 p-4 rounded-lg border border-gray-200">
+      <h4 className="font-semibold text-gray-800 mb-2">Strážiť dostupnosť</h4>
+      <p className="text-sm text-gray-600 mb-3">Zadajte váš email a my vám dáme vedieť, keď bude produkt opäť skladom.</p>
+
+      {error && <div className="text-red-600 text-sm mb-3">{error}</div>}
+
+      <div className="flex gap-2">
+        <input
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          placeholder="Váš email"
+          className="flex-1 border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-1 focus:ring-tany-green"
+          required
+        />
+        <button
+          type="submit"
+          disabled={submitting}
+          className="bg-tany-green text-white px-4 py-2 rounded hover:bg-green-700 transition whitespace-nowrap disabled:opacity-70"
+        >
+          {submitting ? 'Odosielam...' : 'Strážiť'}
+        </button>
+      </div>
+    </form>
   );
 };
 
@@ -484,30 +548,31 @@ const ProductDetail = () => {
             </div>
 
             <div className="border-t border-gray-100 pt-8">
-                <div className="flex flex-col sm:flex-row gap-4">
-                    {/* Quantity Selector */}
-                    <div className={`flex items-center border border-gray-300 rounded ${product.quantity <= 0 ? 'opacity-50 pointer-events-none' : ''}`}>
-                        <button onClick={decreaseQty} className="px-4 py-3 text-gray-600 hover:bg-gray-100 transition" disabled={product.quantity <= 0}>-</button>
-                        <input
-                            type="number"
-                            min="1"
-                            value={quantity}
-                            onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                            className="w-16 text-center focus:outline-none text-gray-800 font-semibold"
-                            disabled={product.quantity <= 0}
-                        />
-                        <button onClick={increaseQty} className="px-4 py-3 text-gray-600 hover:bg-gray-100 transition" disabled={product.quantity <= 0}>+</button>
-                    </div>
+                {product.quantity > 0 ? (
+                  <div className="flex flex-col sm:flex-row gap-4">
+                      {/* Quantity Selector */}
+                      <div className="flex items-center border border-gray-300 rounded">
+                          <button onClick={decreaseQty} className="px-4 py-3 text-gray-600 hover:bg-gray-100 transition">-</button>
+                          <input
+                              type="number"
+                              min="1"
+                              value={quantity}
+                              onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                              className="w-16 text-center focus:outline-none text-gray-800 font-semibold"
+                          />
+                          <button onClick={increaseQty} className="px-4 py-3 text-gray-600 hover:bg-gray-100 transition">+</button>
+                      </div>
 
-                    {/* Add to Cart Button */}
-                    <AddToCartButton
-                        onClick={handleAddToCart}
-                        adding={adding}
-                        className="flex-1 py-3 px-6"
-                        disabled={product.quantity <= 0}
-                        text={product.quantity <= 0 ? "Vypredané" : undefined}
-                    />
-                </div>
+                      {/* Add to Cart Button */}
+                      <AddToCartButton
+                          onClick={handleAddToCart}
+                          adding={adding}
+                          className="flex-1 py-3 px-6"
+                      />
+                  </div>
+                ) : (
+                  <StockNotificationForm productId={product.id} />
+                )}
             </div>
 
             {/* Reasons to Buy Section */}
