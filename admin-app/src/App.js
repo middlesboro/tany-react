@@ -52,9 +52,9 @@ import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
-    <CartProvider>
-      <BreadcrumbProvider>
-        <Router>
+    <Router>
+      <CartProvider>
+        <BreadcrumbProvider>
           <ScrollToTop />
           <Routes>
           <Route path="/admin/login" element={<Login isAdmin={true} />} />
@@ -123,9 +123,9 @@ function App() {
           <Route path="orders/:id" element={<OrderEdit />} />
           </Route>
         </Routes>
-        </Router>
-      </BreadcrumbProvider>
-    </CartProvider>
+        </BreadcrumbProvider>
+      </CartProvider>
+    </Router>
   );
 }
 

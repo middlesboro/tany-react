@@ -1,4 +1,5 @@
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
+import { useLocation } from 'react-router-dom';
 import { getCustomerContext } from '../services/customerService';
 import {
   addToCart as addToCartService,
@@ -16,8 +17,15 @@ export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState(null);
   const [customer, setCustomer] = useState(null);
   const [loading, setLoading] = useState(true);
+  const location = useLocation();
 
   const fetchContext = useCallback(async () => {
+    // Skip fetching context on admin routes
+    if (location.pathname.startsWith('/admin')) {
+        setLoading(false);
+        return;
+    }
+
     try {
       const storedCartId = localStorage.getItem('cartId');
       const data = await getCustomerContext(storedCartId);
@@ -36,7 +44,7 @@ export const CartProvider = ({ children }) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [location.pathname]);
 
   useEffect(() => {
     fetchContext();
