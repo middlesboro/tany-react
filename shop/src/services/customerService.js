@@ -22,6 +22,29 @@ export const getCustomer = async () => {
     return response.json();
 };
 
+export const createEmailNotification = async (notification) => {
+    const response = await authFetch(`${process.env.REACT_APP_API_URL}/customers/email-notification`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(notification),
+    });
+    if (!response.ok) {
+        let errorMessage = 'Failed to create email notification';
+        try {
+            const errorData = await response.json();
+            if (errorData.message) errorMessage = errorData.message;
+        } catch (e) { }
+        throw new Error(errorMessage);
+    }
+    try {
+        return await response.json();
+    } catch (e) {
+        return true;
+    }
+};
+
 export const updateCustomer = async (customer) => {
     const response = await authFetch(API_URL, {
         method: 'PUT',
