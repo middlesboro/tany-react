@@ -545,7 +545,7 @@ const ProductDetail = () => {
                 <h1 className="text-3xl font-bold text-gray-800 leading-tight mr-4">{product.title}</h1>
                  <button
                     onClick={toggleWishlist}
-                    className={`p-2 rounded-full transition-colors flex-shrink-0 ${inWishlist ? 'text-red-500 bg-red-50' : 'text-gray-300 hover:text-red-400 hover:bg-gray-50'}`}
+                    className={`p-2 rounded-full transition-colors flex-shrink-0 ${inWishlist ? 'text-red-500 bg-red-50' : 'text-red-500 hover:text-red-600 hover:bg-gray-50'}`}
                     title={inWishlist ? "Odobrať z obľúbených" : "Pridať do obľúbených"}
                 >
                     <svg

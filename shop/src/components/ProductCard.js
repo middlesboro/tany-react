@@ -80,7 +80,7 @@ const ProductCard = ({ product }) => {
 
         <button
           onClick={toggleWishlist}
-          className="absolute top-2 right-2 z-20 p-2 rounded-full bg-white/80 hover:bg-white text-gray-400 hover:text-red-500 transition-colors"
+          className="absolute top-2 right-2 z-20 p-2 rounded-full bg-white/80 hover:bg-white text-red-500 hover:text-red-600 transition-colors"
           title={inWishlist ? "Odobrať z obľúbených" : "Pridať do obľúbených"}
         >
             <svg

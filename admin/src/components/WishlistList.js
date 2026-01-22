@@ -39,7 +39,7 @@ const WishlistList = ({ wishlists, onDelete }) => {
                 <p className="text-gray-900 whitespace-no-wrap">{wishlist.products ? wishlist.products.length : 0}</p>
               </td>
               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                <div className="flex item-center">
+                <div className="flex items-center">
                   <button
                     onClick={() => {
                         if (window.confirm('Are you sure you want to delete this wishlist?')) {
