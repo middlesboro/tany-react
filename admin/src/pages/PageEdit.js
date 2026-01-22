@@ -38,7 +38,7 @@ const PageEdit = () => {
     } else {
       await createPage(page);
     }
-    navigate('/admin/pages');
+    navigate('/pages');
   };
 
   const handleSaveAndStay = async () => {
@@ -46,7 +46,7 @@ const PageEdit = () => {
       await updatePage(id, page);
     } else {
       const newPage = await createPage(page);
-      navigate(`/admin/pages/${newPage.id}`, { replace: true });
+      navigate(`/pages/${newPage.id}`, { replace: true });
     }
   };
 

@@ -44,7 +44,7 @@ const PaymentEdit = () => {
         } else {
             await createPayment(payment);
         }
-        navigate('/admin/payments');
+        navigate('/payments');
     } catch (error) {
         console.error("Error saving payment:", error);
         alert("Error saving payment");
@@ -57,7 +57,7 @@ const PaymentEdit = () => {
             await updatePayment(id, payment);
         } else {
             const newPayment = await createPayment(payment);
-            navigate(`/admin/payments/${newPayment.id}`, { replace: true });
+            navigate(`/payments/${newPayment.id}`, { replace: true });
         }
     } catch (error) {
         console.error("Error saving payment:", error);
@@ -143,7 +143,7 @@ const PaymentEdit = () => {
           </button>
           <button
             type="button"
-            onClick={() => navigate('/admin/payments')}
+            onClick={() => navigate('/payments')}
             className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
             Cancel

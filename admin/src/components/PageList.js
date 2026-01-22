@@ -65,7 +65,7 @@ const PageList = () => {
               </td>
               <td className="py-2 px-4 border-b">
                 <Link
-                  to={`/admin/pages/${p.id}`}
+                  to={`/pages/${p.id}`}
                   className="text-blue-500 hover:text-blue-700 mr-2 inline-block"
                   title="Edit"
                 >

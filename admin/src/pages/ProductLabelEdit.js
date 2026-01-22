@@ -36,7 +36,7 @@ const ProductLabelEdit = () => {
     } else {
       await createProductLabel(productLabel);
     }
-    navigate('/admin/product-labels');
+    navigate('/product-labels');
   };
 
   return (

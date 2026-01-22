@@ -73,7 +73,7 @@ const OrderEdit = () => {
     } else {
       await createOrder(order);
     }
-    navigate('/admin/orders');
+    navigate('/orders');
   };
 
   const handleDownloadInvoice = async () => {

@@ -34,7 +34,7 @@ const SupplierEdit = () => {
     } else {
       await createSupplier(supplier);
     }
-    navigate('/admin/suppliers');
+    navigate('/suppliers');
   };
 
   const handleSaveAndStay = async () => {
@@ -42,7 +42,7 @@ const SupplierEdit = () => {
       await updateSupplier(id, supplier);
     } else {
       const newSupplier = await createSupplier(supplier);
-      navigate(`/admin/suppliers/${newSupplier.id}`, { replace: true });
+      navigate(`/suppliers/${newSupplier.id}`, { replace: true });
     }
   };
 

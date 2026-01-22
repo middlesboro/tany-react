@@ -28,7 +28,7 @@ const Login = ({ isAdmin = false }) => {
 
       let redirectPath;
       if (isAdmin) {
-        redirectPath = '/admin/carts';
+        redirectPath = '/carts';
       } else {
         redirectPath = location.state?.from?.pathname || '/';
       }

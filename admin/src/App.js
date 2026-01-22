@@ -34,72 +34,69 @@ import ProductLabels from './pages/ProductLabels';
 import ProductLabelEdit from './pages/ProductLabelEdit';
 import CartDiscounts from './pages/CartDiscounts';
 import CartDiscountEdit from './pages/CartDiscountEdit';
-import { CartProvider } from './context/CartContext';
 import { BreadcrumbProvider } from './context/BreadcrumbContext';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
   return (
-    <CartProvider>
       <BreadcrumbProvider>
         <Router basename="/admin">
           <ScrollToTop />
           <Routes>
-          <Route path="/" element={<Navigate to="/shop-settings" replace />} />
-          <Route path="/login" element={<Login isAdmin={true} />} />
-          <Route path="/authentication/success" element={<AuthenticationSuccess />} />
+            <Route path="/" element={<Navigate to="/shop-settings" replace />} />
+            <Route path="/login" element={<Login isAdmin={true} />} />
+            <Route path="/authentication/success" element={<AuthenticationSuccess />} />
 
-          <Route element={<AdminLayout />}>
-          <Route path="shop-settings" element={<ShopSettings />} />
-          <Route path="products" element={<Products />} />
-          <Route path="products/new" element={<ProductEdit />} />
-          <Route path="products/:id" element={<ProductEdit />} />
-          <Route path="categories" element={<Categories />} />
-          <Route path="categories/new" element={<CategoryEdit />} />
-          <Route path="categories/:id" element={<CategoryEdit />} />
-          <Route path="customers" element={<Customers />} />
-          <Route path="customers/new" element={<CustomerEdit />} />
-          <Route path="customers/:id" element={<CustomerEdit />} />
-          <Route path="brands" element={<Brands />} />
-          <Route path="brands/new" element={<BrandEdit />} />
-          <Route path="brands/:id" element={<BrandEdit />} />
-          <Route path="pages" element={<Pages />} />
-          <Route path="pages/new" element={<PageEdit />} />
-          <Route path="pages/:id" element={<PageEdit />} />
-          <Route path="blogs" element={<Blogs />} />
-          <Route path="blogs/new" element={<BlogEdit />} />
-          <Route path="blogs/:id" element={<BlogEdit />} />
-          <Route path="suppliers" element={<Suppliers />} />
-          <Route path="suppliers/new" element={<SupplierEdit />} />
-          <Route path="suppliers/:id" element={<SupplierEdit />} />
-          <Route path="product-labels" element={<ProductLabels />} />
-          <Route path="product-labels/new" element={<ProductLabelEdit />} />
-          <Route path="product-labels/:id" element={<ProductLabelEdit />} />
-          <Route path="cart-discounts" element={<CartDiscounts />} />
-          <Route path="cart-discounts/new" element={<CartDiscountEdit />} />
-          <Route path="cart-discounts/:id" element={<CartDiscountEdit />} />
-          <Route path="filter-parameters" element={<FilterParameters />} />
-          <Route path="filter-parameters/new" element={<FilterParameterEdit />} />
-          <Route path="filter-parameters/:id" element={<FilterParameterEdit />} />
-          <Route path="filter-parameter-values" element={<FilterParameterValues />} />
-          <Route path="filter-parameter-values/new" element={<FilterParameterValueEdit />} />
-          <Route path="filter-parameter-values/:id" element={<FilterParameterValueEdit />} />
-          <Route path="carriers" element={<Carriers />} />
-          <Route path="carriers/new" element={<CarrierEdit />} />
-          <Route path="carriers/:id" element={<CarrierEdit />} />
-          <Route path="payments" element={<Payments />} />
-          <Route path="payments/new" element={<PaymentEdit />} />
-          <Route path="payments/:id" element={<PaymentEdit />} />
-          <Route path="carts" element={<Carts />} />
-          <Route path="carts/:id" element={<CartDetail />} />
-          <Route path="orders" element={<Orders />} />
-          <Route path="orders/new" element={<OrderEdit />} />
-          <Route path="orders/:id" element={<OrderEdit />} />
-          </Route>
-        </Routes>
+            <Route element={<AdminLayout />}>
+              <Route path="shop-settings" element={<ShopSettings />} />
+              <Route path="products" element={<Products />} />
+              <Route path="products/new" element={<ProductEdit />} />
+              <Route path="products/:id" element={<ProductEdit />} />
+              <Route path="categories" element={<Categories />} />
+              <Route path="categories/new" element={<CategoryEdit />} />
+              <Route path="categories/:id" element={<CategoryEdit />} />
+              <Route path="customers" element={<Customers />} />
+              <Route path="customers/new" element={<CustomerEdit />} />
+              <Route path="customers/:id" element={<CustomerEdit />} />
+              <Route path="brands" element={<Brands />} />
+              <Route path="brands/new" element={<BrandEdit />} />
+              <Route path="brands/:id" element={<BrandEdit />} />
+              <Route path="pages" element={<Pages />} />
+              <Route path="pages/new" element={<PageEdit />} />
+              <Route path="pages/:id" element={<PageEdit />} />
+              <Route path="blogs" element={<Blogs />} />
+              <Route path="blogs/new" element={<BlogEdit />} />
+              <Route path="blogs/:id" element={<BlogEdit />} />
+              <Route path="suppliers" element={<Suppliers />} />
+              <Route path="suppliers/new" element={<SupplierEdit />} />
+              <Route path="suppliers/:id" element={<SupplierEdit />} />
+              <Route path="product-labels" element={<ProductLabels />} />
+              <Route path="product-labels/new" element={<ProductLabelEdit />} />
+              <Route path="product-labels/:id" element={<ProductLabelEdit />} />
+              <Route path="cart-discounts" element={<CartDiscounts />} />
+              <Route path="cart-discounts/new" element={<CartDiscountEdit />} />
+              <Route path="cart-discounts/:id" element={<CartDiscountEdit />} />
+              <Route path="filter-parameters" element={<FilterParameters />} />
+              <Route path="filter-parameters/new" element={<FilterParameterEdit />} />
+              <Route path="filter-parameters/:id" element={<FilterParameterEdit />} />
+              <Route path="filter-parameter-values" element={<FilterParameterValues />} />
+              <Route path="filter-parameter-values/new" element={<FilterParameterValueEdit />} />
+              <Route path="filter-parameter-values/:id" element={<FilterParameterValueEdit />} />
+              <Route path="carriers" element={<Carriers />} />
+              <Route path="carriers/new" element={<CarrierEdit />} />
+              <Route path="carriers/:id" element={<CarrierEdit />} />
+              <Route path="payments" element={<Payments />} />
+              <Route path="payments/new" element={<PaymentEdit />} />
+              <Route path="payments/:id" element={<PaymentEdit />} />
+              <Route path="carts" element={<Carts />} />
+              <Route path="carts/:id" element={<CartDetail />} />
+              <Route path="orders" element={<Orders />} />
+              <Route path="orders/new" element={<OrderEdit />} />
+              <Route path="orders/:id" element={<OrderEdit />} />
+            </Route>
+          </Routes>
         </Router>
       </BreadcrumbProvider>
-    </CartProvider>
   );
 }
 

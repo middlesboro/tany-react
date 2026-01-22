@@ -30,7 +30,7 @@ const AuthenticationSuccess = () => {
                  const isSimpleAdmin = decoded.isAdmin === true;
 
                  if (isAdmin || isSimpleAdmin) {
-                     targetPath = '/admin/carts';
+                     targetPath = '/carts';
                  } else {
                      targetPath = '/';
                  }
@@ -41,7 +41,7 @@ const AuthenticationSuccess = () => {
 
           navigate(targetPath, { replace: true });
         } else {
-          const fallbackLogin = redirectPath === '/admin/carts' ? '/admin/login' : '/login';
+          const fallbackLogin = redirectPath === '/carts' ? '/login' : '/login';
           navigate(fallbackLogin, { replace: true });
         }
       } catch (err) {

@@ -51,7 +51,7 @@ const SupplierList = () => {
               <td className="py-2 px-4 border-b">{supplier.name}</td>
               <td className="py-2 px-4 border-b">
                 <Link
-                  to={`/admin/suppliers/${supplier.id}`}
+                  to={`/suppliers/${supplier.id}`}
                   className="text-blue-500 hover:text-blue-700 mr-2 inline-block"
                   title="Edit"
                 >

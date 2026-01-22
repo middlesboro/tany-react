@@ -49,7 +49,7 @@ const BlogEdit = () => {
     } else {
       await createBlog(blog);
     }
-    navigate('/admin/blogs');
+    navigate('/blogs');
   };
 
   const handleSaveAndStay = async () => {
@@ -57,7 +57,7 @@ const BlogEdit = () => {
       await updateBlog(id, blog);
     } else {
       const newBlog = await createBlog(blog);
-      navigate(`/admin/blogs/${newBlog.id}`, { replace: true });
+      navigate(`/blogs/${newBlog.id}`, { replace: true });
     }
   };
 

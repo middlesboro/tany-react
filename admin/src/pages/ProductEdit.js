@@ -104,7 +104,7 @@ const ProductEdit = () => {
         await patchProduct(productId, { productFilterParameters: product.productFilterParameters });
     }
 
-    navigate('/admin/products');
+    navigate('/products');
   };
 
   const handleSaveAndStay = async () => {
@@ -114,7 +114,7 @@ const ProductEdit = () => {
     } else {
       const newProduct = await createProduct(product);
       productId = newProduct.id;
-      navigate(`/admin/products/${newProduct.id}`, { replace: true });
+      navigate(`/products/${newProduct.id}`, { replace: true });
     }
 
     // Save filter parameters via PATCH

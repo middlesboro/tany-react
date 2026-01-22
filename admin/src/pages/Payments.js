@@ -47,7 +47,7 @@ const Payments = () => {
     <div>
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Payment Management</h1>
-        <Link to="/admin/payments/new" className="bg-green-500 text-white px-4 py-2 rounded">
+        <Link to="/payments/new" className="bg-green-500 text-white px-4 py-2 rounded">
           Create Payment
         </Link>
       </div>
@@ -74,7 +74,7 @@ const Payments = () => {
               <td className="py-2 px-4 border-b">{payment.price}</td>
               <td className="py-2 px-4 border-b">
                 <Link
-                  to={`/admin/payments/${payment.id}`}
+                  to={`/payments/${payment.id}`}
                   className="text-blue-500 hover:text-blue-700 mr-2 inline-block"
                   title="Edit"
                 >

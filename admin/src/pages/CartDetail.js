@@ -32,7 +32,7 @@ const CartDetail = () => {
   return (
     <div className="p-4">
       <div className="mb-4">
-        <Link to="/admin/carts" className="text-blue-500 hover:underline">
+        <Link to="/carts" className="text-blue-500 hover:underline">
           &larr; Back to Carts
         </Link>
       </div>

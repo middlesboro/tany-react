@@ -229,7 +229,7 @@ const OrderList = () => {
               <td className="py-2 px-4 border-b">{order.finalPrice}</td>
               <td className="py-2 px-4 border-b">
                 <Link
-                  to={`/admin/orders/${order.id}`}
+                  to={`/orders/${order.id}`}
                   className="text-blue-500 hover:text-blue-700 mr-2 inline-block"
                   title="View/Edit"
                 >

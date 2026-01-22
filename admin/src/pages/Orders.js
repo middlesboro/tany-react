@@ -7,7 +7,7 @@ const Orders = () => {
     <div>
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Order Management</h1>
-        <Link to="/admin/orders/new" className="bg-green-500 text-white px-4 py-2 rounded">
+        <Link to="/orders/new" className="bg-green-500 text-white px-4 py-2 rounded">
           Create Order
         </Link>
       </div>

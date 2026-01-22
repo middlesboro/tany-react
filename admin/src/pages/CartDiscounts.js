@@ -52,7 +52,7 @@ const CartDiscounts = () => {
     <div className="p-4">
       <div className="flex justify-between items-center mb-6">
         <h1 className="text-2xl font-bold">Cart Discounts</h1>
-        <Link to="/admin/cart-discounts/new" className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
+        <Link to="/cart-discounts/new" className="bg-green-600 text-white px-4 py-2 rounded hover:bg-green-700">
           Add New Discount
         </Link>
       </div>
@@ -89,7 +89,7 @@ const CartDiscounts = () => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                   <Link
-                    to={`/admin/cart-discounts/${discount.id}`}
+                    to={`/cart-discounts/${discount.id}`}
                     className="text-blue-500 hover:text-blue-700 mr-2 inline-block"
                     title="Edit"
                   >

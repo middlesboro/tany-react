@@ -7,7 +7,7 @@ const Blogs = () => {
     <div>
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Blog Management</h1>
-        <Link to="/admin/blogs/new" className="bg-green-500 text-white px-4 py-2 rounded">
+        <Link to="/blogs/new" className="bg-green-500 text-white px-4 py-2 rounded">
           Create Blog
         </Link>
       </div>

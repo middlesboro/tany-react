@@ -67,7 +67,7 @@ const CarrierEdit = () => {
         } else {
             await createCarrier(carrier);
         }
-        navigate('/admin/carriers');
+        navigate('/carriers');
     } catch (error) {
         console.error("Error saving carrier:", error);
         alert("Error saving carrier");
@@ -80,7 +80,7 @@ const CarrierEdit = () => {
             await updateCarrier(id, carrier);
         } else {
             const newCarrier = await createCarrier(carrier);
-            navigate(`/admin/carriers/${newCarrier.id}`, { replace: true });
+            navigate(`/carriers/${newCarrier.id}`, { replace: true });
         }
     } catch (error) {
         console.error("Error saving carrier:", error);
@@ -201,7 +201,7 @@ const CarrierEdit = () => {
           </button>
           <button
             type="button"
-            onClick={() => navigate('/admin/carriers')}
+            onClick={() => navigate('/carriers')}
             className="bg-gray-500 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
           >
             Cancel

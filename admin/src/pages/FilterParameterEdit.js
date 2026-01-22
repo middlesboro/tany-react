@@ -45,7 +45,7 @@ const FilterParameterEdit = () => {
       } else {
         await createFilterParameter(filterParameter);
       }
-      navigate('/admin/filter-parameters');
+      navigate('/filter-parameters');
     } catch (error) {
       console.error('Failed to save filter parameter', error);
       alert('Failed to save filter parameter');

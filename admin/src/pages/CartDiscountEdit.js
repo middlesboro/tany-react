@@ -69,7 +69,7 @@ const CartDiscountEdit = () => {
       } else {
         await updateCartDiscount(id, payload);
       }
-      navigate('/admin/cart-discounts');
+      navigate('/cart-discounts');
     } catch (err) {
       setError('Failed to save discount');
       setLoading(false);
@@ -81,7 +81,7 @@ const CartDiscountEdit = () => {
   return (
     <div className="p-4 max-w-2xl mx-auto">
       <div className="mb-6">
-        <Link to="/admin/cart-discounts" className="text-blue-500 hover:underline">
+        <Link to="/cart-discounts" className="text-blue-500 hover:underline">
           &larr; Back to Discounts
         </Link>
       </div>

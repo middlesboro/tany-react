@@ -31,7 +31,7 @@ const CartList = () => {
               <td className="py-2 px-4 border-b">{cart.customerName}</td>
               <td className="py-2 px-4 border-b">
                 <Link
-                  to={`/admin/carts/${cart.cartId}`}
+                  to={`/carts/${cart.cartId}`}
                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-1 px-3 rounded"
                 >
                   Detail

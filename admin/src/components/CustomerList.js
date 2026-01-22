@@ -55,7 +55,7 @@ const CustomerList = () => {
               <td className="py-2 px-4 border-b">{customer.email}</td>
               <td className="py-2 px-4 border-b">
                 <Link
-                  to={`/admin/customers/${customer.id}`}
+                  to={`/customers/${customer.id}`}
                   className="text-blue-500 hover:text-blue-700 mr-2 inline-block"
                   title="Edit"
                 >

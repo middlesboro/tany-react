@@ -47,7 +47,7 @@ const Carriers = () => {
     <div>
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">Carrier Management</h1>
-        <Link to="/admin/carriers/new" className="bg-green-500 text-white px-4 py-2 rounded">
+        <Link to="/carriers/new" className="bg-green-500 text-white px-4 py-2 rounded">
           Create Carrier
         </Link>
       </div>
@@ -74,7 +74,7 @@ const Carriers = () => {
               <td className="py-2 px-4 border-b">{carrier.type}</td>
               <td className="py-2 px-4 border-b">
                 <Link
-                  to={`/admin/carriers/${carrier.id}`}
+                  to={`/carriers/${carrier.id}`}
                   className="text-blue-500 hover:text-blue-700 mr-2 inline-block"
                   title="Edit"
                 >

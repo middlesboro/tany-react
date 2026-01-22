@@ -45,7 +45,7 @@ const BrandEdit = () => {
     } else {
       await createBrand(brand);
     }
-    navigate('/admin/brands');
+    navigate('/brands');
   };
 
   const handleSaveAndStay = async () => {
@@ -53,7 +53,7 @@ const BrandEdit = () => {
       await updateBrand(id, brand);
     } else {
       const newBrand = await createBrand(brand);
-      navigate(`/admin/brands/${newBrand.id}`, { replace: true });
+      navigate(`/brands/${newBrand.id}`, { replace: true });
     }
   };
 

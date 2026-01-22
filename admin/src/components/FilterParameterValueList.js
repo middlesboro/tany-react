@@ -38,7 +38,7 @@ const FilterParameterValueList = () => {
     <div>
       <div className="flex justify-between items-center mb-4">
         <h2 className="text-2xl font-bold">Filter Parameter Values</h2>
-        <Link to="/admin/filter-parameter-values/new" className="bg-green-500 text-white px-4 py-2 rounded">
+        <Link to="/filter-parameter-values/new" className="bg-green-500 text-white px-4 py-2 rounded">
           Add New
         </Link>
       </div>
@@ -67,7 +67,7 @@ const FilterParameterValueList = () => {
               </td>
               <td className="py-2 px-4 border-b">
                 <Link
-                  to={`/admin/filter-parameter-values/${val.id}`}
+                  to={`/filter-parameter-values/${val.id}`}
                   className="text-blue-500 hover:text-blue-700 mr-2 inline-block"
                   title="Edit"
                 >

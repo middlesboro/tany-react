@@ -6,39 +6,39 @@ const menuItems = [
   {
     title: 'Catalog',
     children: [
-      { title: 'Products', path: '/admin/products' },
-      { title: 'Categories', path: '/admin/categories' },
-      { title: 'Brands', path: '/admin/brands' },
-      { title: 'Suppliers', path: '/admin/suppliers' },
-      { title: 'Product Labels', path: '/admin/product-labels' },
-      { title: 'Filter Parameters', path: '/admin/filter-parameters' },
-      { title: 'Filter Values', path: '/admin/filter-parameter-values' },
+      { title: 'Products', path: '/products' },
+      { title: 'Categories', path: '/categories' },
+      { title: 'Brands', path: '/brands' },
+      { title: 'Suppliers', path: '/suppliers' },
+      { title: 'Product Labels', path: '/product-labels' },
+      { title: 'Filter Parameters', path: '/filter-parameters' },
+      { title: 'Filter Values', path: '/filter-parameter-values' },
     ]
   },
   {
     title: 'Orders',
     children: [
-      { title: 'Orders', path: '/admin/orders' },
-      { title: 'Carts', path: '/admin/carts' },
-      { title: 'Customers', path: '/admin/customers' },
+      { title: 'Orders', path: '/orders' },
+      { title: 'Carts', path: '/carts' },
+      { title: 'Customers', path: '/customers' },
     ]
   },
   {
     title: 'Settings',
     children: [
-      { title: 'Shop Settings', path: '/admin/shop-settings' },
-      { title: 'Carriers', path: '/admin/carriers' },
-      { title: 'Payments', path: '/admin/payments' },
-      { title: 'Cart Discounts', path: '/admin/cart-discounts' },
+      { title: 'Shop Settings', path: '/shop-settings' },
+      { title: 'Carriers', path: '/carriers' },
+      { title: 'Payments', path: '/payments' },
+      { title: 'Cart Discounts', path: '/cart-discounts' },
     ]
   },
   {
     title: 'Pages',
-    path: '/admin/pages'
+    path: '/pages'
   },
   {
     title: 'Blogs',
-    path: '/admin/blogs'
+    path: '/blogs'
   }
 ];
 
@@ -63,12 +63,12 @@ const AdminLayout = () => {
   }, [location.pathname]);
 
   if (!isAuthenticated()) {
-    return <Navigate to="/admin/login" replace />;
+    return <Navigate to="/login" replace />;
   }
 
   const handleLogout = () => {
     removeToken();
-    navigate('/admin/login');
+    navigate('/login');
   };
 
   const toggleGroup = (title) => {

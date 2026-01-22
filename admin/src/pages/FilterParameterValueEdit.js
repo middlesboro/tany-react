@@ -73,7 +73,7 @@ const FilterParameterValueEdit = () => {
       } else {
         await createFilterParameterValue(filterParameterValue);
       }
-      navigate('/admin/filter-parameter-values');
+      navigate('/filter-parameter-values');
     } catch (error) {
       console.error('Failed to save filter parameter value', error);
       alert('Failed to save filter parameter value');

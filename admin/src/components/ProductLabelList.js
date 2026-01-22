@@ -37,7 +37,7 @@ const ProductLabelList = () => {
   return (
     <div>
       <div className="flex justify-end mb-4">
-        <Link to="/admin/product-labels/new" className="bg-green-500 text-white px-4 py-2 rounded">
+        <Link to="/product-labels/new" className="bg-green-500 text-white px-4 py-2 rounded">
           Add Product Label
         </Link>
       </div>
@@ -82,7 +82,7 @@ const ProductLabelList = () => {
               <td className="py-2 px-4 border-b">{label.active ? 'Yes' : 'No'}</td>
               <td className="py-2 px-4 border-b">
                 <Link
-                  to={`/admin/product-labels/${label.id}`}
+                  to={`/product-labels/${label.id}`}
                   className="text-blue-500 hover:text-blue-700 mr-2 inline-block"
                   title="Edit"
                 >
