@@ -1,8 +1,7 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Home from './pages/Home';
-import PublicLayout from './components/PublicLayout';
-import ProductDetail from './pages/ProductDetail';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import Login from './pages/Login';
+import AuthenticationSuccess from './pages/AuthenticationSuccess';
 import AdminLayout from './components/AdminLayout';
 import Products from './pages/Products';
 import ProductEdit from './pages/ProductEdit';
@@ -30,18 +29,7 @@ import Carriers from './pages/Carriers';
 import CarrierEdit from './pages/CarrierEdit';
 import Payments from './pages/Payments';
 import PaymentEdit from './pages/PaymentEdit';
-import Login from './pages/Login';
-import AuthenticationSuccess from './pages/AuthenticationSuccess';
-import Cart from './pages/Cart';
-import Checkout from './pages/Checkout';
-import OrderConfirmation from './pages/OrderConfirmation';
-import GlobalPaymentsCallback from './pages/GlobalPaymentsCallback';
-import BesteronCallback from './pages/BesteronCallback';
-import CategoryProducts from './pages/CategoryProducts';
-import BlogDetail from './pages/BlogDetail';
 import ShopSettings from './pages/ShopSettings';
-import Account from './pages/Account';
-import PublicPage from './pages/PublicPage';
 import ProductLabels from './pages/ProductLabels';
 import ProductLabelEdit from './pages/ProductLabelEdit';
 import CartDiscounts from './pages/CartDiscounts';
@@ -54,28 +42,14 @@ function App() {
   return (
     <CartProvider>
       <BreadcrumbProvider>
-        <Router>
+        <Router basename="/admin">
           <ScrollToTop />
           <Routes>
-          <Route path="/admin/login" element={<Login isAdmin={true} />} />
+          <Route path="/" element={<Navigate to="/shop-settings" replace />} />
+          <Route path="/login" element={<Login isAdmin={true} />} />
           <Route path="/authentication/success" element={<AuthenticationSuccess />} />
 
-          <Route element={<PublicLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/order" element={<Checkout />} />
-            <Route path="/order/confirmation/:id" element={<OrderConfirmation />} />
-            <Route path="/global-payments-callback" element={<GlobalPaymentsCallback />} />
-            <Route path="/besteron-callback" element={<BesteronCallback />} />
-            <Route path="/category/:slug" element={<CategoryProducts />} />
-            <Route path="/products/:id" element={<ProductDetail />} />
-            <Route path="/blog/:id" element={<BlogDetail />} />
-            <Route path="/login" element={<Login isAdmin={false} />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/:slug" element={<PublicPage />} />
-          </Route>
-
-          <Route path="/admin" element={<AdminLayout />}>
+          <Route element={<AdminLayout />}>
           <Route path="shop-settings" element={<ShopSettings />} />
           <Route path="products" element={<Products />} />
           <Route path="products/new" element={<ProductEdit />} />

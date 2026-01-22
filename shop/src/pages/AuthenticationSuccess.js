@@ -1,0 +1,83 @@
+import React, { useEffect, useState } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
+import { setToken, exchangeToken, getDecodedToken } from '../services/authService';
+
+const AuthenticationSuccess = () => {
+  const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
+  const [error, setError] = useState('');
+
+  useEffect(() => {
+    const authorizationCode = searchParams.get('authorizationCode');
+
+    const authenticate = async () => {
+      try {
+        const redirectPath = localStorage.getItem('post_login_redirect');
+
+        if (authorizationCode) {
+          const token = await exchangeToken(authorizationCode);
+          setToken(token);
+
+          localStorage.removeItem('post_login_redirect');
+
+          let targetPath = redirectPath;
+          if (!targetPath) {
+             const decoded = getDecodedToken();
+             if (decoded) {
+                 const roles = decoded.roles || decoded.authorities || [];
+                 // Check for common admin role patterns
+                 const isAdmin = Array.isArray(roles) && (roles.includes('ADMIN') || roles.includes('ROLE_ADMIN'));
+                 const isSimpleAdmin = decoded.isAdmin === true;
+
+                 if (isAdmin || isSimpleAdmin) {
+                     targetPath = '/admin/carts';
+                 } else {
+                     targetPath = '/';
+                 }
+             } else {
+                 targetPath = '/';
+             }
+          }
+
+          navigate(targetPath, { replace: true });
+        } else {
+          const fallbackLogin = redirectPath === '/admin/carts' ? '/admin/login' : '/login';
+          navigate(fallbackLogin, { replace: true });
+        }
+      } catch (err) {
+        console.error(err);
+        setError('Authentication failed. Please try logging in again.');
+      }
+    };
+
+    authenticate();
+  }, [searchParams, navigate]);
+
+  if (error) {
+    return (
+      <div className="flex items-center justify-center min-h-screen bg-gray-100">
+        <div className="text-center">
+          <h2 className="text-xl font-semibold mb-2 text-red-600">Error</h2>
+          <p>{error}</p>
+          <button
+            onClick={() => navigate('/login')}
+            className="mt-4 bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Back to Login
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="flex items-center justify-center min-h-screen bg-gray-100">
+      <div className="text-center">
+        <h2 className="text-xl font-semibold mb-2">Authenticating...</h2>
+        <p>Please wait while we redirect you.</p>
+      </div>
+    </div>
+  );
+};
+
+export default AuthenticationSuccess;
