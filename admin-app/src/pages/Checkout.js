@@ -1,14 +1,17 @@
-  import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import { createOrder } from '../services/orderService';
 import { debounce } from '../utils/debounce';
 import PriceBreakdown from '../components/PriceBreakdown';
+import { isValidName, isValidSlovakPhone, isValidSlovakZip, isValidEmail, checkEmailTypos } from '../utils/validation';
 
 const Checkout = () => {
   const navigate = useNavigate();
   const { cart, customer: customerContext, loading, clearCart, updateCart } = useCart();
+  const [errors, setErrors] = useState({});
+  const [warnings, setWarnings] = useState({});
   const { setBreadcrumbs } = useBreadcrumbs();
   const [selectedCarrier, setSelectedCarrier] = useState(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
@@ -210,17 +213,109 @@ const Checkout = () => {
   const handleCustomerChange = (e) => {
     const { name, value } = e.target;
     setCustomer(prev => ({ ...prev, [name]: value }));
+    // Clear specific error when user types
+    if (errors[name]) {
+        setErrors(prev => ({ ...prev, [name]: null }));
+    }
+    if (warnings[name]) {
+        setWarnings(prev => ({ ...prev, [name]: null }));
+    }
   };
 
   const handleInvoiceAddressChange = (e) => {
     const { name, value } = e.target;
-    setInvoiceAddress(prev => ({ ...prev, [name]: value }));
+    let newValue = value;
+    if (name === 'zip') {
+        newValue = value.replace(/\s+/g, '');
+    }
+    setInvoiceAddress(prev => ({ ...prev, [name]: newValue }));
+
+    const errorKey = `invoice_${name}`;
+    if (errors[errorKey]) {
+        setErrors(prev => ({ ...prev, [errorKey]: null }));
+    }
   };
 
   const handleDeliveryAddressChange = (e) => {
     const { name, value } = e.target;
-    setDeliveryAddress(prev => ({ ...prev, [name]: value }));
+    let newValue = value;
+    if (name === 'zip') {
+        newValue = value.replace(/\s+/g, '');
+    }
+    setDeliveryAddress(prev => ({ ...prev, [name]: newValue }));
+
+    const errorKey = `delivery_${name}`;
+    if (errors[errorKey]) {
+        setErrors(prev => ({ ...prev, [errorKey]: null }));
+    }
   };
+
+  const validateField = (name, value, prefix = '') => {
+      let error = null;
+      let warning = null;
+      const fieldName = prefix ? name.replace(`${prefix}_`, '') : name; // e.g., 'zip' from 'invoice_zip'
+
+      // Map field name to validation logic
+      // Note: 'firstname'/'lastname'/'email'/'phone' are direct names in customer object
+      // 'street'/'city'/'zip' are in address objects, passed with prefix usually or handled by caller
+
+      // We normalize the value check based on the field 'type' logic
+
+      // Customer Fields
+      if (name === 'firstname') {
+          if (!isValidName(value)) error = "Meno môže obsahovať len písmená";
+      } else if (name === 'lastname') {
+          if (!isValidName(value)) error = "Priezvisko môže obsahovať len písmená";
+      } else if (name === 'email') {
+          if (!isValidEmail(value)) {
+              error = "Neplatný formát emailu";
+          } else {
+              const typo = checkEmailTypos(value);
+              if (typo) warning = typo;
+          }
+      } else if (name === 'phone') {
+          if (!isValidSlovakPhone(value)) error = "Nesprávny formát (napr. +421944123456 alebo 0944123456)";
+      }
+      // Address Fields (prefix is 'invoice' or 'delivery')
+      else if (name.endsWith('street')) {
+           if (!value) error = "Ulica je povinná";
+      } else if (name.endsWith('city')) {
+           if (!value) error = "Mesto je povinné";
+      } else if (name.endsWith('zip')) {
+           if (!isValidSlovakZip(value)) error = "PSČ musí mať 5 číslic";
+      }
+
+      setErrors(prev => ({ ...prev, [name]: error }));
+      setWarnings(prev => ({ ...prev, [name]: warning }));
+
+      return !error;
+  };
+
+  const handleBlur = (e) => {
+      const { name, value } = e.target;
+      // Determine context for address fields
+      // The inputs have names like "invoice_street" or just "street" depending on how I set them up.
+      // In JSX below:
+      // Customer: name="firstname", etc.
+      // Invoice: name="street" (but handled by handleInvoiceAddressChange)
+      // Wait, handleInvoiceAddressChange uses `name` from event. The input `name` is "street".
+      // But `errors` state uses `invoice_street`.
+      // So I need to pass the correct key to `validateField`.
+
+      // I should update inputs to have unique names or handle the mapping here.
+      // Current JSX:
+      // Invoice: <input name="street" ... />
+      // Delivery: <input name="street" ... />
+      // This is problematic for `handleBlur` if I rely on `e.target.name` alone because both have name="street".
+      // I should assume the section based on ... well, I can't know which section it is easily without unique names or ids.
+
+      // I will update input names in JSX to be unique (e.g. "invoice_street") and handle that in change handlers.
+      // OR, simpler: pass a wrapper to onBlur.
+  };
+
+  // Revised handlers to support unique names if I change them, OR just wrap onBlur.
+  // Let's change input names in JSX to be explicit: 'invoice_street', 'delivery_street'.
+  // And update change handlers to parse it.
 
   const calculateShippingPrice = (carrier) => {
     if (!carrier) return 0;
@@ -261,15 +356,53 @@ const Checkout = () => {
       }
   };
 
+  const validateForm = () => {
+      const newErrors = {};
+      const newWarnings = {};
+
+      // Customer
+      if (!isValidName(customer.firstname)) newErrors.firstname = "Meno môže obsahovať len písmená";
+      if (!isValidName(customer.lastname)) newErrors.lastname = "Priezvisko môže obsahovať len písmená";
+      if (!isValidEmail(customer.email)) {
+          newErrors.email = "Neplatný formát emailu";
+      } else {
+          const typo = checkEmailTypos(customer.email);
+          if (typo) newWarnings.email = typo;
+      }
+      if (!isValidSlovakPhone(customer.phone)) newErrors.phone = "Nesprávny formát (napr. +421944123456 alebo 0944123456)";
+
+      // Invoice Address (Required)
+      if (!invoiceAddress.street) newErrors.invoice_street = "Ulica je povinná";
+      if (!invoiceAddress.city) newErrors.invoice_city = "Mesto je povinné";
+      if (!isValidSlovakZip(invoiceAddress.zip)) newErrors.invoice_zip = "PSČ musí mať 5 číslic";
+
+      // Delivery Address (Required if different)
+      if (differentDeliveryAddress) {
+          if (!deliveryAddress.street) newErrors.delivery_street = "Ulica je povinná";
+          if (!deliveryAddress.city) newErrors.delivery_city = "Mesto je povinné";
+          if (!isValidSlovakZip(deliveryAddress.zip)) newErrors.delivery_zip = "PSČ musí mať 5 číslic";
+      }
+
+      setErrors(newErrors);
+      setWarnings(newWarnings);
+      return Object.keys(newErrors).length === 0;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (!validateForm()) {
+        window.scrollTo(0, 0);
+        return;
+    }
+
     const carrierObj = carriers.find(c => c.id === selectedCarrier);
     const paymentObj = payments.find(p => p.id === selectedPayment);
     const shippingPrice = calculateShippingPrice(carrierObj);
     const paymentPrice = calculatePaymentPrice(paymentObj);
 
     if (carrierObj?.type === 'PACKETA' && !selectedPickupPoint) {
-        alert("Please select a pick-up point.");
+        alert("Prosím vyberte výdajné miesto.");
         return;
     }
 
@@ -306,24 +439,24 @@ const Checkout = () => {
       navigate(`/order/confirmation/${createdOrder.id}`, { state: { newOrder: true } });
     } catch (error) {
       console.error('Order creation failed', error);
-      alert('Failed to create order. Please try again.');
+      alert('Nepodarilo sa vytvoriť objednávku. Skúste to prosím znova.');
     }
   };
 
   if (loading) {
-      return <div className="container mx-auto px-4 py-8">Loading checkout...</div>;
+      return <div className="container mx-auto px-4 py-8">Načítavam pokladňu...</div>;
   }
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Checkout</h1>
+      <h1 className="text-3xl font-bold mb-6">Objednávka</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-8">
+      <form onSubmit={handleSubmit} className="space-y-8" noValidate>
         {/* Carriers Section */}
         <section>
           <h2 className="text-xl font-bold mb-4">1. DOPRAVA A PLATBA</h2>
           <div className="bg-white rounded shadow p-4 space-y-4">
-             {carriers.length === 0 && <p>No carriers available.</p>}
+             {carriers.length === 0 && <p>Žiadni dopravcovia nie sú k dispozícii.</p>}
              {carriers.map(carrier => {
                  const price = calculateShippingPrice(carrier);
                  const isPacketa = carrier.type === 'PACKETA';
@@ -355,11 +488,11 @@ const Checkout = () => {
                                     onClick={openPacketaWidget}
                                     className="bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
                                 >
-                                    Select pick-up point
+                                    Vybrať výdajné miesto
                                 </button>
                                 {selectedPickupPoint && (
                                     <div className="mt-2 text-sm text-gray-700">
-                                        <strong>Selected Point:</strong> {selectedPickupPoint.name}
+                                        <strong>Vybrané miesto:</strong> {selectedPickupPoint.name}
                                     </div>
                                 )}
                             </div>
@@ -373,9 +506,9 @@ const Checkout = () => {
         {/* Payments Section */}
         {selectedCarrier && (
             <section>
-            <h2 className="text-xl font-bold mb-4">2. PAYMENT METHOD</h2>
+            <h2 className="text-xl font-bold mb-4">2. SPÔSOB PLATBY</h2>
             <div className="bg-white rounded shadow p-4 space-y-4">
-                {payments.length === 0 && <p>No payments available.</p>}
+                {payments.length === 0 && <p>Žiadne platby nie sú k dispozícii.</p>}
                 {payments.map(payment => {
                     const price = calculatePaymentPrice(payment);
                     return (
@@ -404,29 +537,33 @@ const Checkout = () => {
 
         {/* Customer Details Section */}
         <section>
-          <h2 className="text-xl font-bold mb-4">3. CUSTOMER DETAILS</h2>
+          <h2 className="text-xl font-bold mb-4">3. FAKTURAČNÉ ÚDAJE</h2>
           <div className="bg-white rounded shadow p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
              <div>
-                 <label className="block text-sm font-medium text-gray-700 mb-1">First Name</label>
+                 <label className="block text-sm font-medium text-gray-700 mb-1">Meno</label>
                  <input
                     type="text"
                     name="firstname"
                     value={customer.firstname}
                     onChange={handleCustomerChange}
+                    onBlur={(e) => validateField(e.target.name, e.target.value)}
                     required
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500 ${errors.firstname ? 'border-red-500' : 'border-gray-300'}`}
                  />
+                 {errors.firstname && <p className="text-red-500 text-xs mt-1">{errors.firstname}</p>}
              </div>
              <div>
-                 <label className="block text-sm font-medium text-gray-700 mb-1">Last Name</label>
+                 <label className="block text-sm font-medium text-gray-700 mb-1">Priezvisko</label>
                  <input
                     type="text"
                     name="lastname"
                     value={customer.lastname}
                     onChange={handleCustomerChange}
+                    onBlur={(e) => validateField(e.target.name, e.target.value)}
                     required
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500 ${errors.lastname ? 'border-red-500' : 'border-gray-300'}`}
                  />
+                 {errors.lastname && <p className="text-red-500 text-xs mt-1">{errors.lastname}</p>}
              </div>
              <div>
                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
@@ -435,61 +572,72 @@ const Checkout = () => {
                     name="email"
                     value={customer.email}
                     onChange={handleCustomerChange}
+                    onBlur={(e) => validateField(e.target.name, e.target.value)}
                     required
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500 ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
                  />
+                 {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
+                 {!errors.email && warnings.email && <p className="text-green-600 text-xs mt-1">{warnings.email}</p>}
              </div>
              <div>
-                 <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                 <label className="block text-sm font-medium text-gray-700 mb-1">Telefón</label>
                  <input
                     type="tel"
                     name="phone"
                     value={customer.phone}
                     onChange={handleCustomerChange}
+                    onBlur={(e) => validateField(e.target.name, e.target.value)}
                     required
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500 ${errors.phone ? 'border-red-500' : 'border-gray-300'}`}
                  />
+                 {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
              </div>
           </div>
         </section>
 
         {/* Invoice Address Section */}
         <section>
-          <h2 className="text-xl font-bold mb-4">4. INVOICE ADDRESS</h2>
+          <h2 className="text-xl font-bold mb-4">4. FAKTURAČNÁ ADRESA</h2>
           <div className="bg-white rounded shadow p-6 space-y-4">
              <div>
-                 <label className="block text-sm font-medium text-gray-700 mb-1">Street and Number</label>
+                 <label className="block text-sm font-medium text-gray-700 mb-1">Ulica a číslo</label>
                  <input
                     type="text"
                     name="street"
                     value={invoiceAddress.street}
                     onChange={handleInvoiceAddressChange}
+                    onBlur={(e) => validateField('invoice_street', e.target.value)}
                     required
-                    className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500 ${errors.invoice_street ? 'border-red-500' : 'border-gray-300'}`}
                  />
+                 {errors.invoice_street && <p className="text-red-500 text-xs mt-1">{errors.invoice_street}</p>}
              </div>
              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Mesto</label>
                     <input
                         type="text"
                         name="city"
                         value={invoiceAddress.city}
                         onChange={handleInvoiceAddressChange}
+                        onBlur={(e) => validateField('invoice_city', e.target.value)}
                         required
-                        className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                        className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500 ${errors.invoice_city ? 'border-red-500' : 'border-gray-300'}`}
                     />
+                    {errors.invoice_city && <p className="text-red-500 text-xs mt-1">{errors.invoice_city}</p>}
                  </div>
                  <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">ZIP Code</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">PSČ</label>
                     <input
                         type="text"
                         name="zip"
                         value={invoiceAddress.zip}
                         onChange={handleInvoiceAddressChange}
+                        onBlur={(e) => validateField('invoice_zip', e.target.value)}
                         required
-                        className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                        className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500 ${errors.invoice_zip ? 'border-red-500' : 'border-gray-300'}`}
                     />
+                    {errors.invoice_zip && <p className="text-red-500 text-xs mt-1">{errors.invoice_zip}</p>}
                  </div>
              </div>
 
@@ -501,7 +649,7 @@ const Checkout = () => {
                         onChange={(e) => setDifferentDeliveryAddress(e.target.checked)}
                         className="h-4 w-4 text-blue-600 border-gray-300 rounded"
                     />
-                    <span className="ml-2 text-gray-700">Delivery address is different from invoice address</span>
+                    <span className="ml-2 text-gray-700">Doručiť na inú adresu</span>
                 </label>
              </div>
           </div>
@@ -510,41 +658,47 @@ const Checkout = () => {
         {/* Delivery Address Section */}
         {differentDeliveryAddress && (
             <section>
-            <h2 className="text-xl font-bold mb-4">5. DELIVERY ADDRESS</h2>
+            <h2 className="text-xl font-bold mb-4">5. DORUČOVACIA ADRESA</h2>
             <div className="bg-white rounded shadow p-6 space-y-4">
                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Street and Number</label>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Ulica a číslo</label>
                     <input
                         type="text"
                         name="street"
                         value={deliveryAddress.street}
                         onChange={handleDeliveryAddressChange}
+                        onBlur={(e) => validateField('delivery_street', e.target.value)}
                         required={differentDeliveryAddress}
-                        className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                        className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500 ${errors.delivery_street ? 'border-red-500' : 'border-gray-300'}`}
                     />
+                    {errors.delivery_street && <p className="text-red-500 text-xs mt-1">{errors.delivery_street}</p>}
                 </div>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">City</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">Mesto</label>
                         <input
                             type="text"
                             name="city"
                             value={deliveryAddress.city}
                             onChange={handleDeliveryAddressChange}
+                            onBlur={(e) => validateField('delivery_city', e.target.value)}
                             required={differentDeliveryAddress}
-                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                            className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500 ${errors.delivery_city ? 'border-red-500' : 'border-gray-300'}`}
                         />
+                        {errors.delivery_city && <p className="text-red-500 text-xs mt-1">{errors.delivery_city}</p>}
                     </div>
                     <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">ZIP Code</label>
+                        <label className="block text-sm font-medium text-gray-700 mb-1">PSČ</label>
                         <input
                             type="text"
                             name="zip"
                             value={deliveryAddress.zip}
                             onChange={handleDeliveryAddressChange}
+                            onBlur={(e) => validateField('delivery_zip', e.target.value)}
                             required={differentDeliveryAddress}
-                            className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                            className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500 ${errors.delivery_zip ? 'border-red-500' : 'border-gray-300'}`}
                         />
+                        {errors.delivery_zip && <p className="text-red-500 text-xs mt-1">{errors.delivery_zip}</p>}
                     </div>
                 </div>
             </div>
@@ -583,7 +737,7 @@ const Checkout = () => {
                 className="bg-green-600 text-white font-bold py-3 px-8 rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={!selectedCarrier || !selectedPayment}
             >
-                Complete Order
+                Dokončiť objednávku
             </button>
         </div>
       </form>
