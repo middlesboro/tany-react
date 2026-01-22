@@ -95,8 +95,8 @@ const Checkout = () => {
               phone: cart.phone || profile.phone || prev.phone
           }));
 
-          if (cart.note) {
-              setNote(cart.note);
+          if (cart.note || cart.description) {
+              setNote(cart.note || cart.description);
           }
 
           // Initialize Invoice Address
@@ -197,6 +197,7 @@ const Checkout = () => {
           email: customer.email,
           phone: customer.phone,
           note: note,
+          description: note,
           invoiceAddress: invoiceAddress,
           deliveryAddress: differentDeliveryAddress ? deliveryAddress : invoiceAddress, // Send proper delivery address
           selectedCarrierId: selectedCarrier,
