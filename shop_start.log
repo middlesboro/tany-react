@@ -2,9 +2,9 @@
 > shop@0.1.0 start
 > react-scripts start
 
-(node:1664) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:2646) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 (Use `node --trace-deprecation ...` to show where the warning was created)
-(node:1664) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:2646) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 Starting the development server...
 
 Compiled with warnings.
@@ -33,14 +33,14 @@ src/pages/CategoryProducts.js
 
 src/pages/Checkout.js
   Line 178:27:  React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead                react-hooks/exhaustive-deps
-  Line 210:6:   React Hook useEffect has missing dependencies: 'carriers' and 'cart'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
-  Line 256:13:  'fieldName' is assigned a value but never used                                                                            no-unused-vars
-  Line 294:9:   'handleBlur' is assigned a value but never used                                                                           no-unused-vars
-  Line 295:15:  'name' is assigned a value but never used                                                                                 no-unused-vars
-  Line 295:21:  'value' is assigned a value but never used                                                                                no-unused-vars
+  Line 211:6:   React Hook useEffect has missing dependencies: 'carriers' and 'cart'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  Line 257:13:  'fieldName' is assigned a value but never used                                                                            no-unused-vars
+  Line 295:9:   'handleBlur' is assigned a value but never used                                                                           no-unused-vars
+  Line 296:15:  'name' is assigned a value but never used                                                                                 no-unused-vars
+  Line 296:21:  'value' is assigned a value but never used                                                                                no-unused-vars
 
 src/pages/ProductDetail.js
-  Line 358:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 432:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
 src/pages/PublicPage.js
   Line 37:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
@@ -72,24 +72,24 @@ src/pages/CategoryProducts.js
 
 src/pages/Checkout.js
   Line 178:27:  React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead                react-hooks/exhaustive-deps
-  Line 210:6:   React Hook useEffect has missing dependencies: 'carriers' and 'cart'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
-  Line 256:13:  'fieldName' is assigned a value but never used                                                                            no-unused-vars
-  Line 294:9:   'handleBlur' is assigned a value but never used                                                                           no-unused-vars
-  Line 295:15:  'name' is assigned a value but never used                                                                                 no-unused-vars
-  Line 295:21:  'value' is assigned a value but never used                                                                                no-unused-vars
+  Line 211:6:   React Hook useEffect has missing dependencies: 'carriers' and 'cart'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  Line 257:13:  'fieldName' is assigned a value but never used                                                                            no-unused-vars
+  Line 295:9:   'handleBlur' is assigned a value but never used                                                                           no-unused-vars
+  Line 296:15:  'name' is assigned a value but never used                                                                                 no-unused-vars
+  Line 296:21:  'value' is assigned a value but never used                                                                                no-unused-vars
 
 src/pages/ProductDetail.js
-  Line 358:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 432:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
 src/pages/PublicPage.js
   Line 37:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
 webpack compiled with 1 warning
-(node:1664) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
-Proxy error: Could not proxy request /api/categories from localhost:3000 to http://localhost:8080.
+(node:2646) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+Proxy error: Could not proxy request /api/blogs from localhost:3000 to http://localhost:8080.
 See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
 
-Proxy error: Could not proxy request /api/blogs from localhost:3000 to http://localhost:8080.
+Proxy error: Could not proxy request /api/customer/context from localhost:3000 to http://localhost:8080.
 See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
 
 Compiling...
@@ -126,7 +126,7 @@ src/pages/Checkout.js
   Line 296:21:  'value' is assigned a value but never used                                                                                no-unused-vars
 
 src/pages/ProductDetail.js
-  Line 358:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 432:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
 src/pages/PublicPage.js
   Line 37:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
@@ -165,7 +165,7 @@ src/pages/Checkout.js
   Line 296:21:  'value' is assigned a value but never used                                                                                no-unused-vars
 
 src/pages/ProductDetail.js
-  Line 358:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 432:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
 src/pages/PublicPage.js
   Line 37:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps

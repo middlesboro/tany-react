@@ -7,6 +7,11 @@ export const getProducts = async (page = 0, sort = 'title,asc', size = 20) => {
   return response.json();
 };
 
+export const getRelatedProducts = async (id) => {
+  const response = await authFetch(`${API_URL}/${id}/related`);
+  return response.json();
+};
+
 export const getProduct = async (id) => {
   const response = await authFetch(`${API_URL}/${id}`);
   return response.json();
