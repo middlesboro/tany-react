@@ -21,6 +21,7 @@ const menuItems = [
       { title: 'Orders', path: '/orders' },
       { title: 'Carts', path: '/carts' },
       { title: 'Customers', path: '/customers' },
+      { title: 'Wishlists', path: '/wishlists' },
     ]
   },
   {

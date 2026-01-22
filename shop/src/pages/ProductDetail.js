@@ -4,12 +4,13 @@ import { getProduct } from '../services/productService';
 import { getReviewsByProduct, createReview } from '../services/reviewService';
 import { getCategories } from '../services/categoryService';
 import { findCategoryPath } from '../utils/categoryUtils';
-import { getUserEmail } from '../services/authService';
+import { getUserEmail, isAuthenticated } from '../services/authService';
 import { createEmailNotification } from '../services/customerService';
 import { useCart } from '../context/CartContext';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import AddToCartButton from '../components/AddToCartButton';
 import ProductLabel from '../components/ProductLabel';
+import { addToWishlist, removeFromWishlist } from '../services/wishlistService';
 
 const REASONS = [
   "Sme malá Slovenská spoločnosť. Každú objednávku si vážime rovnako a tak k nej aj pristupujeme",
@@ -355,6 +356,8 @@ const ProductDetail = () => {
   const [adding, setAdding] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [isFullViewOpen, setIsFullViewOpen] = useState(false);
+  const [inWishlist, setInWishlist] = useState(false);
+  const [wishlistLoading, setWishlistLoading] = useState(false);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -362,6 +365,7 @@ const ProductDetail = () => {
       try {
         const data = await getProduct(id);
         setProduct(data);
+        setInWishlist(data.inWishlist || false);
         if (data.images && data.images.length > 0) {
           setSelectedImage(data.images[0]);
         }
@@ -437,6 +441,29 @@ const ProductDetail = () => {
 
   const increaseQty = () => setQuantity(q => q + 1);
   const decreaseQty = () => setQuantity(q => (q > 1 ? q - 1 : 1));
+
+  const toggleWishlist = async () => {
+    if (!isAuthenticated()) {
+        alert("Please login to use wishlist");
+        return;
+    }
+    if (wishlistLoading) return;
+
+    setWishlistLoading(true);
+    try {
+        if (inWishlist) {
+            await removeFromWishlist(product.id);
+            setInWishlist(false);
+        } else {
+            await addToWishlist(product.id);
+            setInWishlist(true);
+        }
+    } catch (error) {
+        console.error("Wishlist action failed", error);
+    } finally {
+        setWishlistLoading(false);
+    }
+  };
 
   if (loading) {
     return (
@@ -514,7 +541,25 @@ const ProductDetail = () => {
 
           {/* Right Column: Info */}
           <div className="p-8 flex flex-col">
-            <h1 className="text-3xl font-bold text-gray-800 mb-2 leading-tight">{product.title}</h1>
+            <div className="flex justify-between items-start mb-2">
+                <h1 className="text-3xl font-bold text-gray-800 leading-tight mr-4">{product.title}</h1>
+                 <button
+                    onClick={toggleWishlist}
+                    className={`p-2 rounded-full transition-colors flex-shrink-0 ${inWishlist ? 'text-red-500 bg-red-50' : 'text-red-500 hover:text-red-600 hover:bg-gray-50'}`}
+                    title={inWishlist ? "Odobrať z obľúbených" : "Pridať do obľúbených"}
+                >
+                    <svg
+                        xmlns="http://www.w3.org/2000/svg"
+                        className="h-8 w-8"
+                        fill={inWishlist ? "currentColor" : "none"}
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                        strokeWidth="2"
+                    >
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                    </svg>
+                </button>
+            </div>
 
             <div className="flex items-center mb-6">
                 <StarRating rating={5} />
