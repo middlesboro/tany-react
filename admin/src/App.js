@@ -34,6 +34,7 @@ import ProductLabels from './pages/ProductLabels';
 import ProductLabelEdit from './pages/ProductLabelEdit';
 import CartDiscounts from './pages/CartDiscounts';
 import CartDiscountEdit from './pages/CartDiscountEdit';
+import Wishlists from './pages/Wishlists';
 import { BreadcrumbProvider } from './context/BreadcrumbContext';
 import ScrollToTop from './components/ScrollToTop';
 
@@ -76,6 +77,7 @@ function App() {
               <Route path="cart-discounts" element={<CartDiscounts />} />
               <Route path="cart-discounts/new" element={<CartDiscountEdit />} />
               <Route path="cart-discounts/:id" element={<CartDiscountEdit />} />
+              <Route path="wishlists" element={<Wishlists />} />
               <Route path="filter-parameters" element={<FilterParameters />} />
               <Route path="filter-parameters/new" element={<FilterParameterEdit />} />
               <Route path="filter-parameters/:id" element={<FilterParameterEdit />} />
