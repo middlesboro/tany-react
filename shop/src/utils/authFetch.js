@@ -16,5 +16,9 @@ export const authFetch = async (url, options = {}) => {
 
   const response = await fetch(url, newOptions);
 
+  if (response.status === 401 || response.status === 403) {
+    window.dispatchEvent(new CustomEvent('auth_error'));
+  }
+
   return response;
 };
