@@ -8,6 +8,7 @@ import { getUserEmail, isAuthenticated } from '../services/authService';
 import { createEmailNotification } from '../services/customerService';
 import { useCart } from '../context/CartContext';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
+import { useModal } from '../context/ModalContext';
 import AddToCartButton from '../components/AddToCartButton';
 import ProductLabel from '../components/ProductLabel';
 import { addToWishlist, removeFromWishlist } from '../services/wishlistService';
@@ -348,6 +349,7 @@ const ReasonsToBuy = () => (
 const ProductDetail = () => {
   const { id } = useParams();
   const { addToCart } = useCart();
+  const { openLoginModal } = useModal();
   const { setBreadcrumbs } = useBreadcrumbs();
   const [product, setProduct] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -444,7 +446,7 @@ const ProductDetail = () => {
 
   const toggleWishlist = async () => {
     if (!isAuthenticated()) {
-        alert("Please login to use wishlist");
+        openLoginModal();
         return;
     }
     if (wishlistLoading) return;
