@@ -20,16 +20,16 @@ const MagicLinkPage = () => {
         localStorage.setItem('pkce_verifier', verifier);
 
         // Derive backend URL
-        const apiUrl = process.env.REACT_APP_API_URL;
+        const apiUrl = process.env.REACT_APP_API_URL || '';
         // Strip /api or /api/ from end to get base URL
-        const backendUrl = apiUrl ? apiUrl.replace(/\/api\/?$/, '') : '';
+        const backendPath = apiUrl.replace(/\/api\/?$/, '');
 
-        if (!backendUrl) {
-            console.error("Backend URL could not be determined from REACT_APP_API_URL");
-            return;
-        }
+        // If path is relative or empty, prepend origin
+        const authOrigin = backendPath.startsWith('http')
+            ? backendPath
+            : window.location.origin + backendPath;
 
-        const authUrl = new URL(`${backendUrl}/oauth2/authorize`);
+        const authUrl = new URL(`${authOrigin}/oauth2/authorize`);
         authUrl.searchParams.append('response_type', 'code');
         authUrl.searchParams.append('client_id', 'public-client');
         authUrl.searchParams.append('redirect_uri', `${window.location.origin}/admin/oauth/callback`);

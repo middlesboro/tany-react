@@ -41,6 +41,18 @@ import { BreadcrumbProvider } from './context/BreadcrumbContext';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
+  const path = window.location.pathname;
+
+  if (path.startsWith('/magic-link')) {
+    return (
+      <Router>
+        <Routes>
+          <Route path="/magic-link" element={<MagicLinkPage />} />
+        </Routes>
+      </Router>
+    );
+  }
+
   return (
       <BreadcrumbProvider>
         <Router basename="/admin">
@@ -49,7 +61,6 @@ function App() {
             <Route path="/" element={<Navigate to="/shop-settings" replace />} />
             <Route path="/login" element={<Login isAdmin={true} />} />
             <Route path="/authentication/success" element={<AuthenticationSuccess />} />
-            <Route path="/magic-link" element={<MagicLinkPage />} />
             <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
 
             <Route element={<AdminLayout />}>
