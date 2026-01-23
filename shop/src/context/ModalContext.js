@@ -9,6 +9,9 @@ export const ModalProvider = ({ children }) => {
   const [loginMessage, setLoginMessage] = useState(null);
 
   const openLoginModal = (message = null) => {
+    if (typeof message !== 'string') {
+      message = null;
+    }
     setLoginMessage(message);
     setIsLoginModalOpen(true);
   };
