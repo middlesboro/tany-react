@@ -74,7 +74,7 @@ const PublicLayout = () => {
              {customer ? (
                 <Link to="/account" className="hover:text-tany-green transition-colors">{customer.email}</Link>
              ) : (
-                <button onClick={openLoginModal} className="hover:text-tany-green transition-colors">Prihlásenie</button>
+                <button onClick={() => openLoginModal()} className="hover:text-tany-green transition-colors">Prihlásenie</button>
              )}
              <Link to="/admin" className="hover:text-tany-green transition-colors">Admin</Link>
           </div>
