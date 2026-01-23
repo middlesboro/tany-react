@@ -3,7 +3,7 @@ import { useModal } from '../context/ModalContext';
 import { requestMagicLink } from '../services/authService';
 
 const LoginModal = () => {
-  const { isLoginModalOpen, closeLoginModal } = useModal();
+  const { isLoginModalOpen, closeLoginModal, loginMessage } = useModal();
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState(null);
@@ -44,6 +44,15 @@ const LoginModal = () => {
         <div className="p-8">
           <h2 className="text-2xl font-bold text-gray-800 mb-2">Prihlásenie</h2>
           <p className="text-gray-600 mb-6">Zadajte váš email pre prihlásenie bez hesla.</p>
+
+          {loginMessage && !message && (
+             <div className="bg-blue-50 text-blue-800 p-4 rounded mb-6 text-sm flex items-start">
+               <svg className="w-5 h-5 mr-2 mt-0.5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+               </svg>
+               <span>{loginMessage}</span>
+             </div>
+          )}
 
           {message ? (
             <div className="bg-green-50 text-green-700 p-4 rounded mb-6 text-center">

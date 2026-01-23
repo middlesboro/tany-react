@@ -456,7 +456,7 @@ const ProductDetail = () => {
 
   const toggleWishlist = async () => {
     if (!isAuthenticated()) {
-        openLoginModal();
+        openLoginModal('Pre pridanie do obľúbených sa musíte prihlásiť.');
         return;
     }
     if (wishlistLoading) return;

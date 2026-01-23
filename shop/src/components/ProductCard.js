@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useModal } from '../context/ModalContext';
 import AddToCartButton from './AddToCartButton';
 import ProductLabel from './ProductLabel';
 import { addToWishlist, removeFromWishlist } from '../services/wishlistService';
@@ -8,6 +9,7 @@ import { isAuthenticated } from '../services/authService';
 
 const ProductCard = ({ product }) => {
   const { addToCart, cart } = useCart();
+  const { openLoginModal } = useModal();
   const [quantity, setQuantity] = useState(1);
   const [adding, setAdding] = useState(false);
   const [inWishlist, setInWishlist] = useState(product.inWishlist || false);
@@ -47,8 +49,7 @@ const ProductCard = ({ product }) => {
   const toggleWishlist = async (e) => {
     e.preventDefault();
     if (!isAuthenticated()) {
-      // Redirect to login or show modal? For now just ignore or alert
-      alert("Please login to use wishlist");
+      openLoginModal('Pre pridanie do obľúbených sa musíte prihlásiť.');
       return;
     }
     if (wishlistLoading) return;
