@@ -20,7 +20,8 @@ const MagicLinkPage = () => {
         localStorage.setItem('pkce_verifier', verifier);
 
         // Construct Authorization URL
-        const authUrl = new URL(`${process.env.REACT_APP_API_URL}/oauth2/authorize`);
+        // Use window.location.origin as base in case REACT_APP_API_URL is relative (e.g. /api)
+        const authUrl = new URL(`${process.env.REACT_APP_API_URL}/oauth2/authorize`, window.location.origin);
         authUrl.searchParams.append('response_type', 'code');
         authUrl.searchParams.append('client_id', 'public-client');
         authUrl.searchParams.append('redirect_uri', `${window.location.origin}/oauth/callback`);
