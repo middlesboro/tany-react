@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getProduct } from '../services/productService';
+import { getProduct, getRelatedProducts } from '../services/productService';
 import { getReviewsByProduct, createReview } from '../services/reviewService';
 import { getCategories } from '../services/categoryService';
 import { findCategoryPath } from '../utils/categoryUtils';
@@ -11,6 +11,7 @@ import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import { useModal } from '../context/ModalContext';
 import AddToCartButton from '../components/AddToCartButton';
 import ProductLabel from '../components/ProductLabel';
+import ProductCard from '../components/ProductCard';
 import { addToWishlist, removeFromWishlist } from '../services/wishlistService';
 
 const REASONS = [
@@ -352,6 +353,7 @@ const ProductDetail = () => {
   const { openLoginModal } = useModal();
   const { setBreadcrumbs } = useBreadcrumbs();
   const [product, setProduct] = useState(null);
+  const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [quantity, setQuantity] = useState(1);
@@ -416,6 +418,14 @@ const ProductDetail = () => {
         }
         crumbs.push({ label: data.title, path: null }); // Current product
         setBreadcrumbs(crumbs);
+
+        try {
+          const related = await getRelatedProducts(id);
+          setRelatedProducts(Array.isArray(related) ? related.slice(0, 5) : []);
+        } catch (relatedErr) {
+          console.error("Failed to load related products", relatedErr);
+          setRelatedProducts([]);
+        }
 
       } catch (err) {
         setError("Failed to load product details.");
@@ -640,6 +650,18 @@ const ProductDetail = () => {
 
           <ProductReviews productId={product.id} />
       </div>
+
+      {/* Related Products Section */}
+      {relatedProducts.length > 0 && (
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold text-gray-800 mb-6">Súvisiace produkty</h2>
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
+            {relatedProducts.map(product => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        </div>
+      )}
 
       {/* Full View Modal */}
       {isFullViewOpen && selectedImage && (

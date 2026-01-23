@@ -125,14 +125,16 @@ const ProductCard = ({ product }) => {
 
           {/* Add to Cart Section - Always visible */}
           <div className="w-full flex items-center justify-center gap-2">
-             <input
-              type="number"
-              min="1"
-              value={quantity}
-              onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-              disabled={adding || product.quantity <= 0}
-              className={`w-12 h-10 border border-gray-300 text-center text-sm focus:border-tany-green focus:outline-none ${product.quantity <= 0 ? 'opacity-50' : ''}`}
-            />
+             {product.quantity > 0 && (
+               <input
+                type="number"
+                min="1"
+                value={quantity}
+                onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
+                disabled={adding}
+                className="w-12 h-10 border border-gray-300 text-center text-sm focus:border-tany-green focus:outline-none"
+              />
+             )}
             <AddToCartButton
               onClick={handleAddToCart}
               adding={adding}
