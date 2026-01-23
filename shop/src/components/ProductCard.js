@@ -3,11 +3,19 @@ import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import AddToCartButton from './AddToCartButton';
 import ProductLabel from './ProductLabel';
+import { addToWishlist, removeFromWishlist } from '../services/wishlistService';
+import { isAuthenticated } from '../services/authService';
 
 const ProductCard = ({ product }) => {
   const { addToCart, cart } = useCart();
   const [quantity, setQuantity] = useState(1);
   const [adding, setAdding] = useState(false);
+  const [inWishlist, setInWishlist] = useState(product.inWishlist || false);
+  const [wishlistLoading, setWishlistLoading] = useState(false);
+
+  useEffect(() => {
+    setInWishlist(product.inWishlist || false);
+  }, [product.inWishlist]);
 
   useEffect(() => {
     if (cart && cart.products) {
@@ -36,6 +44,31 @@ const ProductCard = ({ product }) => {
     }
   };
 
+  const toggleWishlist = async (e) => {
+    e.preventDefault();
+    if (!isAuthenticated()) {
+      // Redirect to login or show modal? For now just ignore or alert
+      alert("Please login to use wishlist");
+      return;
+    }
+    if (wishlistLoading) return;
+
+    setWishlistLoading(true);
+    try {
+      if (inWishlist) {
+        await removeFromWishlist(product.id);
+        setInWishlist(false);
+      } else {
+        await addToWishlist(product.id);
+        setInWishlist(true);
+      }
+    } catch (error) {
+      console.error("Wishlist action failed", error);
+    } finally {
+      setWishlistLoading(false);
+    }
+  };
+
   return (
     <div className="group bg-white flex flex-col h-full border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all duration-300 relative">
         {/* Discount Badge Placeholder (example) */}
@@ -44,6 +77,23 @@ const ProductCard = ({ product }) => {
         {product.productLabels && product.productLabels.map((label, index) => (
             <ProductLabel key={index} label={label} />
         ))}
+
+        <button
+          onClick={toggleWishlist}
+          className="absolute top-2 right-2 z-20 p-2 rounded-full bg-white/80 hover:bg-white text-red-500 hover:text-red-600 transition-colors"
+          title={inWishlist ? "Odobrať z obľúbených" : "Pridať do obľúbených"}
+        >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              className="h-6 w-6"
+              fill={inWishlist ? "currentColor" : "none"}
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+              strokeWidth="2"
+            >
+              <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+            </svg>
+        </button>
 
       <Link to={`/products/${product.id}`} className="block relative overflow-hidden flex-shrink-0 aspect-square">
          {/* Overlay on hover not typically used in this specific prestashop theme, but image zoom/swap is common.
