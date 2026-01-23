@@ -80,7 +80,7 @@ describe('Checkout Component', () => {
     expect(screen.getByDisplayValue('John')).toBeInTheDocument();
     expect(screen.getByDisplayValue('Doe')).toBeInTheDocument();
     expect(screen.getByDisplayValue('Main St')).toBeInTheDocument();
-    expect(screen.getByLabelText('Delivery address is different from invoice address')).toBeChecked();
+    expect(screen.getByLabelText('Doručiť na inú adresu')).toBeChecked();
     expect(screen.getByDisplayValue('Other St')).toBeInTheDocument();
   });
 

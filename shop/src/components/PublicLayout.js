@@ -3,6 +3,7 @@ import { Outlet, Link, NavLink, useLocation } from 'react-router-dom';
 import { getCategories } from '../services/categoryService';
 import { getBlogs } from '../services/blogService';
 import { useCart } from '../context/CartContext';
+import { useModal } from '../context/ModalContext';
 import ProductSearch from './ProductSearch';
 import CategoryTree from './CategoryTree';
 import BlogSlider from './BlogSlider';
@@ -10,6 +11,7 @@ import Breadcrumbs from './Breadcrumbs';
 
 const PublicLayout = () => {
   const { cart, customer } = useCart();
+  const { openLoginModal } = useModal();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [categories, setCategories] = useState([]);
@@ -72,7 +74,7 @@ const PublicLayout = () => {
              {customer ? (
                 <Link to="/account" className="hover:text-tany-green transition-colors">{customer.email}</Link>
              ) : (
-                <Link to="/login" className="hover:text-tany-green transition-colors">Prihlásenie</Link>
+                <button onClick={openLoginModal} className="hover:text-tany-green transition-colors">Prihlásenie</button>
              )}
              <Link to="/admin" className="hover:text-tany-green transition-colors">Admin</Link>
           </div>
@@ -256,9 +258,9 @@ const PublicLayout = () => {
              <div>
               <h4 className="font-bold text-gray-800 text-lg mb-4 uppercase">Váš účet</h4>
               <ul className="space-y-2">
-                <li><Link to="/login" className="hover:text-tany-green transition-colors">Osobné údaje</Link></li>
-                <li><Link to="/login" className="hover:text-tany-green transition-colors">Objednávky</Link></li>
-                <li><Link to="/login" className="hover:text-tany-green transition-colors">Adresy</Link></li>
+                <li><Link to="/account" className="hover:text-tany-green transition-colors">Osobné údaje</Link></li>
+                <li><Link to="/account" className="hover:text-tany-green transition-colors">Objednávky</Link></li>
+                <li><Link to="/account" className="hover:text-tany-green transition-colors">Adresy</Link></li>
                 <li><a href="#" className="hover:text-tany-green transition-colors">Sledovanie objednávky</a></li>
               </ul>
             </div>

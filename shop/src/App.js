@@ -14,35 +14,44 @@ import CategoryProducts from './pages/CategoryProducts';
 import BlogDetail from './pages/BlogDetail';
 import Account from './pages/Account';
 import PublicPage from './pages/PublicPage';
+import MagicLinkPage from './pages/MagicLinkPage';
+import OAuthCallbackPage from './pages/OAuthCallbackPage';
 import { CartProvider } from './context/CartContext';
 import { BreadcrumbProvider } from './context/BreadcrumbContext';
+import { ModalProvider } from './context/ModalContext';
 import ScrollToTop from './components/ScrollToTop';
+import LoginModal from './components/LoginModal';
 
 function App() {
   return (
     <CartProvider>
       <BreadcrumbProvider>
-        <Router>
-          <ScrollToTop />
-          <Routes>
-          <Route path="/authentication/success" element={<AuthenticationSuccess />} />
+        <ModalProvider>
+          <Router>
+            <ScrollToTop />
+            <LoginModal />
+            <Routes>
+              <Route path="/authentication/success" element={<AuthenticationSuccess />} />
+              <Route path="/magic-link" element={<MagicLinkPage />} />
+              <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
 
-          <Route element={<PublicLayout />}>
-            <Route path="/" element={<Home />} />
-            <Route path="/cart" element={<Cart />} />
-            <Route path="/order" element={<Checkout />} />
-            <Route path="/order/confirmation/:id" element={<OrderConfirmation />} />
-            <Route path="/global-payments-callback" element={<GlobalPaymentsCallback />} />
-            <Route path="/besteron-callback" element={<BesteronCallback />} />
-            <Route path="/category/:slug" element={<CategoryProducts />} />
-            <Route path="/products/:id" element={<ProductDetail />} />
-            <Route path="/blog/:id" element={<BlogDetail />} />
-            <Route path="/login" element={<Login isAdmin={false} />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/:slug" element={<PublicPage />} />
-          </Route>
-        </Routes>
-        </Router>
+              <Route element={<PublicLayout />}>
+                <Route path="/" element={<Home />} />
+                <Route path="/cart" element={<Cart />} />
+                <Route path="/order" element={<Checkout />} />
+                <Route path="/order/confirmation/:id" element={<OrderConfirmation />} />
+                <Route path="/global-payments-callback" element={<GlobalPaymentsCallback />} />
+                <Route path="/besteron-callback" element={<BesteronCallback />} />
+                <Route path="/category/:slug" element={<CategoryProducts />} />
+                <Route path="/products/:id" element={<ProductDetail />} />
+                <Route path="/blog/:id" element={<BlogDetail />} />
+                <Route path="/login" element={<Login isAdmin={false} />} />
+                <Route path="/account" element={<Account />} />
+                <Route path="/:slug" element={<PublicPage />} />
+              </Route>
+            </Routes>
+          </Router>
+        </ModalProvider>
       </BreadcrumbProvider>
     </CartProvider>
   );
