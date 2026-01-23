@@ -64,7 +64,7 @@ const AdminLayout = () => {
   }, [location.pathname]);
 
   if (!isAuthenticated()) {
-    return <Navigate to="/login" replace />;
+    return <Navigate to="/login" state={{ message: "Musíte byť prihlásený.", from: location }} replace />;
   }
 
   const handleLogout = () => {

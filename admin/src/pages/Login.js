@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
-import { login } from '../services/authService';
+import { requestMagicLink } from '../services/authService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 
 const Login = ({ isAdmin = false }) => {
@@ -19,22 +19,23 @@ const Login = ({ isAdmin = false }) => {
     }
   }, [setBreadcrumbs, isAdmin]);
 
+  useEffect(() => {
+    if (location.state?.message) {
+        setError(location.state.message);
+    }
+  }, [location.state]);
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await login(email);
-      setMessage('Check your email for the login link.');
+      await requestMagicLink(email);
+      setMessage('Skontrolujte si email a kliknite na prihlasovací odkaz.');
       setError('');
 
-      let redirectPath;
-      if (isAdmin) {
-        redirectPath = '/carts';
-      } else {
-        redirectPath = location.state?.from?.pathname || '/';
-      }
+      const redirectPath = location.state?.from?.pathname || (isAdmin ? '/carts' : '/');
       localStorage.setItem('post_login_redirect', redirectPath);
     } catch (err) {
-      setError('Login failed. Please try again.');
+      setError('Nepodarilo sa odoslať prihlasovací odkaz. Skúste to prosím neskôr.');
       setMessage('');
     }
   };

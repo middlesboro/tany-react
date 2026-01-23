@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import AuthenticationSuccess from './pages/AuthenticationSuccess';
+import MagicLinkPage from './pages/MagicLinkPage';
+import OAuthCallbackPage from './pages/OAuthCallbackPage';
 import AdminLayout from './components/AdminLayout';
 import Products from './pages/Products';
 import ProductEdit from './pages/ProductEdit';
@@ -47,6 +49,8 @@ function App() {
             <Route path="/" element={<Navigate to="/shop-settings" replace />} />
             <Route path="/login" element={<Login isAdmin={true} />} />
             <Route path="/authentication/success" element={<AuthenticationSuccess />} />
+            <Route path="/magic-link" element={<MagicLinkPage />} />
+            <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
 
             <Route element={<AdminLayout />}>
               <Route path="shop-settings" element={<ShopSettings />} />
