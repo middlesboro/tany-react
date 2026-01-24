@@ -4,6 +4,7 @@ import { getCategories } from '../services/categoryService';
 import { getBlogs } from '../services/blogService';
 import { useCart } from '../context/CartContext';
 import { useModal } from '../context/ModalContext';
+import { getUserEmail } from '../services/authService';
 import ProductSearch from './ProductSearch';
 import CategoryTree from './CategoryTree';
 import BlogSlider from './BlogSlider';
@@ -14,6 +15,7 @@ const PublicLayout = () => {
   const { openLoginModal } = useModal();
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const userEmail = customer?.email || getUserEmail();
   const [categories, setCategories] = useState([]);
   const [blogs, setBlogs] = useState([]);
 
@@ -71,8 +73,8 @@ const PublicLayout = () => {
             </span>
           </div>
           <div className="flex space-x-4">
-             {customer ? (
-                <Link to="/account" className="hover:text-tany-green transition-colors">{customer.email}</Link>
+             {userEmail  ? (
+                <Link to="/account" className="hover:text-tany-green transition-colors">{userEmail}</Link>
              ) : (
                 <button onClick={() => openLoginModal()} className="hover:text-tany-green transition-colors">Prihlásenie</button>
              )}
