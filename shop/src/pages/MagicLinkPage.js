@@ -22,7 +22,7 @@ const MagicLinkPage = () => {
         const authUrl = new URL(`${process.env.REACT_APP_BACKEND_BASE_URL}/oauth2/authorize`);
         authUrl.searchParams.append('response_type', 'code');
         authUrl.searchParams.append('client_id', 'public-client');
-        authUrl.searchParams.append('redirect_uri', `${window.location.origin}`);
+        authUrl.searchParams.append('redirect_uri', `${window.location.origin}/oauth/callback`);
         authUrl.searchParams.append('scope', 'openid profile');
         authUrl.searchParams.append('code_challenge', challenge);
         authUrl.searchParams.append('code_challenge_method', 'S256');

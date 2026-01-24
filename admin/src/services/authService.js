@@ -27,13 +27,13 @@ export const generatePKCE = async () => {
 export const exchangeToken = async (code, verifier) => {
   const params = new URLSearchParams();
   params.append('grant_type', 'authorization_code');
-  params.append('client_id', 'public-client');
+  params.append('client_id', 'admin-client');
   // Dynamic redirect URI based on current origin, must match what was sent in authorize request
-  params.append('redirect_uri', `${window.location.origin}/admin/oauth/callback`);
+  params.append('redirect_uri', `${window.location.origin}/oauth/callback`);
   params.append('code', code);
   params.append('code_verifier', verifier);
 
-  const response = await fetch(`${API_URL}/oauth2/token`, {
+  const response = await fetch(`/oauth2/token`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: params

@@ -53,6 +53,26 @@ function App() {
     );
   }
 
+  if (path.startsWith('/oauth/callback')) {
+    return (
+        <Router>
+          <Routes>
+            <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
+          </Routes>
+        </Router>
+    );
+  }
+
+  if (path.startsWith('/authentication/success')) {
+    return (
+        <Router>
+          <Routes>
+            <Route path="/authentication/success" element={<AuthenticationSuccess />} />
+          </Routes>
+        </Router>
+    );
+  }
+
   return (
       <BreadcrumbProvider>
         <Router basename="/admin">
@@ -60,8 +80,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Navigate to="/shop-settings" replace />} />
             <Route path="/login" element={<Login isAdmin={true} />} />
-            <Route path="/authentication/success" element={<AuthenticationSuccess />} />
-            <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
 
             <Route element={<AdminLayout />}>
               <Route path="shop-settings" element={<ShopSettings />} />
