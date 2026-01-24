@@ -1,10 +1,10 @@
-import { getToken } from '../services/authService';
+import { getToken, isTokenExpired } from '../services/authService';
 
 export const authFetch = async (url, options = {}) => {
   const token = getToken();
   const headers = options.headers ? new Headers(options.headers) : new Headers();
 
-  if (token) {
+  if (token && !isTokenExpired()) {
     headers.append('Authorization', `Bearer ${token}`);
   }
 
