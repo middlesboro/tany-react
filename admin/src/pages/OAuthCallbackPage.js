@@ -31,7 +31,7 @@ const OAuthCallbackPage = () => {
         const redirectPath = localStorage.getItem('post_login_redirect') || '/';
         localStorage.removeItem('post_login_redirect');
 
-        navigate(redirectPath);
+        window.location.href = redirectPath;
       } catch (err) {
         console.error('Token exchange failed', err);
         setError('Authentication failed. Please try again.');
