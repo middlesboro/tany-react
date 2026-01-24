@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Login from './pages/Login';
 import AuthenticationSuccess from './pages/AuthenticationSuccess';
+import MagicLinkPage from './pages/MagicLinkPage';
+import OAuthCallbackPage from './pages/OAuthCallbackPage';
 import AdminLayout from './components/AdminLayout';
 import Products from './pages/Products';
 import ProductEdit from './pages/ProductEdit';
@@ -39,6 +41,38 @@ import { BreadcrumbProvider } from './context/BreadcrumbContext';
 import ScrollToTop from './components/ScrollToTop';
 
 function App() {
+  const path = window.location.pathname;
+
+  if (path.startsWith('/magic-link')) {
+    return (
+      <Router>
+        <Routes>
+          <Route path="/magic-link" element={<MagicLinkPage />} />
+        </Routes>
+      </Router>
+    );
+  }
+
+  if (path.startsWith('/oauth/callback')) {
+    return (
+        <Router>
+          <Routes>
+            <Route path="/oauth/callback" element={<OAuthCallbackPage />} />
+          </Routes>
+        </Router>
+    );
+  }
+
+  if (path.startsWith('/authentication/success')) {
+    return (
+        <Router>
+          <Routes>
+            <Route path="/authentication/success" element={<AuthenticationSuccess />} />
+          </Routes>
+        </Router>
+    );
+  }
+
   return (
       <BreadcrumbProvider>
         <Router basename="/admin">
@@ -46,7 +80,6 @@ function App() {
           <Routes>
             <Route path="/" element={<Navigate to="/shop-settings" replace />} />
             <Route path="/login" element={<Login isAdmin={true} />} />
-            <Route path="/authentication/success" element={<AuthenticationSuccess />} />
 
             <Route element={<AdminLayout />}>
               <Route path="shop-settings" element={<ShopSettings />} />

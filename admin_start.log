@@ -1,0 +1,71 @@
+
+> admin@0.1.0 start
+> cross-env PORT=3000 react-scripts start
+
+(node:3936) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+(node:3936) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+Starting the development server...
+
+Compiled with warnings.
+
+[eslint]
+src/pages/CartDiscounts.js
+  Line 14:6:  React Hook useEffect has a missing dependency: 'fetchDiscounts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/FilterParameterValueEdit.js
+  Line 57:6:  React Hook useEffect has a missing dependency: 'fetchAssignedProducts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint]
+src/pages/CartDiscounts.js
+  Line 14:6:  React Hook useEffect has a missing dependency: 'fetchDiscounts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/FilterParameterValueEdit.js
+  Line 57:6:  React Hook useEffect has a missing dependency: 'fetchAssignedProducts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint]
+src/pages/CartDiscounts.js
+  Line 14:6:  React Hook useEffect has a missing dependency: 'fetchDiscounts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/FilterParameterValueEdit.js
+  Line 57:6:  React Hook useEffect has a missing dependency: 'fetchAssignedProducts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint]
+src/pages/CartDiscounts.js
+  Line 14:6:  React Hook useEffect has a missing dependency: 'fetchDiscounts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/FilterParameterValueEdit.js
+  Line 57:6:  React Hook useEffect has a missing dependency: 'fetchAssignedProducts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning
+Compiling...
+Compiled with warnings.
+
+[eslint]
+src/pages/CartDiscounts.js
+  Line 14:6:  React Hook useEffect has a missing dependency: 'fetchDiscounts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/FilterParameterValueEdit.js
+  Line 57:6:  React Hook useEffect has a missing dependency: 'fetchAssignedProducts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+Search for the keywords to learn more about each warning.
+To ignore, add // eslint-disable-next-line to the line before.
+
+WARNING in [eslint]
+src/pages/CartDiscounts.js
+  Line 14:6:  React Hook useEffect has a missing dependency: 'fetchDiscounts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/FilterParameterValueEdit.js
+  Line 57:6:  React Hook useEffect has a missing dependency: 'fetchAssignedProducts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+webpack compiled with 1 warning

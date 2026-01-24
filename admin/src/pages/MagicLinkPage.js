@@ -21,7 +21,7 @@ const MagicLinkPage = () => {
 
         const authUrl = new URL(`${process.env.REACT_APP_BACKEND_BASE_URL}/oauth2/authorize`);
         authUrl.searchParams.append('response_type', 'code');
-        authUrl.searchParams.append('client_id', 'public-client');
+        authUrl.searchParams.append('client_id', 'admin-client');
         authUrl.searchParams.append('redirect_uri', `${window.location.origin}/oauth/callback`);
         authUrl.searchParams.append('scope', 'openid profile');
         authUrl.searchParams.append('code_challenge', challenge);
@@ -50,7 +50,7 @@ const MagicLinkPage = () => {
 
   return (
     <div className="flex justify-center items-center h-screen flex-col gap-4">
-      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-tany-green"></div>
+      <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
       <p className="text-gray-600">Logging you in...</p>
     </div>
   );
