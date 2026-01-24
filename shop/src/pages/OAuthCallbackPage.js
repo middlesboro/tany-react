@@ -25,8 +25,8 @@ const OAuthCallbackPage = () => {
       }
 
       try {
-        const accessToken = await exchangeToken(code, verifier);
-        setToken(accessToken);
+        const tokenData = await exchangeToken(code, verifier);
+        setToken(tokenData);
         localStorage.removeItem('pkce_verifier');
 
         // Refresh customer context (which loads the logged in user)

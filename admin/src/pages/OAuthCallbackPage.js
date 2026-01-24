@@ -23,8 +23,8 @@ const OAuthCallbackPage = () => {
       }
 
       try {
-        const accessToken = await exchangeToken(code, verifier);
-        setToken(accessToken);
+        const tokenData = await exchangeToken(code, verifier);
+        setToken(tokenData);
         localStorage.removeItem('pkce_verifier');
 
         // Check for saved redirect path
