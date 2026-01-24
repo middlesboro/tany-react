@@ -1,7 +1,6 @@
 import { authFetch } from '../utils/authFetch';
 
-const API_URL = `${process.env.REACT_APP_API_URL}/client/wishlist`;
-// Note: The controller is mapped to /client/wishlist.
+const API_URL = `${process.env.REACT_APP_API_URL}/wishlist`;
 // If the backend is running on 8080 and we proxy to it, we need to make sure the path is correct.
 // Standard Spring setup usually keeps context root / or /api.
 // Assuming the controller is mapped as requested in prompt.
