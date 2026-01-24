@@ -32,7 +32,13 @@ const Login = ({ isAdmin = false }) => {
       setMessage('Skontrolujte si email a kliknite na prihlasovací odkaz.');
       setError('');
 
-      const redirectPath = location.state?.from?.pathname || (isAdmin ? '/admin/carts' : '/');
+      let redirectPath = location.state?.from?.pathname;
+      if (redirectPath && isAdmin && !redirectPath.startsWith('/admin')) {
+        redirectPath = '/admin' + redirectPath;
+      }
+      if (!redirectPath) {
+        redirectPath = isAdmin ? '/admin/carts' : '/';
+      }
       localStorage.setItem('post_login_redirect', redirectPath);
     } catch (err) {
       setError('Nepodarilo sa odoslať prihlasovací odkaz. Skúste to prosím neskôr.');
