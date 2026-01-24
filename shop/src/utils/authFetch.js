@@ -32,6 +32,10 @@ export const authFetch = async (url, options = {}) => {
             const newToken = await refreshToken();
             // Retry request with new token
             response = await fetch(url, { ...options, headers: getHeaders(newToken) });
+            if (response.status === 401 || response.status === 403) {
+              removeToken();
+              window.dispatchEvent(new CustomEvent('auth_error'));
+            }
         } catch (error) {
             // Refresh failed or retry failed
             removeToken();

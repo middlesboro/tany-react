@@ -23,7 +23,7 @@ const MagicLinkPage = () => {
         authUrl.searchParams.append('response_type', 'code');
         authUrl.searchParams.append('client_id', 'admin-client');
         authUrl.searchParams.append('redirect_uri', `${window.location.origin}/oauth/callback`);
-        authUrl.searchParams.append('scope', 'openid profile');
+        authUrl.searchParams.append('scope', 'openid profile offline_access');
         authUrl.searchParams.append('code_challenge', challenge);
         authUrl.searchParams.append('code_challenge_method', 'S256');
 

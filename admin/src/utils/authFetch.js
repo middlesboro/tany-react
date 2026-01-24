@@ -28,6 +28,10 @@ export const authFetch = async (url, options = {}) => {
         try {
             const newToken = await refreshToken();
             response = await fetch(url, { ...options, headers: getHeaders(newToken) });
+            if (response.status === 401 || response.status === 403) {
+              removeToken();
+              window.dispatchEvent(new CustomEvent('auth_error'));
+            }
         } catch (error) {
             removeToken();
             // Since admin doesn't seem to have a global auth_error listener yet,
