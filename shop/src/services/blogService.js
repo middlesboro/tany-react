@@ -1,8 +1,10 @@
 
+import { authFetch } from '../utils/authFetch';
+
 const API_URL = `${process.env.REACT_APP_API_URL}/blogs`;
 
 export const getBlogs = async () => {
-  const response = await fetch(API_URL);
+  const response = await authFetch(API_URL);
   if (!response.ok) {
       throw new Error('Failed to fetch blogs');
   }
@@ -10,7 +12,7 @@ export const getBlogs = async () => {
 };
 
 export const getBlog = async (id) => {
-  const response = await fetch(`${API_URL}/${id}`);
+  const response = await authFetch(`${API_URL}/${id}`);
   if (!response.ok) {
       if (response.status === 404) {
           return null;

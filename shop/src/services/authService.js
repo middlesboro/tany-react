@@ -85,6 +85,15 @@ export const getDecodedToken = () => {
   }
 };
 
+export const isTokenExpired = () => {
+  const token = getToken();
+  if (!token) return true;
+  const decoded = getDecodedToken();
+  if (!decoded || !decoded.exp) return true;
+  const currentTime = Date.now() / 1000;
+  return decoded.exp < currentTime;
+};
+
 export const getUserEmail = () => {
   const decoded = getDecodedToken();
   return decoded ? (decoded.email || decoded.sub || null) : null;
