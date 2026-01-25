@@ -89,7 +89,7 @@ const PublicLayout = () => {
           {/* Logo */}
           <Link to="/" className="flex-shrink-0">
             <img
-              src="https://tany.b-cdn.net/img/leo-tea-logo-1586598211.jpg"
+              src="/tany_logo.png"
               alt="Tany.sk"
               className="h-16 object-contain"
             />
@@ -221,11 +221,6 @@ const PublicLayout = () => {
                 <aside className="hidden md:block w-full md:w-1/4 lg:w-1/5 flex-shrink-0">
                    <div id="sidebar-filter-root" className="mb-6"></div>
                    <CategoryTree categories={categories} />
-
-                   {/* Banner placeholder often found in left column */}
-                   <div className="mt-6 bg-gray-100 h-64 flex items-center justify-center text-gray-400 text-sm border border-gray-200">
-                      Reklama / Banner
-                   </div>
                 </aside>
               )}
 
