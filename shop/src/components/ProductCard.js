@@ -81,7 +81,7 @@ const ProductCard = ({ product }) => {
         ))}
 
         {product.discountPercentualValue && (
-            <div className="absolute top-10 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 z-10 rounded shadow-sm">
+            <div className="absolute top-14 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 z-10 rounded shadow-sm">
                 -{product.discountPercentualValue}%
             </div>
         )}
