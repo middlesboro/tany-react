@@ -99,8 +99,8 @@ const PublicLayout = () => {
           <ProductSearch />
 
           {/* Packeta Info */}
-          <Link to="/zasielkovna" className="flex items-center gap-2 group flex-shrink-0">
-            <img src="https://www.tany.sk/img/mapa_zasielkovna.png" alt="Zásielkovňa mapa" className="h-10 object-contain" />
+          <Link to="/packeta" className="flex items-center gap-2 group flex-shrink-0">
+            <img src="https://www.tany.sk/img/mapa_zasielkovna.png" alt="Packeta mapa" className="h-10 object-contain" />
             <span className="text-sm font-bold group-hover:text-tany-green max-w-[100px] leading-tight text-gray-700">Viac ako 320 odberných miest</span>
           </Link>
 

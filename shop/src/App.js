@@ -48,7 +48,7 @@ function App() {
                 <Route path="/blog/:id" element={<BlogDetail />} />
                 <Route path="/login" element={<Login isAdmin={false} />} />
                 <Route path="/account" element={<Account />} />
-                <Route path="/zasielkovna" element={<PacketaPage />} />
+                <Route path="/packeta" element={<PacketaPage />} />
                 <Route path="/:slug" element={<PublicPage />} />
               </Route>
             </Routes>

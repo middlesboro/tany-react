@@ -3,9 +3,9 @@ import React from 'react';
 const PacketaPage = () => {
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">Čo je to Zásielkovňa?</h1>
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">Čo je to Packeta?</h1>
       <p className="mb-8 text-gray-600">
-        Zásielkovňa je sieť partnerských predajní a prevádzok, na ktorých si
+        Packeta je sieť partnerských predajní a prevádzok, na ktorých si
         môžete prevziať tovar zakúpený v našom eshope.
       </p>
 
@@ -29,7 +29,7 @@ const PacketaPage = () => {
             className="h-32 mb-4 object-contain"
           />
           <p className="text-gray-600">
-            Hneď ako odovzdáme tovar k preprave, tak vám Zásielkovňa pošle email
+            Hneď ako odovzdáme tovar k preprave, tak vám Packeta pošle email
             s trasovacím číslom. Cestu vašej zásielky tak môžete sledovať
             online.
           </p>
@@ -42,7 +42,7 @@ const PacketaPage = () => {
           />
           <p className="text-gray-600">
             Po doručení zásielky na vami zvolené výdajné miesto vám pošle
-            Zásielkovňa SMS a e-mail s heslom. Od tejto chvíle si ju môžete
+            Packeta SMS a e-mail s heslom. Od tejto chvíle si ju môžete
             kedykoľvek do 7 dní vyzdvihnúť. Dobu na vyzdvihnutie je možné
             predĺžiť až na 21 dní.
           </p>
@@ -62,7 +62,7 @@ const PacketaPage = () => {
           src="https://widget.packeta.com/#/?&gpsOff=1&apiKey=96cee6278e535aa5&country=sk&carriers=packeta&language=sk&primaryButtonColor=white"
           width="100%"
           height="100%"
-          title="Zásielkovňa widget"
+          title="Packeta widget"
           className="w-full h-full"
         ></iframe>
       </div>
