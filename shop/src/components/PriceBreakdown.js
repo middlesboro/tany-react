@@ -1,6 +1,6 @@
 import React from 'react';
 
-const PriceBreakdown = ({ priceBreakDown, showItems = false }) => {
+const PriceBreakdown = ({ priceBreakDown, showItems = false, cartItems = null }) => {
   if (!priceBreakDown) return null;
 
   const { items, totalPrice, totalPriceWithoutVat, totalPriceVatValue } = priceBreakDown;
@@ -18,21 +18,42 @@ const PriceBreakdown = ({ priceBreakDown, showItems = false }) => {
         {/* Products */}
         {productItems.length > 0 && (
             showItems ? (
-                productItems.map((item, index) => (
-                    <div key={`prod-${index}`} className="flex justify-between items-center mb-2">
-                        <div className="flex items-center">
-                            {item.image && (
-                                <img
-                                    src={item.image}
-                                    alt={item.name}
-                                    className="w-10 h-10 object-cover mr-3 rounded"
-                                />
+                (cartItems || productItems).map((item, index) => {
+                    const name = item.title || item.name;
+                    const image = item.image || (item.images && item.images[0]);
+                    const quantity = item.quantity;
+
+                    const unitPrice = item.price || item.priceWithVat;
+                    const discountPrice = item.discountPrice;
+
+                    const totalOriginal = unitPrice * quantity;
+                    const totalDiscounted = discountPrice ? discountPrice * quantity : null;
+                    const totalEffective = totalDiscounted !== null ? totalDiscounted : totalOriginal;
+
+                    return (
+                        <div key={`prod-${index}`} className="flex justify-between items-center mb-2">
+                            <div className="flex items-center">
+                                {image && (
+                                    <img
+                                        src={image}
+                                        alt={name}
+                                        className="w-10 h-10 object-cover mr-3 rounded"
+                                    />
+                                )}
+                                <span>{name} {quantity > 1 ? `(${quantity} ks)` : ''}</span>
+                            </div>
+
+                            {discountPrice ? (
+                                <div className="flex flex-col text-right leading-tight">
+                                     <span className="text-xs text-gray-400 line-through font-normal">{totalOriginal.toFixed(2)} €</span>
+                                     <span className="font-bold text-red-600">{totalEffective.toFixed(2)} €</span>
+                                </div>
+                            ) : (
+                                <span>{totalEffective.toFixed(2)} €</span>
                             )}
-                            <span>{item.name} {item.quantity > 1 ? `(${item.quantity} ks)` : ''}</span>
                         </div>
-                        <span>{(item.priceWithVat * item.quantity).toFixed(2)} €</span>
-                    </div>
-                ))
+                    );
+                })
             ) : (
                 <div className="flex justify-between">
                     <span>Tovar ({productItems.reduce((acc, i) => acc + i.quantity, 0)} ks)</span>
