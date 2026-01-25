@@ -4,6 +4,7 @@ import { useCart } from '../context/CartContext';
 import { useModal } from '../context/ModalContext';
 import AddToCartButton from './AddToCartButton';
 import ProductLabel from './ProductLabel';
+import StarRating from './StarRating';
 import { addToWishlist, removeFromWishlist } from '../services/wishlistService';
 import { isAuthenticated } from '../services/authService';
 
@@ -120,6 +121,9 @@ const ProductCard = ({ product }) => {
         </Link>
 
         <div className="mt-auto flex flex-col items-center w-full">
+          <div className="mb-2">
+            <StarRating rating={product.averageRating || 0} size="w-4 h-4" />
+          </div>
           <div className="mb-3 text-lg font-bold text-gray-900 group-hover:text-tany-red transition-colors">
              {product.price.toFixed(2)} €
           </div>
