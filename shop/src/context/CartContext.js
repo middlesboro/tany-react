@@ -26,7 +26,11 @@ export const CartProvider = ({ children }) => {
           if (data.cartDto.cartId) {
               localStorage.setItem('cartId', data.cartDto.cartId);
           }
-          setCart(data.cartDto);
+          const cartData = { ...data.cartDto };
+          if (data.discountForNewsletter !== undefined) {
+              cartData.discountForNewsletter = data.discountForNewsletter;
+          }
+          setCart(cartData);
       }
       if (data.customerDto) {
           setCustomer(data.customerDto);
