@@ -6,7 +6,7 @@ import CartItem from '../components/CartItem';
 import PriceBreakdown from '../components/PriceBreakdown';
 
 const Cart = () => {
-  const { cart, loading, addDiscount, removeDiscount } = useCart();
+  const { cart, loading, addDiscount, removeDiscount, updateCart } = useCart();
   const { setBreadcrumbs } = useBreadcrumbs();
   const [discountCode, setDiscountCode] = useState('');
   const [discountError, setDiscountError] = useState(null);
@@ -40,6 +40,19 @@ const Cart = () => {
       await removeDiscount(code);
     } catch (err) {
       console.error("Failed to remove discount", err);
+    }
+  };
+
+  const handleNewsletterChange = async (e) => {
+    const checked = e.target.checked;
+    try {
+      const cartId = cart.cartId || cart.id;
+      await updateCart({
+        cartId,
+        discountForNewsletter: checked
+      });
+    } catch (err) {
+      console.error("Failed to update newsletter discount", err);
     }
   };
 
@@ -146,6 +159,18 @@ const Cart = () => {
                 ))}
               </div>
             )}
+
+            <div className="mt-4 pt-4 border-t border-gray-100">
+              <label className="flex items-center space-x-2 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={cart.discountForNewsletter || false}
+                  onChange={handleNewsletterChange}
+                  className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                />
+                <span className="text-sm text-gray-700">Subscribe to newsletter for 10% discount</span>
+              </label>
+            </div>
           </div>
 
           <div className="bg-white rounded-lg shadow p-6">
