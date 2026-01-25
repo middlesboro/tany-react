@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { getCategories } from '../services/categoryService';
 import { searchProductsByCategory } from '../services/productService';
 import { findCategoryBySlug, findCategoryPath } from '../utils/categoryUtils';
@@ -8,9 +8,11 @@ import ProductCard from '../components/ProductCard';
 import CategoryFilter from '../components/CategoryFilter';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import useMediaQuery from '../hooks/useMediaQuery';
+import { serializeFilters, parseFilters } from '../utils/filterUrlUtils';
 
 const CategoryProductsContent = () => {
   const { slug } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { setBreadcrumbs } = useBreadcrumbs();
   const [products, setProducts] = useState([]);
   const [category, setCategory] = useState(null);
@@ -24,6 +26,7 @@ const CategoryProductsContent = () => {
   const [error, setError] = useState(null);
   const isDesktop = useMediaQuery('(min-width: 768px)');
   const [portalTarget, setPortalTarget] = useState(null);
+  const [isUrlInitialized, setIsUrlInitialized] = useState(false);
 
   useEffect(() => {
     // Wait for the portal target to exist
@@ -34,25 +37,21 @@ const CategoryProductsContent = () => {
     window.scrollTo(0, 0);
   }, [page]);
 
+  // Initialization Effect: Load Category and Parse URL
   useEffect(() => {
-    const fetchCategoryAndProducts = async () => {
+    const init = async () => {
       setLoading(true);
       setError(null);
       try {
-        // 1. Fetch all categories to resolve slug to ID
-        // We call getCategories() without args just to get the tree and find the ID.
-        // We will use searchProductsByCategory for the actual filtering and facets.
         const categories = await getCategories();
-
         const foundCategory = findCategoryBySlug(categories, slug);
 
         if (!foundCategory) {
-          setError("Kategória sa nenašla."); // Category not found
+          setError("Kategória sa nenašla.");
           setLoading(false);
           return;
         }
 
-        // Breadcrumbs
         const path = findCategoryPath(categories, slug);
         if (path) {
            const crumbs = [
@@ -67,8 +66,48 @@ const CategoryProductsContent = () => {
 
         setCategory(foundCategory);
 
-        // 2. Fetch products and filters for this category using the search endpoint
-        // Prepare request object for filters
+        // Check URL for filters
+        const q = searchParams.get('q');
+        const urlPage = searchParams.get('page');
+
+        if (q) {
+            // Fetch default filters to map names to IDs
+            const data = await searchProductsByCategory(foundCategory.id, { filterParameters: [], sort }, 0, sort, size);
+
+            if (data.filterParameters) {
+                const initialFilters = parseFilters(q, data.filterParameters);
+                setSelectedFilters(initialFilters);
+                setFilterParameters(data.filterParameters);
+            }
+        }
+
+        if (urlPage) {
+            const p = parseInt(urlPage, 10);
+            if (!isNaN(p) && p > 0) {
+                setPage(p - 1);
+            }
+        }
+
+        setIsUrlInitialized(true);
+      } catch (err) {
+        console.error("Failed to fetch category data", err);
+        setError("Nepodarilo sa načítať produkty.");
+        setLoading(false);
+      }
+    };
+
+    init();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []); // Run once on mount per slug
+
+  // Data Fetching Effect (after initialization)
+  useEffect(() => {
+    if (!isUrlInitialized || !category) return;
+
+    const fetchProducts = async () => {
+      setLoading(true);
+      setError(null);
+      try {
         const filterRequest = {
             filterParameters: Object.keys(selectedFilters).map(key => ({
                 id: key,
@@ -77,28 +116,41 @@ const CategoryProductsContent = () => {
             sort: sort
         };
 
-        const data = await searchProductsByCategory(foundCategory.id, filterRequest, page, sort, size);
+        const data = await searchProductsByCategory(category.id, filterRequest, page, sort, size);
 
-        // Handle response
-        // data.products is a Page object (based on user snippet which maps result.getProducts())
         setProducts(data.products?.content || []);
         setTotalPages(data.products?.totalPages || 0);
 
-        // data.filterParameters is the list of available filters
+        // Update filters with available facets (unless we want to keep all options visible?)
+        // Usually we update to show counts or narrow down.
         if (data.filterParameters) {
             setFilterParameters(data.filterParameters);
         }
 
       } catch (err) {
-        console.error("Failed to fetch category data", err);
-        setError("Nepodarilo sa načítať produkty."); // Failed to load products
+        console.error("Failed to fetch products", err);
+        setError("Nepodarilo sa načítať produkty.");
       } finally {
         setLoading(false);
       }
     };
 
-    fetchCategoryAndProducts();
-  }, [slug, page, sort, size, selectedFilters]); // Added selectedFilters dependency
+    fetchProducts();
+  }, [category, isUrlInitialized, page, sort, size, selectedFilters]);
+
+  // URL Sync Effect
+  useEffect(() => {
+    if (!isUrlInitialized) return;
+
+    const newParams = {};
+    const q = serializeFilters(selectedFilters, filterParameters);
+
+    if (q) newParams.q = q;
+    if (page > 0) newParams.page = page + 1;
+
+    // Use replace: false (default push) to allow back button navigation history
+    setSearchParams(newParams);
+  }, [selectedFilters, page, isUrlInitialized, filterParameters, setSearchParams]);
 
   const handleFilterChange = (paramId, valueId, checked) => {
       setSelectedFilters(prev => {
@@ -130,11 +182,11 @@ const CategoryProductsContent = () => {
     setPage(0);
   };
 
-  if (loading && !category) {
+  if (loading && !category && !isUrlInitialized) {
       return <div className="text-center py-20 text-gray-500">Načítavam kategóriu...</div>;
   }
 
-  if (error) {
+  if (error && !category) {
       return <div className="text-center py-20 text-red-500 font-bold">{error}</div>;
   }
 
