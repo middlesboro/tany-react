@@ -5,6 +5,8 @@ import { getWishlist } from '../services/wishlistService';
 import { removeToken } from '../services/authService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import ProductCard from '../components/ProductCard';
+import CustomerOrderList from '../components/CustomerOrderList';
+import CustomerOrderDetail from '../components/CustomerOrderDetail';
 
 const Account = () => {
   const navigate = useNavigate();
@@ -25,6 +27,10 @@ const Account = () => {
   const [activeTab, setActiveTab] = useState('profile');
   const [wishlist, setWishlist] = useState([]);
   const [wishlistLoading, setWishlistLoading] = useState(false);
+
+  // State for orders
+  const [ordersView, setOrdersView] = useState('list');
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
 
   useEffect(() => {
     setBreadcrumbs([
@@ -104,6 +110,16 @@ const Account = () => {
     navigate('/');
   };
 
+  const handleOrderSelect = (orderId) => {
+    setSelectedOrderId(orderId);
+    setOrdersView('detail');
+  };
+
+  const handleBackToOrders = () => {
+    setSelectedOrderId(null);
+    setOrdersView('list');
+  };
+
   if (loading) return <div className="p-8">Loading...</div>;
 
   return (
@@ -142,6 +158,18 @@ const Account = () => {
               }`}
             >
               Obľúbené produkty
+            </button>
+          </li>
+          <li className="mr-2">
+            <button
+              onClick={() => setActiveTab('orders')}
+              className={`inline-block p-4 border-b-2 rounded-t-lg ${
+                activeTab === 'orders'
+                  ? 'text-tany-green border-tany-green'
+                  : 'border-transparent hover:text-gray-600 hover:border-gray-300'
+              }`}
+            >
+              Moje objednávky
             </button>
           </li>
         </ul>
@@ -329,6 +357,16 @@ const Account = () => {
              </div>
            )}
         </div>
+      )}
+
+      {activeTab === 'orders' && (
+        <>
+          {ordersView === 'list' ? (
+            <CustomerOrderList onOrderSelect={handleOrderSelect} />
+          ) : (
+            <CustomerOrderDetail orderId={selectedOrderId} onBack={handleBackToOrders} />
+          )}
+        </>
       )}
     </div>
   );

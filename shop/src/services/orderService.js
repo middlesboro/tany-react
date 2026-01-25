@@ -27,3 +27,19 @@ export const getOrder = async (id) => {
   }
   return response.json();
 };
+
+export const getOrders = async (page = 0, size = 10, sort = 'createDate,desc') => {
+  const params = new URLSearchParams({
+    page,
+    size,
+    sort
+  });
+  const response = await authFetch(`${API_URL}?${params.toString()}`, {
+    method: 'GET',
+  });
+
+  if (!response.ok) {
+     throw new Error('Failed to fetch orders');
+  }
+  return response.json();
+};
