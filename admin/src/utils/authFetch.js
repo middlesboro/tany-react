@@ -16,5 +16,9 @@ export const authFetch = async (url, options = {}) => {
 
   const response = await fetch(url, newOptions);
 
+  if (response.status === 401) {
+    window.location.href = '/admin/login';
+  }
+
   return response;
 };
