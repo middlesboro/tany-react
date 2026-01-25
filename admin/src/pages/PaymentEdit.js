@@ -12,6 +12,7 @@ const PaymentEdit = () => {
     image: '',
     price: 0,
     type: 'COD',
+    order: 0,
   });
 
   useEffect(() => {
@@ -91,6 +92,19 @@ const PaymentEdit = () => {
             id="description"
             name="description"
             value={payment.description || ''}
+            onChange={handleChange}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="order">
+            Order
+          </label>
+          <input
+            type="number"
+            id="order"
+            name="order"
+            value={payment.order || 0}
             onChange={handleChange}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />

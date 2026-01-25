@@ -7,7 +7,7 @@ const Payments = () => {
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
-  const [sort, setSort] = useState('name,asc');
+  const [sort, setSort] = useState('order,asc');
 
   useEffect(() => {
     const fetchPayments = async () => {
@@ -54,6 +54,9 @@ const Payments = () => {
       <table className="min-w-full bg-white">
         <thead>
           <tr>
+            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('order')}>
+              Order
+            </th>
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('name')}>
               Name
             </th>
@@ -69,6 +72,7 @@ const Payments = () => {
         <tbody>
           {payments.map((payment) => (
             <tr key={payment.id}>
+              <td className="py-2 px-4 border-b">{payment.order}</td>
               <td className="py-2 px-4 border-b">{payment.name}</td>
               <td className="py-2 px-4 border-b">{payment.type}</td>
               <td className="py-2 px-4 border-b">{payment.price}</td>
