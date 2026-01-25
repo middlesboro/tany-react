@@ -252,7 +252,7 @@ const ProductList = () => {
               Title
             </th>
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('price')}>
-              Price
+              Price / Discount
             </th>
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('quantity')}>
               Quantity
@@ -340,7 +340,16 @@ const ProductList = () => {
               ) : (
                 <>
                   <td className="py-2 px-4 border-b">{product.title}</td>
-                  <td className="py-2 px-4 border-b">{product.price}</td>
+                  <td className="py-2 px-4 border-b">
+                    {product.discountPrice ? (
+                      <div className="flex flex-col">
+                        <span className="line-through text-gray-400 text-xs">{product.price}</span>
+                        <span className="text-red-600 font-bold">{product.discountPrice}</span>
+                      </div>
+                    ) : (
+                      product.price
+                    )}
+                  </td>
                   <td className="py-2 px-4 border-b">{product.quantity}</td>
                   <td className="py-2 px-4 border-b">
                     {brands.find(b => b.id === product.brandId)?.name || ''}

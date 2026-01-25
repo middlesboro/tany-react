@@ -495,6 +495,12 @@ const ProductDetail = () => {
                 <ProductLabel key={index} label={label} />
             ))}
 
+            {product.discountPercentualValue && (
+                <div className="absolute top-10 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 z-10 rounded shadow-sm">
+                    -{product.discountPercentualValue}%
+                </div>
+            )}
+
             <div
               className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center mb-6 cursor-zoom-in"
               onClick={() => selectedImage && setIsFullViewOpen(true)}
@@ -565,10 +571,24 @@ const ProductDetail = () => {
             </div>
 
             <div className="mb-6">
-                <span className="text-3xl font-bold text-tany-green">
-                    {product.price ? product.price.toFixed(2).replace('.', ',') : '0,00'} €
-                </span>
-                <span className="text-sm text-gray-500 ml-2">S DPH</span>
+                {product.discountPrice ? (
+                    <div className="flex items-baseline">
+                         <span className="text-xl text-gray-400 line-through mr-3">
+                            {product.price ? product.price.toFixed(2).replace('.', ',') : '0,00'} €
+                         </span>
+                         <span className="text-3xl font-bold text-red-600">
+                            {product.discountPrice.toFixed(2).replace('.', ',')} €
+                         </span>
+                         <span className="text-sm text-gray-500 ml-2">S DPH</span>
+                    </div>
+                ) : (
+                    <div>
+                        <span className="text-3xl font-bold text-tany-green">
+                            {product.price ? product.price.toFixed(2).replace('.', ',') : '0,00'} €
+                        </span>
+                        <span className="text-sm text-gray-500 ml-2">S DPH</span>
+                    </div>
+                )}
             </div>
 
             <div className="mb-8">
