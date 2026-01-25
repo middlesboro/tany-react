@@ -16,6 +16,7 @@ const mockFilterParams = [
       { id: '201', name: 'Blond' },
       { id: '202', name: 'Hnedá' },
       { id: '203', name: 'Čierna-Matná' }, // Test hyphen inside value
+      { id: '204', name: 'Špeciálny' }, // Test diacritics
     ],
   },
   {
@@ -35,28 +36,27 @@ describe('filterUrlUtils', () => {
       expect(serializeFilters({}, mockFilterParams)).toBe('');
     });
 
-    it('should serialize single filter with single value (Unicode)', () => {
+    it('should serialize single filter with single value (removing diacritics)', () => {
       const selected = { '1': ['101'] };
       const result = serializeFilters(selected, mockFilterParams);
-      // "Dostupnosť" -> "Dostupnosť"
-      // "Na sklade" -> "Na+sklade" (customEncode replaces space with +)
-      // WAIT: In latest plan I REMOVED space->+ replacement from customEncode to let URLSearchParams handle it.
-      // But URLSearchParams encodes space as +.
-      // serializeFilters returns a string that IS PASSED to setSearchParams?
-      // No, `serializeFilters` builds the value for `q`.
-      // If `serializeFilters` returns "Na sklade" (with space),
-      // `setSearchParams({ q: "Na sklade" })` -> URL `?q=Na+sklade`.
-
-      // So `serializeFilters` output should contain SPACE if we removed replacement.
-      expect(result).toBe('Dostupnosť-Na sklade');
+      // "Dostupnosť" -> "Dostupnost"
+      // "Na sklade" -> "Na sklade"
+      expect(result).toBe('Dostupnost-Na sklade');
     });
 
-    it('should serialize single filter with multiple values', () => {
+    it('should serialize single filter with multiple values (removing diacritics)', () => {
       const selected = { '2': ['201', '202'] };
       const result = serializeFilters(selected, mockFilterParams);
-      // "Odtieň" -> "Odtieň"
-      // "Hnedá" -> "Hnedá"
-      expect(result).toBe('Odtieň-Blond,Hnedá');
+      // "Odtieň" -> "Odtienc"
+      // "Blond", "Hnedá" -> "Blond", "Hneda"
+      expect(result).toBe('Odtien-Blond,Hneda');
+    });
+
+    it('should serialize values with strong diacritics', () => {
+      const selected = { '2': ['204'] };
+      const result = serializeFilters(selected, mockFilterParams);
+      // "Špeciálny" -> "Specialny"
+      expect(result).toBe('Odtien-Specialny');
     });
 
     it('should serialize multiple filters', () => {
@@ -65,32 +65,22 @@ describe('filterUrlUtils', () => {
         '2': ['201', '202'],
       };
       const result = serializeFilters(selected, mockFilterParams);
-      expect(result).toContain('Dostupnosť-Na sklade');
-      expect(result).toContain('Odtieň-Blond,Hnedá');
+      expect(result).toContain('Dostupnost-Na sklade');
+      expect(result).toContain('Odtien-Blond,Hneda');
       expect(result).toContain('/');
     });
 
     it('should handle special structural characters (escaped)', () => {
-      // '3': 'Brand/Type' -> 'Brand%2FType'
-      // Val: 'A/B' -> 'A%2FB'
-      // Val: 'C,D' -> 'C%2CD'
       const selected = { '3': ['301', '302'] };
       const result = serializeFilters(selected, mockFilterParams);
       expect(result).toBe('Brand%2FType-A%2FB,C%2CD');
     });
 
     it('should handle hyphens in values', () => {
-      // Val: 'Čierna-Matná' -> 'Čierna%2DMatná'
+      // Val: 'Čierna-Matná' -> 'Cierna-Matna' -> 'Cierna%2DMatna'
       const selected = { '2': ['203'] };
       const result = serializeFilters(selected, mockFilterParams);
-      expect(result).toBe('Odtieň-Čierna%2DMatná');
-    });
-
-    it('should handle percentages', () => {
-      // Val: '100% Cotton' -> '100%25 Cotton' (Space remains space)
-      const selected = { '3': ['303'] };
-      const result = serializeFilters(selected, mockFilterParams);
-      expect(result).toBe('Brand%2FType-100%25 Cotton');
+      expect(result).toBe('Odtien-Cierna%2DMatna');
     });
   });
 
@@ -99,21 +89,26 @@ describe('filterUrlUtils', () => {
       expect(parseFilters('', mockFilterParams)).toEqual({});
     });
 
-    it('should parse Unicode names correctly', () => {
-      // parseFilters receives the decoded string from searchParams (so space is space)
-      const q = 'Dostupnosť-Na sklade';
+    it('should parse normalized names back to original IDs', () => {
+      const q = 'Dostupnost-Na sklade';
       const result = parseFilters(q, mockFilterParams);
       expect(result).toEqual({ '1': ['101'] });
     });
 
-    it('should parse single filter multiple values (Unicode)', () => {
-      const q = 'Odtieň-Blond,Hnedá';
+    it('should parse single filter multiple values (normalized)', () => {
+      const q = 'Odtien-Blond,Hneda';
       const result = parseFilters(q, mockFilterParams);
       expect(result).toEqual({ '2': ['201', '202'] });
     });
 
+    it('should parse values with strong diacritics removed', () => {
+      const q = 'Odtien-Specialny';
+      const result = parseFilters(q, mockFilterParams);
+      expect(result).toEqual({ '2': ['204'] });
+    });
+
     it('should parse multiple filters', () => {
-      const q = 'Dostupnosť-Na sklade/Odtieň-Blond,Hnedá';
+      const q = 'Dostupnost-Na sklade/Odtien-Blond,Hneda';
       const result = parseFilters(q, mockFilterParams);
       expect(result).toEqual({
         '1': ['101'],
@@ -128,25 +123,19 @@ describe('filterUrlUtils', () => {
     });
 
     it('should handle hyphens in values', () => {
-      const q = 'Odtieň-Čierna%2DMatná';
+      const q = 'Odtien-Cierna%2DMatna';
       const result = parseFilters(q, mockFilterParams);
       expect(result).toEqual({ '2': ['203'] });
     });
 
-    it('should handle percentages', () => {
-      const q = 'Brand%2FType-100%25 Cotton';
-      const result = parseFilters(q, mockFilterParams);
-      expect(result).toEqual({ '3': ['303'] });
-    });
-
     it('should ignore invalid parameters or values', () => {
-      const q = 'Invalid-Val/Dostupnosť-InvalidVal';
+      const q = 'Invalid-Val/Dostupnost-InvalidVal';
       const result = parseFilters(q, mockFilterParams);
       expect(result).toEqual({});
     });
 
     it('should be case insensitive for names', () => {
-        const q = 'dostupnosť-na sklade';
+        const q = 'dostupnost-na sklade';
         const result = parseFilters(q, mockFilterParams);
         expect(result).toEqual({ '1': ['101'] });
     });

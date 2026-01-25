@@ -1,4 +1,9 @@
 
+// Helper to remove diacritics
+const removeDiacritics = (str) => {
+  return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+};
+
 // Custom encoder: escapes only delimiters and % to preserve structure and allow "pretty" UTF-8
 const customEncode = (str) => {
   return str
@@ -41,12 +46,12 @@ export const serializeFilters = (selectedFilters, filterParameters) => {
 
     if (valueNames.length === 0) return;
 
-    // Encode key
-    const encodedKey = customEncode(param.name);
+    // Encode key (remove diacritics first)
+    const encodedKey = customEncode(removeDiacritics(param.name));
 
-    // Encode values and join
+    // Encode values and join (remove diacritics first)
     const encodedValues = valueNames
-      .map((name) => customEncode(name))
+      .map((name) => customEncode(removeDiacritics(name)))
       .join(',');
 
     parts.push(`${encodedKey}-${encodedValues}`);
@@ -75,10 +80,11 @@ export const parseFilters = (q, filterParameters) => {
 
     // Decode Key
     const keyName = customDecode(encodedKey);
+    const normalizedKeyName = keyName.toLowerCase();
 
-    // Find parameter by name (case-insensitive)
+    // Find parameter by name (case-insensitive and diacritic-agnostic)
     const param = filterParameters.find(
-      (p) => p.name.toLowerCase() === keyName.toLowerCase()
+      (p) => removeDiacritics(p.name).toLowerCase() === normalizedKeyName
     );
 
     if (!param) return;
@@ -89,9 +95,11 @@ export const parseFilters = (q, filterParameters) => {
 
     encodedValues.forEach((encodedVal) => {
       const valName = customDecode(encodedVal);
+      const normalizedValName = valName.toLowerCase();
+
       // Find value by name
       const val = param.values.find(
-        (v) => v.name.toLowerCase() === valName.toLowerCase()
+        (v) => removeDiacritics(v.name).toLowerCase() === normalizedValName
       );
       if (val) {
         valueIds.push(val.id);

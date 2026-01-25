@@ -17,7 +17,7 @@ const CategoryProductsContent = () => {
 
   // Data State
   const [category, setCategory] = useState(null);
-  const [initialFacets, setInitialFacets] = useState([]); // Full list for parsing logic
+  const [initialFacets, setInitialFacets] = useState(null); // Full list for parsing logic (null = not loaded)
   const [displayFacets, setDisplayFacets] = useState([]); // Current facets from API (with counts/state)
   const [products, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -44,7 +44,8 @@ const CategoryProductsContent = () => {
   const q = searchParams.get('q');
 
   const selectedFilters = useMemo(() => {
-    if (initialFacets.length === 0) return {};
+    // Only parse if we have the schema (initialFacets)
+    if (!initialFacets) return {};
     return parseFilters(q, initialFacets);
   }, [q, initialFacets]);
 
@@ -54,7 +55,7 @@ const CategoryProductsContent = () => {
       setLoadingCategory(true);
       setError(null);
       setCategory(null);
-      setInitialFacets([]);
+      setInitialFacets(null); // Reset to null to block product fetch
 
       try {
         const categories = await getCategories();
@@ -84,11 +85,11 @@ const CategoryProductsContent = () => {
         // Fetch initial facets (empty search) to get the "Schema" for URL parsing
         // We use a dummy request
         const data = await searchProductsByCategory(foundCategory.id, { filterParameters: [], sort: 'BEST_SELLING' }, 0, 'BEST_SELLING', 1);
-        if (data.filterParameters) {
-            setInitialFacets(data.filterParameters);
-            // Also set display facets initially
-            setDisplayFacets(data.filterParameters);
-        }
+
+        // Always set initialFacets to array (even if empty) to signal loaded state
+        const loadedFacets = data.filterParameters || [];
+        setInitialFacets(loadedFacets);
+        setDisplayFacets(loadedFacets);
 
       } catch (err) {
         console.error("Failed to init category", err);
@@ -104,8 +105,8 @@ const CategoryProductsContent = () => {
 
   // 2. Fetch Products whenever criteria change
   useEffect(() => {
-    // Only fetch if we have a category and the schema (initialFacets) is loaded
-    if (!category || initialFacets.length === 0) return;
+    // Only fetch if we have a category and the schema (initialFacets) is loaded (non-null)
+    if (!category || initialFacets === null) return;
 
     const fetchProducts = async () => {
       setLoadingProducts(true);
