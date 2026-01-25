@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { createCartDiscount, getCartDiscount, updateCartDiscount } from '../services/cartDiscountAdminService';
+import MultiSearchSelect from '../components/MultiSearchSelect';
+import { getBrands } from '../services/brandAdminService';
+import { getCategories } from '../services/categoryAdminService';
+import { getAdminProducts } from '../services/productAdminService';
 
 const CartDiscountEdit = () => {
   const { id } = useParams();
@@ -16,10 +20,35 @@ const CartDiscountEdit = () => {
     dateFrom: '',
     dateTo: '',
     active: true,
+    brandIds: [],
+    categoryIds: [],
+    productIds: [],
   });
+
+  const [brands, setBrands] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [products, setProducts] = useState([]);
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const brandsData = await getBrands(0, 'name,asc', 1000);
+        setBrands(brandsData.content);
+
+        const categoriesData = await getCategories(0, 'title,asc', 1000);
+        setCategories(categoriesData.content.map(c => ({ ...c, name: c.title })));
+
+        const productsData = await getAdminProducts(0, 'title,asc', 1000);
+        setProducts(productsData.content.map(p => ({ ...p, name: p.title })));
+      } catch (err) {
+        console.error('Failed to fetch options', err);
+      }
+    };
+    fetchData();
+  }, []);
 
   useEffect(() => {
     if (!isNew) {
@@ -36,6 +65,9 @@ const CartDiscountEdit = () => {
             ...data,
             dateFrom: formatDate(data.dateFrom),
             dateTo: formatDate(data.dateTo),
+            brandIds: data.brandIds || [],
+            categoryIds: data.categoryIds || [],
+            productIds: data.productIds || [],
           });
         })
         .catch((err) => setError('Failed to fetch discount details'))
@@ -48,6 +80,13 @@ const CartDiscountEdit = () => {
     setFormData((prev) => ({
       ...prev,
       [name]: type === 'checkbox' ? checked : value,
+    }));
+  };
+
+  const handleMultiSelectChange = (name) => (value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [name]: value,
     }));
   };
 
@@ -151,6 +190,36 @@ const CartDiscountEdit = () => {
             className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
           />
           <label className="ml-2 block text-sm text-gray-900">Free Shipping</label>
+        </div>
+
+        <div>
+          <MultiSearchSelect
+            label="Required Products"
+            options={products}
+            value={formData.productIds}
+            onChange={handleMultiSelectChange('productIds')}
+            placeholder="Search products..."
+          />
+        </div>
+
+        <div>
+          <MultiSearchSelect
+            label="Required Categories"
+            options={categories}
+            value={formData.categoryIds}
+            onChange={handleMultiSelectChange('categoryIds')}
+            placeholder="Search categories..."
+          />
+        </div>
+
+        <div>
+          <MultiSearchSelect
+            label="Required Brands"
+            options={brands}
+            value={formData.brandIds}
+            onChange={handleMultiSelectChange('brandIds')}
+            placeholder="Search brands..."
+          />
         </div>
 
         <div className="grid grid-cols-2 gap-4">
