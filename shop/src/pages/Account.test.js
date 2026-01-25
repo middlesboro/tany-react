@@ -1,7 +1,8 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { MemoryRouter, Routes, Route } from 'react-router-dom';
 import Account from './Account';
-import { getCustomer, updateCustomer } from '../services/customerService';
+import { getCustomer } from '../services/customerService';
 import { getWishlist } from '../services/wishlistService';
 import { removeToken } from '../services/authService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
@@ -16,13 +17,6 @@ jest.mock('../context/BreadcrumbContext');
 jest.mock('../components/ProductCard', () => ({ product }) => (
   <div data-testid="product-card">{product.title}</div>
 ));
-
-// Mock useNavigate
-const mockNavigate = jest.fn();
-jest.mock('react-router-dom', () => ({
-  ...jest.requireActual('react-router-dom'),
-  useNavigate: () => mockNavigate,
-}));
 
 describe('Account Page', () => {
   const mockSetBreadcrumbs = jest.fn();
@@ -41,8 +35,20 @@ describe('Account Page', () => {
     });
   });
 
+  const renderWithRouter = (initialEntry = '/account/personal-data') => {
+    return render(
+      <MemoryRouter initialEntries={[initialEntry]}>
+        <Routes>
+          <Route path="/account/:tab" element={<Account />} />
+          <Route path="/account/orders/:orderId" element={<Account />} />
+          <Route path="/" element={<div>Home Page</div>} />
+        </Routes>
+      </MemoryRouter>
+    );
+  };
+
   test('renders profile tab by default and loads customer data', async () => {
-    render(<Account />);
+    renderWithRouter('/account/personal-data');
 
     expect(screen.getByText('Loading...')).toBeInTheDocument();
 
@@ -56,15 +62,31 @@ describe('Account Page', () => {
     expect(getCustomer).toHaveBeenCalledTimes(1);
   });
 
-  test('switches to wishlist tab and fetches data', async () => {
-    // Mock wishlist data
+  test('loading wishlist data when navigating to wishlist tab', async () => {
     const mockWishlistProducts = [
       { id: '1', title: 'Product 1' },
       { id: '2', title: 'Product 2' }
     ];
     getWishlist.mockResolvedValue({ content: mockWishlistProducts });
 
-    render(<Account />);
+    renderWithRouter('/account/wishlist');
+
+    await waitFor(() => {
+        expect(getWishlist).toHaveBeenCalledTimes(1);
+    });
+
+    await waitFor(() => {
+      expect(screen.getAllByTestId('product-card')).toHaveLength(2);
+    });
+
+    expect(screen.getByText('Product 1')).toBeInTheDocument();
+  });
+
+  test('switches to wishlist tab when clicking button', async () => {
+    const mockWishlistProducts = [];
+    getWishlist.mockResolvedValue({ content: mockWishlistProducts });
+
+    renderWithRouter('/account/personal-data');
 
     await waitFor(() => {
       expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
@@ -73,20 +95,14 @@ describe('Account Page', () => {
     const wishlistTab = screen.getByText('Obľúbené produkty');
     fireEvent.click(wishlistTab);
 
-    // Check if loading state appears or handled (it might be fast)
-    // We expect getWishlist to be called
-    expect(getWishlist).toHaveBeenCalledTimes(1);
-
+    // Navigation should trigger data fetch
     await waitFor(() => {
-      expect(screen.getAllByTestId('product-card')).toHaveLength(2);
+        expect(getWishlist).toHaveBeenCalledTimes(1);
     });
-
-    expect(screen.getByText('Product 1')).toBeInTheDocument();
-    expect(screen.getByText('Product 2')).toBeInTheDocument();
   });
 
-  test('logout button calls removeToken and navigates', async () => {
-    render(<Account />);
+  test('logout button calls removeToken and navigates home', async () => {
+    renderWithRouter('/account/personal-data');
 
     await waitFor(() => {
       expect(screen.queryByText('Loading...')).not.toBeInTheDocument();
@@ -96,6 +112,8 @@ describe('Account Page', () => {
     fireEvent.click(logoutBtn);
 
     expect(removeToken).toHaveBeenCalledTimes(1);
-    expect(mockNavigate).toHaveBeenCalledWith('/');
+    await waitFor(() => {
+        expect(screen.getByText('Home Page')).toBeInTheDocument();
+    });
   });
 });

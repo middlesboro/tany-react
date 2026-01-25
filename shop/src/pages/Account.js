@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { getCustomer, updateCustomer } from '../services/customerService';
 import { getWishlist } from '../services/wishlistService';
 import { removeToken } from '../services/authService';
@@ -10,7 +10,9 @@ import CustomerOrderDetail from '../components/CustomerOrderDetail';
 
 const Account = () => {
   const navigate = useNavigate();
+  const { tab, orderId } = useParams();
   const { setBreadcrumbs } = useBreadcrumbs();
+
   const [customer, setCustomer] = useState({
     firstname: '',
     lastname: '',
@@ -23,14 +25,14 @@ const Account = () => {
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
 
-  // New state for tabs and wishlist
-  const [activeTab, setActiveTab] = useState('profile');
+  // Wishlist state
   const [wishlist, setWishlist] = useState([]);
   const [wishlistLoading, setWishlistLoading] = useState(false);
 
-  // State for orders
-  const [ordersView, setOrdersView] = useState('list');
-  const [selectedOrderId, setSelectedOrderId] = useState(null);
+  // Derived state
+  const activeTab = tab === 'personal-data' ? 'profile' :
+                    tab === 'wishlist' ? 'wishlist' :
+                    tab === 'orders' || orderId ? 'orders' : 'profile';
 
   useEffect(() => {
     setBreadcrumbs([
@@ -110,16 +112,6 @@ const Account = () => {
     navigate('/');
   };
 
-  const handleOrderSelect = (orderId) => {
-    setSelectedOrderId(orderId);
-    setOrdersView('detail');
-  };
-
-  const handleBackToOrders = () => {
-    setSelectedOrderId(null);
-    setOrdersView('list');
-  };
-
   if (loading) return <div className="p-8">Loading...</div>;
 
   return (
@@ -138,7 +130,7 @@ const Account = () => {
         <ul className="flex flex-wrap -mb-px text-sm font-medium text-center text-gray-500">
           <li className="mr-2">
             <button
-              onClick={() => setActiveTab('profile')}
+              onClick={() => navigate('/account/personal-data')}
               className={`inline-block p-4 border-b-2 rounded-t-lg ${
                 activeTab === 'profile'
                   ? 'text-tany-green border-tany-green'
@@ -150,7 +142,7 @@ const Account = () => {
           </li>
           <li className="mr-2">
             <button
-              onClick={() => setActiveTab('wishlist')}
+              onClick={() => navigate('/account/wishlist')}
               className={`inline-block p-4 border-b-2 rounded-t-lg ${
                 activeTab === 'wishlist'
                   ? 'text-tany-green border-tany-green'
@@ -162,7 +154,7 @@ const Account = () => {
           </li>
           <li className="mr-2">
             <button
-              onClick={() => setActiveTab('orders')}
+              onClick={() => navigate('/account/orders')}
               className={`inline-block p-4 border-b-2 rounded-t-lg ${
                 activeTab === 'orders'
                   ? 'text-tany-green border-tany-green'
@@ -361,10 +353,10 @@ const Account = () => {
 
       {activeTab === 'orders' && (
         <>
-          {ordersView === 'list' ? (
-            <CustomerOrderList onOrderSelect={handleOrderSelect} />
+          {orderId ? (
+            <CustomerOrderDetail orderId={orderId} onBack={() => navigate('/account/orders')} />
           ) : (
-            <CustomerOrderDetail orderId={selectedOrderId} onBack={handleBackToOrders} />
+            <CustomerOrderList onOrderSelect={(id) => navigate(`/account/orders/${id}`)} />
           )}
         </>
       )}
