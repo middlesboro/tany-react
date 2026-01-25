@@ -107,13 +107,20 @@ const CustomerOrderDetail = ({ orderId, onBack }) => {
                      <span className="text-gray-900">{item.name}</span>
                    </td>
                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
-                     {item.price?.toFixed(2)} €
+                     {item.discountPrice ? (
+                        <div className="flex flex-col items-end">
+                            <span className="text-xs text-gray-400 line-through">{item.price?.toFixed(2)} €</span>
+                            <span className="text-red-600 font-bold">{item.discountPrice.toFixed(2)} €</span>
+                        </div>
+                     ) : (
+                        <span>{item.price?.toFixed(2)} €</span>
+                     )}
                    </td>
                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
                      {item.quantity}
                    </td>
                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right font-bold">
-                     {(item.price * item.quantity).toFixed(2)} €
+                     {((item.discountPrice || item.price) * item.quantity).toFixed(2)} €
                    </td>
                  </tr>
                ))}

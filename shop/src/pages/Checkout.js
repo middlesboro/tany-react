@@ -429,6 +429,7 @@ const Checkout = () => {
         id: p.id,
         name: p.title,
         price: p.price,
+        discountPrice: p.discountPrice,
         quantity: p.quantity,
         image: p.image
       })) || []
@@ -726,7 +727,7 @@ const Checkout = () => {
             <section>
                 <h2 className="text-xl font-bold mb-4">7. SÚHRN</h2>
                 <div className="bg-white rounded shadow p-6">
-                   <PriceBreakdown priceBreakDown={cart.priceBreakDown} showItems={true} />
+                   <PriceBreakdown priceBreakDown={cart.priceBreakDown} showItems={true} cartItems={cart.products} />
                 </div>
             </section>
         )}
