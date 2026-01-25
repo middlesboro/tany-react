@@ -23,7 +23,7 @@ export const getCustomer = async () => {
 };
 
 export const createEmailNotification = async (notification) => {
-    const response = await authFetch(`${process.env.REACT_APP_API_URL}/customers/email-notification`, {
+    const response = await authFetch(`${process.env.REACT_APP_API_URL}/customer/email-notification`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

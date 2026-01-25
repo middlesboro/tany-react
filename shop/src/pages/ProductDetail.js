@@ -427,7 +427,6 @@ const ProductDetail = () => {
     try {
       await addToCart(product.id, quantity);
       // Optional: Add a toast notification here
-      alert("Product added to cart");
     } catch (err) {
       alert("Failed to add to cart");
     } finally {
