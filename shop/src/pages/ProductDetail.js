@@ -190,7 +190,7 @@ const ProductReviews = ({ productId }) => {
         <div className="bg-gray-50 p-6 rounded-lg text-center">
           <div className="text-4xl font-bold text-gray-800 mb-2">{stats.averageRating ? stats.averageRating.toFixed(2) : '0.00'}/5</div>
           <div className="flex justify-center mb-2">
-            <StarRating rating={Math.round(stats.averageRating)} size="w-6 h-6" />
+            <StarRating rating={stats.averageRating} size="w-6 h-6" />
           </div>
           <p className="text-gray-500">Počet hodnotení: {stats.reviewsCount}</p>
         </div>
