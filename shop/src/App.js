@@ -14,6 +14,7 @@ import CategoryProducts from './pages/CategoryProducts';
 import BlogDetail from './pages/BlogDetail';
 import Account from './pages/Account';
 import PublicPage from './pages/PublicPage';
+import PacketaPage from './pages/PacketaPage';
 import MagicLinkPage from './pages/MagicLinkPage';
 import OAuthCallbackPage from './pages/OAuthCallbackPage';
 import { CartProvider } from './context/CartContext';
@@ -47,6 +48,7 @@ function App() {
                 <Route path="/blog/:id" element={<BlogDetail />} />
                 <Route path="/login" element={<Login isAdmin={false} />} />
                 <Route path="/account" element={<Account />} />
+                <Route path="/packeta" element={<PacketaPage />} />
                 <Route path="/:slug" element={<PublicPage />} />
               </Route>
             </Routes>
