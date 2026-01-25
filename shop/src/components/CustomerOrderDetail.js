@@ -41,13 +41,27 @@ const CustomerOrderDetail = ({ orderId, onBack }) => {
       </button>
 
       <div className="border-b border-gray-200 pb-4 mb-4">
-        <h2 className="text-2xl font-bold mb-2">Objednávka #{order.id}</h2>
+        <h2 className="text-2xl font-bold mb-2">Objednávka #{order.orderIdentifier}</h2>
         <div className="flex flex-wrap gap-4 text-sm text-gray-600">
            <div><span className="font-bold">Stav:</span> {order.status}</div>
            <div><span className="font-bold">Platba:</span> {order.paymentName}</div>
            <div><span className="font-bold">Doprava:</span> {order.carrierName}</div>
         </div>
       </div>
+
+      {order.statusHistory && order.statusHistory.length > 0 && (
+        <div className="mb-8 border-b border-gray-200 pb-4">
+          <h3 className="text-lg font-bold mb-4">História stavov</h3>
+          <ul className="space-y-2">
+            {order.statusHistory.map((history, index) => (
+              <li key={index} className="text-sm text-gray-700 flex items-center">
+                 <span className="font-semibold min-w-[120px]">{history.status}</span>
+                 <span className="text-gray-500">{new Date(history.createdAt).toLocaleString('sk-SK')}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
         <div>

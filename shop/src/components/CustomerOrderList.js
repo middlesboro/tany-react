@@ -48,6 +48,9 @@ const CustomerOrderList = ({ onOrderSelect }) => {
                 Číslo objednávky
               </th>
               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                Dátum vytvorenia
+              </th>
+              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                 Stav
               </th>
               <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
@@ -62,7 +65,10 @@ const CustomerOrderList = ({ onOrderSelect }) => {
             {orders.map((order) => (
               <tr key={order.id}>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">{order.id}</p>
+                  <p className="text-gray-900 whitespace-no-wrap">{order.orderIdentifier}</p>
+                </td>
+                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                  <p className="text-gray-900 whitespace-no-wrap">{new Date(order.createDate).toLocaleString('sk-SK')}</p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <span className={`relative inline-block px-3 py-1 font-semibold leading-tight text-gray-900`}>

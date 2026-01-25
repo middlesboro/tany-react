@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import Home from './pages/Home';
 import PublicLayout from './components/PublicLayout';
 import ProductDetail from './pages/ProductDetail';
@@ -47,7 +47,9 @@ function App() {
                 <Route path="/products/:id" element={<ProductDetail />} />
                 <Route path="/blog/:id" element={<BlogDetail />} />
                 <Route path="/login" element={<Login isAdmin={false} />} />
-                <Route path="/account" element={<Account />} />
+                <Route path="/account" element={<Navigate to="/account/personal-data" replace />} />
+                <Route path="/account/:tab" element={<Account />} />
+                <Route path="/account/orders/:orderId" element={<Account />} />
                 <Route path="/packeta" element={<PacketaPage />} />
                 <Route path="/:slug" element={<PublicPage />} />
               </Route>
