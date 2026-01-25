@@ -1,3 +1,22 @@
+
+// Custom encoder: escapes only delimiters and % to preserve structure and allow "pretty" UTF-8
+const customEncode = (str) => {
+  return str
+    .replace(/%/g, '%25') // Must be first
+    .replace(/-/g, '%2D')
+    .replace(/\//g, '%2F')
+    .replace(/,/g, '%2C');
+};
+
+const customDecode = (str) => {
+  try {
+    return decodeURIComponent(str);
+  } catch (e) {
+    // Fallback if malformed
+    return str;
+  }
+};
+
 export const serializeFilters = (selectedFilters, filterParameters) => {
   if (!selectedFilters || !filterParameters) return '';
 
@@ -23,11 +42,11 @@ export const serializeFilters = (selectedFilters, filterParameters) => {
     if (valueNames.length === 0) return;
 
     // Encode key
-    const encodedKey = encodeURIComponent(param.name).replace(/%20/g, '+');
+    const encodedKey = customEncode(param.name);
 
     // Encode values and join
     const encodedValues = valueNames
-      .map((name) => encodeURIComponent(name).replace(/%20/g, '+'))
+      .map((name) => customEncode(name))
       .join(',');
 
     parts.push(`${encodedKey}-${encodedValues}`);
@@ -55,9 +74,9 @@ export const parseFilters = (q, filterParameters) => {
     if (!encodedKey || !encodedValuesStr) return;
 
     // Decode Key
-    const keyName = decodeURIComponent(encodedKey.replace(/\+/g, '%20'));
+    const keyName = customDecode(encodedKey);
 
-    // Find parameter by name (case-insensitive to be robust)
+    // Find parameter by name (case-insensitive)
     const param = filterParameters.find(
       (p) => p.name.toLowerCase() === keyName.toLowerCase()
     );
@@ -69,7 +88,7 @@ export const parseFilters = (q, filterParameters) => {
     const valueIds = [];
 
     encodedValues.forEach((encodedVal) => {
-      const valName = decodeURIComponent(encodedVal.replace(/\+/g, '%20'));
+      const valName = customDecode(encodedVal);
       // Find value by name
       const val = param.values.find(
         (v) => v.name.toLowerCase() === valName.toLowerCase()
