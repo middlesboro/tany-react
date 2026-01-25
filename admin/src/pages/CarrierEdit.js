@@ -15,7 +15,7 @@ const CarrierEdit = () => {
     ranges: [],
   });
 
-  const [newRange, setNewRange] = useState({ price: '', weightFrom: '', weightTo: '' });
+  const [newRange, setNewRange] = useState({ price: '', priceWithoutVat: '', weightFrom: '', weightTo: '' });
 
   useEffect(() => {
     if (id) {
@@ -40,16 +40,17 @@ const CarrierEdit = () => {
   };
 
   const handleAddRange = () => {
-    if (newRange.price && newRange.weightFrom && newRange.weightTo) {
+    if (newRange.price && newRange.priceWithoutVat && newRange.weightFrom && newRange.weightTo) {
       setCarrier({
         ...carrier,
         ranges: [...(carrier.ranges || []), {
             price: Number(newRange.price),
+            priceWithoutVat: Number(newRange.priceWithoutVat),
             weightFrom: Number(newRange.weightFrom),
             weightTo: Number(newRange.weightTo)
         }]
       });
-      setNewRange({ price: '', weightFrom: '', weightTo: '' });
+      setNewRange({ price: '', priceWithoutVat: '', weightFrom: '', weightTo: '' });
     }
   };
 
@@ -153,7 +154,7 @@ const CarrierEdit = () => {
                 <ul className="mb-4">
                     {carrier.ranges.map((range, index) => (
                         <li key={index} className="flex items-center mb-2">
-                            <span className="mr-2">Price: {range.price}, Weight: {range.weightFrom} - {range.weightTo}</span>
+                            <span className="mr-2">Price: {range.price}, Price w/o VAT: {range.priceWithoutVat}, Weight: {range.weightFrom} - {range.weightTo}</span>
                             <button type="button" onClick={() => handleRemoveRange(index)} className="text-red-500 hover:text-red-700">Remove</button>
                         </li>
                     ))}
@@ -165,6 +166,13 @@ const CarrierEdit = () => {
                     placeholder="Price"
                     value={newRange.price}
                     onChange={(e) => setNewRange({...newRange, price: e.target.value})}
+                    className="border rounded p-1"
+                />
+                <input
+                    type="number"
+                    placeholder="Price w/o VAT"
+                    value={newRange.priceWithoutVat}
+                    onChange={(e) => setNewRange({...newRange, priceWithoutVat: e.target.value})}
                     className="border rounded p-1"
                 />
                 <input
