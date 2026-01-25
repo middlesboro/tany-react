@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import React, { useEffect, useState, useMemo } from 'react';
+import { useParams, useSearchParams } from 'react-router-dom';
 import { getCategories } from '../services/categoryService';
 import { searchProductsByCategory } from '../services/productService';
 import { findCategoryBySlug, findCategoryPath } from '../utils/categoryUtils';
@@ -8,47 +8,62 @@ import ProductCard from '../components/ProductCard';
 import CategoryFilter from '../components/CategoryFilter';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import useMediaQuery from '../hooks/useMediaQuery';
+import { serializeFilters, parseFilters } from '../utils/filterUrlUtils';
 
 const CategoryProductsContent = () => {
   const { slug } = useParams();
+  const [searchParams, setSearchParams] = useSearchParams();
   const { setBreadcrumbs } = useBreadcrumbs();
-  const [products, setProducts] = useState([]);
+
+  // Data State
   const [category, setCategory] = useState(null);
-  const [filterParameters, setFilterParameters] = useState([]);
-  const [selectedFilters, setSelectedFilters] = useState({});
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState(12);
+  const [initialFacets, setInitialFacets] = useState(null); // Full list for parsing logic (null = not loaded)
+  const [displayFacets, setDisplayFacets] = useState([]); // Current facets from API (with counts/state)
+  const [products, setProducts] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
+
+  // UI Options
   const [sort, setSort] = useState('BEST_SELLING');
-  const [loading, setLoading] = useState(true);
+  const [size, setSize] = useState(12);
+
+  // Status
+  const [loadingCategory, setLoadingCategory] = useState(true);
+  const [loadingProducts, setLoadingProducts] = useState(false);
   const [error, setError] = useState(null);
+
   const isDesktop = useMediaQuery('(min-width: 768px)');
   const [portalTarget, setPortalTarget] = useState(null);
 
   useEffect(() => {
-    // Wait for the portal target to exist
     setPortalTarget(document.getElementById('sidebar-filter-root'));
   }, []);
 
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, [page]);
+  // Derived State from URL
+  const pageParam = parseInt(searchParams.get('page') || '1', 10);
+  const page = (pageParam > 0 ? pageParam : 1) - 1; // Internal 0-based
+  const q = searchParams.get('q');
 
+  const selectedFilters = useMemo(() => {
+    // Only parse if we have the schema (initialFacets)
+    if (!initialFacets) return {};
+    return parseFilters(q, initialFacets);
+  }, [q, initialFacets]);
+
+  // 1. Initialization: Fetch Category and Initial Facets (Schema)
   useEffect(() => {
-    const fetchCategoryAndProducts = async () => {
-      setLoading(true);
+    const initCategory = async () => {
+      setLoadingCategory(true);
       setError(null);
-      try {
-        // 1. Fetch all categories to resolve slug to ID
-        // We call getCategories() without args just to get the tree and find the ID.
-        // We will use searchProductsByCategory for the actual filtering and facets.
-        const categories = await getCategories();
+      setCategory(null);
+      setInitialFacets(null); // Reset to null to block product fetch
 
+      try {
+        const categories = await getCategories();
         const foundCategory = findCategoryBySlug(categories, slug);
 
         if (!foundCategory) {
-          setError("Kategória sa nenašla."); // Category not found
-          setLoading(false);
+          setError("Kategória sa nenašla.");
+          setLoadingCategory(false);
           return;
         }
 
@@ -67,8 +82,36 @@ const CategoryProductsContent = () => {
 
         setCategory(foundCategory);
 
-        // 2. Fetch products and filters for this category using the search endpoint
-        // Prepare request object for filters
+        // Fetch initial facets (empty search) to get the "Schema" for URL parsing
+        // We use a dummy request
+        const data = await searchProductsByCategory(foundCategory.id, { filterParameters: [], sort: 'BEST_SELLING' }, 0, 'BEST_SELLING', 1);
+
+        // Always set initialFacets to array (even if empty) to signal loaded state
+        const loadedFacets = data.filterParameters || [];
+        setInitialFacets(loadedFacets);
+        setDisplayFacets(loadedFacets);
+
+      } catch (err) {
+        console.error("Failed to init category", err);
+        setError("Nepodarilo sa načítať kategóriu.");
+      } finally {
+        setLoadingCategory(false);
+      }
+    };
+
+    initCategory();
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [slug]);
+
+  // 2. Fetch Products whenever criteria change
+  useEffect(() => {
+    // Only fetch if we have a category and the schema (initialFacets) is loaded (non-null)
+    if (!category || initialFacets === null) return;
+
+    const fetchProducts = async () => {
+      setLoadingProducts(true);
+      // setError(null); // Don't clear category error if any
+      try {
         const filterRequest = {
             filterParameters: Object.keys(selectedFilters).map(key => ({
                 id: key,
@@ -77,64 +120,89 @@ const CategoryProductsContent = () => {
             sort: sort
         };
 
-        const data = await searchProductsByCategory(foundCategory.id, filterRequest, page, sort, size);
+        const data = await searchProductsByCategory(category.id, filterRequest, page, sort, size);
 
-        // Handle response
-        // data.products is a Page object (based on user snippet which maps result.getProducts())
         setProducts(data.products?.content || []);
         setTotalPages(data.products?.totalPages || 0);
 
-        // data.filterParameters is the list of available filters
+        // Update display facets if provided (to show counts or narrow options)
         if (data.filterParameters) {
-            setFilterParameters(data.filterParameters);
+            setDisplayFacets(data.filterParameters);
         }
-
       } catch (err) {
-        console.error("Failed to fetch category data", err);
-        setError("Nepodarilo sa načítať produkty."); // Failed to load products
+        console.error("Failed to fetch products", err);
+        // Maybe set a local error state for product list, but keep category visible
       } finally {
-        setLoading(false);
+        setLoadingProducts(false);
       }
     };
 
-    fetchCategoryAndProducts();
-  }, [slug, page, sort, size, selectedFilters]); // Added selectedFilters dependency
+    fetchProducts();
+    window.scrollTo(0, 0);
+  }, [category, initialFacets, selectedFilters, page, sort, size]);
 
+
+  // Handlers
   const handleFilterChange = (paramId, valueId, checked) => {
-      setSelectedFilters(prev => {
-          const currentValues = prev[paramId] || [];
-          let newValues;
-          if (checked) {
-              newValues = [...currentValues, valueId];
-          } else {
-              newValues = currentValues.filter(id => id !== valueId);
-          }
+      // We must derive the *next* state based on current selectedFilters
+      // selectedFilters is Memoized from URL, so it's the source of truth.
 
-          const newState = { ...prev };
-          if (newValues.length > 0) {
-              newState[paramId] = newValues;
-          } else {
-              delete newState[paramId];
-          }
-          return newState;
-      });
-      setPage(0); // Reset page on filter change
+      const currentValues = selectedFilters[paramId] || [];
+      let newValues;
+      if (checked) {
+          newValues = [...currentValues, valueId];
+      } else {
+          newValues = currentValues.filter(id => id !== valueId);
+      }
+
+      const nextFilters = { ...selectedFilters };
+      if (newValues.length > 0) {
+          nextFilters[paramId] = newValues;
+      } else {
+          delete nextFilters[paramId];
+      }
+
+      // Serialize and update URL
+      // Always reset to page 1 (0) on filter change
+      const newQ = serializeFilters(nextFilters, initialFacets);
+
+      const newParams = {};
+      if (newQ) newParams.q = newQ;
+      // page 1 is default, omitted
+
+      setSearchParams(newParams);
+  };
+
+  const handlePageChange = (newPage) => {
+      // newPage is 0-based
+      const newParams = {};
+      if (q) newParams.q = q;
+      if (newPage > 0) newParams.page = newPage + 1;
+
+      setSearchParams(newParams);
   };
 
   const handleSortChange = (e) => {
     setSort(e.target.value);
+    // Sort does not reset page usually, but maybe it should?
+    // User preference often is to keep page.
+    // But for safety let's reset to 1 if sorting changes order drastically.
+    // The previous code didn't reset page on sort. I'll keep it.
   };
 
   const handleSizeChange = (e) => {
     setSize(Number(e.target.value));
-    setPage(0);
+    // Reset to page 1
+    const newParams = {};
+    if (q) newParams.q = q;
+    setSearchParams(newParams);
   };
 
-  if (loading && !category) {
+  if (loadingCategory) {
       return <div className="text-center py-20 text-gray-500">Načítavam kategóriu...</div>;
   }
 
-  if (error) {
+  if (error && !category) {
       return <div className="text-center py-20 text-red-500 font-bold">{error}</div>;
   }
 
@@ -181,7 +249,7 @@ const CategoryProductsContent = () => {
       {/* Mobile Filter */}
       {!isDesktop && (
         <CategoryFilter
-          filterParameters={filterParameters}
+          filterParameters={displayFacets}
           selectedFilters={selectedFilters}
           onFilterChange={handleFilterChange}
         />
@@ -190,23 +258,30 @@ const CategoryProductsContent = () => {
       {/* Desktop Filter Portal */}
       {isDesktop && portalTarget && createPortal(
         <CategoryFilter
-          filterParameters={filterParameters}
+          filterParameters={displayFacets}
           selectedFilters={selectedFilters}
           onFilterChange={handleFilterChange}
         />,
         portalTarget
       )}
 
-          {loading ? (
+          {loadingProducts && products.length === 0 ? (
             <div className="text-center py-20 text-gray-500">Načítavam produkty...</div>
           ) : (
             <>
                 {products.length === 0 ? (
                     <div className="text-center py-20 text-gray-500">V tejto kategórii nie sú žiadne produkty.</div>
                 ) : (
-                    <div className="grid grid-cols-2 md:grid-cols-3 gap-0 border-t border-l border-gray-100">
+                    <div className="grid grid-cols-2 md:grid-cols-3 gap-0 border-t border-l border-gray-100 opacity-transition">
+                         {/* Simple opacity usage if loading but showing stale data?
+                             For now, strict loading state. */}
+                        {loadingProducts && (
+                             <div className="absolute inset-0 bg-white bg-opacity-50 z-10 flex items-center justify-center">
+                                 <span className="text-gray-500">Obnovujem...</span>
+                             </div>
+                        )}
                         {products.map((product) => (
-                            <div key={product.id} className="p-2">
+                            <div key={product.id} className="p-2 relative">
                                 <ProductCard product={product} />
                             </div>
                         ))}
@@ -217,7 +292,7 @@ const CategoryProductsContent = () => {
               {totalPages > 1 && (
                 <div className="flex justify-center items-center mt-12 gap-2 text-sm">
                     <button
-                    onClick={() => setPage(page - 1)}
+                    onClick={() => handlePageChange(page - 1)}
                     disabled={page === 0}
                     className={`px-3 py-2 rounded-sm border ${
                         page === 0
@@ -231,7 +306,7 @@ const CategoryProductsContent = () => {
                     Strana {page + 1} z {totalPages}
                     </span>
                     <button
-                    onClick={() => setPage(page + 1)}
+                    onClick={() => handlePageChange(page + 1)}
                     disabled={page + 1 >= totalPages}
                     className={`px-3 py-2 rounded-sm border ${
                         page + 1 >= totalPages
