@@ -80,6 +80,12 @@ const ProductCard = ({ product }) => {
             <ProductLabel key={index} label={label} />
         ))}
 
+        {product.discountPercentualValue && (
+            <div className="absolute top-10 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 z-10 rounded shadow-sm">
+                -{product.discountPercentualValue}%
+            </div>
+        )}
+
         <button
           onClick={toggleWishlist}
           className="absolute top-2 left-2 z-20 p-2 rounded-full bg-white/80 hover:bg-white text-red-500 hover:text-red-600 transition-colors"
@@ -124,8 +130,15 @@ const ProductCard = ({ product }) => {
           <div className="mb-2">
             <StarRating rating={product.averageRating || 0} size="w-4 h-4" />
           </div>
-          <div className="mb-3 text-lg font-bold text-gray-900 group-hover:text-tany-red transition-colors">
-             {product.price.toFixed(2)} €
+          <div className="mb-3 text-lg font-bold text-gray-900 group-hover:text-tany-red transition-colors flex justify-center items-center">
+             {product.discountPrice ? (
+                 <div className="flex flex-col leading-tight">
+                    <span className="text-xs text-gray-400 line-through font-normal">{product.price.toFixed(2)} €</span>
+                    <span className="text-red-600">{product.discountPrice.toFixed(2)} €</span>
+                 </div>
+             ) : (
+                 <span>{product.price.toFixed(2)} €</span>
+             )}
           </div>
 
           {/* Add to Cart Section - Always visible */}

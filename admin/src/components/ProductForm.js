@@ -88,6 +88,36 @@ const ProductForm = ({
           className="w-full px-3 py-2 border rounded"
         />
       </div>
+      <div className="mb-4">
+        <label className="block text-gray-700">Discount Value</label>
+        <input
+          type="number"
+          name="discountValue"
+          value={product.discountValue || ''}
+          onChange={handleChange}
+          className="w-full px-3 py-2 border rounded"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700">Discount Percentual Value</label>
+        <input
+          type="number"
+          name="discountPercentualValue"
+          value={product.discountPercentualValue || ''}
+          onChange={handleChange}
+          className="w-full px-3 py-2 border rounded"
+        />
+      </div>
+      <div className="mb-4">
+        <label className="block text-gray-700">Discount Price</label>
+        <input
+          type="number"
+          name="discountPrice"
+          value={product.discountPrice || ''}
+          onChange={handleChange}
+          className="w-full px-3 py-2 border rounded"
+        />
+      </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <SearchSelect

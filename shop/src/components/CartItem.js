@@ -70,7 +70,14 @@ const CartItem = ({ item }) => {
         </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
-        <div className="text-sm text-gray-900">{item.price ? item.price.toFixed(2) : '0.00'} €</div>
+        {item.discountPrice ? (
+          <div className="flex flex-col">
+            <span className="text-xs text-gray-400 line-through">{item.price ? item.price.toFixed(2) : '0.00'} €</span>
+            <span className="text-sm font-bold text-red-600">{item.discountPrice.toFixed(2)} €</span>
+          </div>
+        ) : (
+          <div className="text-sm text-gray-900">{item.price ? item.price.toFixed(2) : '0.00'} €</div>
+        )}
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="flex items-center">
@@ -89,7 +96,7 @@ const CartItem = ({ item }) => {
       </td>
       <td className="px-6 py-4 whitespace-nowrap">
         <div className="text-sm text-gray-900">
-          {(item.price * item.quantity).toFixed(2)} €
+          {((item.discountPrice || item.price) * item.quantity).toFixed(2)} €
         </div>
       </td>
       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
