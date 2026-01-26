@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { getProduct, createProduct, updateProduct, patchProduct } from '../services/productAdminService';
+import { getProduct, createProduct, updateProduct } from '../services/productAdminService';
 import { getBrands } from '../services/brandAdminService';
 import { getSuppliers } from '../services/supplierAdminService';
 import { getCategories } from '../services/categoryAdminService';
@@ -109,35 +109,21 @@ const ProductEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let productId = id;
     if (id) {
       await updateProduct(id, product);
     } else {
-      const newProduct = await createProduct(product);
-      productId = newProduct.id;
-    }
-
-    // Save filter parameters via PATCH
-    if (product.productFilterParameters) {
-        await patchProduct(productId, { productFilterParameters: product.productFilterParameters });
+      await createProduct(product);
     }
 
     navigate('/products');
   };
 
   const handleSaveAndStay = async () => {
-    let productId = id;
     if (id) {
       await updateProduct(id, product);
     } else {
       const newProduct = await createProduct(product);
-      productId = newProduct.id;
       navigate(`/products/${newProduct.id}`, { replace: true });
-    }
-
-    // Save filter parameters via PATCH
-    if (product.productFilterParameters) {
-        await patchProduct(productId, { productFilterParameters: product.productFilterParameters });
     }
   };
 
