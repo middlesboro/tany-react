@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import { getProduct, getRelatedProducts } from '../services/productService';
+import { getProductBySlug, getRelatedProducts } from '../services/productService';
 import { getReviewsByProduct, createReview } from '../services/reviewService';
 import { getCategories } from '../services/categoryService';
 import { findCategoryPath } from '../utils/categoryUtils';
@@ -333,7 +333,7 @@ const ReasonsToBuy = () => (
 );
 
 const ProductDetail = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const { addToCart } = useCart();
   const { openLoginModal } = useModal();
   const { setBreadcrumbs } = useBreadcrumbs();
@@ -352,7 +352,7 @@ const ProductDetail = () => {
     const fetchProduct = async () => {
       setLoading(true);
       try {
-        const data = await getProduct(id);
+        const data = await getProductBySlug(slug);
         setProduct(data);
         setInWishlist(data.inWishlist || false);
         if (data.images && data.images.length > 0) {
@@ -405,7 +405,7 @@ const ProductDetail = () => {
         setBreadcrumbs(crumbs);
 
         try {
-          const related = await getRelatedProducts(id);
+          const related = await getRelatedProducts(data.id);
           setRelatedProducts(Array.isArray(related) ? related.slice(0, 5) : []);
         } catch (relatedErr) {
           console.error("Failed to load related products", relatedErr);
@@ -420,7 +420,7 @@ const ProductDetail = () => {
       }
     };
     fetchProduct();
-  }, [id]);
+  }, [slug]);
 
   const handleAddToCart = async () => {
     if (!product) return;
