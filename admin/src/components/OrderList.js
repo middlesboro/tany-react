@@ -216,6 +216,9 @@ const OrderList = () => {
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('paymentName')}>
               Payment
             </th>
+            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('createDate')}>
+              Create Date
+            </th>
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('finalPrice')}>
               Price
             </th>
@@ -235,6 +238,9 @@ const OrderList = () => {
               </td>
               <td className="py-2 px-4 border-b">
                 {order.paymentName}
+              </td>
+              <td className="py-2 px-4 border-b">
+                {order.createDate ? new Date(order.createDate).toLocaleString() : ''}
               </td>
               <td className="py-2 px-4 border-b">{order.finalPrice} €</td>
               <td className="py-2 px-4 border-b">

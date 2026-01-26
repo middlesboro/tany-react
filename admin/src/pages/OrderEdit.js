@@ -21,7 +21,10 @@ const OrderEdit = () => {
     invoiceAddress: { street: '', city: '', zip: '' },
     deliveryAddressSameAsInvoiceAddress: false,
     note: '',
-    priceBreakDown: null
+    priceBreakDown: null,
+    status: 'CREATED',
+    statusHistory: [],
+    createDate: null
   });
 
   useEffect(() => {
