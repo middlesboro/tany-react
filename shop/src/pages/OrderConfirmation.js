@@ -235,60 +235,9 @@ const OrderConfirmation = () => {
           </div>
       )}
 
-      <div className="bg-white shadow rounded p-6 mb-8">
-        <h2 className="text-xl font-bold mb-4">Order Items</h2>
-        <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-                <tr>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Product</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-                    <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Total</th>
-                </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-                {order.items && order.items.map((item) => (
-                    <tr key={item.id}>
-                        <td className="px-6 py-4 whitespace-nowrap">
-                            <div className="flex items-center">
-                                {item.image && (
-                                    <div className="flex-shrink-0 h-10 w-10 mr-4">
-                                        <img className="h-10 w-10 rounded-full object-cover" src={item.image} alt={item.name} />
-                                    </div>
-                                )}
-                                <div className="text-sm font-medium text-gray-900">{item.name}</div>
-                            </div>
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {item.quantity}
-                        </td>
-                        <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {item.price ? `${item.price.toFixed(2)} €` : '-'}
-                        </td>
-                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {(item.price && item.quantity) ? `${(item.price * item.quantity).toFixed(2)} €` : '-'}
-                        </td>
-                    </tr>
-                ))}
-            </tbody>
-            </table>
-        </div>
-        <div className="mt-4 flex flex-col items-end">
-             <div className="text-sm text-gray-500 mb-1">
-                Cena bez DPH: {order.priceBreakDown && order.priceBreakDown.totalPriceWithoutVat
-                    ? `${order.priceBreakDown.totalPriceWithoutVat.toFixed(2)} €`
-                    : (order.finalPrice ? `${(order.finalPrice / VAT_RATE).toFixed(2)} €` : '-')}
-            </div>
-            <div className="text-xl font-bold">
-                Total Price: {order.finalPrice ? `${order.finalPrice.toFixed(2)} €` : '-'}
-            </div>
-        </div>
-      </div>
-
       {order.priceBreakDown && (
           <div className="bg-white shadow rounded p-6 mb-8">
-              <h2 className="text-xl font-bold mb-4">Súhrn ceny</h2>
+              <h2 className="text-xl font-bold mb-4">Rekapitulácia objednávky</h2>
               <PriceBreakdown priceBreakDown={order.priceBreakDown} showItems={true} />
           </div>
       )}
