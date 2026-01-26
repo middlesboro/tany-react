@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getOrder } from '../services/orderService';
+import { VAT_RATE } from '../utils/constants';
 
 const CustomerOrderDetail = ({ orderId, onBack }) => {
   const [order, setOrder] = useState(null);
@@ -155,6 +156,14 @@ const CustomerOrderDetail = ({ orderId, onBack }) => {
              <span className="text-gray-600">Doprava:</span>
              <span className="font-medium">
                 {order.deliveryPrice ? order.deliveryPrice.toFixed(2) : '0.00'} €
+             </span>
+           </div>
+           <div className="flex justify-between py-2 border-b border-gray-100">
+             <span className="text-gray-600">Cena bez DPH:</span>
+             <span className="font-medium">
+                {order.priceBreakDown && order.priceBreakDown.totalPriceWithoutVat
+                    ? order.priceBreakDown.totalPriceWithoutVat.toFixed(2)
+                    : (order.finalPrice ? (order.finalPrice / VAT_RATE).toFixed(2) : '0.00')} €
              </span>
            </div>
            <div className="flex justify-between py-4 text-lg font-bold">

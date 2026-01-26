@@ -6,6 +6,7 @@ import { createOrder } from '../services/orderService';
 import { debounce } from '../utils/debounce';
 import PriceBreakdown from '../components/PriceBreakdown';
 import { isValidName, isValidSlovakPhone, isValidSlovakZip, isValidEmail, checkEmailTypos } from '../utils/validation';
+import { VAT_RATE } from '../utils/constants';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -723,14 +724,41 @@ const Checkout = () => {
         </section>
 
         {/* Price Breakdown */}
-        {cart?.priceBreakDown && (
-            <section>
-                <h2 className="text-xl font-bold mb-4">7. SÚHRN</h2>
-                <div className="bg-white rounded shadow p-6">
+        <section>
+            <h2 className="text-xl font-bold mb-4">7. SÚHRN</h2>
+            <div className="bg-white rounded shadow p-6">
+                {cart?.priceBreakDown ? (
                    <PriceBreakdown priceBreakDown={cart.priceBreakDown} showItems={true} cartItems={cart.products} />
-                </div>
-            </section>
-        )}
+                ) : (
+                    <div className="w-full">
+                        <div className="space-y-2 text-sm text-gray-600">
+                             {/* Items Fallback - basic list */}
+                             {cart?.products?.map((item, index) => (
+                                <div key={index} className="flex justify-between items-center mb-2">
+                                     <div className="flex items-center">
+                                         <span>{item.title} {item.quantity > 1 ? `(${item.quantity} ks)` : ''}</span>
+                                     </div>
+                                     <span>{(item.price * item.quantity).toFixed(2)} €</span>
+                                </div>
+                             ))}
+                        </div>
+                        <div className="border-t border-gray-200 pt-3 mt-3">
+                             <div className="flex justify-between items-end">
+                                 <span className="text-base font-bold text-gray-900">Spolu (produkty):</span>
+                                 <div className="text-right">
+                                     <span className="block text-xl font-bold text-blue-600">
+                                         {cart?.totalProductPrice ? cart.totalProductPrice.toFixed(2) : '0.00'} €
+                                     </span>
+                                 </div>
+                             </div>
+                             <div className="flex justify-between text-xs text-gray-500 mt-1">
+                                 <span>Bez DPH: {cart?.totalProductPrice ? (cart.totalProductPrice / VAT_RATE).toFixed(2) : '0.00'} €</span>
+                             </div>
+                        </div>
+                   </div>
+                )}
+            </div>
+        </section>
 
         {/* Submit Button */}
         <div className="flex justify-end pt-6">
