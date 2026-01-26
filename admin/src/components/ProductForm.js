@@ -133,6 +133,16 @@ const ProductForm = ({
               className="w-full px-3 py-2 border rounded"
             />
           </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Quantity</label>
+            <input
+                type="number"
+                name="quantity"
+                value={product.quantity}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded"
+            />
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
             <div>
               <label className="block text-gray-700">EAN</label>
@@ -213,16 +223,6 @@ const ProductForm = ({
           className="bg-white"
         />
       </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Quantity</label>
-            <input
-              type="number"
-              name="quantity"
-              value={product.quantity}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded"
-            />
-          </div>
         </>
       )}
 
