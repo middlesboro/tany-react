@@ -152,7 +152,7 @@ const OrderConfirmation = () => {
         </div>
       )}
 
-      <h1 className="text-3xl font-bold mb-6">Order #{order.id}</h1>
+      <h1 className="text-3xl font-bold mb-6">Číslo objednávky {order.orderIdentifier}</h1>
 
       {/* Personal Info */}
       <div className="bg-white shadow rounded p-6 mb-8">
