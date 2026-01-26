@@ -13,6 +13,7 @@ import ProductImageManager from '../components/ProductImageManager';
 const ProductEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [activeTab, setActiveTab] = useState('main');
   const location = useLocation();
   const [product, setProduct] = useState({
     title: '',
@@ -142,6 +143,8 @@ const ProductEdit = () => {
     <div>
       <h1 className="text-2xl font-bold mb-4">{id ? 'Edit Product' : 'Create Product'}</h1>
       <ProductForm
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
         product={product}
         brands={brands}
         suppliers={suppliers}
@@ -153,7 +156,7 @@ const ProductEdit = () => {
         handleSubmit={handleSubmit}
         handleSaveAndStay={handleSaveAndStay}
       />
-      {id && (
+      {activeTab === 'main' && id && (
         <ProductImageManager
           productId={id}
           images={product.images}
