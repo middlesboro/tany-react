@@ -4,6 +4,7 @@ import { getOrder } from '../services/orderService';
 import { getPaymentInfo, checkBesteronStatus } from '../services/paymentService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import PriceBreakdown from '../components/PriceBreakdown';
+import { VAT_RATE } from '../utils/constants';
 
 const OrderConfirmation = () => {
   const { id } = useParams();
@@ -273,7 +274,12 @@ const OrderConfirmation = () => {
             </tbody>
             </table>
         </div>
-        <div className="mt-4 flex justify-end">
+        <div className="mt-4 flex flex-col items-end">
+             <div className="text-sm text-gray-500 mb-1">
+                Cena bez DPH: {order.priceBreakDown && order.priceBreakDown.totalPriceWithoutVat
+                    ? `${order.priceBreakDown.totalPriceWithoutVat.toFixed(2)} €`
+                    : (order.finalPrice ? `${(order.finalPrice / VAT_RATE).toFixed(2)} €` : '-')}
+            </div>
             <div className="text-xl font-bold">
                 Total Price: {order.finalPrice ? `${order.finalPrice.toFixed(2)} €` : '-'}
             </div>

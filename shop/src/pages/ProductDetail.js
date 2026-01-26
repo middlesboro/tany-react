@@ -14,6 +14,7 @@ import ProductLabel from '../components/ProductLabel';
 import ProductCard from '../components/ProductCard';
 import StarRating from '../components/StarRating';
 import { addToWishlist, removeFromWishlist } from '../services/wishlistService';
+import { VAT_RATE } from '../utils/constants';
 
 const REASONS = [
   "Sme malá Slovenská spoločnosť. Každú objednávku si vážime rovnako a tak k nej aj pristupujeme",
@@ -571,22 +572,32 @@ const ProductDetail = () => {
 
             <div className="mb-6">
                 {product.discountPrice ? (
-                    <div className="flex items-baseline">
-                         <span className="text-xl text-gray-400 line-through mr-3">
-                            {product.price ? product.price.toFixed(2).replace('.', ',') : '0,00'} €
-                         </span>
-                         <span className="text-3xl font-bold text-red-600">
-                            {product.discountPrice.toFixed(2).replace('.', ',')} €
-                         </span>
-                         <span className="text-sm text-gray-500 ml-2">S DPH</span>
-                    </div>
+                    <>
+                        <div className="flex items-baseline">
+                             <span className="text-xl text-gray-400 line-through mr-3">
+                                {product.price ? product.price.toFixed(2).replace('.', ',') : '0,00'} €
+                             </span>
+                             <span className="text-3xl font-bold text-red-600">
+                                {product.discountPrice.toFixed(2).replace('.', ',')} €
+                             </span>
+                             <span className="text-sm text-gray-500 ml-2">S DPH</span>
+                        </div>
+                        <div className="text-sm text-gray-500 mt-1">
+                            Cena bez DPH: {(product.discountPrice / VAT_RATE).toFixed(2).replace('.', ',')} €
+                        </div>
+                    </>
                 ) : (
-                    <div>
-                        <span className="text-3xl font-bold text-tany-green">
-                            {product.price ? product.price.toFixed(2).replace('.', ',') : '0,00'} €
-                        </span>
-                        <span className="text-sm text-gray-500 ml-2">S DPH</span>
-                    </div>
+                    <>
+                        <div>
+                            <span className="text-3xl font-bold text-tany-green">
+                                {product.price ? product.price.toFixed(2).replace('.', ',') : '0,00'} €
+                            </span>
+                            <span className="text-sm text-gray-500 ml-2">S DPH</span>
+                        </div>
+                        <div className="text-sm text-gray-500 mt-1">
+                            Cena bez DPH: {product.price ? (product.price / VAT_RATE).toFixed(2).replace('.', ',') : '0,00'} €
+                        </div>
+                    </>
                 )}
             </div>
 

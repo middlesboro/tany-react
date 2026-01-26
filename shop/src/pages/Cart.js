@@ -4,6 +4,7 @@ import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import { Link } from 'react-router-dom';
 import CartItem from '../components/CartItem';
 import PriceBreakdown from '../components/PriceBreakdown';
+import { VAT_RATE } from '../utils/constants';
 
 const Cart = () => {
   const { cart, loading, addDiscount, removeDiscount, updateCart } = useCart();
@@ -192,9 +193,15 @@ const Cart = () => {
                     </div>
                   )}
                 </div>
-                <div className="border-t border-gray-200 pt-4 flex justify-between items-center">
-                  <span className="text-lg font-bold">Total:</span>
-                  <span className="text-xl font-bold text-blue-600">{totalDisplayPrice.toFixed(2)} €</span>
+                <div className="border-t border-gray-200 pt-4">
+                   <div className="flex justify-between items-center mb-1">
+                      <span className="text-sm text-gray-500">Bez DPH:</span>
+                      <span className="text-sm text-gray-500">{(totalDisplayPrice / VAT_RATE).toFixed(2)} €</span>
+                   </div>
+                   <div className="flex justify-between items-center">
+                      <span className="text-lg font-bold">Total:</span>
+                      <span className="text-xl font-bold text-blue-600">{totalDisplayPrice.toFixed(2)} €</span>
+                   </div>
                 </div>
               </>
             )}
