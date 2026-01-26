@@ -225,7 +225,7 @@ const OrderList = () => {
         <tbody>
           {orders.map((order) => (
             <tr key={order.id}>
-              <td className="py-2 px-4 border-b">{order.id}</td>
+              <td className="py-2 px-4 border-b">{order.orderIdentifier}</td>
               <td className="py-2 px-4 border-b">
                 {order.customerName}
               </td>
