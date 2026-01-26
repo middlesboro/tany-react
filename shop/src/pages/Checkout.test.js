@@ -127,4 +127,31 @@ describe('Checkout Component', () => {
            expect(callWithCarrier2).toBeDefined();
       });
   });
+
+  test('preserves discountForNewsletter when updating cart', async () => {
+    const cartWithDiscount = { ...mockCart, discountForNewsletter: true };
+    useCart.mockReturnValue({
+      cart: cartWithDiscount,
+      loading: false,
+      clearCart: mockClearCart,
+      updateCart: mockUpdateCart,
+    });
+
+    render(
+      <BrowserRouter>
+        <Checkout />
+      </BrowserRouter>
+    );
+
+    // Trigger update
+    const firstnameInput = screen.getByDisplayValue('John');
+    fireEvent.change(firstnameInput, { target: { value: 'Jane' } });
+
+    await waitFor(() => {
+        expect(mockUpdateCart).toHaveBeenCalled();
+    });
+
+    const lastCall = mockUpdateCart.mock.calls[mockUpdateCart.mock.calls.length - 1][0];
+    expect(lastCall.discountForNewsletter).toBe(true);
+  });
 });
