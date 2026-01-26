@@ -112,7 +112,7 @@ const OrderForm = ({ order, handleChange, handleSubmit, carriers = [], payments 
             <label className="block text-gray-700">Create Date</label>
             <input
               type="text"
-              value={order.createDate ? new Date(order.createDate).toLocaleString() : ''}
+              value={order.createDate ? new Date(order.createDate).toLocaleString('sk-SK') : ''}
               disabled
               className="w-full px-3 py-2 border rounded bg-gray-100"
             />
@@ -124,7 +124,7 @@ const OrderForm = ({ order, handleChange, handleSubmit, carriers = [], payments 
             <ul className="list-disc pl-5">
               {order.statusHistory.map((history, index) => (
                 <li key={index} className="mb-1">
-                  <span className="font-medium">{history.status}</span> - {new Date(history.changeDate || history.date || history.createdAt).toLocaleString()}
+                  <span className="font-medium">{history.status}</span> - {new Date(history.changeDate || history.date || history.createdAt).toLocaleString('sk-SK')}
                 </li>
               ))}
             </ul>
