@@ -4,6 +4,7 @@ import { useCart } from '../context/CartContext';
 import { useModal } from '../context/ModalContext';
 import AddToCartButton from './AddToCartButton';
 import ProductLabel from './ProductLabel';
+import ProductJsonLd from './ProductJsonLd';
 import StarRating from './StarRating';
 import { addToWishlist, removeFromWishlist } from '../services/wishlistService';
 import { isAuthenticated } from '../services/authService';
@@ -73,6 +74,7 @@ const ProductCard = ({ product }) => {
 
   return (
     <div className="group bg-white flex flex-col h-full border border-gray-100 hover:border-gray-200 hover:shadow-lg transition-all duration-300 relative">
+        <ProductJsonLd product={product} />
         {/* Discount Badge Placeholder (example) */}
         {/* <span className="absolute top-2 left-2 bg-tany-red text-white text-xs font-bold px-2 py-1 z-10">-10%</span> */}
 

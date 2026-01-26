@@ -12,6 +12,7 @@ import { useModal } from '../context/ModalContext';
 import AddToCartButton from '../components/AddToCartButton';
 import ProductLabel from '../components/ProductLabel';
 import ProductCard from '../components/ProductCard';
+import ProductJsonLd from '../components/ProductJsonLd';
 import StarRating from '../components/StarRating';
 import { addToWishlist, removeFromWishlist } from '../services/wishlistService';
 import { VAT_RATE } from '../utils/constants';
@@ -480,6 +481,7 @@ const ProductDetail = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <ProductJsonLd product={product} />
       {/* Breadcrumb-ish Link */}
       <Link to="/" className="inline-flex items-center text-gray-500 hover:text-tany-green mb-6 transition-colors text-sm font-medium">
         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>
