@@ -204,7 +204,8 @@ const Checkout = () => {
           selectedCarrierId: selectedCarrier,
           selectedPaymentId: selectedPayment,
           selectedPickupPointId: carrierObj?.type === 'PACKETA' ? selectedPickupPoint?.id : null,
-          selectedPickupPointName: carrierObj?.type === 'PACKETA' ? (selectedPickupPoint?.name || selectedPickupPoint?.formatedValue) : null
+          selectedPickupPointName: carrierObj?.type === 'PACKETA' ? (selectedPickupPoint?.name || selectedPickupPoint?.formatedValue) : null,
+          discountForNewsletter: cart.discountForNewsletter
       };
 
       debouncedUpdate(dataToSave);
