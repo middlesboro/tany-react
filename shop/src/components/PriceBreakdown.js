@@ -65,7 +65,10 @@ const PriceBreakdown = ({ priceBreakDown, showItems = false, cartItems = null })
         {/* Other Items (Shipping, Payment, Discount) */}
         {otherItems.map((item, index) => (
             <div key={`${item.type}-${index}`} className={`flex justify-between ${item.type === 'DISCOUNT' ? 'text-green-600' : ''}`}>
-                <span>{item.name}</span>
+                <div className="flex items-center">
+                    {showItems && <div className="w-10 mr-3" />}
+                    <span>{item.name}</span>
+                </div>
                 <span>
                     {(item.priceWithVat * item.quantity).toFixed(2)} €
                 </span>
