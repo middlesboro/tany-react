@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { getProduct, createProduct, updateProduct } from '../services/productAdminService';
 import { getBrands } from '../services/brandAdminService';
 import { getSuppliers } from '../services/supplierAdminService';
@@ -13,6 +13,7 @@ import ProductImageManager from '../components/ProductImageManager';
 const ProductEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [product, setProduct] = useState({
     title: '',
     shortDescription: '',
@@ -34,6 +35,30 @@ const ProductEdit = () => {
     wholesalePrice: '',
     metaTitle: '',
     metaDescription: '',
+  });
+
+  const mapProductToState = (data) => ({
+    ...data,
+    title: data.title || '',
+    shortDescription: data.shortDescription || '',
+    description: data.description || '',
+    price: data.price || '',
+    quantity: data.quantity || '',
+    images: data.images || [],
+    brandId: data.brandId || '',
+    supplierId: data.supplierId || '',
+    categoryIds: data.categoryIds || [],
+    productFilterParameters: data.productFilterParameters || [],
+    productLabelIds: data.productLabelIds || [],
+    ean: data.ean || '',
+    productCode: data.productCode || '',
+    weight: data.weight || '',
+    active: data.active !== undefined ? data.active : true,
+    priceWithoutVat: data.priceWithoutVat || '',
+    discountPriceWithoutVat: data.discountPriceWithoutVat || '',
+    wholesalePrice: data.wholesalePrice || '',
+    metaTitle: data.metaTitle || '',
+    metaDescription: data.metaDescription || '',
   });
 
   const [brands, setBrands] = useState([]);
@@ -68,28 +93,14 @@ const ProductEdit = () => {
     if (id) {
       const fetchProductData = async () => {
         const data = await getProduct(id);
-        setProduct({
-          ...data,
-          images: data.images || [],
-          brandId: data.brandId || '',
-          supplierId: data.supplierId || '',
-          categoryIds: data.categoryIds || [],
-          productFilterParameters: data.productFilterParameters || [],
-          productLabelIds: data.productLabelIds || [],
-          ean: data.ean || '',
-          productCode: data.productCode || '',
-          weight: data.weight || '',
-          active: data.active !== undefined ? data.active : true,
-          priceWithoutVat: data.priceWithoutVat || '',
-          discountPriceWithoutVat: data.discountPriceWithoutVat || '',
-          wholesalePrice: data.wholesalePrice || '',
-          metaTitle: data.metaTitle || '',
-          metaDescription: data.metaDescription || '',
-        });
+        setProduct(mapProductToState(data));
       };
       fetchProductData();
+    } else if (location.state?.duplicateProduct) {
+      const duplicateData = location.state.duplicateProduct;
+      setProduct(mapProductToState({ ...duplicateData, images: [] }));
     }
-  }, [id]);
+  }, [id, location.state]);
 
   const refreshImages = async () => {
     if (id) {
