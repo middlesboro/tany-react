@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getOrder } from '../services/orderService';
 import { VAT_RATE } from '../utils/constants';
 
@@ -119,7 +120,13 @@ const CustomerOrderDetail = ({ orderId, onBack }) => {
                      {item.image && (
                        <img src={item.image} alt={item.name} className="w-10 h-10 object-cover rounded mr-4" />
                      )}
-                     <span className="text-gray-900">{item.name}</span>
+                     {item.slug || item.productSlug ? (
+                       <Link to={`/product/${item.slug || item.productSlug}`} className="text-gray-900 hover:text-tany-green hover:underline">
+                         {item.name}
+                       </Link>
+                     ) : (
+                       <span className="text-gray-900">{item.name}</span>
+                     )}
                    </td>
                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
                      {item.discountPrice ? (
