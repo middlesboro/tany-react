@@ -264,10 +264,17 @@ const OrderConfirmation = () => {
                             {item.quantity}
                         </td>
                         <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {item.price ? `${item.price.toFixed(2)} €` : '-'}
+                            {item.discountPrice ? (
+                                <div className="flex flex-col">
+                                    <span className="text-xs text-gray-400 line-through">{item.price ? item.price.toFixed(2) : '0.00'} €</span>
+                                    <span className="text-sm font-bold text-red-600">{item.discountPrice.toFixed(2)} €</span>
+                                </div>
+                            ) : (
+                                <span>{item.price ? `${item.price.toFixed(2)} €` : '-'}</span>
+                            )}
                         </td>
                          <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                            {(item.price && item.quantity) ? `${(item.price * item.quantity).toFixed(2)} €` : '-'}
+                            {((item.discountPrice || item.price) && item.quantity) ? `${((item.discountPrice || item.price) * item.quantity).toFixed(2)} €` : '-'}
                         </td>
                     </tr>
                 ))}
