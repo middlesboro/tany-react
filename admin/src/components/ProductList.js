@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { getAdminProducts, deleteProduct, patchProduct } from '../services/productAdminService';
+import { Link, useNavigate } from 'react-router-dom';
+import { getAdminProducts, deleteProduct, patchProduct, getProduct } from '../services/productAdminService';
 import { getBrands } from '../services/brandAdminService';
 import SearchSelect from './SearchSelect';
 
 const ProductList = () => {
+  const navigate = useNavigate();
   const [products, setProducts] = useState([]);
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(10);
@@ -93,6 +94,22 @@ const ProductList = () => {
       setSort(`${field},${currentDirection === 'asc' ? 'desc' : 'asc'}`);
     } else {
       setSort(`${field},asc`);
+    }
+  };
+
+  const handleDuplicate = async (productId) => {
+    try {
+      const fullProduct = await getProduct(productId);
+      const duplicateData = {
+        ...fullProduct,
+        id: undefined,
+        title: `${fullProduct.title} - copy`,
+        images: [],
+      };
+      navigate('/products/new', { state: { duplicateProduct: duplicateData } });
+    } catch (error) {
+      console.error("Failed to duplicate product", error);
+      alert("Failed to duplicate product.");
     }
   };
 
@@ -389,6 +406,15 @@ const ProductList = () => {
                     >
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
+                      </svg>
+                    </button>
+                    <button
+                      onClick={() => handleDuplicate(product.id)}
+                      className="text-indigo-500 hover:text-indigo-700 mr-2"
+                      title="Duplicate"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
                       </svg>
                     </button>
                     <button
