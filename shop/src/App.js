@@ -44,7 +44,7 @@ function App() {
                 <Route path="/global-payments-callback" element={<GlobalPaymentsCallback />} />
                 <Route path="/besteron-callback" element={<BesteronCallback />} />
                 <Route path="/category/:slug" element={<CategoryProducts />} />
-                <Route path="/products/:id" element={<ProductDetail />} />
+                <Route path="/product/:slug" element={<ProductDetail />} />
                 <Route path="/blog/:id" element={<BlogDetail />} />
                 <Route path="/login" element={<Login isAdmin={false} />} />
                 <Route path="/account" element={<Navigate to="/account/personal-data" replace />} />

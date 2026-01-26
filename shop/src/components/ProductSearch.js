@@ -49,8 +49,8 @@ const ProductSearch = () => {
     return () => clearTimeout(timeoutId);
   }, [query]);
 
-  const handleProductClick = (id) => {
-    navigate(`/products/${id}`);
+  const handleProductClick = (product) => {
+    navigate(`/product/${product.slug}`);
     setShowResults(false);
     setQuery('');
   };
@@ -81,7 +81,7 @@ const ProductSearch = () => {
                 {results.map((product) => (
                   <li key={product.id}>
                     <button
-                      onClick={() => handleProductClick(product.id)}
+                      onClick={() => handleProductClick(product)}
                       className="w-full text-left p-2 hover:bg-gray-50 flex items-center space-x-3 transition-colors border-b border-gray-100 last:border-0"
                     >
                       <div className="h-12 w-12 flex-shrink-0 bg-gray-100 flex items-center justify-center overflow-hidden rounded">

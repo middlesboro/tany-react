@@ -103,7 +103,7 @@ const ProductCard = ({ product }) => {
             </svg>
         </button>
 
-      <Link to={`/products/${product.id}`} className="block relative overflow-hidden flex-shrink-0 aspect-square">
+      <Link to={`/product/${product.slug}`} className="block relative overflow-hidden flex-shrink-0 aspect-square">
          {/* Overlay on hover not typically used in this specific prestashop theme, but image zoom/swap is common.
              We keep it simple but cleaner. */}
         {product.images && product.images.length > 0 ? (
@@ -120,7 +120,7 @@ const ProductCard = ({ product }) => {
       </Link>
 
       <div className="p-2 md:p-4 flex flex-col flex-grow text-center">
-        <Link to={`/products/${product.id}`} className="block mb-2">
+        <Link to={`/product/${product.slug}`} className="block mb-2">
           <h3 className="text-sm font-normal text-gray-800 hover:text-tany-green transition-colors leading-relaxed h-10 overflow-hidden" title={product.title}>
               {product.title}
           </h3>
