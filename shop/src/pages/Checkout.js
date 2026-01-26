@@ -48,6 +48,7 @@ const Checkout = () => {
   useEffect(() => {
     setBreadcrumbs([
       { label: 'Domov', path: '/' },
+      { label: 'Nákupný košík', path: '/cart' },
       { label: 'Objednávka', path: null }
     ]);
   }, [setBreadcrumbs]);
