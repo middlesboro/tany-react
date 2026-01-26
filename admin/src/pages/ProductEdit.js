@@ -25,6 +25,15 @@ const ProductEdit = () => {
     categoryIds: [],
     productFilterParameters: [],
     productLabelIds: [],
+    ean: '',
+    productCode: '',
+    weight: '',
+    active: true,
+    priceWithoutVat: '',
+    discountPriceWithoutVat: '',
+    wholesalePrice: '',
+    metaTitle: '',
+    metaDescription: '',
   });
 
   const [brands, setBrands] = useState([]);
@@ -37,22 +46,22 @@ const ProductEdit = () => {
   useEffect(() => {
     const fetchData = async () => {
       const brandsData = await getBrands(0, 'name,asc', 1000);
-      setBrands(brandsData.content);
+      setBrands(brandsData.content || []);
       const suppliersData = await getSuppliers(0, 'name,asc', 1000);
-      setSuppliers(suppliersData.content);
+      setSuppliers(suppliersData.content || []);
       const categoriesData = await getCategories(0, 'title,asc', 1000);
       // Map categories to have 'name' property for consistency with SearchSelect/MultiSearchSelect
-      const mappedCategories = categoriesData.content.map(c => ({
+      const mappedCategories = (categoriesData.content || []).map(c => ({
         ...c,
         name: c.title
       }));
       setCategories(mappedCategories);
       const filterParametersData = await getFilterParameters(0, 'name,asc', 1000);
-      setFilterParameters(filterParametersData.content);
+      setFilterParameters(filterParametersData.content || []);
       const filterParameterValuesData = await getFilterParameterValues(0, 'name,asc', 1000);
-      setFilterParameterValues(filterParameterValuesData.content);
+      setFilterParameterValues(filterParameterValuesData.content || []);
       const productLabelsData = await getAllProductLabels();
-      setProductLabels(productLabelsData.map(l => ({...l, name: l.title})));
+      setProductLabels((productLabelsData || []).map(l => ({...l, name: l.title})));
     };
     fetchData();
 
@@ -67,6 +76,15 @@ const ProductEdit = () => {
           categoryIds: data.categoryIds || [],
           productFilterParameters: data.productFilterParameters || [],
           productLabelIds: data.productLabelIds || [],
+          ean: data.ean || '',
+          productCode: data.productCode || '',
+          weight: data.weight || '',
+          active: data.active !== undefined ? data.active : true,
+          priceWithoutVat: data.priceWithoutVat || '',
+          discountPriceWithoutVat: data.discountPriceWithoutVat || '',
+          wholesalePrice: data.wholesalePrice || '',
+          metaTitle: data.metaTitle || '',
+          metaDescription: data.metaDescription || '',
         });
       };
       fetchProductData();

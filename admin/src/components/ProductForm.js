@@ -19,6 +19,7 @@ const ProductForm = ({
 }) => {
   const [selectedParamId, setSelectedParamId] = useState('');
   const [selectedValueId, setSelectedValueId] = useState('');
+  const [activeTab, setActiveTab] = useState('main');
 
   const handleQuillChange = (name) => (value) => {
     // ReactQuill returns the HTML value directly
@@ -78,48 +79,86 @@ const ProductForm = ({
 
   return (
     <form onSubmit={handleSubmit}>
-      <div className="mb-4">
-        <label className="block text-gray-700">Title</label>
-        <input
-          type="text"
-          name="title"
-          value={product.title}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border rounded"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700">Discount Value</label>
-        <input
-          type="number"
-          name="discountValue"
-          value={product.discountValue || ''}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border rounded"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700">Discount Percentual Value</label>
-        <input
-          type="number"
-          name="discountPercentualValue"
-          value={product.discountPercentualValue || ''}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border rounded"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700">Discount Price</label>
-        <input
-          type="number"
-          name="discountPrice"
-          value={product.discountPrice || ''}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border rounded"
-        />
+      <div className="mb-4 border-b">
+        <button
+          type="button"
+          className={`px-4 py-2 ${activeTab === 'main' ? 'border-b-2 border-blue-500 font-bold' : ''}`}
+          onClick={() => setActiveTab('main')}
+        >
+          Main
+        </button>
+        <button
+          type="button"
+          className={`px-4 py-2 ${activeTab === 'prices' ? 'border-b-2 border-blue-500 font-bold' : ''}`}
+          onClick={() => setActiveTab('prices')}
+        >
+          Prices
+        </button>
+        <button
+          type="button"
+          className={`px-4 py-2 ${activeTab === 'seo' ? 'border-b-2 border-blue-500 font-bold' : ''}`}
+          onClick={() => setActiveTab('seo')}
+        >
+          SEO
+        </button>
       </div>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+      {activeTab === 'main' && (
+        <>
+          <div className="mb-4 flex items-center">
+            <input
+              type="checkbox"
+              name="active"
+              checked={product.active}
+              onChange={(e) => handleChange({ target: { name: 'active', value: e.target.checked } })}
+              className="mr-2"
+            />
+            <label className="text-gray-700">Active</label>
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Title</label>
+            <input
+              type="text"
+              name="title"
+              value={product.title}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border rounded"
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label className="block text-gray-700">EAN</label>
+              <input
+                type="text"
+                name="ean"
+                value={product.ean || ''}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700">Product Code</label>
+              <input
+                type="text"
+                name="productCode"
+                value={product.productCode || ''}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700">Weight</label>
+              <input
+                type="number"
+                name="weight"
+                value={product.weight || ''}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <SearchSelect
           label="Brand"
           options={brands}
@@ -248,26 +287,124 @@ const ProductForm = ({
           className="bg-white"
         />
       </div>
-      <div className="mb-4">
-        <label className="block text-gray-700">Price</label>
-        <input
-          type="number"
-          name="price"
-          value={product.price}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border rounded"
-        />
-      </div>
-      <div className="mb-4">
-        <label className="block text-gray-700">Quantity</label>
-        <input
-          type="number"
-          name="quantity"
-          value={product.quantity}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border rounded"
-        />
-      </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Quantity</label>
+            <input
+              type="number"
+              name="quantity"
+              value={product.quantity}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border rounded"
+            />
+          </div>
+        </>
+      )}
+
+      {activeTab === 'prices' && (
+        <>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-4">
+            <div>
+              <label className="block text-gray-700">Price</label>
+              <input
+                type="number"
+                name="price"
+                value={product.price || ''}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700">Price Without VAT</label>
+              <input
+                type="number"
+                name="priceWithoutVat"
+                value={product.priceWithoutVat || ''}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700">Wholesale Price</label>
+              <input
+                type="number"
+                name="wholesalePrice"
+                value={product.wholesalePrice || ''}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+          </div>
+
+          <h3 className="text-lg font-bold mb-2">Discount</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label className="block text-gray-700">Discount Price</label>
+              <input
+                type="number"
+                name="discountPrice"
+                value={product.discountPrice || ''}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700">Discount Price Without VAT</label>
+              <input
+                type="number"
+                name="discountPriceWithoutVat"
+                value={product.discountPriceWithoutVat || ''}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700">Discount Value</label>
+              <input
+                type="number"
+                name="discountValue"
+                value={product.discountValue || ''}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+            <div>
+              <label className="block text-gray-700">Discount Percentual Value</label>
+              <input
+                type="number"
+                name="discountPercentualValue"
+                value={product.discountPercentualValue || ''}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+          </div>
+        </>
+      )}
+
+      {activeTab === 'seo' && (
+        <>
+          <div className="mb-4">
+            <label className="block text-gray-700">Meta Title</label>
+            <input
+              type="text"
+              name="metaTitle"
+              value={product.metaTitle || ''}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Meta Description</label>
+            <textarea
+              name="metaDescription"
+              value={product.metaDescription || ''}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border rounded h-32"
+            />
+          </div>
+        </>
+      )}
+
       <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
         Save
       </button>
