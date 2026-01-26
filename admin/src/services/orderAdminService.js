@@ -13,7 +13,8 @@ export const getOrders = async (page = 0, sort = 'id,asc', size = 20, filter = {
   if (filter.status) params.append('status', filter.status);
   if (filter.priceFrom) params.append('priceFrom', filter.priceFrom);
   if (filter.priceTo) params.append('priceTo', filter.priceTo);
-  if (filter.customerId) params.append('customerId', filter.customerId);
+  if (filter.carrierId) params.append('carrierId', filter.carrierId);
+  if (filter.paymentId) params.append('paymentId', filter.paymentId);
 
   const response = await authFetch(`${API_URL}?${params.toString()}`);
   return response.json();

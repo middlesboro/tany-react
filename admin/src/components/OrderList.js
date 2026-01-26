@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getOrders, deleteOrder } from '../services/orderAdminService';
-import { getCustomers } from '../services/customerAdminService';
 import { getCarriers } from '../services/carrierAdminService';
 import { getPayments } from '../services/paymentAdminService';
 import SearchSelect from './SearchSelect';
@@ -14,7 +13,6 @@ const OrderList = () => {
   const [sort, setSort] = useState('id,asc');
 
   // Data for lookups
-  const [customers, setCustomers] = useState([]);
   const [carriers, setCarriers] = useState([]);
   const [payments, setPayments] = useState([]);
 
@@ -24,7 +22,8 @@ const OrderList = () => {
     status: '',
     priceFrom: '',
     priceTo: '',
-    customerId: '',
+    carrierId: '',
+    paymentId: '',
   });
   const [appliedFilter, setAppliedFilter] = useState({});
 
@@ -32,12 +31,6 @@ const OrderList = () => {
     const fetchData = async () => {
       try {
         // Fetch lookups
-        const customersData = await getCustomers(0, 'lastname,asc', 1000);
-        setCustomers(customersData.content.map(c => ({
-          id: c.id,
-          name: `${c.firstname} ${c.lastname} (${c.email})`
-        })));
-
         const carriersData = await getCarriers(0, 'name,asc', 100);
         setCarriers(carriersData.content);
 
@@ -83,10 +76,17 @@ const OrderList = () => {
     });
   };
 
-  const handleCustomerChange = (value) => {
+  const handleCarrierChange = (value) => {
     setFilter({
       ...filter,
-      customerId: value,
+      carrierId: value,
+    });
+  };
+
+  const handlePaymentChange = (value) => {
+    setFilter({
+      ...filter,
+      paymentId: value,
     });
   };
 
@@ -101,7 +101,8 @@ const OrderList = () => {
       status: '',
       priceFrom: '',
       priceTo: '',
-      customerId: '',
+      carrierId: '',
+      paymentId: '',
     };
     setFilter(emptyFilter);
     setAppliedFilter({});
@@ -164,11 +165,20 @@ const OrderList = () => {
           </div>
           <div>
             <SearchSelect
-              label="Customer"
-              options={customers}
-              value={filter.customerId}
-              onChange={handleCustomerChange}
-              placeholder="Select Customer"
+              label="Carrier"
+              options={carriers}
+              value={filter.carrierId}
+              onChange={handleCarrierChange}
+              placeholder="Select Carrier"
+            />
+          </div>
+          <div>
+            <SearchSelect
+              label="Payment"
+              options={payments}
+              value={filter.paymentId}
+              onChange={handlePaymentChange}
+              placeholder="Select Payment"
             />
           </div>
         </div>
@@ -194,20 +204,20 @@ const OrderList = () => {
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('id')}>
               Order ID
             </th>
-            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('customerId')}>
+            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('customerName')}>
               Customer
             </th>
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('status')}>
               Status
             </th>
-            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('carrierId')}>
+            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('carrierName')}>
               Carrier
             </th>
-            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('paymentId')}>
+            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('paymentName')}>
               Payment
             </th>
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('finalPrice')}>
-              Final Price
+              Price
             </th>
             <th className="py-2 px-4 border-b">Actions</th>
           </tr>
@@ -217,16 +227,16 @@ const OrderList = () => {
             <tr key={order.id}>
               <td className="py-2 px-4 border-b">{order.id}</td>
               <td className="py-2 px-4 border-b">
-                {customers.find(c => c.id === order.customerId)?.name || order.customerId}
+                {order.customerName}
               </td>
               <td className="py-2 px-4 border-b">{order.status}</td>
               <td className="py-2 px-4 border-b">
-                {carriers.find(c => c.id === order.carrierId)?.name || order.carrierId}
+                {order.carrierName}
               </td>
               <td className="py-2 px-4 border-b">
-                {payments.find(p => p.id === order.paymentId)?.name || order.paymentId}
+                {order.paymentName}
               </td>
-              <td className="py-2 px-4 border-b">{order.finalPrice}</td>
+              <td className="py-2 px-4 border-b">{order.finalPrice} €</td>
               <td className="py-2 px-4 border-b">
                 <Link
                   to={`/orders/${order.id}`}
