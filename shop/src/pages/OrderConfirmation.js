@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useSearchParams, useLocation } from 'react-router-dom';
-import { getOrder } from '../services/orderService';
+import { getOrderConfirmation } from '../services/orderService';
 import { getPaymentInfo, checkBesteronStatus } from '../services/paymentService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import PriceBreakdown from '../components/PriceBreakdown';
@@ -32,7 +32,7 @@ const OrderConfirmation = () => {
   useEffect(() => {
     const fetchOrder = async () => {
       try {
-        const data = await getOrder(id);
+        const data = await getOrderConfirmation(id);
         setOrder(data);
 
         // Check if already paid based on order status or URL param

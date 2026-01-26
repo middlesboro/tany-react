@@ -17,6 +17,17 @@ export const createOrder = async (orderData) => {
   return response.json();
 };
 
+export const getOrderConfirmation = async (id) => {
+  const response = await authFetch(`${API_URL}/${id}/confirmation`, {
+    method: 'GET',
+  });
+
+  if (!response.ok) {
+     throw new Error('Failed to fetch order confirmation');
+  }
+  return response.json();
+};
+
 export const getOrder = async (id) => {
   const response = await authFetch(`${API_URL}/${id}`, {
     method: 'GET',
