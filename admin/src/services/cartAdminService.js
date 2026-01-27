@@ -2,8 +2,20 @@ import { authFetch } from '../utils/authFetch';
 
 const API_URL = `${process.env.REACT_APP_API_URL}/admin/carts`;
 
-export const getCarts = async () => {
-  const response = await authFetch(API_URL);
+export const getCarts = async (page = 0, sort = 'cartId,desc', size = 20, filter = {}) => {
+  const params = new URLSearchParams({
+    page,
+    size,
+    sort,
+  });
+
+  if (filter.cartId) params.append('cartId', filter.cartId);
+  if (filter.orderIdentifier) params.append('orderIdentifier', filter.orderIdentifier);
+  if (filter.customerName) params.append('customerName', filter.customerName);
+  if (filter.dateFrom) params.append('dateFrom', filter.dateFrom);
+  if (filter.dateTo) params.append('dateTo', filter.dateTo);
+
+  const response = await authFetch(`${API_URL}?${params.toString()}`);
   return response.json();
 };
 
