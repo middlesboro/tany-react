@@ -13,6 +13,9 @@ const OrderEdit = () => {
   const [order, setOrder] = useState({
     cartId: '',
     customerId: '',
+    customerName: '',
+    email: '',
+    phone: '',
     finalPrice: '',
     items: [],
     carrierId: '',

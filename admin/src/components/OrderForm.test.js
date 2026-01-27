@@ -42,4 +42,29 @@ describe('OrderForm', () => {
     const createDateInput = screen.getByDisplayValue(slovakDateRegex);
     expect(createDateInput).toBeInTheDocument();
   });
+
+  test('renders customer info fields instead of customerId', () => {
+    const orderWithCustomer = {
+      ...mockOrder,
+      customerName: 'John Doe',
+      email: 'john@example.com',
+      phone: '1234567890'
+    };
+
+    render(
+      <OrderForm
+        order={orderWithCustomer}
+        handleChange={mockHandleChange}
+        handleSubmit={mockHandleSubmit}
+      />
+    );
+
+    expect(screen.queryByText('Customer ID')).not.toBeInTheDocument();
+    expect(screen.getByText('Customer Name')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('John Doe')).toBeInTheDocument();
+    expect(screen.getByText('Email')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('john@example.com')).toBeInTheDocument();
+    expect(screen.getByText('Phone')).toBeInTheDocument();
+    expect(screen.getByDisplayValue('1234567890')).toBeInTheDocument();
+  });
 });
