@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import { getCartById } from '../services/cartAdminService';
+import PriceBreakdown from '../components/PriceBreakdown';
 
 const CartDetail = () => {
   const { id } = useParams();
@@ -45,8 +46,20 @@ const CartDetail = () => {
             <p className="font-semibold">{cart.cartId}</p>
           </div>
           <div>
+            <p className="text-gray-600">Order ID:</p>
+            <p className="font-semibold">{cart.orderIdentifier || '-'}</p>
+          </div>
+          <div>
             <p className="text-gray-600">Customer Name:</p>
-            <p className="font-semibold">{cart.customerName}</p>
+            <p className="font-semibold">{cart.customerName || '-'}</p>
+          </div>
+          <div>
+            <p className="text-gray-600">Carrier:</p>
+            <p className="font-semibold">{cart.carrierName || '-'}</p>
+          </div>
+          <div>
+            <p className="text-gray-600">Payment:</p>
+            <p className="font-semibold">{cart.paymentName || '-'}</p>
           </div>
           <div>
             <p className="text-gray-600">Created Date:</p>
@@ -59,39 +72,13 @@ const CartDetail = () => {
         </div>
       </div>
 
-      <h2 className="text-xl font-bold mb-4">Items</h2>
-      <div className="bg-white shadow rounded-lg overflow-hidden">
-        <table className="min-w-full divide-y divide-gray-200">
-          <thead className="bg-gray-50">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Image</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Price</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Quantity</th>
-            </tr>
-          </thead>
-          <tbody className="bg-white divide-y divide-gray-200">
-            {cart.items && cart.items.map((item, index) => (
-              <tr key={item.productId || index}>
-                <td className="px-6 py-4 whitespace-nowrap">
-                  {item.image ? (
-                    <img src={item.image} alt={item.title} className="h-12 w-12 object-cover rounded" />
-                  ) : (
-                    <div className="h-12 w-12 bg-gray-200 rounded flex items-center justify-center text-gray-400">No Img</div>
-                  )}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{item.title}</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.price} €</td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{item.quantity}</td>
-              </tr>
-            ))}
-            {(!cart.items || cart.items.length === 0) && (
-               <tr>
-                 <td colSpan="4" className="px-6 py-4 text-center text-sm text-gray-500">No items in this cart.</td>
-               </tr>
-            )}
-          </tbody>
-        </table>
+      <h2 className="text-xl font-bold mb-4">Price Breakdown</h2>
+      <div className="bg-white shadow rounded-lg p-6 mb-6">
+        {cart.priceBreakDown ? (
+            <PriceBreakdown priceBreakDown={cart.priceBreakDown} showItems={true} />
+        ) : (
+            <div className="text-gray-500">No price breakdown available.</div>
+        )}
       </div>
     </div>
   );
