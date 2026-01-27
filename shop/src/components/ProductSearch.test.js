@@ -9,10 +9,21 @@ jest.mock('../services/productService');
 const mockProducts = [
   {
     id: 1,
-    title: 'Test Product',
-    shortDescription: 'This is a description',
+    title: 'In Stock Product',
+    shortDescription: 'Description',
     price: 10.0,
-    images: ['image.jpg']
+    images: ['image1.jpg'],
+    quantity: 10,
+    slug: 'in-stock-product'
+  },
+  {
+    id: 2,
+    title: 'Out of Stock Product',
+    shortDescription: 'Description',
+    price: 20.0,
+    images: ['image2.jpg'],
+    quantity: 0,
+    slug: 'out-of-stock-product'
   }
 ];
 
@@ -27,7 +38,7 @@ describe('ProductSearch', () => {
     jest.clearAllMocks();
   });
 
-  test('renders results without description', async () => {
+  test('renders results with stock status', async () => {
     await act(async () => {
         render(
         <MemoryRouter>
@@ -37,7 +48,7 @@ describe('ProductSearch', () => {
     });
 
     const input = screen.getByPlaceholderText('Hľadať v obchode...');
-    fireEvent.change(input, { target: { value: 'Test' } });
+    fireEvent.change(input, { target: { value: 'Prod' } });
 
     // Advance timers to trigger debounce
     await act(async () => {
@@ -45,17 +56,22 @@ describe('ProductSearch', () => {
     });
 
     await waitFor(() => {
-      expect(searchProducts).toHaveBeenCalledWith('Test');
+      expect(searchProducts).toHaveBeenCalledWith('Prod');
     });
 
-    const title = await screen.findByText('Test Product');
-    expect(title).toBeInTheDocument();
-
-    // Check if price is present
+    // Check In Stock Product
+    const inStockTitle = await screen.findByText('In Stock Product');
+    expect(inStockTitle).toBeInTheDocument();
     expect(screen.getByText('10.00 €')).toBeInTheDocument();
+    expect(screen.getByText('Skladom')).toBeInTheDocument();
 
-    // Check if description is NOT present
-    const description = screen.queryByText('This is a description');
-    expect(description).not.toBeInTheDocument();
+    // Check Out of Stock Product
+    const outOfStockTitle = screen.getByText('Out of Stock Product');
+    expect(outOfStockTitle).toBeInTheDocument();
+    expect(screen.getByText('20.00 €')).toBeInTheDocument();
+    expect(screen.getByText('Vypredané')).toBeInTheDocument();
+
+    // Check that description is NOT present (regression test)
+    expect(screen.queryByText('Description')).not.toBeInTheDocument();
   });
 });
