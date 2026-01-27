@@ -2,7 +2,7 @@ import { authFetch } from '../utils/authFetch';
 
 const API_URL = `${process.env.REACT_APP_API_URL}/admin/carts`;
 
-export const getCarts = async (page = 0, sort = 'cartId,desc', size = 20, filter = {}) => {
+export const getCarts = async (page = 0, sort = 'createDate,desc', size = 20, filter = {}) => {
   const params = new URLSearchParams({
     page,
     size,
