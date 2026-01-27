@@ -50,11 +50,11 @@ const CartDetail = () => {
           </div>
           <div>
             <p className="text-gray-600">Created Date:</p>
-            <p className="font-semibold">{cart.createDate ? new Date(cart.createDate).toLocaleString() : '-'}</p>
+            <p className="font-semibold">{cart.createDate ? new Date(cart.createDate).toLocaleString('sk-SK') : '-'}</p>
           </div>
           <div>
             <p className="text-gray-600">Updated Date:</p>
-            <p className="font-semibold">{cart.updateDate ? new Date(cart.updateDate).toLocaleString() : '-'}</p>
+            <p className="font-semibold">{cart.updateDate ? new Date(cart.updateDate).toLocaleString('sk-SK') : '-'}</p>
           </div>
         </div>
       </div>
