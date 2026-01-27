@@ -16,6 +16,13 @@ jest.mock('../context/CartContext', () => ({
   useCart: jest.fn(),
 }));
 
+// Mock the ModalContext
+jest.mock('../context/ModalContext', () => ({
+  useModal: () => ({
+    openMessageModal: jest.fn(),
+  }),
+}));
+
 // Mock the BreadcrumbContext
 jest.mock('../context/BreadcrumbContext', () => ({
   useBreadcrumbs: () => ({

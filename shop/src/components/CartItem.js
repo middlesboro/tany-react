@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
+import { useModal } from '../context/ModalContext';
 
 const CartItem = ({ item }) => {
   const { addToCart, removeFromCart } = useCart();
+  const { openMessageModal } = useModal();
   const [quantity, setQuantity] = useState(item.quantity);
   const [updating, setUpdating] = useState(false);
 
@@ -24,7 +26,11 @@ const CartItem = ({ item }) => {
     try {
       await addToCart(item.productId || item.id, newQuantity);
     } catch (error) {
-      console.error("Failed to update cart item", error);
+      if (error.status === 400) {
+        openMessageModal("Upozornenie", "Pre tento produkt nie je na sklade dostatočné množstvo.");
+      } else {
+        console.error("Failed to update cart item", error);
+      }
       setQuantity(item.quantity);
     } finally {
       setUpdating(false);
