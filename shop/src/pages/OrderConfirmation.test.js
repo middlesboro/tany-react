@@ -35,6 +35,7 @@ jest.mock('../components/PriceBreakdown', () => () => <div>PriceBreakdown</div>)
 describe('OrderConfirmation', () => {
   const mockOrder = {
     id: '123',
+    orderIdentifier: '123',
     firstname: 'John',
     lastname: 'Doe',
     email: 'john@example.com',
@@ -61,10 +62,35 @@ describe('OrderConfirmation', () => {
     render(<OrderConfirmation />);
 
     await waitFor(() => {
-      expect(screen.getByText('Order #123')).toBeInTheDocument();
+      expect(screen.getByText('Číslo objednávky 123')).toBeInTheDocument();
     });
 
     expect(getOrderConfirmation).toHaveBeenCalledWith('123');
     expect(getOrder).not.toHaveBeenCalled();
+  });
+
+  test('renders Pay by payme button for BANK_TRANSFER with paymentLink', async () => {
+    getOrderConfirmation.mockResolvedValue({
+      ...mockOrder,
+      paymentType: 'BANK_TRANSFER',
+      orderIdentifier: '123'
+    });
+    getPaymentInfo.mockResolvedValue({
+        qrCode: 'some-qr-code',
+        paymentLink: 'https://payme.click/test'
+    });
+
+    render(<OrderConfirmation />);
+
+    await waitFor(() => {
+        expect(screen.getByText('Číslo objednávky 123')).toBeInTheDocument();
+    });
+
+    expect(screen.getAllByText('Payment Information').length).toBeGreaterThan(0);
+
+    const link = screen.getByRole('link', { name: /Pay by payme/i });
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute('href', 'https://payme.click/test');
+    expect(link).toHaveAttribute('target', '_blank');
   });
 });

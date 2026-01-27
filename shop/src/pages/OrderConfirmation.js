@@ -217,12 +217,26 @@ const OrderConfirmation = () => {
               </div>
            </div>
       ) : (
-        !isPaid && paymentInfo && paymentInfo.qrCode && (
+        !isPaid && paymentInfo && (paymentInfo.qrCode || (order.paymentType === 'BANK_TRANSFER' && paymentInfo.paymentLink)) && (
             <div className="bg-white shadow rounded p-6 mb-8">
                 <h2 className="text-xl font-bold mb-4">Payment Information</h2>
                 <div className="flex flex-col items-center">
-                    <p className="mb-4 text-gray-700">Scan the QR code to pay:</p>
-                    <img src={`data:image/png;base64,${paymentInfo.qrCode}`} alt="Payment QR Code" className="w-64 h-64 border border-gray-200 rounded" />
+                    {paymentInfo.qrCode && (
+                        <>
+                            <p className="mb-4 text-gray-700">Scan the QR code to pay:</p>
+                            <img src={`data:image/png;base64,${paymentInfo.qrCode}`} alt="Payment QR Code" className="w-64 h-64 border border-gray-200 rounded" />
+                        </>
+                    )}
+                    {order.paymentType === 'BANK_TRANSFER' && paymentInfo.paymentLink && (
+                        <a
+                            href={paymentInfo.paymentLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-blue-600 text-white font-bold py-2 px-6 rounded hover:bg-blue-700 mt-4"
+                        >
+                            Pay by payme
+                        </a>
+                    )}
                 </div>
             </div>
         )
