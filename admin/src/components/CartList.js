@@ -5,7 +5,7 @@ import { getCarts } from '../services/cartAdminService';
 const CartList = () => {
   const [carts, setCarts] = useState([]);
   const [page, setPage] = useState(0);
-  const [size, setSize] = useState(20);
+  const [size, setSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
   const [sort, setSort] = useState('cartId,desc');
 
