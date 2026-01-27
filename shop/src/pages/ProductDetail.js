@@ -336,7 +336,7 @@ const ReasonsToBuy = () => (
 const ProductDetail = () => {
   const { slug } = useParams();
   const { addToCart } = useCart();
-  const { openLoginModal } = useModal();
+  const { openLoginModal, openMessageModal } = useModal();
   const { setBreadcrumbs } = useBreadcrumbs();
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
@@ -430,7 +430,12 @@ const ProductDetail = () => {
       await addToCart(product.id, quantity);
       // Optional: Add a toast notification here
     } catch (err) {
-      alert("Failed to add to cart");
+      if (err.status === 400) {
+        openMessageModal("Upozornenie", "Pre tento produkt nie je na sklade dostatočné množstvo.");
+      } else {
+        console.error("Failed to add to cart", err);
+        // Fallback for other errors if needed, or just log
+      }
     } finally {
       setAdding(false);
     }

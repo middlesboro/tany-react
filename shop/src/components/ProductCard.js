@@ -11,7 +11,7 @@ import { isAuthenticated } from '../services/authService';
 
 const ProductCard = ({ product }) => {
   const { addToCart, cart } = useCart();
-  const { openLoginModal } = useModal();
+  const { openLoginModal, openMessageModal } = useModal();
   const [quantity, setQuantity] = useState(1);
   const [adding, setAdding] = useState(false);
   const [inWishlist, setInWishlist] = useState(product.inWishlist || false);
@@ -42,7 +42,11 @@ const ProductCard = ({ product }) => {
     try {
       await addToCart(product.id, quantity);
     } catch (error) {
-      console.error("Failed to add to cart", error);
+      if (error.status === 400) {
+          openMessageModal("Upozornenie", "Pre tento produkt nie je na sklade dostatočné množstvo.");
+      } else {
+          console.error("Failed to add to cart", error);
+      }
     } finally {
       setAdding(false);
     }

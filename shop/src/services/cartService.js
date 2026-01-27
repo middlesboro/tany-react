@@ -18,7 +18,10 @@ export const addToCart = async (cartId, productId, quantity) => {
   });
 
   if (!response.ok) {
-     throw new Error('Failed to add to cart');
+     const errorData = await response.json().catch(() => ({}));
+     const error = new Error(errorData.message || 'Failed to add to cart');
+     error.status = response.status;
+     throw error;
   }
   return response.json();
 };
