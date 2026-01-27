@@ -35,6 +35,7 @@ jest.mock('../components/PriceBreakdown', () => () => <div>PriceBreakdown</div>)
 describe('OrderConfirmation', () => {
   const mockOrder = {
     id: '123',
+    orderIdentifier: '123',
     firstname: 'John',
     lastname: 'Doe',
     email: 'john@example.com',
@@ -45,6 +46,12 @@ describe('OrderConfirmation', () => {
     finalPrice: 100,
     status: 'NEW',
     paymentType: 'CASH_ON_DELIVERY',
+    priceBreakDown: {
+        items: [],
+        totalPrice: 100,
+        totalPriceWithoutVat: 80,
+        totalPriceVatValue: 20
+    }
   };
 
   beforeEach(() => {
@@ -61,10 +68,45 @@ describe('OrderConfirmation', () => {
     render(<OrderConfirmation />);
 
     await waitFor(() => {
-      expect(screen.getByText('Order #123')).toBeInTheDocument();
+      expect(screen.getByText('Číslo objednávky 123')).toBeInTheDocument();
     });
 
     expect(getOrderConfirmation).toHaveBeenCalledWith('123');
     expect(getOrder).not.toHaveBeenCalled();
+  });
+
+  test('renders payment link and details for bank transfer', async () => {
+    const bankOrder = { ...mockOrder, paymentType: 'BANK_TRANSFER' };
+    const paymentInfo = {
+        qrCode: 'fake-qr-code',
+        paymentLink: 'https://payme.sk/link',
+        iban: 'SK1234567890',
+        variableSymbol: '123456'
+    };
+
+    getOrderConfirmation.mockResolvedValue(bankOrder);
+    getPaymentInfo.mockResolvedValue(paymentInfo);
+
+    render(<OrderConfirmation />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Číslo objednávky 123')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText('Scan the QR code to pay:')).toBeInTheDocument();
+
+    const payButton = screen.getByText('Pay by payme');
+    expect(payButton).toBeInTheDocument();
+    expect(payButton).toHaveAttribute('href', 'https://payme.sk/link');
+    expect(payButton).toHaveAttribute('target', '_blank');
+
+    expect(screen.getByText('IBAN:')).toBeInTheDocument();
+    expect(screen.getByText('SK1234567890')).toBeInTheDocument();
+
+    expect(screen.getByText('Variable Symbol:')).toBeInTheDocument();
+    expect(screen.getByText('123456')).toBeInTheDocument();
+
+    expect(screen.getByText('Amount:')).toBeInTheDocument();
+    expect(screen.getByText('100.00 €')).toBeInTheDocument();
   });
 });
