@@ -22,6 +22,7 @@ import { BreadcrumbProvider } from './context/BreadcrumbContext';
 import { ModalProvider } from './context/ModalContext';
 import ScrollToTop from './components/ScrollToTop';
 import LoginModal from './components/LoginModal';
+import MessageModal from './components/MessageModal';
 
 function App() {
   return (
@@ -31,6 +32,7 @@ function App() {
           <Router>
             <ScrollToTop />
             <LoginModal />
+            <MessageModal />
             <Routes>
               <Route path="/authentication/success" element={<AuthenticationSuccess />} />
               <Route path="/magic-link" element={<MagicLinkPage />} />
