@@ -7,7 +7,7 @@ const CartList = () => {
   const [page, setPage] = useState(0);
   const [size, setSize] = useState(20);
   const [totalPages, setTotalPages] = useState(0);
-  const [sort, setSort] = useState('cartId,desc');
+  const [sort, setSort] = useState('createDate,desc');
 
   // Filter states
   const [filter, setFilter] = useState({
@@ -185,7 +185,7 @@ const CartList = () => {
               <td className="py-2 px-4 border-b">{cart.carrierName || '-'}</td>
               <td className="py-2 px-4 border-b">{cart.paymentName || '-'}</td>
               <td className="py-2 px-4 border-b">
-                {cart.createDate ? new Date(cart.createDate).toLocaleString() : '-'}
+                {cart.createDate ? new Date(cart.createDate).toLocaleString('sk-SK') : '-'}
               </td>
               <td className="py-2 px-4 border-b">
                 <Link
