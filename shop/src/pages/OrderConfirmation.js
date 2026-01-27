@@ -222,7 +222,41 @@ const OrderConfirmation = () => {
                 <h2 className="text-xl font-bold mb-4">Payment Information</h2>
                 <div className="flex flex-col items-center">
                     <p className="mb-4 text-gray-700">Scan the QR code to pay:</p>
-                    <img src={`data:image/png;base64,${paymentInfo.qrCode}`} alt="Payment QR Code" className="w-64 h-64 border border-gray-200 rounded" />
+                    <img src={`data:image/png;base64,${paymentInfo.qrCode}`} alt="Payment QR Code" className="w-64 h-64 border border-gray-200 rounded mb-4" />
+
+                    {paymentInfo.paymentLink && (
+                         <a
+                            href={paymentInfo.paymentLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="bg-blue-600 text-white font-bold py-2 px-6 rounded hover:bg-blue-700 mb-6"
+                         >
+                            Pay by payme
+                         </a>
+                    )}
+
+                    <div className="w-full max-w-sm">
+                        {paymentInfo.iban && (
+                            <div className="flex justify-between py-2 border-b">
+                                <span className="text-gray-600">IBAN:</span>
+                                <span className="font-medium">{paymentInfo.iban}</span>
+                            </div>
+                        )}
+                        {paymentInfo.variableSymbol && (
+                            <div className="flex justify-between py-2 border-b">
+                                <span className="text-gray-600">Variable Symbol:</span>
+                                <span className="font-medium">{paymentInfo.variableSymbol}</span>
+                            </div>
+                        )}
+                        {order.priceBreakDown && (
+                             <div className="flex justify-between py-2">
+                                <span className="text-gray-600">Amount:</span>
+                                <span className="font-bold text-blue-600">
+                                    {order.priceBreakDown.totalPrice.toFixed(2)} €
+                                </span>
+                            </div>
+                        )}
+                    </div>
                 </div>
             </div>
         )
