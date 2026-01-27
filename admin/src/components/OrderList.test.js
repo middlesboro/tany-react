@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen, waitFor } from '@testing-library/react';
+import { render, screen, waitFor, fireEvent } from '@testing-library/react';
 import { MemoryRouter } from 'react-router-dom';
 import OrderList from './OrderList';
 import * as orderAdminService from '../services/orderAdminService';
@@ -39,6 +39,8 @@ describe('OrderList', () => {
     orderAdminService.getOrders.mockResolvedValue(mockOrders);
     carrierAdminService.getCarriers.mockResolvedValue(mockCarriers);
     paymentAdminService.getPayments.mockResolvedValue(mockPayments);
+    localStorage.clear();
+    jest.clearAllMocks();
   });
 
   test('renders order identifier instead of id in the table but uses id for link', async () => {
@@ -53,20 +55,79 @@ describe('OrderList', () => {
       expect(orderAdminService.getOrders).toHaveBeenCalled();
     });
 
-    // Check if the order identifier is displayed
-    // Note: Before the fix, this is expected to fail (it would find "100" but not "ORD-2023-100" in the first column)
-    // However, since we are writing the test to verify the desired behavior, we assert for ORD-2023-100.
     const identifierElement = await screen.findByText('ORD-2023-100');
     expect(identifierElement).toBeInTheDocument();
 
-    // Check if the link uses the ID (100)
     const links = screen.getAllByRole('link');
     const editLink = links.find((link) => link.getAttribute('href') === '/orders/100');
     expect(editLink).toBeInTheDocument();
+  });
 
-    // Verify "100" is NOT displayed as the order identifier (though it might be present in the link href or elsewhere if we are not careful, but distinct enough)
-    // Actually, "100" might appear in the href, so checking it's not in the document might be flaky if it's in the link text (it's not, link is an icon).
-    // The previous implementation showed 100 in the cell.
-    // If we want to be strict, we could check the specific cell content.
+  test('persists filter and sort state to localStorage', async () => {
+    render(
+      <MemoryRouter>
+        <OrderList />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(orderAdminService.getOrders).toHaveBeenCalled();
+    });
+
+    const statusInput = screen.getByPlaceholderText('Status');
+    fireEvent.change(statusInput, { target: { value: 'PAID' } });
+
+    const filterButton = screen.getByText('Filter');
+    fireEvent.click(filterButton);
+
+    await waitFor(() => {
+      const stored = JSON.parse(localStorage.getItem('admin_orders_list_state'));
+      expect(stored).toMatchObject({
+        appliedFilter: expect.objectContaining({ status: 'PAID' }),
+      });
+    });
+
+    // There are multiple "Status" texts (label and table header), so we target the table header specifically
+    // Since getByText might return the label too, we can use getAllByText or restrict by selector if supported,
+    // but testing-library recommends roles. The header is a 'columnheader' (if th) or just use closest.
+    // However, for simplicity here, let's use getAllByText and find the one that is a th, or use getByRole.
+
+    // Using getByRole for the column header
+    const statusHeader = screen.getByRole('columnheader', { name: /Status/i });
+    fireEvent.click(statusHeader);
+
+    await waitFor(() => {
+      const stored = JSON.parse(localStorage.getItem('admin_orders_list_state'));
+      expect(stored).toMatchObject({
+        sort: 'status,asc',
+      });
+    });
+  });
+
+  test('initializes with state from localStorage', async () => {
+    const savedState = {
+      page: 1,
+      size: 25,
+      sort: 'finalPrice,desc',
+      appliedFilter: { status: 'DELIVERED' },
+    };
+    localStorage.setItem('admin_orders_list_state', JSON.stringify(savedState));
+
+    render(
+      <MemoryRouter>
+        <OrderList />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(orderAdminService.getOrders).toHaveBeenCalledWith(
+        1,
+        'finalPrice,desc',
+        25,
+        expect.objectContaining({ status: 'DELIVERED' })
+      );
+    });
+
+    expect(screen.getByPlaceholderText('Status')).toHaveValue('DELIVERED');
   });
 });
