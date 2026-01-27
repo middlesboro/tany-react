@@ -5,12 +5,25 @@ import { getCarriers } from '../services/carrierAdminService';
 import { getPayments } from '../services/paymentAdminService';
 import SearchSelect from './SearchSelect';
 
+const STORAGE_KEY = 'admin_orders_list_state';
+
+const getInitialState = (key, defaultValue) => {
+  try {
+    const saved = localStorage.getItem(key);
+    return saved ? JSON.parse(saved) : defaultValue;
+  } catch (e) {
+    return defaultValue;
+  }
+};
+
 const OrderList = () => {
+  const savedState = getInitialState(STORAGE_KEY, {});
+
   const [orders, setOrders] = useState([]);
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
+  const [page, setPage] = useState(savedState.page ?? 0);
+  const [size, setSize] = useState(savedState.size ?? 10);
   const [totalPages, setTotalPages] = useState(0);
-  const [sort, setSort] = useState('id,asc');
+  const [sort, setSort] = useState(savedState.sort ?? 'id,asc');
 
   // Data for lookups
   const [carriers, setCarriers] = useState([]);
@@ -24,8 +37,21 @@ const OrderList = () => {
     priceTo: '',
     carrierId: '',
     paymentId: '',
+    ...(savedState.appliedFilter || {}),
   });
-  const [appliedFilter, setAppliedFilter] = useState({});
+  const [appliedFilter, setAppliedFilter] = useState(savedState.appliedFilter ?? {});
+
+  useEffect(() => {
+    localStorage.setItem(
+      STORAGE_KEY,
+      JSON.stringify({
+        page,
+        size,
+        sort,
+        appliedFilter,
+      })
+    );
+  }, [page, size, sort, appliedFilter]);
 
   useEffect(() => {
     const fetchData = async () => {
