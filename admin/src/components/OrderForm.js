@@ -31,11 +31,31 @@ const OrderForm = ({ order, handleChange, handleSubmit, carriers = [], payments 
             />
           </div>
           <div className="mb-4">
-            <label className="block text-gray-700">Customer ID</label>
+            <label className="block text-gray-700">Customer Name</label>
             <input
               type="text"
-              name="customerId"
-              value={order.customerId || ''}
+              name="customerName"
+              value={order.customerName || ''}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Email</label>
+            <input
+              type="text"
+              name="email"
+              value={order.email || ''}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border rounded"
+            />
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Phone</label>
+            <input
+              type="text"
+              name="phone"
+              value={order.phone || ''}
               onChange={handleChange}
               className="w-full px-3 py-2 border rounded"
             />
