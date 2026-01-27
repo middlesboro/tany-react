@@ -16,7 +16,6 @@ const CartDiscountEdit = () => {
     code: '',
     discountType: 'PERCENTAGE',
     value: '',
-    freeShipping: false,
     dateFrom: '',
     dateTo: '',
     active: true,
@@ -163,6 +162,7 @@ const CartDiscountEdit = () => {
             >
               <option value="PERCENTAGE">Percentage</option>
               <option value="FIXED_AMOUNT">Fixed Amount</option>
+              <option value="FREE_SHIPPING">Free shipping</option>
             </select>
           </div>
 
@@ -177,17 +177,6 @@ const CartDiscountEdit = () => {
               className="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm border p-2"
             />
           </div>
-        </div>
-
-        <div className="flex items-center">
-          <input
-            type="checkbox"
-            name="freeShipping"
-            checked={formData.freeShipping}
-            onChange={handleChange}
-            className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
-          />
-          <label className="ml-2 block text-sm text-gray-900">Free Shipping</label>
         </div>
 
         <div>

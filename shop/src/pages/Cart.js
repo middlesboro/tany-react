@@ -147,7 +147,7 @@ const Cart = () => {
                 {activeDiscounts.map((discount, index) => (
                   <div key={index} className="flex justify-between items-center bg-green-50 text-green-700 px-3 py-2 rounded text-sm">
                     <div>
-                      <span className="font-bold">{discount.code}</span>
+                      <span className="font-bold">{discount.title}</span>
                       {discount.value && <span className="ml-2">(-{discount.value}{discount.discountType === 'PERCENTAGE' ? '%' : '€'})</span>}
                     </div>
                     <button
