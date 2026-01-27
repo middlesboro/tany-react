@@ -9,6 +9,7 @@ const ShopSettingsForm = () => {
     shopStreet: '',
     shopZip: '',
     shopCity: '',
+    defaultCountry: '',
     shopPhoneNumber: '',
     shopEmail: '',
     organizationName: '',
@@ -31,6 +32,7 @@ const ShopSettingsForm = () => {
           bankAccount: data.bankAccount || '',
           bankBic: data.bankBic || '',
           shopStreet: data.shopStreet || '',
+          defaultCountry: data.defaultCountry || '',
           shopZip: data.shopZip || '',
           shopCity: data.shopCity || '',
           shopPhoneNumber: data.shopPhoneNumber || '',
@@ -167,6 +169,20 @@ const ShopSettingsForm = () => {
               value={formData.shopZip}
               onChange={handleChange}
               className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+            />
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="defaultCountry">
+              Default country
+            </label>
+            <input
+                type="text"
+                name="defaultCountry"
+                id="defaultCountry"
+                value={formData.defaultCountry}
+                onChange={handleChange}
+                className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             />
           </div>
 

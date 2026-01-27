@@ -236,7 +236,7 @@ const Account = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="invoiceAddress.street">
-                    Ulica
+                    Ulica a číslo
                   </label>
                   <input
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -273,6 +273,19 @@ const Account = () => {
                     onChange={handleChange}
                   />
                 </div>
+                <div>
+                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="invoiceAddress.country">
+                    Krajina
+                  </label>
+                  <input
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="invoiceAddress.country"
+                      type="text"
+                      name="invoiceAddress.country"
+                      value={customer.invoiceAddress.country || ''}
+                      readOnly
+                  />
+                </div>
               </div>
             </div>
 
@@ -281,7 +294,7 @@ const Account = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                 <div>
                   <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="deliveryAddress.street">
-                    Ulica
+                    Ulica a číslo
                   </label>
                   <input
                     className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -316,6 +329,19 @@ const Account = () => {
                     name="deliveryAddress.zip"
                     value={customer.deliveryAddress.zip || ''}
                     onChange={handleChange}
+                  />
+                </div>
+                <div>
+                  <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="deliveryAddress.country">
+                    Krajina
+                  </label>
+                  <input
+                      className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                      id="deliveryAddress.country"
+                      type="text"
+                      name="deliveryAddress.country"
+                      value={customer.deliveryAddress.country || ''}
+                      readOnly
                   />
                 </div>
               </div>
