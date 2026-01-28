@@ -1,5 +1,6 @@
 import React from 'react';
 import PriceBreakdown from './PriceBreakdown';
+import OrderCreateItems from './OrderCreateItems';
 
 const OrderStatus = [
   'CREATED',
@@ -11,7 +12,18 @@ const OrderStatus = [
   'CANCELED'
 ];
 
-const OrderForm = ({ order, handleChange, handleSubmit, carriers = [], payments = [] }) => {
+const OrderForm = ({
+  order,
+  handleChange,
+  handleSubmit,
+  carriers = [],
+  payments = [],
+  cartDiscounts = [],
+  isCreateMode = false,
+  onAddItem,
+  onRemoveItem,
+  onUpdateItem
+}) => {
   const selectedCarrier = carriers.find(c => c.id === order.carrierId);
   const isPacketa = selectedCarrier && selectedCarrier.type === 'PACKETA';
 
@@ -30,16 +42,41 @@ const OrderForm = ({ order, handleChange, handleSubmit, carriers = [], payments 
               className="w-full px-3 py-2 border rounded"
             />
           </div>
-          <div className="mb-4">
-            <label className="block text-gray-700">Customer Name</label>
-            <input
-              type="text"
-              name="customerName"
-              value={order.customerName || ''}
-              onChange={handleChange}
-              className="w-full px-3 py-2 border rounded"
-            />
-          </div>
+          {isCreateMode ? (
+            <>
+              <div className="mb-4">
+                <label className="block text-gray-700">First Name</label>
+                <input
+                  type="text"
+                  name="firstname"
+                  value={order.firstname || ''}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border rounded"
+                />
+              </div>
+              <div className="mb-4">
+                <label className="block text-gray-700">Last Name</label>
+                <input
+                  type="text"
+                  name="lastname"
+                  value={order.lastname || ''}
+                  onChange={handleChange}
+                  className="w-full px-3 py-2 border rounded"
+                />
+              </div>
+            </>
+          ) : (
+            <div className="mb-4">
+              <label className="block text-gray-700">Customer Name</label>
+              <input
+                type="text"
+                name="customerName"
+                value={order.customerName || ''}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded"
+              />
+            </div>
+          )}
           <div className="mb-4">
             <label className="block text-gray-700">Email</label>
             <input
@@ -75,7 +112,20 @@ const OrderForm = ({ order, handleChange, handleSubmit, carriers = [], payments 
                 </option>
               ))}
             </select>
-            {isPacketa && order.selectedPickupPointName && (
+            {isCreateMode && (
+                <div className="mt-2">
+                     <label className="block text-sm text-gray-600">Pickup Point ID</label>
+                     <input
+                        type="text"
+                        name="selectedPickupPointId"
+                        value={order.selectedPickupPointId || ''}
+                        onChange={handleChange}
+                        className="w-full px-3 py-2 border rounded text-sm"
+                        placeholder="e.g. 1234"
+                     />
+                </div>
+            )}
+            {isPacketa && order.selectedPickupPointName && !isCreateMode && (
               <div className="mt-1 text-sm text-gray-600">
                 Pickup Point: <strong>{order.selectedPickupPointName}</strong>
               </div>
@@ -109,6 +159,28 @@ const OrderForm = ({ order, handleChange, handleSubmit, carriers = [], payments 
               ))}
             </select>
           </div>
+          {isCreateMode && (
+              <div className="mb-4">
+                <label className="block text-gray-700">Discounts</label>
+                <select
+                  multiple
+                  name="cartDiscountIds"
+                  value={order.cartDiscountIds || []}
+                  onChange={(e) => {
+                    const values = Array.from(e.target.selectedOptions, option => option.value);
+                    handleChange({ target: { name: 'cartDiscountIds', value: values } });
+                  }}
+                  className="w-full px-3 py-2 border rounded h-24"
+                >
+                  {cartDiscounts.map(discount => (
+                    <option key={discount.id} value={discount.id}>
+                      {discount.title}
+                    </option>
+                  ))}
+                </select>
+                <p className="text-xs text-gray-500 mt-1">Hold Ctrl (Windows) or Cmd (Mac) to select multiple options.</p>
+              </div>
+          )}
           <div className="col-span-2 mb-4">
             <label className="block text-gray-700">Note</label>
             <textarea
@@ -241,11 +313,20 @@ const OrderForm = ({ order, handleChange, handleSubmit, carriers = [], payments 
       </div>
 
       <div className="bg-white shadow rounded-lg p-6 mb-6">
-        <h2 className="text-xl font-bold mb-4">Price Breakdown</h2>
-        {order.priceBreakDown ? (
-            <PriceBreakdown priceBreakDown={order.priceBreakDown} showItems={true} />
+        <h2 className="text-xl font-bold mb-4">{isCreateMode ? 'Products' : 'Price Breakdown'}</h2>
+        {isCreateMode ? (
+            <OrderCreateItems
+                items={order.items || []}
+                onAddItem={onAddItem}
+                onRemoveItem={onRemoveItem}
+                onUpdateItem={onUpdateItem}
+            />
         ) : (
-            <div className="text-gray-500">No price breakdown available.</div>
+            order.priceBreakDown ? (
+                <PriceBreakdown priceBreakDown={order.priceBreakDown} showItems={true} />
+            ) : (
+                <div className="text-gray-500">No price breakdown available.</div>
+            )
         )}
       </div>
 
