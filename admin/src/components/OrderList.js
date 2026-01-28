@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
-import { getOrders, deleteOrder } from '../services/orderAdminService';
+import { Link, useNavigate } from 'react-router-dom';
+import { getOrders, deleteOrder, getOrder } from '../services/orderAdminService';
 import { getCarriers } from '../services/carrierAdminService';
 import { getPayments } from '../services/paymentAdminService';
 import SearchSelect from './SearchSelect';
@@ -40,6 +40,7 @@ const OrderList = () => {
     ...(savedState.appliedFilter || {}),
   });
   const [appliedFilter, setAppliedFilter] = useState(savedState.appliedFilter ?? {});
+  const navigate = useNavigate();
 
   useEffect(() => {
     localStorage.setItem(
@@ -82,6 +83,41 @@ const OrderList = () => {
     if (window.confirm('Are you sure you want to delete this order?')) {
       await deleteOrder(id);
       setOrders(orders.filter((order) => order.id !== id));
+    }
+  };
+
+  const handleDuplicate = async (id) => {
+    if (window.confirm('Are you sure you want to duplicate this order?')) {
+      try {
+        const order = await getOrder(id);
+        const {
+          id: _,
+          createDate,
+          statusHistory,
+          orderIdentifier,
+          carrierOrderStateLink,
+          cartId,
+          ...rest
+        } = order;
+
+        const duplicatedOrder = {
+          ...rest,
+          status: 'CREATED',
+          cartId: null, // Clear cartId to avoid conflicts
+          items: order.items ? order.items.map(item => ({
+             id: item.productId || item.id, // Use productId if available, otherwise fallback to id (careful here)
+             name: item.productName || item.name,
+             quantity: item.quantity,
+             price: item.price,
+             image: item.image || item.imageUrl
+          })) : []
+        };
+
+        navigate('/orders/new', { state: { duplicatedOrder } });
+      } catch (error) {
+        console.error('Failed to duplicate order:', error);
+        alert('Failed to duplicate order.');
+      }
     }
   };
 
@@ -279,6 +315,15 @@ const OrderList = () => {
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                   </svg>
                 </Link>
+                <button
+                  onClick={() => handleDuplicate(order.id)}
+                  className="text-green-500 hover:text-green-700 mr-2 inline-block"
+                  title="Duplicate"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                  </svg>
+                </button>
                 <button
                   onClick={() => handleDelete(order.id)}
                   className="text-red-500 hover:text-red-700"
