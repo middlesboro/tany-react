@@ -67,4 +67,23 @@ describe('OrderForm', () => {
     expect(screen.getByText('Phone')).toBeInTheDocument();
     expect(screen.getByDisplayValue('1234567890')).toBeInTheDocument();
   });
+
+  test('renders tracking link when carrierOrderStateLink is present', () => {
+    const orderWithLink = {
+      ...mockOrder,
+      carrierOrderStateLink: 'https://tracking.example.com/123'
+    };
+
+    render(
+      <OrderForm
+        order={orderWithLink}
+        handleChange={mockHandleChange}
+        handleSubmit={mockHandleSubmit}
+      />
+    );
+
+    const link = screen.getByText('Track Package');
+    expect(link).toBeInTheDocument();
+    expect(link).toHaveAttribute('href', 'https://tracking.example.com/123');
+  });
 });

@@ -27,7 +27,8 @@ const OrderEdit = () => {
     priceBreakDown: null,
     status: 'CREATED',
     statusHistory: [],
-    createDate: null
+    createDate: null,
+    carrierOrderStateLink: ''
   });
 
   useEffect(() => {
