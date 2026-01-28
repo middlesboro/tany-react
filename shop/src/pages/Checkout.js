@@ -468,7 +468,7 @@ const Checkout = () => {
                  const isSelected = selectedCarrier === carrier.id;
 
                  return (
-                    <div key={carrier.id} className={`p-4 border rounded ${isSelected ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}>
+                    <div key={carrier.id} className={`p-4 border rounded ${isSelected ? 'border-tany-green bg-green-50' : 'border-gray-200'}`}>
                         <label className="flex items-center cursor-pointer">
                             <input
                                 type="radio"
@@ -476,7 +476,7 @@ const Checkout = () => {
                                 value={carrier.id}
                                 checked={isSelected}
                                 onChange={() => setSelectedCarrier(carrier.id)}
-                                className="h-5 w-5 text-blue-600 mr-4"
+                                className="h-5 w-5 text-tany-green mr-4"
                             />
                             <div className="flex-1">
                                 <div className="font-bold">{carrier.name}</div>
@@ -491,7 +491,7 @@ const Checkout = () => {
                                 <button
                                     type="button"
                                     onClick={openPacketaWidget}
-                                    className="bg-blue-600 text-white font-semibold py-2 px-4 rounded hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    className="bg-tany-green text-white font-semibold py-2 px-4 rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-tany-green"
                                 >
                                     Vybrať výdajné miesto
                                 </button>
@@ -517,14 +517,14 @@ const Checkout = () => {
                 {payments.map(payment => {
                     const price = calculatePaymentPrice(payment);
                     return (
-                        <label key={payment.id} className={`flex items-center p-4 border rounded cursor-pointer hover:bg-gray-50 ${selectedPayment === payment.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}>
+                        <label key={payment.id} className={`flex items-center p-4 border rounded cursor-pointer hover:bg-gray-50 ${selectedPayment === payment.id ? 'border-tany-green bg-green-50' : 'border-gray-200'}`}>
                             <input
                                 type="radio"
                                 name="payment"
                                 value={payment.id}
                                 checked={selectedPayment === payment.id}
                                 onChange={() => setSelectedPayment(payment.id)}
-                                className="h-5 w-5 text-blue-600 mr-4"
+                                className="h-5 w-5 text-tany-green mr-4"
                             />
                             <div className="flex-1">
                                 <div className="font-bold">{payment.name}</div>
@@ -553,7 +553,7 @@ const Checkout = () => {
                     onChange={handleCustomerChange}
                     onBlur={(e) => validateField(e.target.name, e.target.value)}
                     required
-                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500 ${errors.firstname ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-tany-green ${errors.firstname ? 'border-red-500' : 'border-gray-300'}`}
                  />
                  {errors.firstname && <p className="text-red-500 text-xs mt-1">{errors.firstname}</p>}
              </div>
@@ -566,7 +566,7 @@ const Checkout = () => {
                     onChange={handleCustomerChange}
                     onBlur={(e) => validateField(e.target.name, e.target.value)}
                     required
-                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500 ${errors.lastname ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-tany-green ${errors.lastname ? 'border-red-500' : 'border-gray-300'}`}
                  />
                  {errors.lastname && <p className="text-red-500 text-xs mt-1">{errors.lastname}</p>}
              </div>
@@ -579,7 +579,7 @@ const Checkout = () => {
                     onChange={handleCustomerChange}
                     onBlur={(e) => validateField(e.target.name, e.target.value)}
                     required
-                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500 ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-tany-green ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
                  />
                  {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
                  {!errors.email && warnings.email && <p className="text-green-600 text-xs mt-1">{warnings.email}</p>}
@@ -593,7 +593,7 @@ const Checkout = () => {
                     onChange={handleCustomerChange}
                     onBlur={(e) => validateField(e.target.name, e.target.value)}
                     required
-                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500 ${errors.phone ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-tany-green ${errors.phone ? 'border-red-500' : 'border-gray-300'}`}
                  />
                  {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
              </div>
@@ -613,7 +613,7 @@ const Checkout = () => {
                     onChange={handleInvoiceAddressChange}
                     onBlur={(e) => validateField('invoice_street', e.target.value)}
                     required
-                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500 ${errors.invoice_street ? 'border-red-500' : 'border-gray-300'}`}
+                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-tany-green ${errors.invoice_street ? 'border-red-500' : 'border-gray-300'}`}
                  />
                  {errors.invoice_street && <p className="text-red-500 text-xs mt-1">{errors.invoice_street}</p>}
              </div>
@@ -627,7 +627,7 @@ const Checkout = () => {
                         onChange={handleInvoiceAddressChange}
                         onBlur={(e) => validateField('invoice_city', e.target.value)}
                         required
-                        className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500 ${errors.invoice_city ? 'border-red-500' : 'border-gray-300'}`}
+                        className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-tany-green ${errors.invoice_city ? 'border-red-500' : 'border-gray-300'}`}
                     />
                     {errors.invoice_city && <p className="text-red-500 text-xs mt-1">{errors.invoice_city}</p>}
                  </div>
@@ -640,7 +640,7 @@ const Checkout = () => {
                         onChange={handleInvoiceAddressChange}
                         onBlur={(e) => validateField('invoice_zip', e.target.value)}
                         required
-                        className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500 ${errors.invoice_zip ? 'border-red-500' : 'border-gray-300'}`}
+                        className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-tany-green ${errors.invoice_zip ? 'border-red-500' : 'border-gray-300'}`}
                     />
                     {errors.invoice_zip && <p className="text-red-500 text-xs mt-1">{errors.invoice_zip}</p>}
                  </div>
@@ -652,7 +652,7 @@ const Checkout = () => {
                         type="checkbox"
                         checked={differentDeliveryAddress}
                         onChange={(e) => setDifferentDeliveryAddress(e.target.checked)}
-                        className="h-4 w-4 text-blue-600 border-gray-300 rounded"
+                        className="h-4 w-4 text-tany-green border-gray-300 rounded"
                     />
                     <span className="ml-2 text-gray-700">Doručiť na inú adresu</span>
                 </label>
@@ -674,7 +674,7 @@ const Checkout = () => {
                         onChange={handleDeliveryAddressChange}
                         onBlur={(e) => validateField('delivery_street', e.target.value)}
                         required={differentDeliveryAddress}
-                        className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500 ${errors.delivery_street ? 'border-red-500' : 'border-gray-300'}`}
+                        className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-tany-green ${errors.delivery_street ? 'border-red-500' : 'border-gray-300'}`}
                     />
                     {errors.delivery_street && <p className="text-red-500 text-xs mt-1">{errors.delivery_street}</p>}
                 </div>
@@ -688,7 +688,7 @@ const Checkout = () => {
                             onChange={handleDeliveryAddressChange}
                             onBlur={(e) => validateField('delivery_city', e.target.value)}
                             required={differentDeliveryAddress}
-                            className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500 ${errors.delivery_city ? 'border-red-500' : 'border-gray-300'}`}
+                            className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-tany-green ${errors.delivery_city ? 'border-red-500' : 'border-gray-300'}`}
                         />
                         {errors.delivery_city && <p className="text-red-500 text-xs mt-1">{errors.delivery_city}</p>}
                     </div>
@@ -701,7 +701,7 @@ const Checkout = () => {
                             onChange={handleDeliveryAddressChange}
                             onBlur={(e) => validateField('delivery_zip', e.target.value)}
                             required={differentDeliveryAddress}
-                            className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-blue-500 ${errors.delivery_zip ? 'border-red-500' : 'border-gray-300'}`}
+                            className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-tany-green ${errors.delivery_zip ? 'border-red-500' : 'border-gray-300'}`}
                         />
                         {errors.delivery_zip && <p className="text-red-500 text-xs mt-1">{errors.delivery_zip}</p>}
                     </div>
@@ -719,7 +719,7 @@ const Checkout = () => {
                 name="note"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-blue-500"
+                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-tany-green"
                 rows="4"
              />
           </div>
@@ -748,7 +748,7 @@ const Checkout = () => {
                              <div className="flex justify-between items-end">
                                  <span className="text-base font-bold text-gray-900">Spolu (produkty):</span>
                                  <div className="text-right">
-                                     <span className="block text-xl font-bold text-blue-600">
+                                     <span className="block text-xl font-bold text-tany-green">
                                          {cart?.totalProductPrice ? cart.totalProductPrice.toFixed(2) : '0.00'} €
                                      </span>
                                  </div>
@@ -766,7 +766,7 @@ const Checkout = () => {
         <div className="flex justify-end pt-6">
             <button
                 type="submit"
-                className="bg-green-600 text-white font-bold py-3 px-8 rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="bg-tany-green text-white font-bold py-3 px-8 rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
                 disabled={!selectedCarrier || !selectedPayment}
             >
                 Dokončiť objednávku

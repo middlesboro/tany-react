@@ -130,7 +130,7 @@ const Cart = () => {
                 value={discountCode}
                 onChange={(e) => setDiscountCode(e.target.value)}
                 placeholder="Enter code"
-                className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 border p-2"
+                className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-tany-green focus:ring-tany-green border p-2"
               />
               <button
                 type="submit"
@@ -167,7 +167,7 @@ const Cart = () => {
                   type="checkbox"
                   checked={cart.discountForNewsletter || false}
                   onChange={handleNewsletterChange}
-                  className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  className="rounded border-gray-300 text-tany-green shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50"
                 />
                 <span className="text-sm text-gray-700">Subscribe to newsletter for 10% discount</span>
               </label>
@@ -200,17 +200,17 @@ const Cart = () => {
                    </div>
                    <div className="flex justify-between items-center">
                       <span className="text-lg font-bold">Total:</span>
-                      <span className="text-xl font-bold text-blue-600">{totalDisplayPrice.toFixed(2)} €</span>
+                      <span className="text-xl font-bold text-tany-green">{totalDisplayPrice.toFixed(2)} €</span>
                    </div>
                 </div>
               </>
             )}
 
-            <Link to="/order" className="block w-full bg-green-600 text-white text-center font-bold py-3 mt-6 rounded hover:bg-green-700">
+            <Link to="/order" className="block w-full bg-tany-green text-white text-center font-bold py-3 mt-6 rounded hover:bg-green-700">
               Continue to Order
             </Link>
              <div className="mt-4 text-center">
-                <Link to="/" className="text-blue-600 hover:text-blue-800 font-medium">
+                <Link to="/" className="text-tany-green hover:text-green-800 font-medium">
                     Continue Shopping
                 </Link>
              </div>
