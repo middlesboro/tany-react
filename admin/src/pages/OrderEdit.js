@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
+import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { getOrder, createOrder, updateOrder, downloadInvoice } from '../services/orderAdminService';
 import { getCarriers } from '../services/carrierAdminService';
 import { getPayments } from '../services/paymentAdminService';
@@ -9,6 +9,7 @@ import OrderForm from '../components/OrderForm';
 const OrderEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const location = useLocation();
   const [carriers, setCarriers] = useState([]);
   const [payments, setPayments] = useState([]);
   const [cartDiscounts, setCartDiscounts] = useState([]);
@@ -60,8 +61,10 @@ const OrderEdit = () => {
         setOrder(data);
       };
       fetchOrder();
+    } else if (location.state?.duplicatedOrder) {
+      setOrder(location.state.duplicatedOrder);
     }
-  }, [id]);
+  }, [id, location.state]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;

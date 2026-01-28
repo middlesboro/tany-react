@@ -11,6 +11,12 @@ jest.mock('../services/orderAdminService');
 jest.mock('../services/carrierAdminService');
 jest.mock('../services/paymentAdminService');
 
+const mockNavigate = jest.fn();
+jest.mock('react-router-dom', () => ({
+  ...jest.requireActual('react-router-dom'),
+  useNavigate: () => mockNavigate,
+}));
+
 const mockOrders = {
   content: [
     {
@@ -26,6 +32,22 @@ const mockOrders = {
   totalPages: 1,
 };
 
+const mockOrderDetails = {
+  id: 100,
+  orderIdentifier: 'ORD-2023-100',
+  createDate: '2023-01-01',
+  statusHistory: [],
+  cartId: 'cart-123',
+  customerName: 'John Doe',
+  status: 'PENDING',
+  carrierName: 'DHL',
+  paymentName: 'Card',
+  finalPrice: 150.0,
+  items: [
+    { productId: 1, productName: 'Product 1', quantity: 2, price: 50 },
+  ],
+};
+
 const mockCarriers = {
   content: [{ id: 1, name: 'DHL' }],
 };
@@ -37,6 +59,7 @@ const mockPayments = {
 describe('OrderList', () => {
   beforeEach(() => {
     orderAdminService.getOrders.mockResolvedValue(mockOrders);
+    orderAdminService.getOrder.mockResolvedValue(mockOrderDetails);
     carrierAdminService.getCarriers.mockResolvedValue(mockCarriers);
     paymentAdminService.getPayments.mockResolvedValue(mockPayments);
     localStorage.clear();
@@ -129,5 +152,40 @@ describe('OrderList', () => {
     });
 
     expect(screen.getByPlaceholderText('Status')).toHaveValue('DELIVERED');
+  });
+
+  test('handles order duplication correctly', async () => {
+    window.confirm = jest.fn().mockImplementation(() => true);
+
+    render(
+      <MemoryRouter>
+        <OrderList />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(orderAdminService.getOrders).toHaveBeenCalled();
+    });
+
+    const duplicateButton = screen.getByTitle('Duplicate');
+    fireEvent.click(duplicateButton);
+
+    expect(window.confirm).toHaveBeenCalledWith('Are you sure you want to duplicate this order?');
+
+    await waitFor(() => {
+      expect(orderAdminService.getOrder).toHaveBeenCalledWith(100);
+    });
+
+    expect(mockNavigate).toHaveBeenCalledWith('/orders/new', {
+      state: {
+        duplicatedOrder: expect.objectContaining({
+          status: 'CREATED',
+          cartId: null,
+          items: [
+             { id: 1, name: 'Product 1', quantity: 2, price: 50, image: undefined }
+          ]
+        }),
+      },
+    });
   });
 });
