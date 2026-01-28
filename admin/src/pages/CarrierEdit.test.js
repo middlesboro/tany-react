@@ -39,4 +39,27 @@ describe('CarrierEdit', () => {
         expect(screen.getByText(/Price: 120, Price w\/o VAT: 100, Weight: 0 - 5/)).toBeInTheDocument();
     });
   });
+
+  test('adds a price range with freeShippingThreshold', async () => {
+    renderWithRouter(<CarrierEdit />);
+
+    const priceInput = screen.getByPlaceholderText('Price');
+    const priceWithoutVatInput = screen.getByPlaceholderText('Price w/o VAT');
+    const weightFromInput = screen.getByPlaceholderText('Weight From');
+    const weightToInput = screen.getByPlaceholderText('Weight To');
+    const freeShippingThresholdInput = screen.getByPlaceholderText('Free Shipping Threshold');
+    const addRangeButton = screen.getByText('Add Range');
+
+    fireEvent.change(priceInput, { target: { value: '120' } });
+    fireEvent.change(priceWithoutVatInput, { target: { value: '100' } });
+    fireEvent.change(weightFromInput, { target: { value: '0' } });
+    fireEvent.change(weightToInput, { target: { value: '5' } });
+    fireEvent.change(freeShippingThresholdInput, { target: { value: '200' } });
+
+    fireEvent.click(addRangeButton);
+
+    await waitFor(() => {
+        expect(screen.getByText(/Price: 120, Price w\/o VAT: 100, Weight: 0 - 5, Free Shipping Threshold: 200/)).toBeInTheDocument();
+    });
+  });
 });

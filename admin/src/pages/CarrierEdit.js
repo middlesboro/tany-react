@@ -15,7 +15,7 @@ const CarrierEdit = () => {
     ranges: [],
   });
 
-  const [newRange, setNewRange] = useState({ price: '', priceWithoutVat: '', weightFrom: '', weightTo: '' });
+  const [newRange, setNewRange] = useState({ price: '', priceWithoutVat: '', weightFrom: '', weightTo: '', freeShippingThreshold: '' });
 
   useEffect(() => {
     if (id) {
@@ -47,10 +47,11 @@ const CarrierEdit = () => {
             price: Number(newRange.price),
             priceWithoutVat: Number(newRange.priceWithoutVat),
             weightFrom: Number(newRange.weightFrom),
-            weightTo: Number(newRange.weightTo)
+            weightTo: Number(newRange.weightTo),
+            freeShippingThreshold: newRange.freeShippingThreshold ? Number(newRange.freeShippingThreshold) : null
         }]
       });
-      setNewRange({ price: '', priceWithoutVat: '', weightFrom: '', weightTo: '' });
+      setNewRange({ price: '', priceWithoutVat: '', weightFrom: '', weightTo: '', freeShippingThreshold: '' });
     }
   };
 
@@ -154,7 +155,7 @@ const CarrierEdit = () => {
                 <ul className="mb-4">
                     {carrier.ranges.map((range, index) => (
                         <li key={index} className="flex items-center mb-2">
-                            <span className="mr-2">Price: {range.price}, Price w/o VAT: {range.priceWithoutVat}, Weight: {range.weightFrom} - {range.weightTo}</span>
+                            <span className="mr-2">Price: {range.price}, Price w/o VAT: {range.priceWithoutVat}, Weight: {range.weightFrom} - {range.weightTo}{range.freeShippingThreshold != null ? `, Free Shipping Threshold: ${range.freeShippingThreshold}` : ''}</span>
                             <button type="button" onClick={() => handleRemoveRange(index)} className="text-red-500 hover:text-red-700">Remove</button>
                         </li>
                     ))}
@@ -187,6 +188,13 @@ const CarrierEdit = () => {
                     placeholder="Weight To"
                     value={newRange.weightTo}
                     onChange={(e) => setNewRange({...newRange, weightTo: e.target.value})}
+                    className="border rounded p-1"
+                />
+                 <input
+                    type="number"
+                    placeholder="Free Shipping Threshold"
+                    value={newRange.freeShippingThreshold}
+                    onChange={(e) => setNewRange({...newRange, freeShippingThreshold: e.target.value})}
                     className="border rounded p-1"
                 />
                 <button type="button" onClick={handleAddRange} className="bg-blue-500 text-white px-3 py-1 rounded">Add Range</button>
