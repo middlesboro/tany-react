@@ -30,7 +30,11 @@ const Cart = () => {
       await addDiscount(discountCode);
       setDiscountCode('');
     } catch (err) {
-      setDiscountError(err.message || "Failed to apply discount");
+      if (err.status === 404) {
+        setDiscountError("Zľavový kód sa nenašiel.");
+      } else {
+        setDiscountError(err.message || "Failed to apply discount");
+      }
     } finally {
       setDiscountLoading(false);
     }
