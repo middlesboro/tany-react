@@ -30,7 +30,7 @@ const PriceBreakdown = ({ priceBreakDown, showItems = false }) => {
                             )}
                             <span>{item.name} {item.quantity > 1 ? `(${item.quantity} ks)` : ''}</span>
                         </div>
-                        <span>{(item.priceWithVat * item.quantity).toFixed(2)} €</span>
+                        <span>{item.priceWithVat} €</span>
                     </div>
                 ))
             ) : (

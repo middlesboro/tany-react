@@ -102,6 +102,8 @@ const OrderList = () => {
 
         const duplicatedOrder = {
           ...rest,
+          firstname: order.customerName.split(" ")[0] || '',
+          lastname: order.customerName.split(" ")[1] || '',
           status: 'CREATED',
           cartId: null, // Clear cartId to avoid conflicts
           items: order.items ? order.items.map(item => ({
