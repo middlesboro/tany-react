@@ -69,8 +69,10 @@ export const addDiscount = async (cartId, code) => {
   });
 
   if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || 'Failed to add discount');
+    const errorData = await response.json().catch(() => ({}));
+    const error = new Error(errorData.message || 'Failed to add discount');
+    error.status = response.status;
+    throw error;
   }
   return response.json();
 };

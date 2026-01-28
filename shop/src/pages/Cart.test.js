@@ -109,4 +109,46 @@ describe('Cart Component', () => {
       const checkbox = screen.getByLabelText('Subscribe to newsletter for 10% discount');
       expect(checkbox).toBeChecked();
   });
+
+  test('displays specific error message when discount code is not found', async () => {
+    const error = new Error('Not Found');
+    error.status = 404;
+    mockAddDiscount.mockRejectedValue(error);
+
+    render(
+      <BrowserRouter>
+        <Cart />
+      </BrowserRouter>
+    );
+
+    const input = screen.getByPlaceholderText('Enter code');
+    const button = screen.getByText('Apply');
+
+    fireEvent.change(input, { target: { value: 'INVALID' } });
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(screen.getByText('Zľavový kód sa nenašiel.')).toBeInTheDocument();
+    });
+  });
+
+  test('displays generic error message for other errors', async () => {
+    mockAddDiscount.mockRejectedValue(new Error('Generic Error'));
+
+    render(
+      <BrowserRouter>
+        <Cart />
+      </BrowserRouter>
+    );
+
+    const input = screen.getByPlaceholderText('Enter code');
+    const button = screen.getByText('Apply');
+
+    fireEvent.change(input, { target: { value: 'ERROR' } });
+    fireEvent.click(button);
+
+    await waitFor(() => {
+      expect(screen.getByText('Generic Error')).toBeInTheDocument();
+    });
+  });
 });
