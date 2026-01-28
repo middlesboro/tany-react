@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getOrder, createOrder, updateOrder, downloadInvoice } from '../services/orderAdminService';
 import { getCarriers } from '../services/carrierAdminService';
 import { getPayments } from '../services/paymentAdminService';
+import { getCartDiscounts } from '../services/cartDiscountAdminService';
 import OrderForm from '../components/OrderForm';
 
 const OrderEdit = () => {
@@ -10,16 +11,21 @@ const OrderEdit = () => {
   const navigate = useNavigate();
   const [carriers, setCarriers] = useState([]);
   const [payments, setPayments] = useState([]);
+  const [cartDiscounts, setCartDiscounts] = useState([]);
   const [order, setOrder] = useState({
     cartId: '',
     customerId: '',
     customerName: '',
+    firstname: '',
+    lastname: '',
     email: '',
     phone: '',
     finalPrice: '',
     items: [],
+    cartDiscountIds: [],
     carrierId: '',
     paymentId: '',
+    selectedPickupPointId: '',
     deliveryAddress: { street: '', city: '', zip: '' },
     invoiceAddress: { street: '', city: '', zip: '' },
     deliveryAddressSameAsInvoiceAddress: false,
@@ -34,14 +40,16 @@ const OrderEdit = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [carriersData, paymentsData] = await Promise.all([
+        const [carriersData, paymentsData, discountsData] = await Promise.all([
           getCarriers(0, 'name,asc', 100),
-          getPayments(0, 'name,asc', 100)
+          getPayments(0, 'name,asc', 100),
+          getCartDiscounts(0, 'title,asc', 100)
         ]);
         setCarriers(carriersData.content || []);
         setPayments(paymentsData.content || []);
+        setCartDiscounts(discountsData.content || []);
       } catch (error) {
-        console.error("Failed to fetch carriers or payments", error);
+        console.error("Failed to fetch carriers, payments or discounts", error);
       }
     };
     fetchData();
@@ -73,12 +81,36 @@ const OrderEdit = () => {
     }
   };
 
+  const handleAddItem = (item) => {
+    setOrder(prev => ({ ...prev, items: [...prev.items, item] }));
+  };
+
+  const handleRemoveItem = (index) => {
+    setOrder(prev => ({ ...prev, items: prev.items.filter((_, i) => i !== index) }));
+  };
+
+  const handleUpdateItem = (index, updatedItem) => {
+    setOrder(prev => {
+      const newItems = [...prev.items];
+      newItems[index] = updatedItem;
+      return { ...prev, items: newItems };
+    });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (id) {
       await updateOrder(id, order);
     } else {
-      await createOrder(order);
+      const createPayload = {
+        ...order,
+        items: order.items.map(item => ({
+            id: item.id,
+            name: item.name,
+            quantity: item.quantity
+        }))
+      };
+      await createOrder(createPayload);
     }
     navigate('/orders');
   };
@@ -123,6 +155,11 @@ const OrderEdit = () => {
         handleSubmit={handleSubmit}
         carriers={carriers}
         payments={payments}
+        cartDiscounts={cartDiscounts}
+        isCreateMode={!id}
+        onAddItem={handleAddItem}
+        onRemoveItem={handleRemoveItem}
+        onUpdateItem={handleUpdateItem}
       />
     </div>
   );
