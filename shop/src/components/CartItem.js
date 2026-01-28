@@ -69,7 +69,7 @@ const CartItem = ({ item }) => {
              )}
           </div>
           <div className="ml-4">
-            <Link to={`/product/${item.slug}`} className="text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline">
+            <Link to={`/product/${item.slug}`} className="text-sm font-medium text-gray-800 hover:text-tany-green hover:underline">
               {displayName}
             </Link>
           </div>

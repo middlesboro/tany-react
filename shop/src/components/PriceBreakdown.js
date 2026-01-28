@@ -80,7 +80,7 @@ const PriceBreakdown = ({ priceBreakDown, showItems = false, cartItems = null })
         <div className="flex justify-between items-end">
             <span className="text-base font-bold text-gray-900">Spolu:</span>
             <div className="text-right">
-                <span className="block text-xl font-bold text-blue-600">{totalPrice.toFixed(2)} €</span>
+                <span className="block text-xl font-bold text-tany-green">{totalPrice.toFixed(2)} €</span>
             </div>
         </div>
         <div className="flex justify-between text-xs text-gray-500 mt-1">
