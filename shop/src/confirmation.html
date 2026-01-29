@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Objedn·vka ˙speöne vytvoren·</title>
+
+  <style>
+    :root {
+      --green: #1f7a4d;
+      --green-light: #e9f6ef;
+      --bg: #f5f7f6;
+      --card: #ffffff;
+      --text: #1f2933;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 24px;
+    }
+
+    /* HERO */
+    .hero {
+      background: linear-gradient(180deg, #eef9f3, #ffffff);
+      border-radius: var(--radius);
+      padding: 40px 24px;
+      text-align: center;
+      box-shadow: 0 8px 24px rgba(0,0,0,.05);
+    }
+
+    .hero .check {
+      width: 72px;
+      height: 72px;
+      border-radius: 50%;
+      background: var(--green-light);
+      color: var(--green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 36px;
+      margin: 0 auto 16px;
+    }
+
+    .badge {
+      display: inline-block;
+      margin-top: 12px;
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: var(--green-light);
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    /* GRID */
+    .grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 24px;
+      margin-top: 32px;
+    }
+
+    @media (max-width: 900px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* CARD */
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: 0 6px 20px rgba(0,0,0,.05);
+    }
+
+    .card h3 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-size: 18px;
+    }
+
+    .info-line {
+      margin-bottom: 6px;
+      color: var(--muted);
+    }
+
+    /* SUMMARY */
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+    }
+
+    .summary-row.discount {
+      color: var(--green);
+    }
+
+    .summary-total {
+      border-top: 1px solid var(--border);
+      margin-top: 12px;
+      padding-top: 12px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--green);
+    }
+
+    .summary-meta {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 6px;
+      font-size: 13px;
+      color: var(--muted);
+    }
+
+    /* PRODUCTS */
+    .products {
+      margin-top: 32px;
+    }
+
+    .product {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .product img {
+      width: 80px;
+      height: 80px;
+      object-fit: contain;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+    }
+
+    .product-name {
+      font-weight: 600;
+    }
+
+    .product-price {
+      margin-left: auto;
+      font-weight: 600;
+    }
+
+    /* FOOTER */
+    .footer {
+      margin-top: 40px;
+      text-align: center;
+    }
+
+    .shipping {
+      margin-bottom: 16px;
+      color: var(--muted);
+    }
+
+    .footer-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 14px 28px;
+      border-radius: 10px;
+      font-weight: 600;
+      border: none;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    .btn-primary {
+      background: var(--green);
+      color: #fff;
+    }
+
+    .btn-secondary {
+      background: #fff;
+      border: 1px solid var(--border);
+      color: var(--text);
+    }
+  </style>
+</head>
+
+<body>
+  <div class="container">
+
+    <!-- HERO -->
+    <section class="hero">
+      <div class="check"></div>
+      <h1>Objedn·vka ˙speöne vytvoren·</h1>
+      <span class="badge">Objedn·vka #0009</span>
+      <p style="margin-top:16px">
+        œakujeme za v·ö n·kup!<br/>
+        Potvrdenie sme poslali na <strong>lubogrno@gmail.com</strong>
+      </p>
+    </section>
+
+    <!-- GRID -->
+    <section class="grid">
+
+      <!-- LEFT -->
+      <div class="card">
+        <h3>Rekapitul·cia</h3>
+
+        <div class="summary-row">
+          <span>Medzis˙Ëet</span><span>9,87 Ä</span>
+        </div>
+        <div class="summary-row discount">
+          <span>Zæava (10 %)</span><span>-0,95 Ä</span>
+        </div>
+        <div class="summary-row">
+          <span>Doprava</span><span>2,60 Ä</span>
+        </div>
+        <div class="summary-row">
+          <span>Dobierka</span><span>1,00 Ä</span>
+        </div>
+
+        <div class="summary-total summary-row">
+          <span>SPOLU</span><span>12,15 Ä</span>
+        </div>
+
+        <div class="summary-meta">
+          <span>Bez DPH: 9,87 Ä</span>
+          <span>DPH: 2,28 Ä</span>
+        </div>
+      </div>
+
+      <!-- RIGHT -->
+      <div>
+        <div class="card" style="margin-bottom:16px">
+          <h3>Kontakt</h3>
+          <div class="info-line">lubo grno</div>
+          <div class="info-line">lubogrno@gmail.com</div>
+          <div class="info-line">0948305254</div>
+        </div>
+
+        <div class="card" style="margin-bottom:16px">
+          <h3>DoruËovacia adresa</h3>
+          <div class="info-line">budatinska 2.a</div>
+          <div class="info-line">bratislava ina, 55555</div>
+        </div>
+
+        <div class="card">
+          <h3>Platba & doprava</h3>
+          <div class="info-line">Dobierka</div>
+          <div class="info-line">Packeta</div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- PRODUCTS FULL WIDTH -->
+    <section class="products card">
+      <h3>Zak˙penÈ produkty</h3>
+      <div class="product">
+        <img src="https://via.placeholder.com/80" alt="Produkt">
+        <div>
+          <div class="product-name">100% Indick· Henna 200g</div>
+          <div class="info-line">Indian Natural Hair Care</div>
+        </div>
+        <div class="product-price">9,50 Ä</div>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+      <div class="shipping">
+        Odoslanie oËak·vame: <strong>1ñ2 pracovnÈ dni</strong>
+      </div>
+
+      <div class="footer-buttons">
+        <button class="btn btn-primary">PokraËovaù v n·kupe</button>
+        <button class="btn btn-secondary">Sledovaù objedn·vku</button>
+      </div>
+    </footer>
+
+  </div>
+</body>
+</html>
+
