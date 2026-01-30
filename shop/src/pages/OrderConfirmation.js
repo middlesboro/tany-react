@@ -3,8 +3,6 @@ import { useParams, Link, useSearchParams, useLocation } from 'react-router-dom'
 import { getOrderConfirmation } from '../services/orderService';
 import { getPaymentInfo, checkBesteronStatus } from '../services/paymentService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
-import PriceBreakdown from '../components/PriceBreakdown';
-import { VAT_RATE } from '../utils/constants';
 
 const OrderConfirmation = () => {
   const { id } = useParams();
@@ -19,6 +17,7 @@ const OrderConfirmation = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isPaid, setIsPaid] = useState(false);
+  const [showPaymentInfo, setShowPaymentInfo] = useState(false);
   const [verifyingPayment, setVerifyingPayment] = useState(false);
   const [verificationMessage, setVerificationMessage] = useState('');
 
@@ -37,7 +36,7 @@ const OrderConfirmation = () => {
         setOrder(data);
 
         // Check if already paid based on order status or URL param
-        if (data.status === 'PAID' || paymentStatus === 'PAYED') {
+        if (data.status === 'PAID') {
             setIsPaid(true);
         }
 
@@ -47,6 +46,10 @@ const OrderConfirmation = () => {
         } catch (paymentErr) {
             console.error("Failed to load payment info", paymentErr);
             // We don't block the order view if payment info fails
+        }
+
+        if (!isPaid && data.paymentType !== 'COD') {
+            setShowPaymentInfo(true);
         }
 
       } catch (err) {
@@ -103,10 +106,6 @@ const OrderConfirmation = () => {
 
           pollStatus();
       }
-      // We only want to start this once when component mounts or dependencies change to true
-      // But implementing polling inside useEffect requires care with closures.
-      // Since `pollStatus` is recursive via setTimeout, it will run.
-      // We disable the effect re-running on every render by checking conditions.
       // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, verifyPayment]);
 
@@ -114,173 +113,241 @@ const OrderConfirmation = () => {
   if (error) return <div className="container mx-auto px-4 py-8 text-red-600">{error}</div>;
   if (!order) return <div className="container mx-auto px-4 py-8">Order not found.</div>;
 
+  const getBreakdownItem = (type) => order.priceBreakDown?.items.find(i => i.type === type);
+  const getAllBreakdownItems = (type) => order.priceBreakDown?.items.filter(i => i.type === type) || [];
+
+  const shippingItem = getBreakdownItem('CARRIER');
+  const paymentItem = getBreakdownItem('PAYMENT');
+  const discountItems = getAllBreakdownItems('DISCOUNT');
+  const productItems = getAllBreakdownItems('PRODUCT');
+
+  // Calculate subtotal (sum of products)
+  const subtotal = productItems.reduce((acc, item) => acc + (item.priceWithVat * item.quantity), 0);
+
   return (
-    <div className="container mx-auto px-4 py-8 max-w-4xl">
+    <div className="bg-[#f5f7f6] rounded-[14px] p-4 md:p-6 max-w-[1100px] mx-auto text-[#1f2933] font-sans my-4">
+      {/* Messages */}
       {isPaid && (
         <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-8" role="alert">
-           <p className="font-bold">Payment Successful!</p>
-           <p>Your order has been paid successfully.</p>
+           <p className="font-bold">Platba úspešná!</p>
+           <p>Vaša objednávka bola úspešne zaplatená.</p>
         </div>
       )}
 
       {!isPaid && paymentStatus === 'ERROR' && (
         <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-8" role="alert">
-            <p className="font-bold">Payment Failed!</p>
-            <p>There was an error processing your payment.</p>
+            <p className="font-bold">Platba zlyhala!</p>
+            <p>Pri spracovaní vašej platby nastala chyba.</p>
         </div>
       )}
 
       {!isPaid && verificationMessage && (
-          <div className={`border-l-4 p-4 mb-8 ${verifyingPayment ? 'bg-green-50 border-tany-green text-tany-green' : 'bg-yellow-100 border-yellow-500 text-yellow-700'}`} role="alert">
+          <div className={`border-l-4 p-4 mb-8 ${verifyingPayment ? 'bg-green-50 border-[#1f7a4d] text-[#1f7a4d]' : 'bg-yellow-100 border-yellow-500 text-yellow-700'}`} role="alert">
               <div className="flex items-center">
                   {verifyingPayment && (
-                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-tany-green" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                    <svg className="animate-spin -ml-1 mr-3 h-5 w-5 text-[#1f7a4d]" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
                       <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                       <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                     </svg>
                   )}
-                  <p className="font-bold">{verifyingPayment ? 'Processing...' : 'Info'}</p>
+                  <p className="font-bold">{verifyingPayment ? 'Spracováva sa...' : 'Info'}</p>
               </div>
               <p>{verificationMessage}</p>
           </div>
       )}
 
-      {location.state?.newOrder && (
-        <div className="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-8" role="alert">
-            <p className="font-bold">Thank you!</p>
-            <p>Your order has been placed successfully.</p>
-        </div>
-      )}
+      {/* HERO */}
+      <section className="bg-gradient-to-b from-[#eef9f3] to-white rounded-[14px] p-6 md:p-10 text-center shadow-[0_8px_24px_rgba(0,0,0,0.05)]">
+          <div className="w-[72px] h-[72px] rounded-full bg-[#e9f6ef] text-[#1f7a4d] flex items-center justify-center text-4xl mx-auto mb-4">
+               <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
+          </div>
+          <h1 className="text-2xl md:text-3xl font-bold mb-2">
+            {isPaid ? "Objednávka úspešne vytvorená" : "Objednávka prijatá"}
+          </h1>
+          <span className="inline-block mt-3 px-4 py-1.5 rounded-full bg-[#e9f6ef] text-[#1f7a4d] font-semibold">
+              Objednávka #{order.orderIdentifier}
+          </span>
+          <p className="mt-4 text-gray-600">
+              Ďakujeme za váš nákup!<br/>
+              Potvrdenie sme poslali na <strong>{order.email}</strong>
+          </p>
+      </section>
 
-      <h1 className="text-3xl font-bold mb-6">Číslo objednávky {order.orderIdentifier}</h1>
+      {/* GRID */}
+      <section className=" gap-6 mt-8">
+          {/* RIGHT */}
+          <div className="space-y-4">
+               <div className="bg-white rounded-[14px] p-5 shadow-[0_6px_20px_rgba(0,0,0,0.05)]">
+                  <h3 className="text-lg font-bold mb-4">Osobné údaje a doručovacie údaje</h3>
+                  <div className="text-gray-600 mb-1.5">{order.firstname} {order.lastname}</div>
+                  <div className="text-gray-600 mb-1.5">{order.email}</div>
+                  <div className="text-gray-600 mb-4">{order.phone}</div>
 
-      {/* Personal Info */}
-      <div className="bg-white shadow rounded p-6 mb-8">
-          <h2 className="text-xl font-bold mb-4">Personal Information</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div>
-                  <span className="block text-sm font-medium text-gray-500">Name</span>
-                  <span className="block text-gray-900">{order.firstname} {order.lastname}</span>
-              </div>
-              <div>
-                  <span className="block text-sm font-medium text-gray-500">Email</span>
-                  <span className="block text-gray-900">{order.email}</span>
-              </div>
-              <div>
-                  <span className="block text-sm font-medium text-gray-500">Phone</span>
-                  <span className="block text-gray-900">{order.phone}</span>
-              </div>
-              {order.selectedPickupPointId && (
-                  <div>
-                      <span className="block text-sm font-medium text-gray-500">Pickup Point ID</span>
-                      <span className="block text-gray-900">{order.selectedPickupPointId}</span>
+                   {order.deliveryAddress ? (
+                       <>
+                           <h3 className="text-lg font-bold mb-4">Doručovacia adresa</h3>
+                           <div className="text-gray-600 mb-1.5">{order.deliveryAddress.street}</div>
+                           <div className="text-gray-600 mb-1.5">{order.deliveryAddress.city}, {order.deliveryAddress.zip}</div>
+                           <div className="text-gray-600 mb-4">{order.deliveryAddress.country}</div>
+                       </>
+                   ) : <div className="text-gray-600">N/A</div>}
+
+                   {order.invoiceAddress ? (
+                       <>
+                           <h3 className="text-lg font-bold mb-4">Fakturačná adresa</h3>
+                           <div className="text-gray-600 mb-1.5">{order.invoiceAddress.street}</div>
+                           <div className="text-gray-600 mb-1.5">{order.invoiceAddress.city}, {order.invoiceAddress.zip}</div>
+                           <div className="text-gray-600 mb-4">{order.invoiceAddress.country}</div>
+                       </>
+                   ) : <div className="text-gray-600">N/A</div>}
+               </div>
+
+               {/* Payment Info Card if Not Paid */}
+               {showPaymentInfo && (
+                   <div className="bg-white rounded-[14px] p-5 shadow-[0_6px_20px_rgba(0,0,0,0.05)] border-l-4 border-[#1f7a4d]">
+                      <h3 className="text-lg font-bold mb-4 text-[#1f7a4d]">Platba</h3>
+
+                      {order.paymentType === 'GLOBAL_PAYMENTS' && paymentInfo.globalPaymentDetails ? (
+                         <div className="flex flex-col items-center">
+                             <p className="mb-4 text-gray-700">Pre platbu kartou kliknite nižšie:</p>
+                             <form action={paymentInfo.globalPaymentDetails.paymentUrl} method="POST">
+                                 {Object.entries(paymentInfo.globalPaymentDetails).map(([key, value]) => {
+                                     if (key === 'paymentUrl') return null;
+                                     return <input key={key} type="hidden" name={key.toUpperCase()} value={value} />;
+                                 })}
+                                 <button type="submit" className="bg-[#1f7a4d] text-white font-bold py-2 px-6 rounded hover:bg-green-700">
+                                     Zaplatiť
+                                 </button>
+                             </form>
+                         </div>
+                      ) : (
+                        paymentInfo.qrCode && (
+                            <div className="flex flex-col items-center">
+                                <p className="mb-4 text-gray-700 text-sm">Naskenujte QR kód pre platbu:</p>
+                                <img src={`data:image/png;base64,${paymentInfo.qrCode}`} alt="Payment QR Code" className="w-48 h-48 border border-gray-200 rounded mb-4" />
+
+                                {paymentInfo.paymentLink && (
+                                     <a
+                                        href={paymentInfo.paymentLink}
+                                        target="_blank"
+                                        rel="noopener noreferrer"
+                                        className="bg-[#1f7a4d] text-white font-bold py-2 px-6 rounded hover:bg-green-700 mb-6 text-sm"
+                                     >
+                                        Zaplatiť cez Payme
+                                     </a>
+                                )}
+
+                                <div className="w-full text-sm">
+                                    <div className="mb-2">
+                                        Zaplatiť za objednávku môžete cez službu Payme. Jedná sa o službu Slovenskej Bankovej Asociácie.
+                                        Po kilknutí na tlačidlo "Zaplatiť cez Payme" budete presmerovaný na stránku Payme, kde môžete dokončiť platbu prostredníctvom vašej bankovej aplikácie alebo QR kódu.
+                                    </div>
+                                    <div className="mb-2">
+                                        Taktiež môžete zaplatiť manuálnym zadaním údajom vo vašom internet bankingu pomocou nasledujúcich údajov:
+                                    </div>
+                                    {paymentInfo.iban && (
+                                        <div className="flex justify-between py-1 border-b">
+                                            <span className="text-gray-600">IBAN:</span>
+                                            <span className="font-medium break-all text-right ml-2">{paymentInfo.iban}</span>
+                                        </div>
+                                    )}
+                                    {paymentInfo.variableSymbol && (
+                                        <div className="flex justify-between py-1 border-b">
+                                            <span className="text-gray-600">Var. symbol:</span>
+                                            <span className="font-medium">{paymentInfo.variableSymbol}</span>
+                                        </div>
+                                    )}
+                                    <div className="flex justify-between py-1">
+                                        <span className="text-gray-600">Suma:</span>
+                                        <span className="font-bold text-[#1f7a4d]">
+                                            {order.priceBreakDown.totalPrice.toFixed(2)} €
+                                        </span>
+                                    </div>
+                                </div>
+                            </div>
+                        )
+                      )}
+                   </div>
+               )}
+          </div>
+      </section>
+
+      {/* PRODUCTS */}
+      <section className="mt-8 bg-white rounded-[14px] p-5 shadow-[0_6px_20px_rgba(0,0,0,0.05)]">
+          <h3 className="text-lg font-bold mb-4">Zakúpené produkty</h3>
+          <div className="space-y-4">
+              {productItems.map((item, idx) => (
+                  <div key={idx} className="flex flex-col sm:flex-row items-start sm:items-center gap-4 border-b border-gray-100 last:border-0 pb-4 last:pb-0">
+                       <img src={item.image || (item.images && item.images[0]) || 'https://via.placeholder.com/80'} alt={item.name} className="w-20 h-20 object-cover rounded-lg border border-gray-200" />
+                       <div className="flex-1">
+                          <div className="font-semibold">{item.name}</div>
+                           <div className="text-gray-600 text-sm">{item.quantity} ks</div>
+                       </div>
+                       <div className="font-semibold">{(item.priceWithVat * item.quantity).toFixed(2)} €</div>
                   </div>
-              )}
+              ))}
           </div>
-      </div>
+      </section>
 
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
-        <div className="bg-white shadow rounded p-6">
-          <h2 className="text-xl font-bold mb-4">Delivery Address</h2>
-          {order.deliveryAddress ? (
-            <div>
-              <p>{order.deliveryAddress.street}</p>
-              <p>{order.deliveryAddress.city}, {order.deliveryAddress.zip}</p>
+        {/* LEFT */}
+        <div className="bg-white rounded-[14px] p-5 shadow-[0_6px_20px_rgba(0,0,0,0.05)] h-fit mt-8">
+            <h3 className="text-lg font-bold mb-4">Rekapitulácia</h3>
+
+            <div className="flex justify-between mb-2.5">
+                <span className="text-gray-600">Medzisúčet</span>
+                <span>{subtotal.toFixed(2)} €</span>
             </div>
-          ) : <p>N/A</p>}
-        </div>
-        <div className="bg-white shadow rounded p-6">
-          <h2 className="text-xl font-bold mb-4">Invoice Address</h2>
-          {order.invoiceAddress ? (
-            <div>
-              <p>{order.invoiceAddress.street}</p>
-              <p>{order.invoiceAddress.city}, {order.invoiceAddress.zip}</p>
-            </div>
-          ) : <p>N/A</p>}
-        </div>
-      </div>
 
-      {!isPaid && paymentInfo && order.paymentType === 'GLOBAL_PAYMENTS' && paymentInfo.globalPaymentDetails ? (
-           <div className="bg-white shadow rounded p-6 mb-8">
-              <h2 className="text-xl font-bold mb-4">Payment Information</h2>
-              <div className="flex flex-col items-center">
-                  <p className="mb-4 text-gray-700">Please pay for your order using Global Payments:</p>
-                  <form action={paymentInfo.globalPaymentDetails.paymentUrl} method="POST">
-                      {Object.entries(paymentInfo.globalPaymentDetails).map(([key, value]) => {
-                          if (key === 'paymentUrl') return null;
-                          return <input key={key} type="hidden" name={key.toUpperCase()} value={value} />;
-                      })}
-                      <button type="submit" className="bg-tany-green text-white font-bold py-2 px-6 rounded hover:bg-green-700">
-                          Pay Order
-                      </button>
-                  </form>
-              </div>
-           </div>
-      ) : (
-        !isPaid && paymentInfo && paymentInfo.qrCode && (
-            <div className="bg-white shadow rounded p-6 mb-8">
-                <h2 className="text-xl font-bold mb-4">Payment Information</h2>
-                <div className="flex flex-col items-center">
-                    <p className="mb-4 text-gray-700">Scan the QR code to pay:</p>
-                    <img src={`data:image/png;base64,${paymentInfo.qrCode}`} alt="Payment QR Code" className="w-64 h-64 border border-gray-200 rounded mb-4" />
-
-                    {paymentInfo.paymentLink && (
-                         <a
-                            href={paymentInfo.paymentLink}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            className="bg-tany-green text-white font-bold py-2 px-6 rounded hover:bg-green-700 mb-6"
-                         >
-                            Pay by payme
-                         </a>
-                    )}
-
-                    <div className="w-full max-w-sm">
-                        {paymentInfo.iban && (
-                            <div className="flex justify-between py-2 border-b">
-                                <span className="text-gray-600">IBAN:</span>
-                                <span className="font-medium">{paymentInfo.iban}</span>
-                            </div>
-                        )}
-                        {paymentInfo.variableSymbol && (
-                            <div className="flex justify-between py-2 border-b">
-                                <span className="text-gray-600">Variable Symbol:</span>
-                                <span className="font-medium">{paymentInfo.variableSymbol}</span>
-                            </div>
-                        )}
-                        {order.priceBreakDown && (
-                             <div className="flex justify-between py-2">
-                                <span className="text-gray-600">Amount:</span>
-                                <span className="font-bold text-tany-green">
-                                    {order.priceBreakDown.totalPrice.toFixed(2)} €
-                                </span>
-                            </div>
-                        )}
-                    </div>
+            {discountItems.map((item, idx) => (
+                <div key={idx} className="flex justify-between mb-2.5 text-[#1f7a4d]">
+                    <span>{item.name}</span>
+                    {/* Discounts are usually negative in value, if not, negate them */}
+                    <span>{(item.priceWithVat * item.quantity).toFixed(2)} €</span>
                 </div>
+            ))}
+
+            {/* Shipping */}
+            {shippingItem && (
+                <div className="flex justify-between mb-2.5">
+                    <span className="text-gray-600">Doprava</span>
+                    <span>{(shippingItem.priceWithVat)} €</span>
+                </div>
+            )}
+
+            {/* Payment Fee */}
+            {paymentItem && Math.abs(paymentItem.priceWithVat) > 0 && (
+                <div className="flex justify-between mb-2.5">
+                    <span className="text-gray-600">{paymentItem.name}</span>
+                    <span>{(paymentItem.priceWithVat)} €</span>
+                </div>
+            )}
+
+            <div className="flex justify-between mt-3 pt-3 border-t border-gray-200 text-lg font-bold text-[#1f7a4d]">
+                <span>SPOLU</span>
+                <span>{order.priceBreakDown.totalPrice.toFixed(2)} €</span>
             </div>
-        )
-      )}
 
-      {isPaid && (
-          <div className="bg-white shadow rounded p-6 mb-8 text-center">
-               <h2 className="text-xl font-bold mb-4">Payment Information</h2>
-               <p className="text-green-600 font-bold">This order has been paid.</p>
-          </div>
-      )}
+            <div className="flex justify-between mt-1.5 text-sm text-gray-500">
+                <span>Bez DPH: {order.priceBreakDown.totalPriceWithoutVat.toFixed(2)} €</span>
+                <span>DPH: {order.priceBreakDown.totalPriceVatValue.toFixed(2)} €</span>
+            </div>
+        </div>
 
-      {order.priceBreakDown && (
-          <div className="bg-white shadow rounded p-6 mb-8">
-              <h2 className="text-xl font-bold mb-4">Rekapitulácia objednávky</h2>
-              <PriceBreakdown priceBreakDown={order.priceBreakDown} showItems={true} />
-          </div>
-      )}
 
-      <div className="text-center">
-        <Link to="/" className="inline-block bg-tany-green text-white font-bold py-3 px-8 rounded hover:bg-green-700">
-            Continue Shopping
-        </Link>
-      </div>
+      {/* FOOTER */}
+      <footer className="mt-10 text-center">
+           <div className="text-gray-600 mb-4">
+              Odoslanie očakávame: <strong>1–2 pracovné dni</strong>
+           </div>
+           <div className="flex justify-center gap-4 flex-wrap">
+              <Link to="/" className="px-7 py-3.5 rounded-[10px] font-semibold text-white bg-[#1f7a4d] hover:opacity-90 transition-opacity">
+                  Pokračovať v nákupe
+              </Link>
+              <Link to="/account/orders" className="px-7 py-3.5 rounded-[10px] font-semibold bg-white border border-gray-200 text-gray-800 hover:bg-gray-50 transition-colors">
+                  Sledovať objednávku
+              </Link>
+           </div>
+      </footer>
     </div>
   );
 };

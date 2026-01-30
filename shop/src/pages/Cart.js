@@ -82,10 +82,9 @@ const Cart = () => {
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
         <div className="bg-white rounded-lg shadow p-6 text-center">
-          <p className="text-gray-500 mb-4">Your cart is empty.</p>
-          <Link to="/" className="text-blue-600 hover:text-blue-800 font-medium">
-            Continue Shopping
-          </Link>
+          <p className="text-gray-500 mb-6">Your cart is empty.</p>
+          <a className="px-7 py-3.5 rounded-[10px] font-semibold text-white bg-[#1f7a4d] hover:opacity-90 transition-opacity"
+             href="/">Pokračovať v nákupe</a>
         </div>
       </div>
     );
