@@ -36,6 +36,17 @@ export const createOrder = async (order) => {
   return response.json();
 };
 
+export const patchOrder = async (id, order) => {
+  const response = await authFetch(`${API_URL}/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(order),
+  });
+  return response.json();
+};
+
 export const updateOrder = async (id, order) => {
   const response = await authFetch(`${API_URL}/${id}`, {
     method: 'PUT',
