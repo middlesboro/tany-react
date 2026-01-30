@@ -3,8 +3,8 @@ import { useCart } from '../context/CartContext';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import { Link } from 'react-router-dom';
 import CartItem from '../components/CartItem';
-import PriceBreakdown from '../components/PriceBreakdown';
 import { VAT_RATE } from '../utils/constants';
+import './Cart.css';
 
 const Cart = () => {
   const { cart, loading, addDiscount, removeDiscount, updateCart } = useCart();
@@ -63,9 +63,11 @@ const Cart = () => {
 
   if (loading) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
-        <p>Loading cart...</p>
+      <div className="cart-page">
+         <div className="container">
+            <h1>Nákupný košík</h1>
+            <p>Načítavam košík...</p>
+         </div>
       </div>
     );
   }
@@ -75,149 +77,152 @@ const Cart = () => {
   const activeDiscounts = cart ? (cart.appliedDiscounts || cart.discounts || []) : [];
   const totalDisplayPrice = cart ? (cart.finalPrice !== undefined ? cart.finalPrice : cart.totalProductPrice) : 0;
   const subTotalDisplayPrice = cart ? (cart.totalPrice !== undefined ? cart.totalPrice : (cart.totalProductPrice || 0)) : 0;
+  // If priceBreakdown is available, use it for breakdown logic
+  const priceBreakdown = cart ? cart.priceBreakDown : null;
+  const totalVat = priceBreakdown ? priceBreakdown.totalPriceVatValue : (totalDisplayPrice - (totalDisplayPrice / VAT_RATE));
+  const totalWithoutVat = priceBreakdown ? priceBreakdown.totalPriceWithoutVat : (totalDisplayPrice / VAT_RATE);
 
 
   if (!cart || cartItems.length === 0) {
     return (
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
-        <div className="bg-white rounded-lg shadow p-6 text-center">
-          <p className="text-gray-500 mb-6">Your cart is empty.</p>
-          <a className="px-7 py-3.5 rounded-[10px] font-semibold text-white bg-[#1f7a4d] hover:opacity-90 transition-opacity"
-             href="/">Pokračovať v nákupe</a>
-        </div>
+      <div className="cart-page">
+         <div className="container">
+            <h1>Nákupný košík</h1>
+            <div className="card text-center" style={{ padding: '60px 20px' }}>
+                <p className="muted mb-6" style={{ marginBottom: '24px', fontSize: '16px' }}>Váš košík je prázdny.</p>
+                <Link className="btn" style={{ maxWidth: '300px', margin: '0 auto' }} to="/">
+                    Pokračovať v nákupe
+                </Link>
+            </div>
+         </div>
       </div>
     );
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
+    <div className="cart-page">
+      <div className="container">
+        <h1>Nákupný košík</h1>
 
-      <div className="flex flex-col lg:flex-row gap-8">
-        <div className="flex-1 bg-white rounded-lg shadow overflow-hidden">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Product
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Price
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Quantity
-                </th>
-                <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Total
-                </th>
-                <th scope="col" className="relative px-6 py-3">
-                  <span className="sr-only">Remove</span>
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {cartItems.map((item) => (
-                <CartItem key={item.id || item.productId} item={item} />
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        <div className="w-full lg:w-96">
-          <div className="bg-white rounded-lg shadow p-6 mb-6">
-            <h2 className="text-lg font-bold mb-4">Discount Code</h2>
-            <form onSubmit={handleApplyDiscount} className="flex gap-2">
-              <input
-                type="text"
-                value={discountCode}
-                onChange={(e) => setDiscountCode(e.target.value)}
-                placeholder="Enter code"
-                className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-tany-green focus:ring-tany-green border p-2"
-              />
-              <button
-                type="submit"
-                disabled={discountLoading || !discountCode.trim()}
-                className="bg-gray-800 text-white px-4 py-2 rounded hover:bg-gray-700 disabled:opacity-50"
-              >
-                Apply
-              </button>
-            </form>
-            {discountError && <p className="text-red-500 text-sm mt-2">{discountError}</p>}
-
-            {activeDiscounts.length > 0 && (
-              <div className="mt-4 space-y-2">
-                {activeDiscounts.map((discount, index) => (
-                  <div key={index} className="flex justify-between items-center bg-green-50 text-green-700 px-3 py-2 rounded text-sm">
-                    <div>
-                      <span className="font-bold">{discount.title}</span>
-                      {discount.value && <span className="ml-2">(-{discount.value}{discount.discountType === 'PERCENTAGE' ? '%' : '€'})</span>}
-                    </div>
-                    <button
-                      onClick={() => handleRemoveDiscount(discount.code)}
-                      className="text-green-900 hover:text-red-600 font-bold"
-                    >
-                      ×
-                    </button>
-                  </div>
-                ))}
+        <div className="cart-layout">
+           {/* Items Column */}
+           <div>
+              <div className="card">
+                 {cartItems.map((item) => (
+                    <CartItem key={item.id || item.productId} item={item} />
+                 ))}
               </div>
-            )}
+           </div>
 
-            <div className="mt-4 pt-4 border-t border-gray-100">
-              <label className="flex items-center space-x-2 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={cart.discountForNewsletter || false}
-                  onChange={handleNewsletterChange}
-                  className="rounded border-gray-300 text-tany-green shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50"
-                />
-                <span className="text-sm text-gray-700">Subscribe to newsletter for 10% discount</span>
-              </label>
-            </div>
-          </div>
+           {/* Summary Column */}
+           <div>
+               <div className="card">
+                  <h2>Zľavový kód</h2>
+                  <form onSubmit={handleApplyDiscount} className="flex gap-2 mb-4">
+                     <input
+                         type="text"
+                         value={discountCode}
+                         onChange={(e) => setDiscountCode(e.target.value)}
+                         placeholder="Vložte kód"
+                         className="flex-1"
+                     />
+                     <button
+                         type="submit"
+                         disabled={discountLoading || !discountCode.trim()}
+                         className="btn"
+                         style={{ marginTop: 0, padding: '12px 20px', width: 'auto' }}
+                     >
+                         Použiť
+                     </button>
+                  </form>
+                  {discountError && <p className="error-msg">{discountError}</p>}
 
-          <div className="bg-white rounded-lg shadow p-6">
-            <h2 className="text-lg font-bold mb-4">Summary</h2>
-
-            {cart.priceBreakDown ? (
-               <PriceBreakdown priceBreakDown={cart.priceBreakDown} />
-            ) : (
-              <>
-                <div className="space-y-2 mb-4">
-                  <div className="flex justify-between">
-                    <span className="text-gray-600">Subtotal</span>
-                    <span>{subTotalDisplayPrice.toFixed(2)} €</span>
-                  </div>
-                  {cart.totalDiscount > 0 && (
-                     <div className="flex justify-between text-green-600">
-                      <span>Discount</span>
-                      <span>-{cart.totalDiscount.toFixed(2)} €</span>
-                    </div>
+                  {activeDiscounts.length > 0 && (
+                      <div className="mt-4 space-y-2">
+                        {activeDiscounts.map((discount, index) => (
+                          <div key={index} className="flex justify-between items-center bg-green-50 text-green-700 px-3 py-2 rounded text-sm">
+                            <div>
+                              <span className="font-bold">{discount.title}</span>
+                              {discount.value && <span className="ml-2">(-{discount.value}{discount.discountType === 'PERCENTAGE' ? '%' : '€'})</span>}
+                            </div>
+                            <button
+                              onClick={() => handleRemoveDiscount(discount.code)}
+                              className="text-green-900 hover:text-red-600 font-bold"
+                              title="Odstrániť zľavu"
+                            >
+                              ×
+                            </button>
+                          </div>
+                        ))}
+                      </div>
                   )}
-                </div>
-                <div className="border-t border-gray-200 pt-4">
-                   <div className="flex justify-between items-center mb-1">
-                      <span className="text-sm text-gray-500">Bez DPH:</span>
-                      <span className="text-sm text-gray-500">{(totalDisplayPrice / VAT_RATE).toFixed(2)} €</span>
-                   </div>
-                   <div className="flex justify-between items-center">
-                      <span className="text-lg font-bold">Total:</span>
-                      <span className="text-xl font-bold text-tany-green">{totalDisplayPrice.toFixed(2)} €</span>
-                   </div>
-                </div>
-              </>
-            )}
 
-            <Link to="/order" className="block w-full bg-tany-green text-white text-center font-bold py-3 mt-6 rounded hover:bg-green-700">
-              Continue to Order
-            </Link>
-             <div className="mt-4 text-center">
-                <Link to="/" className="text-tany-green hover:text-green-800 font-medium">
-                    Continue Shopping
-                </Link>
-             </div>
-          </div>
+                  <div className="mt-4 pt-4 separator">
+                      <label className="checkbox-label">
+                         <input
+                            type="checkbox"
+                            checked={cart.discountForNewsletter || false}
+                            onChange={handleNewsletterChange}
+                            className="checkbox-input"
+                         />
+                         <span>Odber newslettera (zľava 10%)</span>
+                      </label>
+                  </div>
+               </div>
+
+               <div className="card">
+                   <h2>Zhrnutie</h2>
+
+                   {priceBreakdown ? (
+                       // Use price breakdown from API
+                       <>
+                           {priceBreakdown.items.filter(i => i.type !== 'PRODUCT').map((item, idx) => (
+                               <div className="summary-item" key={idx}>
+                                  <span>{item.name}</span>
+                                  <span>{(item.priceWithVat * item.quantity).toFixed(2)} €</span>
+                               </div>
+                           ))}
+                           <div className="summary-total">
+                               <span>Spolu</span>
+                               <span>{priceBreakdown.totalPrice.toFixed(2)} €</span>
+                           </div>
+                           <div className="muted vat-info">
+                               Bez DPH: {priceBreakdown.totalPriceWithoutVat.toFixed(2)} € · DPH: {priceBreakdown.totalPriceVatValue.toFixed(2)} €
+                           </div>
+                       </>
+                   ) : (
+                       // Fallback calculation
+                       <>
+                           <div className="summary-item">
+                               <span>Medzisúčet</span>
+                               <span>{subTotalDisplayPrice.toFixed(2)} €</span>
+                           </div>
+                           {cart.totalDiscount > 0 && (
+                               <div className="summary-item text-green-700">
+                                   <span>Zľava</span>
+                                   <span>-{cart.totalDiscount.toFixed(2)} €</span>
+                               </div>
+                           )}
+                           <div className="separator"></div>
+                           <div className="summary-total">
+                               <span>Spolu</span>
+                               <span>{totalDisplayPrice.toFixed(2)} €</span>
+                           </div>
+                           <div className="muted vat-info">
+                               Bez DPH: {totalWithoutVat.toFixed(2)} € · DPH: {totalVat.toFixed(2)} €
+                           </div>
+                       </>
+                   )}
+
+                   <Link to="/order" className="btn">
+                       Pokračovať v objednávke
+                   </Link>
+
+                   <Link to="/" className="btn btn-secondary text-center block no-underline">
+                       Späť do obchodu
+                   </Link>
+               </div>
+           </div>
         </div>
       </div>
     </div>
