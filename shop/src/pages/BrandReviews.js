@@ -79,25 +79,40 @@ const BrandReviews = ({ brandId: propBrandId, title, description }) => {
 
             {!loading && reviews.map(review => (
             <div key={review.id} className="border-b pb-6 last:border-0">
-                <div className="flex flex-col mb-2">
-                <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                        <StarRating rating={review.rating} />
-                        <span className="font-semibold text-gray-800">
-                            {review.title && <span className="mr-2">{review.title}</span>}
-                            <span className="text-gray-500 font-normal text-sm">od {review.customerName ? review.customerName : 'Anonym'}</span>
-                        </span>
+                <div className="flex gap-4">
+                    {review.productImage && (
+                        <div className="flex-shrink-0">
+                            <Link to={`/product/${review.productSlug || '#'}`}>
+                                <img
+                                    src={review.productImage}
+                                    alt={review.productName || review.productTitle || 'Product'}
+                                    className="w-20 h-20 object-cover rounded-md border border-gray-100"
+                                />
+                            </Link>
+                        </div>
+                    )}
+                    <div className="flex-grow">
+                        <div className="flex flex-col mb-2">
+                            <div className="flex items-center justify-between">
+                                <div className="flex items-center gap-2 flex-wrap">
+                                    <StarRating rating={review.rating} />
+                                    <span className="font-semibold text-gray-800">
+                                        {review.title && <span className="mr-2">{review.title}</span>}
+                                        <span className="text-gray-500 font-normal text-sm">od {review.customerName ? review.customerName : 'Anonym'}</span>
+                                    </span>
+                                </div>
+                                <span className="text-sm text-gray-500 whitespace-nowrap ml-2">dňa {new Date(review.createDate).toLocaleDateString('sk-SK')}</span>
+                            </div>
+                        </div>
+
+                        {(review.productName || review.productTitle) && (
+                            <Link to={`/product/${review.productSlug || '#'}`} className="text-sm text-tany-green hover:underline mb-2 block font-medium">
+                                {review.productName || review.productTitle}
+                            </Link>
+                        )}
+                        <p className="text-gray-600 whitespace-pre-line">{review.text}</p>
                     </div>
-                    <span className="text-sm text-gray-500">dňa {new Date(review.createDate).toLocaleDateString('sk-SK')}</span>
                 </div>
-                </div>
-                {/* Try to display product name if available. Assuming API might return productName or productTitle */}
-                {review.productTitle && (
-                    <Link to={`/product/${review.productSlug || '#'}`} className="text-sm text-tany-green hover:underline mb-2 block">
-                        {review.productTitle}
-                    </Link>
-                )}
-                <p className="text-gray-600 whitespace-pre-line">{review.text}</p>
             </div>
             ))}
         </div>
