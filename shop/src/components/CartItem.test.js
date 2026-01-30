@@ -53,11 +53,7 @@ describe('CartItem', () => {
 
     render(
       <BrowserRouter>
-        <table>
-            <tbody>
-                <CartItem item={mockItem} />
-            </tbody>
-        </table>
+        <CartItem item={mockItem} />
       </BrowserRouter>
     );
 

@@ -58,66 +58,66 @@ const CartItem = ({ item }) => {
   const displayName = item.title || item.productName;
 
   return (
-    <tr>
-      <td className="px-6 py-4">
-        <div className="flex items-center">
-          <div className="flex-shrink-0 h-10 w-10">
-             {displayImage ? (
-                <img className="h-10 w-10 rounded-full object-cover" src={displayImage} alt={displayName} />
-             ) : (
-                <div className="h-10 w-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-400 text-xs">No Img</div>
-             )}
-          </div>
-          <div className="ml-4">
-            <Link to={`/product/${item.slug}`} className="text-sm font-medium text-gray-800 hover:text-tany-green hover:underline">
-              {displayName}
-            </Link>
-          </div>
+    <div className="product">
+      {/* Image */}
+      <div>
+         {displayImage ? (
+            <img src={displayImage} alt={displayName} />
+         ) : (
+            <div className="w-20 h-20 rounded bg-gray-200 flex items-center justify-center text-gray-400 text-xs">No Img</div>
+         )}
+      </div>
+
+      {/* Details */}
+      <div className="flex-1">
+        <Link to={`/product/${item.slug}`} className="block font-bold text-gray-800 hover:text-[#2f6f4f] no-underline mb-1">
+          {displayName}
+        </Link>
+        <div className="muted">
+           {item.discountPrice ? (
+             <>
+               <span className="line-through mr-2">{item.price ? item.price.toFixed(2) : '0.00'} €</span>
+               <span className="font-bold text-red-600">{item.discountPrice.toFixed(2)} €</span>
+             </>
+           ) : (
+             <span>{item.price ? item.price.toFixed(2) : '0.00'} €</span>
+           )}
         </div>
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        {item.discountPrice ? (
-          <div className="flex flex-col">
-            <span className="text-xs text-gray-400 line-through">{item.price ? item.price.toFixed(2) : '0.00'} €</span>
-            <span className="text-sm font-bold text-red-600">{item.discountPrice.toFixed(2)} €</span>
-          </div>
-        ) : (
-          <div className="text-sm text-gray-900">{item.price ? item.price.toFixed(2) : '0.00'} €</div>
-        )}
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div className="flex items-center">
-            <input
-                type="number"
-                min="1"
-                value={quantity}
-                onChange={(e) => setQuantity(e.target.value)}
-                onBlur={handleUpdate}
-                onKeyDown={handleKeyDown}
-                disabled={updating}
-                className={`w-16 border rounded px-2 py-1 text-center text-sm ${updating ? 'bg-gray-100 text-gray-500' : 'text-gray-900'}`}
-            />
-            {updating && <span className="ml-2 text-xs text-gray-500">...</span>}
-        </div>
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap">
-        <div className="text-sm text-gray-900">
-          {((item.discountPrice || item.price) * item.quantity).toFixed(2)} €
-        </div>
-      </td>
-      <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-        <button
-          onClick={handleRemove}
-          disabled={updating}
-          className="text-red-600 hover:text-red-900"
-          title="Remove item"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-          </svg>
-        </button>
-      </td>
-    </tr>
+      </div>
+
+      {/* Quantity */}
+      <div>
+         <input
+             type="number"
+             min="1"
+             value={quantity}
+             onChange={(e) => setQuantity(e.target.value)}
+             onBlur={handleUpdate}
+             onKeyDown={handleKeyDown}
+             disabled={updating}
+             className="w-16 text-center"
+             aria-label="Quantity"
+         />
+      </div>
+
+      {/* Total */}
+      <div className="font-bold w-20 text-right hidden sm:block">
+         {((item.discountPrice || item.price) * item.quantity).toFixed(2)} €
+      </div>
+
+      {/* Remove */}
+      <button
+        onClick={handleRemove}
+        disabled={updating}
+        className="text-gray-400 hover:text-red-600 transition-colors"
+        title="Odstrániť"
+        type="button"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+        </svg>
+      </button>
+    </div>
   );
 };
 

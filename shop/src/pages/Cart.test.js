@@ -68,7 +68,7 @@ describe('Cart Component', () => {
       </BrowserRouter>
     );
 
-    expect(screen.getByLabelText('Subscribe to newsletter for 10% discount')).toBeInTheDocument();
+    expect(screen.getByLabelText('Odber newslettera (zľava 10%)')).toBeInTheDocument();
   });
 
   test('calls updateCart when newsletter checkbox is clicked', async () => {
@@ -78,7 +78,7 @@ describe('Cart Component', () => {
       </BrowserRouter>
     );
 
-    const checkbox = screen.getByLabelText('Subscribe to newsletter for 10% discount');
+    const checkbox = screen.getByLabelText('Odber newslettera (zľava 10%)');
     expect(checkbox).not.toBeChecked();
 
     fireEvent.click(checkbox);
@@ -106,7 +106,7 @@ describe('Cart Component', () => {
           </BrowserRouter>
       );
 
-      const checkbox = screen.getByLabelText('Subscribe to newsletter for 10% discount');
+      const checkbox = screen.getByLabelText('Odber newslettera (zľava 10%)');
       expect(checkbox).toBeChecked();
   });
 
@@ -121,8 +121,8 @@ describe('Cart Component', () => {
       </BrowserRouter>
     );
 
-    const input = screen.getByPlaceholderText('Enter code');
-    const button = screen.getByText('Apply');
+    const input = screen.getByPlaceholderText('Vložte kód');
+    const button = screen.getByText('Použiť');
 
     fireEvent.change(input, { target: { value: 'INVALID' } });
     fireEvent.click(button);
@@ -141,8 +141,8 @@ describe('Cart Component', () => {
       </BrowserRouter>
     );
 
-    const input = screen.getByPlaceholderText('Enter code');
-    const button = screen.getByText('Apply');
+    const input = screen.getByPlaceholderText('Vložte kód');
+    const button = screen.getByText('Použiť');
 
     fireEvent.change(input, { target: { value: 'ERROR' } });
     fireEvent.click(button);
