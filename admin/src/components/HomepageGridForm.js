@@ -54,6 +54,17 @@ const HomepageGridForm = ({
         />
       </div>
 
+      <div className="mb-4">
+          <label className="block text-gray-700">Order</label>
+          <input
+              type="number"
+              name="order"
+              value={homepageGrid.order || ''}
+              onChange={handleChange}
+              className="w-full px-3 py-2 border rounded"
+          />
+      </div>
+
       <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
         <div>
           <label className="block text-gray-700">Sort Field</label>
@@ -64,12 +75,8 @@ const HomepageGridForm = ({
             className="w-full px-3 py-2 border rounded"
           >
             <option value="">Select Sort Field</option>
-            <option value="PRICE">Price</option>
-            <option value="TITLE">Title</option>
-            <option value="CREATE_DATE">Create Date</option>
-            <option value="PRIORITY">Priority</option>
-            <option value="BEST_SELLING">Best Selling</option>
-            <option value="RATING">Rating</option>
+            <option value="CREATED_DATE">Created Date</option>
+            <option value="UPDATED_DATE">Updated Date</option>
           </select>
         </div>
         <div>

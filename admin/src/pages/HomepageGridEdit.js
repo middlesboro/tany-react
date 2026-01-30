@@ -15,6 +15,7 @@ const HomepageGridEdit = () => {
     categoryId: '',
     productIds: [],
     resultCount: '',
+    order: '',
     sortField: '',
     sortOrder: '',
   });
