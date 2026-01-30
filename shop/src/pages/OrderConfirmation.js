@@ -17,6 +17,7 @@ const OrderConfirmation = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [isPaid, setIsPaid] = useState(false);
+  const [showPaymentInfo, setShowPaymentInfo] = useState(false);
   const [verifyingPayment, setVerifyingPayment] = useState(false);
   const [verificationMessage, setVerificationMessage] = useState('');
 
@@ -35,7 +36,7 @@ const OrderConfirmation = () => {
         setOrder(data);
 
         // Check if already paid based on order status or URL param
-        if (data.status === 'PAID' || paymentStatus === 'PAYED') {
+        if (data.status === 'PAID') {
             setIsPaid(true);
         }
 
@@ -45,6 +46,10 @@ const OrderConfirmation = () => {
         } catch (paymentErr) {
             console.error("Failed to load payment info", paymentErr);
             // We don't block the order view if payment info fails
+        }
+
+        if (!isPaid && data.paymentType !== 'COD') {
+            setShowPaymentInfo(true);
         }
 
       } catch (err) {
@@ -111,7 +116,7 @@ const OrderConfirmation = () => {
   const getBreakdownItem = (type) => order.priceBreakDown?.items.find(i => i.type === type);
   const getAllBreakdownItems = (type) => order.priceBreakDown?.items.filter(i => i.type === type) || [];
 
-  const shippingItem = getBreakdownItem('SHIPPING');
+  const shippingItem = getBreakdownItem('CARRIER');
   const paymentItem = getBreakdownItem('PAYMENT');
   const discountItems = getAllBreakdownItems('DISCOUNT');
   const productItems = getAllBreakdownItems('PRODUCT');
@@ -169,78 +174,36 @@ const OrderConfirmation = () => {
       </section>
 
       {/* GRID */}
-      <section className="grid grid-cols-1 lg:grid-cols-[2fr_1fr] gap-6 mt-8">
-          {/* LEFT */}
-          <div className="bg-white rounded-[14px] p-5 shadow-[0_6px_20px_rgba(0,0,0,0.05)] h-fit">
-              <h3 className="text-lg font-bold mb-4">Rekapitulácia</h3>
-
-              <div className="flex justify-between mb-2.5">
-                  <span className="text-gray-600">Medzisúčet</span>
-                  <span>{subtotal.toFixed(2)} €</span>
-              </div>
-
-              {discountItems.map((item, idx) => (
-                  <div key={idx} className="flex justify-between mb-2.5 text-[#1f7a4d]">
-                       <span>{item.name}</span>
-                       {/* Discounts are usually negative in value, if not, negate them */}
-                       <span>{(item.priceWithVat * item.quantity).toFixed(2)} €</span>
-                  </div>
-              ))}
-
-               {/* Shipping */}
-               {shippingItem && (
-                  <div className="flex justify-between mb-2.5">
-                      <span className="text-gray-600">Doprava</span>
-                      <span>{(shippingItem.priceWithVat * shippingItem.quantity).toFixed(2)} €</span>
-                  </div>
-               )}
-
-               {/* Payment Fee */}
-               {paymentItem && Math.abs(paymentItem.priceWithVat) > 0 && (
-                  <div className="flex justify-between mb-2.5">
-                      <span className="text-gray-600">{paymentItem.name}</span>
-                       <span>{(paymentItem.priceWithVat * paymentItem.quantity).toFixed(2)} €</span>
-                  </div>
-               )}
-
-               <div className="flex justify-between mt-3 pt-3 border-t border-gray-200 text-lg font-bold text-[#1f7a4d]">
-                  <span>SPOLU</span>
-                  <span>{order.priceBreakDown.totalPrice.toFixed(2)} €</span>
-               </div>
-
-               <div className="flex justify-between mt-1.5 text-sm text-gray-500">
-                  <span>Bez DPH: {order.priceBreakDown.totalPriceWithoutVat.toFixed(2)} €</span>
-                  <span>DPH: {order.priceBreakDown.totalPriceVatValue.toFixed(2)} €</span>
-               </div>
-          </div>
-
+      <section className=" gap-6 mt-8">
           {/* RIGHT */}
           <div className="space-y-4">
                <div className="bg-white rounded-[14px] p-5 shadow-[0_6px_20px_rgba(0,0,0,0.05)]">
-                  <h3 className="text-lg font-bold mb-4">Kontakt</h3>
+                  <h3 className="text-lg font-bold mb-4">Osobné údaje a doručovacie údaje</h3>
                   <div className="text-gray-600 mb-1.5">{order.firstname} {order.lastname}</div>
                   <div className="text-gray-600 mb-1.5">{order.email}</div>
-                  <div className="text-gray-600 mb-1.5">{order.phone}</div>
-               </div>
+                  <div className="text-gray-600 mb-4">{order.phone}</div>
 
-               <div className="bg-white rounded-[14px] p-5 shadow-[0_6px_20px_rgba(0,0,0,0.05)]">
-                  <h3 className="text-lg font-bold mb-4">Doručovacia adresa</h3>
-                  {order.deliveryAddress ? (
-                      <>
-                          <div className="text-gray-600 mb-1.5">{order.deliveryAddress.street}</div>
-                          <div className="text-gray-600 mb-1.5">{order.deliveryAddress.city}, {order.deliveryAddress.zip}</div>
-                      </>
-                  ) : <div className="text-gray-600">N/A</div>}
-               </div>
+                   {order.deliveryAddress ? (
+                       <>
+                           <h3 className="text-lg font-bold mb-4">Doručovacia adresa</h3>
+                           <div className="text-gray-600 mb-1.5">{order.deliveryAddress.street}</div>
+                           <div className="text-gray-600 mb-1.5">{order.deliveryAddress.city}, {order.deliveryAddress.zip}</div>
+                           <div className="text-gray-600 mb-4">{order.deliveryAddress.country}</div>
+                       </>
+                   ) : <div className="text-gray-600">N/A</div>}
 
-               <div className="bg-white rounded-[14px] p-5 shadow-[0_6px_20px_rgba(0,0,0,0.05)]">
-                  <h3 className="text-lg font-bold mb-4">Platba & doprava</h3>
-                  {paymentItem && <div className="text-gray-600 mb-1.5">{paymentItem.name}</div>}
-                  {shippingItem && <div className="text-gray-600 mb-1.5">{shippingItem.name}</div>}
+                   {order.invoiceAddress ? (
+                       <>
+                           <h3 className="text-lg font-bold mb-4">Fakturačná adresa</h3>
+                           <div className="text-gray-600 mb-1.5">{order.invoiceAddress.street}</div>
+                           <div className="text-gray-600 mb-1.5">{order.invoiceAddress.city}, {order.invoiceAddress.zip}</div>
+                           <div className="text-gray-600 mb-4">{order.invoiceAddress.country}</div>
+                       </>
+                   ) : <div className="text-gray-600">N/A</div>}
                </div>
 
                {/* Payment Info Card if Not Paid */}
-               {!isPaid && paymentInfo && (
+               {showPaymentInfo && (
                    <div className="bg-white rounded-[14px] p-5 shadow-[0_6px_20px_rgba(0,0,0,0.05)] border-l-4 border-[#1f7a4d]">
                       <h3 className="text-lg font-bold mb-4 text-[#1f7a4d]">Platba</h3>
 
@@ -275,6 +238,13 @@ const OrderConfirmation = () => {
                                 )}
 
                                 <div className="w-full text-sm">
+                                    <div className="mb-2">
+                                        Zaplatiť za objednávku môžete cez službu Payme. Jedná sa o službu Slovenskej Bankovej Asociácie.
+                                        Po kilknutí na tlačidlo "Zaplatiť cez Payme" budete presmerovaný na stránku Payme, kde môžete dokončiť platbu prostredníctvom vašej bankovej aplikácie alebo QR kódu.
+                                    </div>
+                                    <div className="mb-2">
+                                        Taktiež môžete zaplatiť manuálnym zadaním údajom vo vašom internet bankingu pomocou nasledujúcich údajov:
+                                    </div>
                                     {paymentInfo.iban && (
                                         <div className="flex justify-between py-1 border-b">
                                             <span className="text-gray-600">IBAN:</span>
@@ -318,6 +288,51 @@ const OrderConfirmation = () => {
               ))}
           </div>
       </section>
+
+        {/* LEFT */}
+        <div className="bg-white rounded-[14px] p-5 shadow-[0_6px_20px_rgba(0,0,0,0.05)] h-fit mt-8">
+            <h3 className="text-lg font-bold mb-4">Rekapitulácia</h3>
+
+            <div className="flex justify-between mb-2.5">
+                <span className="text-gray-600">Medzisúčet</span>
+                <span>{subtotal.toFixed(2)} €</span>
+            </div>
+
+            {discountItems.map((item, idx) => (
+                <div key={idx} className="flex justify-between mb-2.5 text-[#1f7a4d]">
+                    <span>{item.name}</span>
+                    {/* Discounts are usually negative in value, if not, negate them */}
+                    <span>{(item.priceWithVat * item.quantity).toFixed(2)} €</span>
+                </div>
+            ))}
+
+            {/* Shipping */}
+            {shippingItem && (
+                <div className="flex justify-between mb-2.5">
+                    <span className="text-gray-600">Doprava</span>
+                    <span>{(shippingItem.priceWithVat)} €</span>
+                </div>
+            )}
+
+            {/* Payment Fee */}
+            {paymentItem && Math.abs(paymentItem.priceWithVat) > 0 && (
+                <div className="flex justify-between mb-2.5">
+                    <span className="text-gray-600">{paymentItem.name}</span>
+                    <span>{(paymentItem.priceWithVat)} €</span>
+                </div>
+            )}
+
+            <div className="flex justify-between mt-3 pt-3 border-t border-gray-200 text-lg font-bold text-[#1f7a4d]">
+                <span>SPOLU</span>
+                <span>{order.priceBreakDown.totalPrice.toFixed(2)} €</span>
+            </div>
+
+            <div className="flex justify-between mt-1.5 text-sm text-gray-500">
+                <span>Bez DPH: {order.priceBreakDown.totalPriceWithoutVat.toFixed(2)} €</span>
+                <span>DPH: {order.priceBreakDown.totalPriceVatValue.toFixed(2)} €</span>
+            </div>
+        </div>
+
 
       {/* FOOTER */}
       <footer className="mt-10 text-center">
