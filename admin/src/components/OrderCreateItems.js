@@ -53,7 +53,8 @@ const OrderCreateItems = ({ items, onAddItem, onRemoveItem, onUpdateItem }) => {
       name: product.title,
       quantity: 1,
       image: product.images && product.images.length > 0 ? product.images[0] : null,
-      price: product.price
+      price: product.price,
+      stockQuantity: product.quantity
     });
     setShowResults(false);
     setQuery('');
@@ -123,7 +124,14 @@ const OrderCreateItems = ({ items, onAddItem, onRemoveItem, onUpdateItem }) => {
                     <span className="text-xs text-gray-500">No Img</span>
                   )}
                </div>
-               <span className="font-medium">{item.name}</span>
+               <div>
+                 <div className="font-medium">{item.name}</div>
+                 {item.stockQuantity !== undefined && (
+                   <div className="text-xs text-gray-500">
+                     Stock: {item.stockQuantity}
+                   </div>
+                 )}
+               </div>
             </div>
             <div className="flex items-center space-x-4">
               <div className="flex items-center space-x-2">
