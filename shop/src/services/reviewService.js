@@ -7,6 +7,11 @@ export const getReviewsByProduct = async (productId, page = 0, size = 10, sort =
   return response.json();
 };
 
+export const getReviewsByBrand = async (brandIds, page = 0, size = 10, sort = 'createDate,desc') => {
+  const response = await authFetch(`${API_URL}/brand?brandIds=${brandIds}&page=${page}&size=${size}&sort=${sort}`);
+  return response.json();
+};
+
 export const createReview = async (reviewData) => {
   const response = await authFetch(API_URL, {
     method: 'POST',
