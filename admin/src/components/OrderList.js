@@ -31,7 +31,7 @@ const OrderList = () => {
 
   // Filter states
   const [filter, setFilter] = useState({
-    id: '',
+    orderIdentifier: '',
     status: '',
     priceFrom: '',
     priceTo: '',
@@ -161,7 +161,7 @@ const OrderList = () => {
 
   const handleClearFilter = () => {
     const emptyFilter = {
-      id: '',
+      orderIdentifier: '',
       status: '',
       priceFrom: '',
       priceTo: '',
@@ -183,8 +183,8 @@ const OrderList = () => {
             <label className="block text-gray-700">Order ID</label>
             <input
               type="text"
-              name="id"
-              value={filter.id}
+              name="orderIdentifier"
+              value={filter.orderIdentifier}
               onChange={handleFilterChange}
               onKeyDown={(e) => e.key === 'Enter' && handleFilterSubmit()}
               placeholder="Order ID"
@@ -265,7 +265,7 @@ const OrderList = () => {
       <table className="min-w-full bg-white">
         <thead>
           <tr>
-            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('id')}>
+            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('orderIdentifier')}>
               Order ID
             </th>
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('customerName')}>
@@ -291,7 +291,7 @@ const OrderList = () => {
         </thead>
         <tbody>
           {orders.map((order) => (
-            <tr key={order.id}>
+            <tr key={order.orderIdentifier}>
               <td className="py-2 px-4 border-b">{order.orderIdentifier}</td>
               <td className="py-2 px-4 border-b">
                 {order.customerName}
