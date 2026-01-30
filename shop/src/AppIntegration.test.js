@@ -5,12 +5,14 @@ import * as customerService from './services/customerService';
 import * as categoryService from './services/categoryService';
 import * as blogService from './services/blogService';
 import * as productService from './services/productService';
+import * as homepageService from './services/homepageService';
 
 // Mock services
 jest.mock('./services/customerService');
 jest.mock('./services/categoryService');
 jest.mock('./services/blogService');
 jest.mock('./services/productService');
+jest.mock('./services/homepageService');
 
 // Mock matchMedia
 window.matchMedia = window.matchMedia || function() {
@@ -30,6 +32,7 @@ describe('App Integration', () => {
     categoryService.getCategories.mockResolvedValue([]);
     blogService.getBlogs.mockResolvedValue([]);
     productService.getProducts.mockResolvedValue({ content: [], totalPages: 0 });
+    homepageService.getHomepageGrids.mockResolvedValue({ homepageGrids: [] });
   });
 
   test('renders App and Login button', async () => {
@@ -43,6 +46,27 @@ describe('App Integration', () => {
       // "Prihlásenie" should be visible in the header (if not logged in)
       const loginElements = screen.getAllByText(/Prihlásenie/i);
       expect(loginElements.length).toBeGreaterThan(0);
+    });
+  });
+
+  test('renders homepage grids', async () => {
+    homepageService.getHomepageGrids.mockResolvedValue({
+      homepageGrids: [
+        {
+          id: '1',
+          title: 'Best Sellers',
+          products: [
+            { id: 'p1', title: 'Product 1', price: 10, images: [], slug: 'product-1', quantity: 10 }
+          ]
+        }
+      ]
+    });
+
+    render(<App />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Best Sellers')).toBeInTheDocument();
+      expect(screen.getByText('Product 1')).toBeInTheDocument();
     });
   });
 });
