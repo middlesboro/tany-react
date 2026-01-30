@@ -56,16 +56,16 @@ const ProductSearch = () => {
   };
 
   return (
-    <div className="flex-grow max-w-xl w-full mx-4" ref={searchRef}>
+    <div className="flex-grow w-full" ref={searchRef}>
       <div className="relative">
         <input
           type="text"
           value={query}
           onChange={(e) => setQuery(e.target.value)}
           placeholder="Hľadať v obchode..."
-          className="w-full border border-gray-300 rounded-sm py-2 px-4 focus:outline-none focus:border-tany-green"
+          className="w-full bg-gray-100 border border-transparent focus:bg-white focus:ring-2 focus:ring-tany-green/20 focus:border-tany-green rounded-full py-3 pl-6 pr-12 text-sm transition-all shadow-sm outline-none"
         />
-        <button className="absolute right-0 top-0 h-full bg-tany-green text-white px-4 hover:bg-green-700 transition-colors">
+        <button className="absolute right-2 top-1/2 transform -translate-y-1/2 p-2 text-gray-400 hover:text-tany-green transition-colors rounded-full hover:bg-gray-100">
           <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
           </svg>

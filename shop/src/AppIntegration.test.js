@@ -43,8 +43,8 @@ describe('App Integration', () => {
 
     // Wait for basic rendering
     await waitFor(() => {
-      // "Prihlásenie" should be visible in the header (if not logged in)
-      const loginElements = screen.getAllByText(/Prihlásenie/i);
+      // "Prihlásiť" should be visible in the header (if not logged in)
+      const loginElements = screen.getAllByText(/Prihlásiť/i);
       expect(loginElements.length).toBeGreaterThan(0);
     });
   });
