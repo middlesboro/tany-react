@@ -28,6 +28,7 @@ const menuItems = [
     title: 'Settings',
     children: [
       { title: 'Shop Settings', path: '/shop-settings' },
+      { title: 'Homepage Grids', path: '/homepage-grids' },
       { title: 'Carriers', path: '/carriers' },
       { title: 'Payments', path: '/payments' },
       { title: 'Cart Discounts', path: '/cart-discounts' },
