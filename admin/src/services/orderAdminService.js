@@ -9,7 +9,7 @@ export const getOrders = async (page = 0, sort = 'id,asc', size = 20, filter = {
     sort,
   });
 
-  if (filter.id) params.append('id', filter.id);
+  if (filter.orderIdentifier) params.append('orderIdentifier', filter.orderIdentifier);
   if (filter.status) params.append('status', filter.status);
   if (filter.priceFrom) params.append('priceFrom', filter.priceFrom);
   if (filter.priceTo) params.append('priceTo', filter.priceTo);
@@ -28,6 +28,17 @@ export const getOrder = async (id) => {
 export const createOrder = async (order) => {
   const response = await authFetch(API_URL, {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(order),
+  });
+  return response.json();
+};
+
+export const patchOrder = async (id, order) => {
+  const response = await authFetch(`${API_URL}/${id}`, {
+    method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
     },

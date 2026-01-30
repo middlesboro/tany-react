@@ -32,6 +32,8 @@ import CarrierEdit from './pages/CarrierEdit';
 import Payments from './pages/Payments';
 import PaymentEdit from './pages/PaymentEdit';
 import ShopSettings from './pages/ShopSettings';
+import HomepageGrids from './pages/HomepageGrids';
+import HomepageGridEdit from './pages/HomepageGridEdit';
 import ProductLabels from './pages/ProductLabels';
 import ProductLabelEdit from './pages/ProductLabelEdit';
 import CartDiscounts from './pages/CartDiscounts';
@@ -83,6 +85,9 @@ function App() {
 
             <Route element={<AdminLayout />}>
               <Route path="shop-settings" element={<ShopSettings />} />
+              <Route path="homepage-grids" element={<HomepageGrids />} />
+              <Route path="homepage-grids/new" element={<HomepageGridEdit />} />
+              <Route path="homepage-grids/:id" element={<HomepageGridEdit />} />
               <Route path="products" element={<Products />} />
               <Route path="products/new" element={<ProductEdit />} />
               <Route path="products/:id" element={<ProductEdit />} />

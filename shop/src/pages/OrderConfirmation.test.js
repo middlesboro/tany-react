@@ -68,7 +68,7 @@ describe('OrderConfirmation', () => {
     render(<OrderConfirmation />);
 
     await waitFor(() => {
-      expect(screen.getByText('Číslo objednávky 123')).toBeInTheDocument();
+      expect(screen.getByText('Objednávka #123')).toBeInTheDocument();
     });
 
     expect(getOrderConfirmation).toHaveBeenCalledWith('123');
@@ -90,12 +90,12 @@ describe('OrderConfirmation', () => {
     render(<OrderConfirmation />);
 
     await waitFor(() => {
-      expect(screen.getByText('Číslo objednávky 123')).toBeInTheDocument();
+      expect(screen.getByText('Objednávka #123')).toBeInTheDocument();
     });
 
-    expect(screen.getByText('Scan the QR code to pay:')).toBeInTheDocument();
+    expect(screen.getByText('Naskenujte QR kód pre platbu:')).toBeInTheDocument();
 
-    const payButton = screen.getByText('Pay by payme');
+    const payButton = screen.getByText('Zaplatiť cez Payme');
     expect(payButton).toBeInTheDocument();
     expect(payButton).toHaveAttribute('href', 'https://payme.sk/link');
     expect(payButton).toHaveAttribute('target', '_blank');
@@ -103,10 +103,10 @@ describe('OrderConfirmation', () => {
     expect(screen.getByText('IBAN:')).toBeInTheDocument();
     expect(screen.getByText('SK1234567890')).toBeInTheDocument();
 
-    expect(screen.getByText('Variable Symbol:')).toBeInTheDocument();
+    expect(screen.getByText('Var. symbol:')).toBeInTheDocument();
     expect(screen.getByText('123456')).toBeInTheDocument();
 
-    expect(screen.getByText('Amount:')).toBeInTheDocument();
-    expect(screen.getByText('100.00 €')).toBeInTheDocument();
+    expect(screen.getByText('Suma:')).toBeInTheDocument();
+    expect(screen.getAllByText('100.00 €')[0]).toBeInTheDocument();
   });
 });

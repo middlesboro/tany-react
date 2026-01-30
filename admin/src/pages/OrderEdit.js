@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { getOrder, createOrder, updateOrder, downloadInvoice } from '../services/orderAdminService';
+import { getOrder, createOrder, updateOrder, patchOrder, downloadInvoice } from '../services/orderAdminService';
 import { getCarriers } from '../services/carrierAdminService';
 import { getPayments } from '../services/paymentAdminService';
 import { getCartDiscounts } from '../services/cartDiscountAdminService';
@@ -13,6 +13,7 @@ const OrderEdit = () => {
   const [carriers, setCarriers] = useState([]);
   const [payments, setPayments] = useState([]);
   const [cartDiscounts, setCartDiscounts] = useState([]);
+  const [initialOrder, setInitialOrder] = useState(null);
   const [order, setOrder] = useState({
     cartId: '',
     customerId: '',
@@ -59,6 +60,7 @@ const OrderEdit = () => {
       const fetchOrder = async () => {
         const data = await getOrder(id);
         setOrder(data);
+        setInitialOrder(data);
       };
       fetchOrder();
     } else if (location.state?.duplicatedOrder) {
@@ -100,10 +102,24 @@ const OrderEdit = () => {
     });
   };
 
+  const getDiff = (initial, current) => {
+    if (!initial) return current;
+    const diff = {};
+    Object.keys(current).forEach(key => {
+      if (current[key] !== initial[key]) {
+        diff[key] = current[key];
+      }
+    });
+    return diff;
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (id) {
-      await updateOrder(id, order);
+      const changedFields = getDiff(initialOrder, order);
+      if (Object.keys(changedFields).length > 0) {
+        await patchOrder(id, changedFields);
+      }
     } else {
       const createPayload = {
         ...order,

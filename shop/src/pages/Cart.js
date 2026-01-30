@@ -30,7 +30,11 @@ const Cart = () => {
       await addDiscount(discountCode);
       setDiscountCode('');
     } catch (err) {
-      setDiscountError(err.message || "Failed to apply discount");
+      if (err.status === 404) {
+        setDiscountError("Zľavový kód sa nenašiel.");
+      } else {
+        setDiscountError(err.message || "Failed to apply discount");
+      }
     } finally {
       setDiscountLoading(false);
     }
@@ -78,10 +82,9 @@ const Cart = () => {
       <div className="container mx-auto px-4 py-8">
         <h1 className="text-3xl font-bold mb-6">Shopping Cart</h1>
         <div className="bg-white rounded-lg shadow p-6 text-center">
-          <p className="text-gray-500 mb-4">Your cart is empty.</p>
-          <Link to="/" className="text-blue-600 hover:text-blue-800 font-medium">
-            Continue Shopping
-          </Link>
+          <p className="text-gray-500 mb-6">Your cart is empty.</p>
+          <a className="px-7 py-3.5 rounded-[10px] font-semibold text-white bg-[#1f7a4d] hover:opacity-90 transition-opacity"
+             href="/">Pokračovať v nákupe</a>
         </div>
       </div>
     );
@@ -130,7 +133,7 @@ const Cart = () => {
                 value={discountCode}
                 onChange={(e) => setDiscountCode(e.target.value)}
                 placeholder="Enter code"
-                className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 border p-2"
+                className="flex-1 rounded-md border-gray-300 shadow-sm focus:border-tany-green focus:ring-tany-green border p-2"
               />
               <button
                 type="submit"
@@ -167,7 +170,7 @@ const Cart = () => {
                   type="checkbox"
                   checked={cart.discountForNewsletter || false}
                   onChange={handleNewsletterChange}
-                  className="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                  className="rounded border-gray-300 text-tany-green shadow-sm focus:border-green-300 focus:ring focus:ring-green-200 focus:ring-opacity-50"
                 />
                 <span className="text-sm text-gray-700">Subscribe to newsletter for 10% discount</span>
               </label>
@@ -200,17 +203,17 @@ const Cart = () => {
                    </div>
                    <div className="flex justify-between items-center">
                       <span className="text-lg font-bold">Total:</span>
-                      <span className="text-xl font-bold text-blue-600">{totalDisplayPrice.toFixed(2)} €</span>
+                      <span className="text-xl font-bold text-tany-green">{totalDisplayPrice.toFixed(2)} €</span>
                    </div>
                 </div>
               </>
             )}
 
-            <Link to="/order" className="block w-full bg-green-600 text-white text-center font-bold py-3 mt-6 rounded hover:bg-green-700">
+            <Link to="/order" className="block w-full bg-tany-green text-white text-center font-bold py-3 mt-6 rounded hover:bg-green-700">
               Continue to Order
             </Link>
              <div className="mt-4 text-center">
-                <Link to="/" className="text-blue-600 hover:text-blue-800 font-medium">
+                <Link to="/" className="text-tany-green hover:text-green-800 font-medium">
                     Continue Shopping
                 </Link>
              </div>
