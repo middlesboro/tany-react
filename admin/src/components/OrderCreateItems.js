@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { searchProducts } from '../services/productService';
+import { searchProducts } from '../services/productAdminService';
 
 const OrderCreateItems = ({ items, onAddItem, onRemoveItem, onUpdateItem }) => {
   const [query, setQuery] = useState('');
