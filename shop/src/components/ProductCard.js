@@ -164,7 +164,7 @@ const ProductCard = ({ product }) => {
               adding={adding}
               text={product.quantity <= 0 ? "Vypredané" : "Do košíka"}
               disabled={product.quantity <= 0}
-              className="h-10 px-4 flex-grow rounded-sm text-sm"
+              className="h-10 px-2 flex-grow rounded-sm text-xs"
             />
           </div>
         </div>
