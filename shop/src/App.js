@@ -56,7 +56,7 @@ function App() {
                 <Route path="/packeta" element={<PacketaPage />} />
                 <Route path="/biokap-recenzie" element={
                   <BrandReviews
-                    brandId=""
+                    brandId="799185bf-064a-4c63-b02b-f0336b99ace4"
                     title="Biokap farby na vlasy - recenzie a skúsenosti"
                     description={`Biokap ponúka 30 ročné skúsenosti vo výskume a vo výrobe rastlinných extraktov. Produkty sú bez obsahu najčastejších alergénov. Produkty v línii Rapid neobsahujú:
  - PEG,
