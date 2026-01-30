@@ -1,9 +1,9 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import OrderCreateItems from './OrderCreateItems';
-import { searchProducts } from '../services/productService';
+import { searchProducts } from '../services/productAdminService';
 
-jest.mock('../services/productService');
+jest.mock('../services/productAdminService');
 
 describe('OrderCreateItems', () => {
   const mockOnAddItem = jest.fn();

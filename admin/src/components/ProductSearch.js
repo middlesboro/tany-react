@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { searchProducts } from '../services/productService';
+import { searchProducts } from '../services/productAdminService';
 
 const ProductSearch = () => {
   const [query, setQuery] = useState('');

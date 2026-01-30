@@ -1,10 +1,10 @@
 import React from 'react';
 import { render, screen, fireEvent, waitFor, act } from '@testing-library/react';
 import ProductSearch from './ProductSearch';
-import { searchProducts } from '../services/productService';
+import { searchProducts } from '../services/productAdminService';
 import { MemoryRouter } from 'react-router-dom';
 
-jest.mock('../services/productService');
+jest.mock('../services/productAdminService');
 
 const mockProducts = [
   {
