@@ -4,9 +4,8 @@ import { useCart } from '../context/CartContext';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import { createOrder } from '../services/orderService';
 import { debounce } from '../utils/debounce';
-import PriceBreakdown from '../components/PriceBreakdown';
 import { isValidName, isValidSlovakPhone, isValidSlovakZip, isValidEmail, checkEmailTypos } from '../utils/validation';
-import { VAT_RATE } from '../utils/constants';
+import './Checkout.css';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -36,9 +35,6 @@ const Checkout = () => {
   const [selectedPickupPoint, setSelectedPickupPoint] = useState(null);
   const [note, setNote] = useState('');
 
-  // Track if we have initialized from cart to avoid overwriting user input
-  // We use state instead of ref to ensure that after initialization, the component re-renders
-  // and subsequent effects (like the auto-save) see the updated initialized value AND updated state.
   const [initialized, setInitialized] = useState(false);
 
   // Dynamic data from cart
@@ -67,7 +63,6 @@ const Checkout = () => {
   // Initialize state from cart data
   useEffect(() => {
       if (cart && !initialized) {
-          // Initialize Carriers
           if (cart.selectedCarrierId) {
               setSelectedCarrier(cart.selectedCarrierId);
           } else if (!selectedCarrier && cart.carriers) {
@@ -77,7 +72,6 @@ const Checkout = () => {
               }
           }
 
-          // Initialize Payments
           if (cart.selectedPaymentId) {
                setSelectedPayment(cart.selectedPaymentId);
           } else if (!selectedPayment && cart.payments) {
@@ -89,7 +83,6 @@ const Checkout = () => {
 
           const profile = customerContext || {};
 
-          // Initialize Customer
           setCustomer(prev => ({
               firstname: cart.firstname || profile.firstname || prev.firstname,
               lastname: cart.lastname || profile.lastname || prev.lastname,
@@ -101,7 +94,6 @@ const Checkout = () => {
               setNote(cart.note || cart.description);
           }
 
-          // Initialize Invoice Address
           const cartInvoice = cart.invoiceAddress || {};
           const profileInvoice = profile.invoiceAddress || {};
 
@@ -111,7 +103,6 @@ const Checkout = () => {
               zip: cartInvoice.zip || profileInvoice.zip || prev.zip
           }));
 
-          // Initialize Pickup Point
           if (cart.selectedPickupPointId) {
              setSelectedPickupPoint({
                  id: cart.selectedPickupPointId,
@@ -119,13 +110,8 @@ const Checkout = () => {
              });
           }
 
-          // Initialize Delivery Address
           const cartDelivery = cart.deliveryAddress || {};
-          // Only use profile delivery address if it has data.
-          // Typically profile.deliveryAddress is same as invoice unless specified.
           const profileDelivery = profile.deliveryAddress || {};
-
-          // Check if cart has specific delivery address data
           const hasCartDeliveryData = cartDelivery.street || cartDelivery.city || cartDelivery.zip;
 
           if (hasCartDeliveryData) {
@@ -135,8 +121,6 @@ const Checkout = () => {
                    zip: cartDelivery.zip || prev.zip
                }));
 
-               // Check difference with whatever invoice address we settled on (cart or profile)
-               // Note: 'invoiceAddress' state isn't updated yet in this render cycle, so we calculate what it will be.
                const targetInvoice = {
                     street: cartInvoice.street || profileInvoice.street || '',
                     city: cartInvoice.city || profileInvoice.city || '',
@@ -148,7 +132,6 @@ const Checkout = () => {
                                    cartDelivery.zip !== targetInvoice.zip;
                setDifferentDeliveryAddress(isDifferent);
           } else {
-              // If cart doesn't have delivery data, check profile delivery data
               const hasProfileDeliveryData = profileDelivery.street || profileDelivery.city || profileDelivery.zip;
 
               if (hasProfileDeliveryData) {
@@ -158,7 +141,6 @@ const Checkout = () => {
                       zip: profileDelivery.zip || prev.zip
                   }));
 
-                   // Check difference with invoice address
                    const targetInvoice = {
                         street: cartInvoice.street || profileInvoice.street || '',
                         city: cartInvoice.city || profileInvoice.city || '',
@@ -176,17 +158,15 @@ const Checkout = () => {
       }
   }, [cart, customerContext, selectedCarrier, selectedPayment, initialized]);
 
-  // Debounced update function
   const debouncedUpdate = useCallback(
       debounce((data) => {
           if (data.cartId) {
              updateCart(data).catch(err => console.error("Auto-save failed", err));
           }
-      }, 1000), // 1 second debounce
-      [updateCart] // dependency on updateCart (stable from context)
+      }, 1000),
+      [updateCart]
   );
 
-  // Effect to trigger update when fields change
   useEffect(() => {
       if (!initialized || !cart) return;
 
@@ -201,7 +181,7 @@ const Checkout = () => {
           note: note,
           description: note,
           invoiceAddress: invoiceAddress,
-          deliveryAddress: differentDeliveryAddress ? deliveryAddress : invoiceAddress, // Send proper delivery address
+          deliveryAddress: differentDeliveryAddress ? deliveryAddress : invoiceAddress,
           selectedCarrierId: selectedCarrier,
           selectedPaymentId: selectedPayment,
           selectedPickupPointId: carrierObj?.type === 'PACKETA' ? selectedPickupPoint?.id : null,
@@ -217,7 +197,6 @@ const Checkout = () => {
   const handleCustomerChange = (e) => {
     const { name, value } = e.target;
     setCustomer(prev => ({ ...prev, [name]: value }));
-    // Clear specific error when user types
     if (errors[name]) {
         setErrors(prev => ({ ...prev, [name]: null }));
     }
@@ -257,15 +236,7 @@ const Checkout = () => {
   const validateField = (name, value, prefix = '') => {
       let error = null;
       let warning = null;
-      const fieldName = prefix ? name.replace(`${prefix}_`, '') : name; // e.g., 'zip' from 'invoice_zip'
 
-      // Map field name to validation logic
-      // Note: 'firstname'/'lastname'/'email'/'phone' are direct names in customer object
-      // 'street'/'city'/'zip' are in address objects, passed with prefix usually or handled by caller
-
-      // We normalize the value check based on the field 'type' logic
-
-      // Customer Fields
       if (name === 'firstname') {
           if (!isValidName(value)) error = "Meno môže obsahovať len písmená";
       } else if (name === 'lastname') {
@@ -280,7 +251,6 @@ const Checkout = () => {
       } else if (name === 'phone') {
           if (!isValidSlovakPhone(value)) error = "Nesprávny formát (napr. +421944123456 alebo 0944123456)";
       }
-      // Address Fields (prefix is 'invoice' or 'delivery')
       else if (name.endsWith('street')) {
            if (!value) error = "Ulica je povinná";
       } else if (name.endsWith('city')) {
@@ -295,39 +265,11 @@ const Checkout = () => {
       return !error;
   };
 
-  const handleBlur = (e) => {
-      const { name, value } = e.target;
-      // Determine context for address fields
-      // The inputs have names like "invoice_street" or just "street" depending on how I set them up.
-      // In JSX below:
-      // Customer: name="firstname", etc.
-      // Invoice: name="street" (but handled by handleInvoiceAddressChange)
-      // Wait, handleInvoiceAddressChange uses `name` from event. The input `name` is "street".
-      // But `errors` state uses `invoice_street`.
-      // So I need to pass the correct key to `validateField`.
-
-      // I should update inputs to have unique names or handle the mapping here.
-      // Current JSX:
-      // Invoice: <input name="street" ... />
-      // Delivery: <input name="street" ... />
-      // This is problematic for `handleBlur` if I rely on `e.target.name` alone because both have name="street".
-      // I should assume the section based on ... well, I can't know which section it is easily without unique names or ids.
-
-      // I will update input names in JSX to be unique (e.g. "invoice_street") and handle that in change handlers.
-      // OR, simpler: pass a wrapper to onBlur.
-  };
-
-  // Revised handlers to support unique names if I change them, OR just wrap onBlur.
-  // Let's change input names in JSX to be explicit: 'invoice_street', 'delivery_street'.
-  // And update change handlers to parse it.
-
   const calculateShippingPrice = (carrier) => {
     if (!carrier) return 0;
-    // New API structure: price is directly on the carrier object
     if (typeof carrier.price === 'number') {
         return carrier.price;
     }
-    // Fallback for old structure
     if (carrier.ranges && carrier.ranges.length > 0) {
         return carrier.ranges[0].price;
     }
@@ -364,7 +306,6 @@ const Checkout = () => {
       const newErrors = {};
       const newWarnings = {};
 
-      // Customer
       if (!isValidName(customer.firstname)) newErrors.firstname = "Meno môže obsahovať len písmená";
       if (!isValidName(customer.lastname)) newErrors.lastname = "Priezvisko môže obsahovať len písmená";
       if (!isValidEmail(customer.email)) {
@@ -375,12 +316,10 @@ const Checkout = () => {
       }
       if (!isValidSlovakPhone(customer.phone)) newErrors.phone = "Nesprávny formát (napr. +421944123456 alebo 0944123456)";
 
-      // Invoice Address (Required)
       if (!invoiceAddress.street) newErrors.invoice_street = "Ulica je povinná";
       if (!invoiceAddress.city) newErrors.invoice_city = "Mesto je povinné";
       if (!isValidSlovakZip(invoiceAddress.zip)) newErrors.invoice_zip = "PSČ musí mať 5 číslic";
 
-      // Delivery Address (Required if different)
       if (differentDeliveryAddress) {
           if (!deliveryAddress.street) newErrors.delivery_street = "Ulica je povinná";
           if (!deliveryAddress.city) newErrors.delivery_city = "Mesto je povinné";
@@ -410,7 +349,6 @@ const Checkout = () => {
         return;
     }
 
-    // cart.totalProductPrice comes from the API
     const productTotal = cart?.totalProductPrice || 0;
     const finalPrice = productTotal + shippingPrice + paymentPrice;
 
@@ -449,54 +387,197 @@ const Checkout = () => {
   };
 
   if (loading) {
-      return <div className="container mx-auto px-4 py-8">Načítavam pokladňu...</div>;
+      return <div className="checkout-page"><div className="container">Načítavam pokladňu...</div></div>;
   }
 
   return (
-    <div className="container mx-auto px-4 py-8">
-      <h1 className="text-3xl font-bold mb-6">Objednávka</h1>
+    <div className="checkout-page">
+      <div className="container">
+        <h1>Objednávka</h1>
 
-      <form onSubmit={handleSubmit} className="space-y-8" noValidate>
-        {/* Carriers Section */}
-        <section>
-          <h2 className="text-xl font-bold mb-4">1. DOPRAVA A PLATBA</h2>
-          <div className="bg-white rounded shadow p-4 space-y-4">
-             {carriers.length === 0 && <p>Žiadni dopravcovia nie sú k dispozícii.</p>}
-             {carriers.map(carrier => {
+        <form onSubmit={handleSubmit} noValidate>
+          {/* Step 1: Osobné údaje */}
+          <div className="card">
+            <h2><span className="step">1</span> Osobné údaje</h2>
+            <div className="grid">
+              <div>
+                <label>Meno</label>
+                <input
+                    type="text"
+                    name="firstname"
+                    value={customer.firstname}
+                    onChange={handleCustomerChange}
+                    onBlur={(e) => validateField(e.target.name, e.target.value)}
+                />
+                {errors.firstname && <div className="error-msg">{errors.firstname}</div>}
+              </div>
+              <div>
+                <label>Priezvisko</label>
+                <input
+                    type="text"
+                    name="lastname"
+                    value={customer.lastname}
+                    onChange={handleCustomerChange}
+                    onBlur={(e) => validateField(e.target.name, e.target.value)}
+                />
+                {errors.lastname && <div className="error-msg">{errors.lastname}</div>}
+              </div>
+              <div className="grid-1">
+                <label>Telefón</label>
+                <input
+                    type="tel"
+                    name="phone"
+                    value={customer.phone}
+                    onChange={handleCustomerChange}
+                    onBlur={(e) => validateField(e.target.name, e.target.value)}
+                />
+                {errors.phone && <div className="error-msg">{errors.phone}</div>}
+              </div>
+              <div className="grid-1">
+                <label>Email</label>
+                <input
+                    type="email"
+                    name="email"
+                    value={customer.email}
+                    onChange={handleCustomerChange}
+                    onBlur={(e) => validateField(e.target.name, e.target.value)}
+                />
+                {errors.email && <div className="error-msg">{errors.email}</div>}
+                {!errors.email && warnings.email && <div className="text-green-600 text-xs mt-1">{warnings.email}</div>}
+              </div>
+            </div>
+          </div>
+
+          {/* Step 2: Fakturačná adresa */}
+          <div className="card">
+            <h2><span className="step">2</span> Fakturačná adresa</h2>
+            <div className="grid">
+              <div className="grid-1">
+                <label>Ulica a číslo</label>
+                <input
+                    type="text"
+                    name="street"
+                    value={invoiceAddress.street}
+                    onChange={handleInvoiceAddressChange}
+                    onBlur={(e) => validateField('invoice_street', e.target.value)}
+                />
+                {errors.invoice_street && <div className="error-msg">{errors.invoice_street}</div>}
+              </div>
+              <div>
+                <label>Mesto</label>
+                <input
+                    type="text"
+                    name="city"
+                    value={invoiceAddress.city}
+                    onChange={handleInvoiceAddressChange}
+                    onBlur={(e) => validateField('invoice_city', e.target.value)}
+                />
+                {errors.invoice_city && <div className="error-msg">{errors.invoice_city}</div>}
+              </div>
+              <div>
+                <label>PSČ</label>
+                <input
+                    type="text"
+                    name="zip"
+                    value={invoiceAddress.zip}
+                    onChange={handleInvoiceAddressChange}
+                    onBlur={(e) => validateField('invoice_zip', e.target.value)}
+                />
+                {errors.invoice_zip && <div className="error-msg">{errors.invoice_zip}</div>}
+              </div>
+            </div>
+
+            <div className="mt-16">
+                <label className="option checkbox-label">
+                   <input
+                        type="checkbox"
+                        checked={differentDeliveryAddress}
+                        onChange={(e) => setDifferentDeliveryAddress(e.target.checked)}
+                        className="checkbox-input"
+                   />
+                   <span>Doručiť na inú adresu</span>
+                </label>
+            </div>
+
+            {differentDeliveryAddress && (
+              <div className="grid mt-16">
+                 <div className="grid-1">
+                    <label>Ulica a číslo (Doručovacia)</label>
+                    <input
+                        type="text"
+                        name="street"
+                        value={deliveryAddress.street}
+                        onChange={handleDeliveryAddressChange}
+                        onBlur={(e) => validateField('delivery_street', e.target.value)}
+                    />
+                    {errors.delivery_street && <div className="error-msg">{errors.delivery_street}</div>}
+                 </div>
+                 <div>
+                    <label>Mesto</label>
+                    <input
+                        type="text"
+                        name="city"
+                        value={deliveryAddress.city}
+                        onChange={handleDeliveryAddressChange}
+                        onBlur={(e) => validateField('delivery_city', e.target.value)}
+                    />
+                    {errors.delivery_city && <div className="error-msg">{errors.delivery_city}</div>}
+                 </div>
+                 <div>
+                    <label>PSČ</label>
+                    <input
+                        type="text"
+                        name="zip"
+                        value={deliveryAddress.zip}
+                        onChange={handleDeliveryAddressChange}
+                        onBlur={(e) => validateField('delivery_zip', e.target.value)}
+                    />
+                    {errors.delivery_zip && <div className="error-msg">{errors.delivery_zip}</div>}
+                 </div>
+              </div>
+            )}
+          </div>
+
+          {/* Step 3: Platba & doprava */}
+          <div className="card">
+            <h2><span className="step">3</span> Platba & doprava</h2>
+
+            {/* Carriers */}
+            {carriers.map(carrier => {
                  const price = calculateShippingPrice(carrier);
                  const isPacketa = carrier.type === 'PACKETA';
                  const isSelected = selectedCarrier === carrier.id;
 
                  return (
-                    <div key={carrier.id} className={`p-4 border rounded ${isSelected ? 'border-tany-green bg-green-50' : 'border-gray-200'}`}>
-                        <label className="flex items-center cursor-pointer">
-                            <input
-                                type="radio"
-                                name="carrier"
-                                value={carrier.id}
-                                checked={isSelected}
-                                onChange={() => setSelectedCarrier(carrier.id)}
-                                className="h-5 w-5 text-tany-green mr-4"
-                            />
-                            <div className="flex-1">
-                                <div className="font-bold">{carrier.name}</div>
-                                <div className="text-sm text-gray-500">{carrier.description}</div>
+                    <div key={carrier.id}>
+                        <label className={`option ${isSelected ? 'active-option' : ''}`}>
+                            <div className="flex-row">
+                                <input
+                                    type="radio"
+                                    name="carrier"
+                                    value={carrier.id}
+                                    checked={isSelected}
+                                    onChange={() => setSelectedCarrier(carrier.id)}
+                                />
+                                <div>
+                                    <div className="font-bold">{carrier.name}</div>
+                                    {carrier.description && <div className="muted">{carrier.description}</div>}
+                                </div>
                             </div>
-                            <div className="font-bold whitespace-nowrap">
-                                {price === 0 ? 'Zadarmo' : `${price.toFixed(2)} €`}
-                            </div>
+                            <strong>{price === 0 ? 'Zadarmo' : `${price.toFixed(2)} €`}</strong>
                         </label>
+
                         {isSelected && isPacketa && (
-                            <div className="mt-4 pl-9">
+                            <div className="packeta-container">
                                 <button
                                     type="button"
                                     onClick={openPacketaWidget}
-                                    className="bg-tany-green text-white font-semibold py-2 px-4 rounded hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-tany-green"
+                                    className="packeta-btn"
                                 >
                                     Vybrať výdajné miesto
                                 </button>
                                 {selectedPickupPoint && (
-                                    <div className="mt-2 text-sm text-gray-700">
+                                    <div className="packeta-info">
                                         <strong>Vybrané miesto:</strong> {selectedPickupPoint.name}
                                     </div>
                                 )}
@@ -504,275 +585,90 @@ const Checkout = () => {
                         )}
                     </div>
                  );
-             })}
-          </div>
-        </section>
+            })}
 
-        {/* Payments Section */}
-        {selectedCarrier && (
-            <section>
-            <h2 className="text-xl font-bold mb-4">2. SPÔSOB PLATBY</h2>
-            <div className="bg-white rounded shadow p-4 space-y-4">
-                {payments.length === 0 && <p>Žiadne platby nie sú k dispozícii.</p>}
-                {payments.map(payment => {
-                    const price = calculatePaymentPrice(payment);
-                    return (
-                        <label key={payment.id} className={`flex items-center p-4 border rounded cursor-pointer hover:bg-gray-50 ${selectedPayment === payment.id ? 'border-tany-green bg-green-50' : 'border-gray-200'}`}>
+            <div className="spacer-20"></div>
+
+            {/* Payments */}
+            {selectedCarrier && payments.map(payment => {
+                 const price = calculatePaymentPrice(payment);
+                 const isSelected = selectedPayment === payment.id;
+
+                 return (
+                    <label key={payment.id} className={`option ${isSelected ? 'active-option' : ''}`}>
+                        <div className="flex-row">
                             <input
                                 type="radio"
                                 name="payment"
                                 value={payment.id}
-                                checked={selectedPayment === payment.id}
+                                checked={isSelected}
                                 onChange={() => setSelectedPayment(payment.id)}
-                                className="h-5 w-5 text-tany-green mr-4"
                             />
-                            <div className="flex-1">
+                            <div>
                                 <div className="font-bold">{payment.name}</div>
-                                <div className="text-sm text-gray-500">{payment.description}</div>
+                                {payment.description && <div className="muted">{payment.description}</div>}
                             </div>
-                            <div className="font-bold whitespace-nowrap">
-                                {price === 0 ? 'Zadarmo' : `${price.toFixed(2)} €`}
-                            </div>
-                        </label>
-                    );
-                })}
-            </div>
-            </section>
-        )}
-
-        {/* Customer Details Section */}
-        <section>
-          <h2 className="text-xl font-bold mb-4">3. FAKTURAČNÉ ÚDAJE</h2>
-          <div className="bg-white rounded shadow p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-             <div>
-                 <label className="block text-sm font-medium text-gray-700 mb-1">Meno</label>
-                 <input
-                    type="text"
-                    name="firstname"
-                    value={customer.firstname}
-                    onChange={handleCustomerChange}
-                    onBlur={(e) => validateField(e.target.name, e.target.value)}
-                    required
-                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-tany-green ${errors.firstname ? 'border-red-500' : 'border-gray-300'}`}
-                 />
-                 {errors.firstname && <p className="text-red-500 text-xs mt-1">{errors.firstname}</p>}
-             </div>
-             <div>
-                 <label className="block text-sm font-medium text-gray-700 mb-1">Priezvisko</label>
-                 <input
-                    type="text"
-                    name="lastname"
-                    value={customer.lastname}
-                    onChange={handleCustomerChange}
-                    onBlur={(e) => validateField(e.target.name, e.target.value)}
-                    required
-                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-tany-green ${errors.lastname ? 'border-red-500' : 'border-gray-300'}`}
-                 />
-                 {errors.lastname && <p className="text-red-500 text-xs mt-1">{errors.lastname}</p>}
-             </div>
-             <div>
-                 <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
-                 <input
-                    type="email"
-                    name="email"
-                    value={customer.email}
-                    onChange={handleCustomerChange}
-                    onBlur={(e) => validateField(e.target.name, e.target.value)}
-                    required
-                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-tany-green ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
-                 />
-                 {errors.email && <p className="text-red-500 text-xs mt-1">{errors.email}</p>}
-                 {!errors.email && warnings.email && <p className="text-green-600 text-xs mt-1">{warnings.email}</p>}
-             </div>
-             <div>
-                 <label className="block text-sm font-medium text-gray-700 mb-1">Telefón</label>
-                 <input
-                    type="tel"
-                    name="phone"
-                    value={customer.phone}
-                    onChange={handleCustomerChange}
-                    onBlur={(e) => validateField(e.target.name, e.target.value)}
-                    required
-                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-tany-green ${errors.phone ? 'border-red-500' : 'border-gray-300'}`}
-                 />
-                 {errors.phone && <p className="text-red-500 text-xs mt-1">{errors.phone}</p>}
-             </div>
+                        </div>
+                        <strong>{price === 0 ? 'Zadarmo' : `${price.toFixed(2)} €`}</strong>
+                    </label>
+                 );
+            })}
           </div>
-        </section>
 
-        {/* Invoice Address Section */}
-        <section>
-          <h2 className="text-xl font-bold mb-4">4. FAKTURAČNÁ ADRESA</h2>
-          <div className="bg-white rounded shadow p-6 space-y-4">
-             <div>
-                 <label className="block text-sm font-medium text-gray-700 mb-1">Ulica a číslo</label>
-                 <input
-                    type="text"
-                    name="street"
-                    value={invoiceAddress.street}
-                    onChange={handleInvoiceAddressChange}
-                    onBlur={(e) => validateField('invoice_street', e.target.value)}
-                    required
-                    className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-tany-green ${errors.invoice_street ? 'border-red-500' : 'border-gray-300'}`}
-                 />
-                 {errors.invoice_street && <p className="text-red-500 text-xs mt-1">{errors.invoice_street}</p>}
-             </div>
-             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Mesto</label>
-                    <input
-                        type="text"
-                        name="city"
-                        value={invoiceAddress.city}
-                        onChange={handleInvoiceAddressChange}
-                        onBlur={(e) => validateField('invoice_city', e.target.value)}
-                        required
-                        className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-tany-green ${errors.invoice_city ? 'border-red-500' : 'border-gray-300'}`}
-                    />
-                    {errors.invoice_city && <p className="text-red-500 text-xs mt-1">{errors.invoice_city}</p>}
-                 </div>
-                 <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">PSČ</label>
-                    <input
-                        type="text"
-                        name="zip"
-                        value={invoiceAddress.zip}
-                        onChange={handleInvoiceAddressChange}
-                        onBlur={(e) => validateField('invoice_zip', e.target.value)}
-                        required
-                        className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-tany-green ${errors.invoice_zip ? 'border-red-500' : 'border-gray-300'}`}
-                    />
-                    {errors.invoice_zip && <p className="text-red-500 text-xs mt-1">{errors.invoice_zip}</p>}
-                 </div>
-             </div>
-
-             <div className="pt-4">
-                <label className="flex items-center">
-                    <input
-                        type="checkbox"
-                        checked={differentDeliveryAddress}
-                        onChange={(e) => setDifferentDeliveryAddress(e.target.checked)}
-                        className="h-4 w-4 text-tany-green border-gray-300 rounded"
-                    />
-                    <span className="ml-2 text-gray-700">Doručiť na inú adresu</span>
-                </label>
-             </div>
-          </div>
-        </section>
-
-        {/* Delivery Address Section */}
-        {differentDeliveryAddress && (
-            <section>
-            <h2 className="text-xl font-bold mb-4">5. DORUČOVACIA ADRESA</h2>
-            <div className="bg-white rounded shadow p-6 space-y-4">
-                <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Ulica a číslo</label>
-                    <input
-                        type="text"
-                        name="street"
-                        value={deliveryAddress.street}
-                        onChange={handleDeliveryAddressChange}
-                        onBlur={(e) => validateField('delivery_street', e.target.value)}
-                        required={differentDeliveryAddress}
-                        className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-tany-green ${errors.delivery_street ? 'border-red-500' : 'border-gray-300'}`}
-                    />
-                    {errors.delivery_street && <p className="text-red-500 text-xs mt-1">{errors.delivery_street}</p>}
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">Mesto</label>
-                        <input
-                            type="text"
-                            name="city"
-                            value={deliveryAddress.city}
-                            onChange={handleDeliveryAddressChange}
-                            onBlur={(e) => validateField('delivery_city', e.target.value)}
-                            required={differentDeliveryAddress}
-                            className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-tany-green ${errors.delivery_city ? 'border-red-500' : 'border-gray-300'}`}
-                        />
-                        {errors.delivery_city && <p className="text-red-500 text-xs mt-1">{errors.delivery_city}</p>}
-                    </div>
-                    <div>
-                        <label className="block text-sm font-medium text-gray-700 mb-1">PSČ</label>
-                        <input
-                            type="text"
-                            name="zip"
-                            value={deliveryAddress.zip}
-                            onChange={handleDeliveryAddressChange}
-                            onBlur={(e) => validateField('delivery_zip', e.target.value)}
-                            required={differentDeliveryAddress}
-                            className={`w-full border rounded px-3 py-2 focus:outline-none focus:border-tany-green ${errors.delivery_zip ? 'border-red-500' : 'border-gray-300'}`}
-                        />
-                        {errors.delivery_zip && <p className="text-red-500 text-xs mt-1">{errors.delivery_zip}</p>}
-                    </div>
-                </div>
-            </div>
-            </section>
-        )}
-
-        {/* Note Section */}
-        <section>
-          <h2 className="text-xl font-bold mb-4">6. POZNÁMKA</h2>
-          <div className="bg-white rounded shadow p-6">
-             <label className="block text-sm font-medium text-gray-700 mb-1">Poznámka k objednávke</label>
+          {/* Note Section */}
+          <div className="card">
+             <h2>Poznámka</h2>
              <textarea
                 name="note"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
-                className="w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:border-tany-green"
-                rows="4"
+                rows="3"
              />
           </div>
-        </section>
 
-        {/* Price Breakdown */}
-        <section>
-            <h2 className="text-xl font-bold mb-4">7. SÚHRN</h2>
-            <div className="bg-white rounded shadow p-6">
-                {cart?.priceBreakDown ? (
-                   <PriceBreakdown priceBreakDown={cart.priceBreakDown} showItems={true} cartItems={cart.products} />
-                ) : (
-                    <div className="w-full">
-                        <div className="space-y-2 text-sm text-gray-600">
-                             {/* Items Fallback - basic list */}
-                             {cart?.products?.map((item, index) => (
-                                <div key={index} className="flex justify-between items-center mb-2">
-                                     <div className="flex items-center">
-                                         <span>{item.title} {item.quantity > 1 ? `(${item.quantity} ks)` : ''}</span>
-                                     </div>
-                                     <span>{(item.price * item.quantity).toFixed(2)} €</span>
-                                </div>
-                             ))}
-                        </div>
-                        <div className="border-t border-gray-200 pt-3 mt-3">
-                             <div className="flex justify-between items-end">
-                                 <span className="text-base font-bold text-gray-900">Spolu (produkty):</span>
-                                 <div className="text-right">
-                                     <span className="block text-xl font-bold text-tany-green">
-                                         {cart?.totalProductPrice ? cart.totalProductPrice.toFixed(2) : '0.00'} €
-                                     </span>
-                                 </div>
-                             </div>
-                             <div className="flex justify-between text-xs text-gray-500 mt-1">
-                                 <span>Bez DPH: {cart?.totalProductPrice ? (cart.totalProductPrice / VAT_RATE).toFixed(2) : '0.00'} €</span>
-                             </div>
-                        </div>
-                   </div>
-                )}
+          {/* Summary */}
+          <div className="card">
+            <h2>Zhrnutie objednávky</h2>
+
+            {cart?.products?.map((item, index) => {
+                const image = item.image || (item.images && item.images[0]) || 'https://via.placeholder.com/64';
+                const total = item.price * item.quantity;
+                return (
+                    <div className="product" key={index}>
+                      <img src={image} alt={item.title} />
+                      <div className="flex-1">
+                        <strong className="block">{item.title}</strong>
+                        <div className="muted">{item.quantity} ks</div>
+                      </div>
+                      <strong>{total.toFixed(2)} €</strong>
+                    </div>
+                );
+            })}
+
+            <div className="separator"></div>
+
+            {cart?.priceBreakDown?.items.filter(i => i.type !== 'PRODUCT').map((item, idx) => (
+                <div className="summary-item" key={idx}>
+                  <span>{item.name}</span>
+                  <span>{(item.priceWithVat * item.quantity).toFixed(2)} €</span>
+                </div>
+            ))}
+
+            <div className="summary-total">
+              <span>Spolu</span>
+              <span>{(cart?.priceBreakDown?.totalPrice || 0).toFixed(2)} €</span>
             </div>
-        </section>
+            <div className="muted vat-info">
+                Bez DPH: {(cart?.priceBreakDown?.totalPriceWithoutVat || 0).toFixed(2)} € · DPH: {(cart?.priceBreakDown?.totalPriceVatValue || 0).toFixed(2)} €
+            </div>
 
-        {/* Submit Button */}
-        <div className="flex justify-end pt-6">
-            <button
-                type="submit"
-                className="bg-tany-green text-white font-bold py-3 px-8 rounded hover:bg-green-700 disabled:opacity-50 disabled:cursor-not-allowed"
-                disabled={!selectedCarrier || !selectedPayment}
-            >
+            <button className="btn" type="submit" disabled={!selectedCarrier || !selectedPayment}>
                 Dokončiť objednávku
             </button>
-        </div>
-      </form>
+          </div>
+
+        </form>
+      </div>
     </div>
   );
 };
