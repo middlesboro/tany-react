@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8" />
+  <title>Pokladňa</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <style>
+    :root {
+      --green: #2f6f4f;
+      --green-light: #e9f4ee;
+      --bg: #f6f7f6;
+      --card: #ffffff;
+      --text: #1f2933;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --radius: 14px;
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .container {
+      max-width: 960px;
+      margin: 40px auto;
+      padding: 0 16px;
+    }
+
+    h1 {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+
+    .steps {
+      display: flex;
+      gap: 16px;
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 32px;
+    }
+
+    .steps .active {
+      color: var(--green);
+      font-weight: 600;
+    }
+
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 20px;
+      box-shadow: 0 10px 30px rgba(0,0,0,.05);
+    }
+
+    .card h2 {
+      font-size: 18px;
+      margin: 0 0 16px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .step {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+      background: var(--green);
+      color: white;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 14px;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+
+    .grid-1 {
+      grid-column: span 2;
+    }
+
+    label {
+      font-size: 13px;
+      color: var(--muted);
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    input {
+      width: 100%;
+      padding: 12px 14px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+      font-size: 15px;
+    }
+
+    input:focus {
+      outline: none;
+      border-color: var(--green);
+    }
+
+    .btn {
+      margin-top: 20px;
+      width: 100%;
+      background: linear-gradient(90deg, #2f6f4f, #3a8a64);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .option {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 14px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      margin-bottom: 12px;
+      cursor: pointer;
+    }
+
+    .option input {
+      width: auto;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .summary-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 20px;
+      font-weight: 700;
+      margin-top: 12px;
+      color: var(--green);
+    }
+
+    .product {
+      display: flex;
+      gap: 14px;
+      margin-bottom: 20px;
+    }
+
+    .product img {
+      width: 64px;
+      height: 64px;
+      border-radius: 8px;
+      object-fit: cover;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    @media (max-width: 640px) {
+      .grid {
+        grid-template-columns: 1fr;
+      }
+      .grid-1 {
+        grid-column: auto;
+      }
+    }
+  </style>
+</head>
+
+<body>
+<div class="container">
+
+  <h1>Objednávka</h1>
+
+  <!-- Osobné údaje -->
+  <div class="card">
+    <h2><span class="step">1</span> Osobné údaje</h2>
+    <div class="grid">
+      <div>
+        <label>Meno</label>
+        <input value="Lubo">
+      </div>
+      <div>
+        <label>Priezvisko</label>
+        <input value="Grno">
+      </div>
+      <div class="grid-1">
+        <label>Telefón</label>
+        <input value="0948305254">
+      </div>
+      <div class="grid-1">
+        <label>Email</label>
+        <input value="lubogrno@gmail.com">
+      </div>
+    </div>
+  </div>
+
+  <!-- Doručovacia adresa -->
+  <div class="card">
+    <h2><span class="step">2</span> Doručovacia adresa</h2>
+    <div class="grid">
+      <div class="grid-1">
+        <label>Ulica</label>
+        <input value="Budatínska 24">
+      </div>
+      <div>
+        <label>Mesto</label>
+        <input value="Bratislava">
+      </div>
+      <div>
+        <label>PSČ</label>
+        <input value="85106">
+      </div>
+    </div>
+  </div>
+
+  <!-- Platba a doprava -->
+  <div class="card">
+    <h2><span class="step">3</span> Platba & doprava</h2>
+
+    <div class="option">
+      <label>
+        <input type="radio" checked> Dobierka
+      </label>
+      <strong>2,60 €</strong>
+    </div>
+
+    <div class="option">
+      <label>
+        <input type="radio"> Platba kartou
+      </label>
+      <strong>0,00 €</strong>
+    </div>
+  </div>
+
+  <!-- Zhrnutie objednávky -->
+  <div class="card">
+    <h2>Zhrnutie objednávky</h2>
+
+    <div class="product">
+      <img src="https://via.placeholder.com/64" alt="">
+      <div>
+        <strong>100% Indická Henna 200g</strong>
+        <div class="muted">Indian Natural Hair Care</div>
+      </div>
+      <strong>9,50 €</strong>
+    </div>
+
+    <div class="summary-item">
+      <span>Medzisúčet</span>
+      <span>9,87 €</span>
+    </div>
+    <div class="summary-item">
+      <span>Zľava (10 %)</span>
+      <span>-0,95 €</span>
+    </div>
+    <div class="summary-item">
+      <span>Doprava</span>
+      <span>2,60 €</span>
+    </div>
+    <div class="summary-item">
+      <span>Dobierka</span>
+      <span>1,00 €</span>
+    </div>
+
+    <div class="summary-total">
+      <span>Spolu</span>
+      <span>12,15 €</span>
+    </div>
+    <div class="muted">Bez DPH: 9,87 € · DPH: 2,28 €</div>
+  </div>
+
+</div>
+</body>
+</html>
