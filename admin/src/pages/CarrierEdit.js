@@ -145,6 +145,9 @@ const CarrierEdit = () => {
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           >
             <option value="PACKETA">Packeta</option>
+            <option value="BALIKOVO">Balikovo</option>
+            <option value="ISKLAD">Isklad</option>
+            <option value="SK_POST">SK_POST</option>
             <option value="COURIER">Courier</option>
           </select>
         </div>
