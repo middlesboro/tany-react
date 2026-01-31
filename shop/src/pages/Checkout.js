@@ -14,6 +14,7 @@ const Checkout = () => {
   const [warnings, setWarnings] = useState({});
   const { setBreadcrumbs } = useBreadcrumbs();
   const [selectedCarrier, setSelectedCarrier] = useState(null);
+  const selectedCarrierRef = useRef(null);
   const [selectedPayment, setSelectedPayment] = useState(null);
   const [customer, setCustomer] = useState({
     firstname: '',
@@ -32,7 +33,10 @@ const Checkout = () => {
     zip: '',
   });
   const [differentDeliveryAddress, setDifferentDeliveryAddress] = useState(false);
-  const [selectedPickupPoint, setSelectedPickupPoint] = useState(null);
+
+  // Use a map to store pickup points for each carrier: { [carrierId]: pointData }
+  const [pickupPointMap, setPickupPointMap] = useState({});
+
   const [note, setNote] = useState('');
 
   const [initialized, setInitialized] = useState(false);
@@ -40,6 +44,10 @@ const Checkout = () => {
   // Dynamic data from cart
   const carriers = cart?.carriers || [];
   const payments = cart?.payments || [];
+
+  useEffect(() => {
+      selectedCarrierRef.current = selectedCarrier;
+  }, [selectedCarrier]);
 
   useEffect(() => {
     setBreadcrumbs([
@@ -70,15 +78,22 @@ const Checkout = () => {
 
     window.handleSPSPickupPoint = (point) => {
         if (point) {
-            setSelectedPickupPoint({
-                id: point.id,
-                name: point.description || point.address,
-                street: point.address,
-                city: point.city,
-                zip: point.zip,
-                country: point.countryISO,
-                type: point.type
-            });
+            const currentCarrierId = selectedCarrierRef.current;
+            if (currentCarrierId) {
+                setPickupPointMap(prev => ({
+                    ...prev,
+                    [currentCarrierId]: {
+                        id: point.id,
+                        name: point.description || point.address,
+                        street: point.address,
+                        city: point.city,
+                        zip: point.zip,
+                        country: point.countryISO,
+                        type: point.type
+                    }
+                }));
+                setErrors(prev => ({ ...prev, pickupPoint: null }));
+            }
         }
     };
 
@@ -90,12 +105,15 @@ const Checkout = () => {
   // Initialize state from cart data
   useEffect(() => {
       if (cart && !initialized) {
+          let initialCarrierId = null;
           if (cart.selectedCarrierId) {
-              setSelectedCarrier(cart.selectedCarrierId);
+              initialCarrierId = cart.selectedCarrierId;
+              setSelectedCarrier(initialCarrierId);
           } else if (!selectedCarrier && cart.carriers) {
               const preSelectedCarrier = cart.carriers.find(c => c.selected);
               if (preSelectedCarrier) {
-                  setSelectedCarrier(preSelectedCarrier.id);
+                  initialCarrierId = preSelectedCarrier.id;
+                  setSelectedCarrier(initialCarrierId);
               }
           }
 
@@ -130,11 +148,14 @@ const Checkout = () => {
               zip: cartInvoice.zip || profileInvoice.zip || prev.zip
           }));
 
-          if (cart.selectedPickupPointId) {
-             setSelectedPickupPoint({
-                 id: cart.selectedPickupPointId,
-                 name: cart.selectedPickupPointName || "Uložené výdajné miesto"
-             });
+          if (cart.selectedPickupPointId && initialCarrierId) {
+             setPickupPointMap(prev => ({
+                 ...prev,
+                 [initialCarrierId]: {
+                     id: cart.selectedPickupPointId,
+                     name: cart.selectedPickupPointName || "Uložené výdajné miesto"
+                 }
+             }));
           }
 
           const cartDelivery = cart.deliveryAddress || {};
@@ -211,6 +232,7 @@ const Checkout = () => {
       if (!initialized || !cart) return;
 
       const carrierObj = carriers.find(c => c.id === selectedCarrier);
+      const currentPickupPoint = pickupPointMap[selectedCarrier];
 
       const dataToSave = {
           cartId: cart.cartId,
@@ -224,14 +246,14 @@ const Checkout = () => {
           deliveryAddress: differentDeliveryAddress ? deliveryAddress : invoiceAddress,
           selectedCarrierId: selectedCarrier,
           selectedPaymentId: selectedPayment,
-          selectedPickupPointId: (carrierObj?.type === 'PACKETA' || carrierObj?.type === 'BALIKOVO') ? selectedPickupPoint?.id : null,
-          selectedPickupPointName: (carrierObj?.type === 'PACKETA' || carrierObj?.type === 'BALIKOVO') ? (selectedPickupPoint?.name || selectedPickupPoint?.formatedValue) : null,
+          selectedPickupPointId: (carrierObj?.type === 'PACKETA' || carrierObj?.type === 'BALIKOVO') ? currentPickupPoint?.id : null,
+          selectedPickupPointName: (carrierObj?.type === 'PACKETA' || carrierObj?.type === 'BALIKOVO') ? (currentPickupPoint?.name || currentPickupPoint?.formatedValue) : null,
           discountForNewsletter: cart.discountForNewsletter
       };
 
       debouncedUpdate(dataToSave);
 
-  }, [customer, invoiceAddress, deliveryAddress, differentDeliveryAddress, selectedCarrier, selectedPayment, selectedPickupPoint, note, cart?.cartId, debouncedUpdate, initialized]);
+  }, [customer, invoiceAddress, deliveryAddress, differentDeliveryAddress, selectedCarrier, selectedPayment, pickupPointMap, note, cart?.cartId, debouncedUpdate, initialized]);
 
 
   const handleCustomerChange = (e) => {
@@ -333,7 +355,11 @@ const Checkout = () => {
       if (window.Packeta && window.Packeta.Widget) {
           window.Packeta.Widget.pick(packetaApiKey, (point) => {
             if (point) {
-                setSelectedPickupPoint(point);
+                setPickupPointMap(prev => ({
+                    ...prev,
+                    [selectedCarrier]: point
+                }));
+                setErrors(prev => ({ ...prev, pickupPoint: null }));
             }
           }, packetaOptions);
       } else {
@@ -399,9 +425,14 @@ const Checkout = () => {
     const paymentObj = payments.find(p => p.id === selectedPayment);
     const shippingPrice = calculateShippingPrice(carrierObj);
     const paymentPrice = calculatePaymentPrice(paymentObj);
+    const currentPickupPoint = pickupPointMap[selectedCarrier];
 
-    if ((carrierObj?.type === 'PACKETA' || carrierObj?.type === 'BALIKOVO') && !selectedPickupPoint) {
-        alert("Prosím vyberte výdajné miesto.");
+    if ((carrierObj?.type === 'PACKETA' || carrierObj?.type === 'BALIKOVO') && !currentPickupPoint) {
+        setErrors(prev => ({ ...prev, pickupPoint: "Musíte vybrať výdajné miesto" }));
+        const carrierElement = document.getElementById(`carrier-${selectedCarrier}`);
+        if (carrierElement) {
+            carrierElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }
         return;
     }
 
@@ -421,7 +452,7 @@ const Checkout = () => {
       carrierId: selectedCarrier,
       paymentId: selectedPayment,
       finalPrice: finalPrice,
-      selectedPickupPointId: (carrierObj?.type === 'PACKETA' || carrierObj?.type === 'BALIKOVO') ? selectedPickupPoint?.id : null,
+      selectedPickupPointId: (carrierObj?.type === 'PACKETA' || carrierObj?.type === 'BALIKOVO') ? currentPickupPoint?.id : null,
       items: cart?.products?.map(p => ({
         id: p.id,
         name: p.title,
@@ -604,9 +635,10 @@ const Checkout = () => {
                  const isPacketa = carrier.type === 'PACKETA';
                  const isBalikovo = carrier.type === 'BALIKOVO';
                  const isSelected = selectedCarrier === carrier.id;
+                 const currentPickupPoint = pickupPointMap[carrier.id];
 
                  return (
-                    <div key={carrier.id}>
+                    <div key={carrier.id} id={`carrier-${carrier.id}`}>
                         <label className={`option ${isSelected ? 'active-option' : ''}`}>
                             <div className="flex-row">
                                 <input
@@ -617,7 +649,6 @@ const Checkout = () => {
                                     onChange={() => {
                                         if (selectedCarrier !== carrier.id) {
                                             setSelectedCarrier(carrier.id);
-                                            setSelectedPickupPoint(null);
                                         }
                                     }}
                                 />
@@ -638,9 +669,12 @@ const Checkout = () => {
                                 >
                                     Vybrať výdajné miesto
                                 </button>
-                                {selectedPickupPoint && (
+                                {errors.pickupPoint && (
+                                    <div className="error-msg mt-2">{errors.pickupPoint}</div>
+                                )}
+                                {currentPickupPoint && (
                                     <div className="packeta-info">
-                                        <strong>Vybrané miesto:</strong> {selectedPickupPoint.name}
+                                        <strong>Vybrané miesto:</strong> {currentPickupPoint.name}
                                     </div>
                                 )}
                             </div>
