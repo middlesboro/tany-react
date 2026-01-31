@@ -154,4 +154,29 @@ describe('Checkout Component', () => {
     const lastCall = mockUpdateCart.mock.calls[mockUpdateCart.mock.calls.length - 1][0];
     expect(lastCall.discountForNewsletter).toBe(true);
   });
+
+  test('renders pickup point button for BALIKOVO carrier', () => {
+    const cartWithBalikovo = {
+      ...mockCart,
+      carriers: [
+        { id: 'balikovo', name: 'Balikovo', type: 'BALIKOVO', price: 3, selected: true }
+      ],
+      selectedCarrierId: 'balikovo'
+    };
+
+    useCart.mockReturnValue({
+      cart: cartWithBalikovo,
+      loading: false,
+      clearCart: mockClearCart,
+      updateCart: mockUpdateCart,
+    });
+
+    render(
+      <BrowserRouter>
+        <Checkout />
+      </BrowserRouter>
+    );
+
+    expect(screen.getByText('Vybrať výdajné miesto')).toBeInTheDocument();
+  });
 });

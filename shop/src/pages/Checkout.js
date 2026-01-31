@@ -58,6 +58,33 @@ const Checkout = () => {
         script.async = true;
         document.body.appendChild(script);
     }
+
+    const spsScriptId = 'sps-widget-script';
+    if (!document.getElementById(spsScriptId)) {
+        const script = document.createElement('script');
+        script.id = spsScriptId;
+        script.src = 'https://balikomat.sps-sro.sk/widget/v1/widget/js/widget.js';
+        script.async = true;
+        document.body.appendChild(script);
+    }
+
+    window.handleSPSPickupPoint = (point) => {
+        if (point) {
+            setSelectedPickupPoint({
+                id: point.id,
+                name: point.description || point.address,
+                street: point.address,
+                city: point.city,
+                zip: point.zip,
+                country: point.countryISO,
+                type: point.type
+            });
+        }
+    };
+
+    return () => {
+        delete window.handleSPSPickupPoint;
+    };
   }, []);
 
   // Initialize state from cart data
@@ -184,8 +211,8 @@ const Checkout = () => {
           deliveryAddress: differentDeliveryAddress ? deliveryAddress : invoiceAddress,
           selectedCarrierId: selectedCarrier,
           selectedPaymentId: selectedPayment,
-          selectedPickupPointId: carrierObj?.type === 'PACKETA' ? selectedPickupPoint?.id : null,
-          selectedPickupPointName: carrierObj?.type === 'PACKETA' ? (selectedPickupPoint?.name || selectedPickupPoint?.formatedValue) : null,
+          selectedPickupPointId: (carrierObj?.type === 'PACKETA' || carrierObj?.type === 'BALIKOVO') ? selectedPickupPoint?.id : null,
+          selectedPickupPointName: (carrierObj?.type === 'PACKETA' || carrierObj?.type === 'BALIKOVO') ? (selectedPickupPoint?.name || selectedPickupPoint?.formatedValue) : null,
           discountForNewsletter: cart.discountForNewsletter
       };
 
@@ -302,6 +329,22 @@ const Checkout = () => {
       }
   };
 
+  const openBalikovoWidget = () => {
+      const SPSwidget = window.SPSwidget || {};
+      window.SPSwidget = SPSwidget;
+
+      SPSwidget.config = SPSwidget.config || {};
+      SPSwidget.config.callback = "handleSPSPickupPoint";
+      SPSwidget.config.country = "sk";
+
+      if (SPSwidget.showMap) {
+          SPSwidget.showMap();
+      } else {
+          console.error("SPS widget script not loaded yet.");
+          alert("Balikovo widget is loading, please try again in a moment.");
+      }
+  };
+
   const validateForm = () => {
       const newErrors = {};
       const newWarnings = {};
@@ -344,7 +387,7 @@ const Checkout = () => {
     const shippingPrice = calculateShippingPrice(carrierObj);
     const paymentPrice = calculatePaymentPrice(paymentObj);
 
-    if (carrierObj?.type === 'PACKETA' && !selectedPickupPoint) {
+    if ((carrierObj?.type === 'PACKETA' || carrierObj?.type === 'BALIKOVO') && !selectedPickupPoint) {
         alert("Prosím vyberte výdajné miesto.");
         return;
     }
@@ -365,7 +408,7 @@ const Checkout = () => {
       carrierId: selectedCarrier,
       paymentId: selectedPayment,
       finalPrice: finalPrice,
-      selectedPickupPointId: carrierObj?.type === 'PACKETA' ? selectedPickupPoint?.id : null,
+      selectedPickupPointId: (carrierObj?.type === 'PACKETA' || carrierObj?.type === 'BALIKOVO') ? selectedPickupPoint?.id : null,
       items: cart?.products?.map(p => ({
         id: p.id,
         name: p.title,
@@ -546,6 +589,7 @@ const Checkout = () => {
             {carriers.map(carrier => {
                  const price = calculateShippingPrice(carrier);
                  const isPacketa = carrier.type === 'PACKETA';
+                 const isBalikovo = carrier.type === 'BALIKOVO';
                  const isSelected = selectedCarrier === carrier.id;
 
                  return (
@@ -557,7 +601,12 @@ const Checkout = () => {
                                     name="carrier"
                                     value={carrier.id}
                                     checked={isSelected}
-                                    onChange={() => setSelectedCarrier(carrier.id)}
+                                    onChange={() => {
+                                        if (selectedCarrier !== carrier.id) {
+                                            setSelectedCarrier(carrier.id);
+                                            setSelectedPickupPoint(null);
+                                        }
+                                    }}
                                 />
                                 <div>
                                     <div className="font-bold">{carrier.name}</div>
@@ -567,11 +616,11 @@ const Checkout = () => {
                             <strong>{price === 0 ? 'Zadarmo' : `${price.toFixed(2)} €`}</strong>
                         </label>
 
-                        {isSelected && isPacketa && (
+                        {isSelected && (isPacketa || isBalikovo) && (
                             <div className="packeta-container">
                                 <button
                                     type="button"
-                                    onClick={openPacketaWidget}
+                                    onClick={isPacketa ? openPacketaWidget : openBalikovoWidget}
                                     className="packeta-btn"
                                 >
                                     Vybrať výdajné miesto
