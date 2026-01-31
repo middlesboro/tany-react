@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
@@ -193,6 +193,19 @@ const Checkout = () => {
       }, 1000),
       [updateCart]
   );
+
+  const debouncedUpdateRef = useRef(debouncedUpdate);
+  useEffect(() => {
+    debouncedUpdateRef.current = debouncedUpdate;
+  }, [debouncedUpdate]);
+
+  useEffect(() => {
+    return () => {
+      if (debouncedUpdateRef.current && debouncedUpdateRef.current.flush) {
+        debouncedUpdateRef.current.flush();
+      }
+    };
+  }, []);
 
   useEffect(() => {
       if (!initialized || !cart) return;
