@@ -85,7 +85,7 @@ const BrandReviews = ({ brandId: propBrandId, title, description }) => {
                             <Link to={`/product/${review.productSlug || '#'}`}>
                                 <img
                                     src={review.productImage}
-                                    alt={review.productTitle || 'Product'}
+                                    alt={review.productName || review.productTitle || 'Product'}
                                     className="w-20 h-20 object-cover rounded-md border border-gray-100"
                                 />
                             </Link>

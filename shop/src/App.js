@@ -18,6 +18,17 @@ import PacketaPage from './pages/PacketaPage';
 import BrandReviews from './pages/BrandReviews';
 import MagicLinkPage from './pages/MagicLinkPage';
 import OAuthCallbackPage from './pages/OAuthCallbackPage';
+import AlergiaNaFarby from './pages/static/AlergiaNaFarby';
+import NajlepsiaFarbaNaVlasyBezAmoniaku from './pages/static/NajlepsiaFarbaNaVlasyBezAmoniaku';
+import BezfarebnaHenna from './pages/static/BezfarebnaHenna';
+import NajkvalitnejsieFarbyNaVlasy from './pages/static/NajkvalitnejsieFarbyNaVlasy';
+import HennaNaVlasy from './pages/static/HennaNaVlasy';
+import NajsetrnejsiaFarbaNaVlasy from './pages/static/NajsetrnejsiaFarbaNaVlasy';
+import HennaNaObocie from './pages/static/HennaNaObocie';
+import PrirodneFarbyNaVlasy from './pages/static/PrirodneFarbyNaVlasy';
+import RicinovyOlejNaMihalnice from './pages/static/RicinovyOlejNaMihalnice';
+import RicinovyOlejNaVlasy from './pages/static/RicinovyOlejNaVlasy';
+import RysaveVlasy from './pages/static/RysaveVlasy';
 import { CartProvider } from './context/CartContext';
 import { BreadcrumbProvider } from './context/BreadcrumbContext';
 import { ModalProvider } from './context/ModalContext';
@@ -111,6 +122,17 @@ Farby na vlasy sú vhodné pre všetky typy vlasov. Vlasy narozdiel od chemický
 Farby na vlasy Voono sú 100% prírodné, neobsahujú amoniak, peroxid ani žiadne iné chemické látky. Oproti konkurencii sa odlišujú používaním viacerých byliniek ako napríklad Bahmu, Shikakai alebo Amla, ktoré v kombinácií s Hennou pomáhajú dosiahnuť ešte lepší farebný výsledok.`}
                   />
                 } />
+                <Route path="/alergia-na-farby" element={<AlergiaNaFarby />} />
+                <Route path="/najlepsia-farba-na-vlasy-bez-amoniaku" element={<NajlepsiaFarbaNaVlasyBezAmoniaku />} />
+                <Route path="/bezfarebna-henna" element={<BezfarebnaHenna />} />
+                <Route path="/najkvalitnejsie-farby-na-vlasy" element={<NajkvalitnejsieFarbyNaVlasy />} />
+                <Route path="/henna-na-vlasy" element={<HennaNaVlasy />} />
+                <Route path="/najsetrnejsia-farba-na-vlasy" element={<NajsetrnejsiaFarbaNaVlasy />} />
+                <Route path="/henna-na-obocie" element={<HennaNaObocie />} />
+                <Route path="/prirodne-farby-na-vlasy" element={<PrirodneFarbyNaVlasy />} />
+                <Route path="/ricinovy-olej-na-mihalnice" element={<RicinovyOlejNaMihalnice />} />
+                <Route path="/ricinovy-olej-na-vlasy" element={<RicinovyOlejNaVlasy />} />
+                <Route path="/rysave-vlasy" element={<RysaveVlasy />} />
                 <Route path="/:slug" element={<PublicPage />} />
               </Route>
             </Routes>
