@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <title>Tany – Prírodná kozmetika</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <style>
+    :root {
+      --green: #2f6f4f;
+      --green-light: #e9f4ee;
+      --bg: #f6f7f6;
+      --card: #ffffff;
+      --text: #1f2933;
+      --muted: #6b7280;
+      --border: #e5e7eb;
+      --radius: 14px;
+      --shadow: 0 10px 30px rgba(0,0,0,.05);
+    }
+
+    * {
+      box-sizing: border-box;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* ================= HEADER ================= */
+
+    header {
+      background: white;
+      box-shadow: var(--shadow);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .topbar {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .logo {
+      font-weight: 800;
+      font-size: 22px;
+      color: var(--green);
+    }
+
+    .search {
+      flex: 1;
+      position: relative;
+    }
+
+    .search input {
+      width: 100%;
+      padding: 12px 40px 12px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--border);
+    }
+
+    .icons {
+      display: flex;
+      gap: 20px;
+      font-size: 14px;
+    }
+
+    .icons span {
+      cursor: pointer;
+      font-weight: 600;
+    }
+
+    nav {
+      background: #2b2b2b;
+    }
+
+    .nav-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 16px;
+      display: flex;
+      gap: 32px;
+    }
+
+    nav a {
+      color: white;
+      padding: 14px 0;
+      font-size: 14px;
+    }
+
+    nav a.active {
+      color: #ff6b6b;
+    }
+
+    /* ================= LAYOUT ================= */
+
+    .page {
+      max-width: 1280px;
+      margin: 32px auto;
+      padding: 0 16px;
+      display: grid;
+      grid-template-columns: 260px 1fr;
+      gap: 24px;
+    }
+
+    @media (max-width: 900px) {
+      .page {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    /* ================= SIDEBAR ================= */
+
+    aside {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      height: fit-content;
+    }
+
+    aside h3 {
+      margin-top: 0;
+      margin-bottom: 16px;
+      font-size: 16px;
+    }
+
+    .filter {
+      margin-bottom: 20px;
+    }
+
+    .filter-title {
+      font-weight: 600;
+      margin-bottom: 8px;
+      font-size: 14px;
+    }
+
+    .filter label {
+      display: block;
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    /* ================= CONTENT ================= */
+
+    .content-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .content-header h1 {
+      margin: 0;
+      font-size: 28px;
+    }
+
+    select {
+      padding: 8px 12px;
+      border-radius: 10px;
+      border: 1px solid var(--border);
+    }
+
+    /* ================= PRODUCTS ================= */
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 24px;
+    }
+
+    .product {
+      background: var(--card);
+      border-radius: var(--radius);
+      padding: 16px;
+      box-shadow: var(--shadow);
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .badge {
+      position: absolute;
+      top: 12px;
+      left: 12px;
+      background: var(--green-light);
+      color: var(--green);
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .favorite {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      color: #ef4444;
+      font-size: 18px;
+    }
+
+    .product img {
+      width: 100%;
+      height: 200px;
+      object-fit: contain;
+      margin-bottom: 12px;
+    }
+
+    .product-title {
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 6px;
+    }
+
+    .rating {
+      color: #fbbf24;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .price {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--green);
+      margin-bottom: 12px;
+    }
+
+    .actions {
+      display: flex;
+      gap: 8px;
+      margin-top: auto;
+    }
+
+    .qty {
+      width: 48px;
+      padding: 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border);
+      text-align: center;
+    }
+
+    .btn {
+      flex: 1;
+      background: linear-gradient(90deg, #2f6f4f, #3a8a64);
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    /* ================= FOOTER ================= */
+
+    footer {
+      margin-top: 60px;
+      background: #1f2933;
+      color: white;
+    }
+
+    .footer-inner {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 40px 16px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 32px;
+    }
+
+    footer h4 {
+      margin-top: 0;
+      margin-bottom: 12px;
+    }
+
+    footer a {
+      display: block;
+      color: #cbd5e1;
+      margin-bottom: 6px;
+      font-size: 14px;
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding: 16px;
+      font-size: 13px;
+      background: #111827;
+    }
+
+  </style>
+</head>
+
+<body>
+
+<!-- HEADER -->
+<header>
+  <div class="topbar">
+    <div class="logo">tany.sk</div>
+    <div class="search">
+      <input placeholder="Hľadať v obchode...">
+    </div>
+    <div class="icons">
+      <span>Môj účet</span>
+      <span>Košík · 10,80 €</span>
+    </div>
+  </div>
+
+  <nav>
+    <div class="nav-inner">
+      <a href="#">Domov</a>
+      <a href="#">Doprava</a>
+      <a href="#">Možnosti platby</a>
+      <a class="active" href="#">Akcie</a>
+      <a href="#">Obchodné podmienky</a>
+    </div>
+  </nav>
+</header>
+
+<!-- PAGE -->
+<div class="page">
+
+  <!-- SIDEBAR -->
+  <aside>
+    <h3>Filtrovať</h3>
+
+    <div class="filter">
+      <div class="filter-title">Kategória</div>
+      <label><input type="checkbox"> Vlasová kozmetika</label>
+      <label><input type="checkbox"> Pleťová kozmetika</label>
+    </div>
+
+    <div class="filter">
+      <div class="filter-title">Odtieň</div>
+      <label><input type="checkbox"> Prírodná</label>
+      <label><input type="checkbox"> Hnedá</label>
+      <label><input type="checkbox"> Čierna</label>
+    </div>
+  </aside>
+
+  <!-- CONTENT -->
+  <main>
+
+    <div class="content-header">
+      <h1>Henna na vlasy</h1>
+      <select>
+        <option>Najpredávanejšie</option>
+        <option>Najlacnejšie</option>
+        <option>Najdrahšie</option>
+      </select>
+    </div>
+
+    <div class="grid">
+
+      <div class="product">
+        <span class="badge">Najpredávanejšie</span>
+        <span class="favorite">♥</span>
+        <img src="https://via.placeholder.com/300">
+        <div class="product-title">100% Indická Henna 200g</div>
+        <div class="rating">★★★★★</div>
+        <div class="price">9,50 €</div>
+        <div class="actions">
+          <input class="qty" value="1">
+          <button class="btn">Do košíka</button>
+        </div>
+      </div>
+
+      <div class="product">
+        <span class="badge">Najpredávanejšie</span>
+        <span class="favorite">♡</span>
+        <img src="https://via.placeholder.com/300">
+        <div class="product-title">Henna & Indigo 200g</div>
+        <div class="rating">★★★★☆</div>
+        <div class="price">9,50 €</div>
+        <div class="actions">
+          <input class="qty" value="1">
+          <button class="btn">Do košíka</button>
+        </div>
+      </div>
+
+    </div>
+
+  </main>
+
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <h4>O nás</h4>
+      <a href="#">Príbeh Tany</a>
+      <a href="#">Kontakt</a>
+    </div>
+    <div>
+      <h4>Zákazníci</h4>
+      <a href="#">Doprava</a>
+      <a href="#">Platba</a>
+    </div>
+    <div>
+      <h4>Právne</h4>
+      <a href="#">Obchodné podmienky</a>
+      <a href="#">GDPR</a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    © 2026 tany.sk
+  </div>
+</footer>
+
+</body>
+</html>
