@@ -8,6 +8,13 @@ export const getCustomerContext = async (cartId) => {
     url += `?cartId=${cartId}`;
   }
   const response = await authFetch(url);
+
+  if (response.status === 404 && cartId) {
+    const error = new Error('Cart not found');
+    error.status = 404;
+    throw error;
+  }
+
   if (!response.ok) {
      throw new Error('Failed to fetch customer context');
   }

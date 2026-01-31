@@ -30,6 +30,44 @@ const TestComponent = () => {
 describe('CartContext', () => {
   beforeEach(() => {
     jest.clearAllMocks();
+    localStorage.clear();
+  });
+
+  test('clears invalid cartId from storage and retries on 404', async () => {
+      const invalidCartId = 'invalid-123';
+      const newCartId = 'new-cart-123';
+
+      localStorage.setItem('cartId', invalidCartId);
+
+      // First call fails with 404
+      const error404 = new Error('Cart not found');
+      error404.status = 404;
+
+      getCustomerContext
+        .mockRejectedValueOnce(error404)
+        .mockResolvedValueOnce({
+              cartDto: {
+                  cartId: newCartId,
+                  items: [],
+                  discountForNewsletter: false
+              },
+              customerDto: null
+          });
+
+      render(
+          <CartProvider>
+              <TestComponent />
+          </CartProvider>
+      );
+
+      await waitFor(() => {
+          expect(screen.getByTestId('discount-flag')).toHaveTextContent('false');
+      });
+
+      expect(getCustomerContext).toHaveBeenCalledTimes(2);
+      expect(getCustomerContext).toHaveBeenNthCalledWith(1, invalidCartId);
+      expect(getCustomerContext).toHaveBeenNthCalledWith(2, null);
+      expect(localStorage.getItem('cartId')).toBe(newCartId);
   });
 
   test('merges discountForNewsletter from root context response into cart', async () => {
