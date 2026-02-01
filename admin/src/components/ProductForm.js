@@ -115,13 +115,25 @@ const ProductForm = ({
         <>
           <div className="mb-4 flex items-center">
             <input
+              id="active"
               type="checkbox"
               name="active"
               checked={product.active}
               onChange={(e) => handleChange({ target: { name: 'active', value: e.target.checked } })}
               className="mr-2"
             />
-            <label className="text-gray-700">Active</label>
+            <label htmlFor="active" className="text-gray-700">Active</label>
+          </div>
+          <div className="mb-4 flex items-center">
+            <input
+                id="externalStock"
+                type="checkbox"
+                name="externalStock"
+                checked={product.externalStock}
+                onChange={(e) => handleChange({ target: { name: 'externalStock', value: e.target.checked } })}
+                className="mr-2"
+            />
+            <label htmlFor="externalStock" className="text-gray-700">External stock</label>
           </div>
           <div className="mb-4">
             <label className="block text-gray-700">Title</label>
