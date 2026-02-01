@@ -71,12 +71,18 @@ const OrderList = () => {
   }, []);
 
   useEffect(() => {
+    let ignore = false;
     const fetchOrders = async () => {
       const data = await getOrders(page, sort, size, appliedFilter);
-      setOrders(data.content);
-      setTotalPages(data.totalPages);
+      if (!ignore) {
+        setOrders(data.content);
+        setTotalPages(data.totalPages);
+      }
     };
     fetchOrders();
+    return () => {
+      ignore = true;
+    };
   }, [page, sort, size, appliedFilter]);
 
   const handleDelete = async (id) => {
@@ -291,7 +297,7 @@ const OrderList = () => {
         </thead>
         <tbody>
           {orders.map((order) => (
-            <tr key={order.orderIdentifier}>
+            <tr key={order.id}>
               <td className="py-2 px-4 border-b">{order.orderIdentifier}</td>
               <td className="py-2 px-4 border-b">
                 {order.customerName}
