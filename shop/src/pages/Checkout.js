@@ -738,6 +738,11 @@ const Checkout = () => {
                         {item.externalStock && (
                             <div className="text-tany-green text-xs mt-1">Skladom u dodávateľa</div>
                         )}
+                        {item.quantity > 0 && !item.externalStock && (
+                            <div className="text-tany-green text-sm mt-1">
+                                Skladom
+                            </div>
+                        )}
                       </div>
                       <strong>{total.toFixed(2)} €</strong>
                     </div>

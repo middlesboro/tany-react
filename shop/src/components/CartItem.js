@@ -88,6 +88,11 @@ const CartItem = ({ item }) => {
                 Skladom u dodávateľa
             </div>
         )}
+        {item.quantity > 0 && !item.externalStock && (
+            <div className="text-tany-green text-sm mt-1">
+                Skladom
+            </div>
+        )}
       </div>
 
       {/* Quantity */}
