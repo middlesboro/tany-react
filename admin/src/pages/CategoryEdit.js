@@ -14,6 +14,7 @@ const CategoryEdit = () => {
     metaDescription: '',
     slug: '',
     parentId: '',
+    defaultCategory: false,
   });
 
   useEffect(() => {
@@ -33,8 +34,8 @@ const CategoryEdit = () => {
   }, [id]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setCategory({ ...category, [name]: value });
+    const { name, value, type, checked } = e.target;
+    setCategory({ ...category, [name]: type === 'checkbox' ? checked : value });
   };
 
   const handleParentChange = (parentId) => {
