@@ -282,6 +282,9 @@ const OrderConfirmation = () => {
                        <div className="flex-1">
                           <div className="font-semibold">{item.name}</div>
                            <div className="text-gray-600 text-sm">{item.quantity} ks</div>
+                           {item.externalStock && (
+                               <div className="text-[#1f7a4d] text-xs mt-1">Skladom u dodávateľa</div>
+                           )}
                        </div>
                        <div className="font-semibold">{(item.priceWithVat * item.quantity).toFixed(2)} €</div>
                   </div>

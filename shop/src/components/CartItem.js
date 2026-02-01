@@ -83,6 +83,11 @@ const CartItem = ({ item }) => {
              <span>{item.price ? item.price.toFixed(2) : '0.00'} €</span>
            )}
         </div>
+        {item.externalStock && (
+            <div className="text-tany-green text-sm mt-1">
+                Skladom u dodávateľa
+            </div>
+        )}
       </div>
 
       {/* Quantity */}
