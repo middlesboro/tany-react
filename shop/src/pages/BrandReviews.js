@@ -4,9 +4,19 @@ import { getReviewsByBrand } from '../services/reviewService';
 import StarRating from '../components/StarRating';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 
-const BrandReviews = ({ brandId: propBrandId, title, description }) => {
+const BrandReviews = ({ brandIds: propBrandIds, brandId: propBrandId, title, description }) => {
   const { brandId: paramBrandId } = useParams();
-  const brandId = propBrandId || paramBrandId;
+
+  let brandIds = [];
+  if (propBrandIds && Array.isArray(propBrandIds) && propBrandIds.length > 0) {
+    brandIds = propBrandIds;
+  } else if (propBrandId) {
+    brandIds = [propBrandId];
+  } else if (paramBrandId) {
+    brandIds = [paramBrandId];
+  }
+
+  const brandIdsKey = brandIds.join(',');
   const { setBreadcrumbs } = useBreadcrumbs();
 
   const [reviews, setReviews] = useState([]);
@@ -16,10 +26,10 @@ const BrandReviews = ({ brandId: propBrandId, title, description }) => {
   const [totalPages, setTotalPages] = useState(0);
 
   const fetchReviews = React.useCallback(async () => {
-    if (!brandId) return;
+    if (brandIds.length === 0) return;
     setLoading(true);
     try {
-      const data = await getReviewsByBrand(brandId, page);
+      const data = await getReviewsByBrand(brandIds, page);
       setReviews(data.reviews.content);
       setTotalPages(data.reviews.totalPages);
       setStats({
@@ -31,7 +41,7 @@ const BrandReviews = ({ brandId: propBrandId, title, description }) => {
     } finally {
       setLoading(false);
     }
-  }, [brandId, page]);
+  }, [brandIdsKey, page]);
 
   useEffect(() => {
     fetchReviews();
@@ -44,7 +54,7 @@ const BrandReviews = ({ brandId: propBrandId, title, description }) => {
     ]);
   }, [title, setBreadcrumbs]);
 
-  if (!brandId) {
+  if (brandIds.length === 0) {
     return <div className="container mx-auto px-4 py-12 text-center text-gray-500">Brand ID not provided.</div>;
   }
 
