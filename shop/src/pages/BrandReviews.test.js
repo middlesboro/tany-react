@@ -78,4 +78,25 @@ describe('BrandReviews Page', () => {
         expect(link).toHaveAttribute('href', '/product/product-slug');
     });
   });
+
+  test('calls getReviewsByBrand with list of brandIds', async () => {
+    const mockReviews = {
+      reviews: { content: [], totalPages: 0 },
+      averageRating: 0,
+      reviewsCount: 0
+    };
+    getReviewsByBrand.mockResolvedValue(mockReviews);
+
+    const brandIds = ['123', '456'];
+    render(
+      <MemoryRouter>
+        <BrandReviews brandIds={brandIds} />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+        // We expect the first argument to be the array of brand IDs
+        expect(getReviewsByBrand).toHaveBeenCalledWith(['123', '456'], 0);
+    });
+  });
 });
