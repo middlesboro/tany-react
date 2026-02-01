@@ -696,7 +696,7 @@ const ProductDetail = () => {
       {/* Full View Modal */}
       {isFullViewOpen && selectedImage && (
         <div
-          className="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-90 p-4"
+          className="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-90 p-4"
           onClick={() => setIsFullViewOpen(false)}
         >
           <div className="relative w-full max-w-5xl h-full flex items-center justify-center">

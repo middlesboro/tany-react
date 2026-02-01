@@ -62,7 +62,7 @@ const PublicLayout = () => {
   return (
     <div className="flex flex-col min-h-screen font-sans text-gray-700">
       {/* Main Header */}
-      <header className="bg-white py-4 md:py-6 relative z-30">
+      <header className="bg-white py-4 md:py-6 relative z-50">
         <div className="container mx-auto px-4 flex flex-wrap md:flex-nowrap items-center justify-between gap-4 md:gap-8">
           {/* Logo */}
           <Link to="/" className="flex-shrink-0 order-1">
