@@ -20,7 +20,17 @@ export const CartProvider = ({ children }) => {
   const fetchContext = useCallback(async () => {
     try {
       const storedCartId = localStorage.getItem('cartId');
-      const data = await getCustomerContext(storedCartId);
+      let data;
+      try {
+        data = await getCustomerContext(storedCartId);
+      } catch (error) {
+        if (error.status === 404 && storedCartId) {
+          localStorage.removeItem('cartId');
+          data = await getCustomerContext(null);
+        } else {
+          throw error;
+        }
+      }
 
       if (data.cartDto) {
           if (data.cartDto.cartId) {
