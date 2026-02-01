@@ -83,7 +83,7 @@ Produkty Biokap Rapid sú určené pre ženy s veľmi citlivou a problematickou 
                 } />
                 <Route path="/farbynavlasy-recenzie" element={
                   <BrandReviews
-                    brandId="00000000-0000-0000-0000-000000000000" // TODO: Replace with correct UUID for Farby na vlasy
+                    brandId="799185bf-064a-4c63-b02b-f0336b99ace4, 9aa7a9b2-fc66-4497-9240-cfbaa798a51d, 30413dd6-f49c-4352-8d16-147ea0ea02ac, c57c3b9e-198f-4bee-9759-425a45a1354d, 4dc0f101-ac8e-41e3-9a2e-3949af7e0723, 6a7f1896-5eab-4fd7-a10d-012edaf58f73, 04c1f441-2ffa-4b40-97e5-6ae5580e77cb" // TODO: Replace with correct UUID for Farby na vlasy
                     title="Farby na vlasy - recenzie a skúsenosti"
                     description={`Pripravili sme si pre Vás zoznam recenzií najobľúbenejších farieb na vlasy ktoré máme od našich zákazníkov. Ak ste používali zatiaľ len chemické farby odporúčamé vyskúšať hennu.
 Narozdiel od chemických farieb neničí vaše vlasy. Naopak ich regeneruje, posilňuje a zanecháva ich vláčne, lesklé a pevné. Pre ulahčenie prechodu odporúčame vyskúšať krémové henny na vlasy, ktoré sa nanášajú úplne rovnako ako klasické chemické farby.`}
@@ -91,7 +91,7 @@ Narozdiel od chemických farieb neničí vaše vlasy. Naopak ich regeneruje, pos
                 } />
                 <Route path="/feelgood-recenzie" element={
                   <BrandReviews
-                    brandId="00000000-0000-0000-0000-000000000000" // TODO: Replace with correct UUID for Feel Good
+                    brandId="8b666a0c-e8b4-4d13-863f-c3d16872c127"
                     title="Dr.Feelgood kozmetika recenzie a skúsenosti"
                     description={`Slovenská značka prírodnej kozmetiky Dr.Feelgood prináša už roky na náš trh kvalitné rastlinné oleje, tuhé šampóny, éterické oleje a najnovšie aj prírodné deodoranty, alebo obľúbené kakaové a bambucké maslo.
 Používajú výhradne prírodné zložky v čo najčistejšej a najvyššej kvalite s ohľadom na primerané ceny.`}
@@ -99,7 +99,7 @@ Používajú výhradne prírodné zložky v čo najčistejšej a najvyššej kva
                 } />
                 <Route path="/henna-na-vlasy-recenzie" element={
                   <BrandReviews
-                    brandId="00000000-0000-0000-0000-000000000000" // TODO: Replace with correct UUID for Henna na vlasy
+                    brandId="9aa7a9b2-fc66-4497-9240-cfbaa798a51d, 30413dd6-f49c-4352-8d16-147ea0ea02ac, c57c3b9e-198f-4bee-9759-425a45a1354d, 4dc0f101-ac8e-41e3-9a2e-3949af7e0723, 6a7f1896-5eab-4fd7-a10d-012edaf58f73, 04c1f441-2ffa-4b40-97e5-6ae5580e77cb"
                     title="Henna na vlasy recenzie a skúsenosti"
                     description={`Henna je prírodná farba na vlasy, ktorá narozdiel od chemických farieb neničí vlasy. Naopak ich regeneruje, vyživuje a zlepšuje celkovú kvalitu vlasov.
 Pripravili sme si pre Vás zoznam recenzií ktoré máme od našich zákazníkov.`}
@@ -107,7 +107,7 @@ Pripravili sme si pre Vás zoznam recenzií ktoré máme od našich zákazníkov
                 } />
                 <Route path="/henne-color-recenzie" element={
                   <BrandReviews
-                    brandId="00000000-0000-0000-0000-000000000000" // TODO: Replace with correct UUID for Henné Color
+                    brandId="9aa7a9b2-fc66-4497-9240-cfbaa798a51d"
                     title="Henné Color recenzie a skúsenosti"
                     description={`Henné Color je francúzska značka, ktorá už viac ako 25 rokov vyrába prírodné farby na vlasy. Práškové farby Henné Color sú 100% prírodné a neobsahujú amoniak ani žiadne chemické látky.
 Ako jedna z mála značiek Henné Color vyrába taktiež krémové farby na vlasy, ktoré sú ideálne ak sa s Hennou ešte len zoznamujute.
@@ -116,7 +116,7 @@ Farby na vlasy sú vhodné pre všetky typy vlasov. Vlasy narozdiel od chemický
                 } />
                 <Route path="/voono-recenzie" element={
                   <BrandReviews
-                    brandId="00000000-0000-0000-0000-000000000000" // TODO: Replace with correct UUID for Voono
+                    brandId="30413dd6-f49c-4352-8d16-147ea0ea02ac"
                     title="Voono recenzie a skúsenosti"
                     description={`Značka Voono patrí k nováčikom na našom trhu, no za krátky čas si stihli urobiť množstvo fanúšikov. Kladú dôraz na najvyššiu kvalitu, pôvod surovín a striktne odmietajú testovanie na zvieratách.
 Farby na vlasy Voono sú 100% prírodné, neobsahujú amoniak, peroxid ani žiadne iné chemické látky. Oproti konkurencii sa odlišujú používaním viacerých byliniek ako napríklad Bahmu, Shikakai alebo Amla, ktoré v kombinácií s Hennou pomáhajú dosiahnuť ešte lepší farebný výsledok.`}

@@ -29,7 +29,7 @@ const BrandReviews = ({ brandIds: propBrandIds, brandId: propBrandId, title, des
     if (brandIds.length === 0) return;
     setLoading(true);
     try {
-      const data = await getReviewsByBrand(brandIds, page);
+      const data = await getReviewsByBrand(brandIds, page, 30);
       setReviews(data.reviews.content);
       setTotalPages(data.reviews.totalPages);
       setStats({
@@ -96,7 +96,7 @@ const BrandReviews = ({ brandIds: propBrandIds, brandId: propBrandId, title, des
                                 <img
                                     src={review.productImage}
                                     alt={review.productName || review.productTitle || 'Product'}
-                                    className="w-20 h-20 object-cover rounded-md border border-gray-100"
+                                    className="w-30 h-20 object-cover rounded-md border border-gray-100"
                                 />
                             </Link>
                         </div>
