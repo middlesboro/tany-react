@@ -24,6 +24,16 @@ const mockProducts = [
     images: ['image2.jpg'],
     quantity: 0,
     slug: 'out-of-stock-product'
+  },
+  {
+    id: 3,
+    title: 'External Stock Product',
+    shortDescription: 'Description',
+    price: 30.0,
+    images: ['image3.jpg'],
+    quantity: 0,
+    externalStock: true,
+    slug: 'external-stock-product'
   }
 ];
 
@@ -70,6 +80,11 @@ describe('ProductSearch', () => {
     expect(outOfStockTitle).toBeInTheDocument();
     expect(screen.getByText('20.00 €')).toBeInTheDocument();
     expect(screen.getByText('Vypredané')).toBeInTheDocument();
+
+    // Check External Stock Product
+    const externalStockTitle = await screen.findByText('External Stock Product');
+    expect(externalStockTitle).toBeInTheDocument();
+    expect(screen.getByText('Skladom u dodávateľa')).toBeInTheDocument();
 
     // Check that description is NOT present (regression test)
     expect(screen.queryByText('Description')).not.toBeInTheDocument();

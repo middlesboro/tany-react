@@ -735,6 +735,9 @@ const Checkout = () => {
                       <div className="flex-1">
                         <strong className="block">{item.title}</strong>
                         <div className="muted">{item.quantity} ks</div>
+                        {item.externalStock && (
+                            <div className="text-tany-green text-xs mt-1">Skladom u dodávateľa</div>
+                        )}
                       </div>
                       <strong>{total.toFixed(2)} €</strong>
                     </div>

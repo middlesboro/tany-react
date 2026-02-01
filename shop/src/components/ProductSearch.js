@@ -93,8 +93,8 @@ const ProductSearch = () => {
                       </div>
                       <div className="flex-grow">
                         <div className="font-medium text-sm text-gray-800 line-clamp-1">{product.title}</div>
-                        <div className={`text-xs ${product.quantity > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                          {product.quantity > 0 ? 'Skladom' : 'Vypredané'}
+                        <div className={`text-xs ${product.externalStock || product.quantity > 0 ? 'text-green-600' : 'text-red-600'}`}>
+                          {product.externalStock ? 'Skladom u dodávateľa' : (product.quantity > 0 ? 'Skladom' : 'Vypredané')}
                         </div>
                       </div>
                       <div className="text-sm font-bold text-tany-green whitespace-nowrap">

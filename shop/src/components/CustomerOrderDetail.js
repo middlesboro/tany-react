@@ -120,13 +120,18 @@ const CustomerOrderDetail = ({ orderId, onBack }) => {
                      {item.image && (
                        <img src={item.image} alt={item.name} className="w-10 h-10 object-cover rounded mr-4" />
                      )}
-                     {item.slug || item.productSlug ? (
-                       <Link to={`/product/${item.slug || item.productSlug}`} className="text-gray-900 hover:text-tany-green hover:underline">
-                         {item.name}
-                       </Link>
-                     ) : (
-                       <span className="text-gray-900">{item.name}</span>
-                     )}
+                     <div className="flex-1">
+                         {item.slug || item.productSlug ? (
+                           <Link to={`/product/${item.slug || item.productSlug}`} className="text-gray-900 hover:text-tany-green hover:underline block">
+                             {item.name}
+                           </Link>
+                         ) : (
+                           <span className="text-gray-900 block">{item.name}</span>
+                         )}
+                         {item.externalStock && (
+                            <div className="text-xs text-tany-green mt-0.5">Skladom u dodávateľa</div>
+                         )}
+                     </div>
                    </td>
                    <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
                      {item.discountPrice ? (

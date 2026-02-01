@@ -609,26 +609,33 @@ const ProductDetail = () => {
             </div>
 
             <div className="mb-8">
-                <div className={`flex items-center font-medium mb-2 ${product.quantity > 0 ? 'text-tany-green' : 'text-red-500'}`}>
-                    {product.quantity > 0 ? (
+                <div className={`flex items-center font-medium mb-2 ${product.externalStock ? 'text-tany-green' : (product.quantity > 0 ? 'text-tany-green' : 'text-red-500')}`}>
+                    {product.externalStock ? (
                         <>
                             <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"></path></svg>
-                            {product.quantity > 5 ? 'Skladom > 5 ks' : `Skladom ${product.quantity} ks`}
+                            Skladom u dodávateľa
                         </>
                     ) : (
-                        <>
-                            <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"></path></svg>
-                            Vypredané
-                        </>
+                        product.quantity > 0 ? (
+                            <>
+                                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"></path></svg>
+                                {product.quantity > 5 ? 'Skladom > 5 ks' : `Skladom ${product.quantity} ks`}
+                            </>
+                        ) : (
+                            <>
+                                <svg className="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"></path></svg>
+                                Vypredané
+                            </>
+                        )
                     )}
                 </div>
                 <div className="text-sm text-gray-500">
-                    Odosielame približne do 24 hodín
+                    {product.externalStock ? 'Odosielam zvyčajne do 3-5 pracovných dní' : 'Odosielame približne do 24 hodín'}
                 </div>
             </div>
 
             <div className="border-t border-gray-100 pt-8">
-                {product.quantity > 0 ? (
+                {product.quantity > 0 || product.externalStock ? (
                   <div className="flex flex-col sm:flex-row gap-4">
                       {/* Quantity Selector */}
                       <div className="flex items-center border border-gray-300 rounded">
