@@ -77,6 +77,19 @@ const CategoryForm = ({ category, handleChange, handleSubmit, categories = [], h
           placeholder="Select parent category..."
         />
       </div>
+      <div className="mb-4 flex items-center">
+        <input
+          type="checkbox"
+          id="defaultCategory"
+          name="defaultCategory"
+          checked={category.defaultCategory || false}
+          onChange={handleChange}
+          className="mr-2"
+        />
+        <label htmlFor="defaultCategory" className="text-gray-700 cursor-pointer">
+          Default Category
+        </label>
+      </div>
       <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
         Save
       </button>
