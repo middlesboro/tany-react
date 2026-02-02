@@ -12,6 +12,7 @@ const CarrierEdit = () => {
     image: '',
     order: 0,
     type: 'PACKETA',
+    iskladId: '',
     ranges: [],
   });
 
@@ -150,6 +151,19 @@ const CarrierEdit = () => {
             <option value="SK_POST">SK_POST</option>
             <option value="COURIER">Courier</option>
           </select>
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="iskladId">
+            Isklad ID
+          </label>
+          <input
+            type="text"
+            id="iskladId"
+            name="iskladId"
+            value={carrier.iskladId || ''}
+            onChange={handleChange}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
         </div>
 
         <div className="mb-4 border-t pt-4">
