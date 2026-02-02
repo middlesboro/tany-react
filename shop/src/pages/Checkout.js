@@ -767,7 +767,7 @@ const Checkout = () => {
             </div>
 
             <button className="btn" type="submit" disabled={!selectedCarrier || !selectedPayment}>
-                Dokončiť objednávku
+                Objednať s povinnosťou platby
             </button>
           </div>
 
