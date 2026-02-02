@@ -206,6 +206,16 @@ const ProductForm = ({
       </div>
 
       <div className="mb-4">
+        <SearchSelect
+            label="Default Category"
+            options={categories}
+            value={product.defaultCategoryId}
+            onChange={handleSelectChange('defaultCategoryId')}
+            placeholder="Search for a default category..."
+        />
+      </div>
+
+      <div className="mb-4">
         <MultiSearchSelect
           label="Categories"
           options={categories}
