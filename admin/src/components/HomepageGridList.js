@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getHomepageGrids, deleteHomepageGrid } from '../services/homepageGridAdminService';
+import usePersistentTableState from '../hooks/usePersistentTableState';
 
 const HomepageGridList = () => {
+  const {
+    page, setPage,
+    size, setSize,
+    sort, handleSort
+  } = usePersistentTableState('admin_homepage_grids_list_state', {}, 'title,asc');
+
   const [grids, setGrids] = useState([]);
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
-  const [sort, setSort] = useState('title,asc');
 
   useEffect(() => {
     const fetchGrids = async () => {
@@ -22,15 +26,6 @@ const HomepageGridList = () => {
     if (window.confirm('Are you sure you want to delete this grid?')) {
       await deleteHomepageGrid(id);
       setGrids(grids.filter((grid) => grid.id !== id));
-    }
-  };
-
-  const handleSort = (field) => {
-    const [currentField, currentDirection] = sort.split(',');
-    if (currentField === field) {
-      setSort(`${field},${currentDirection === 'asc' ? 'desc' : 'asc'}`);
-    } else {
-      setSort(`${field},asc`);
     }
   };
 

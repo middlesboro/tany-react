@@ -1,23 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getCarts } from '../services/cartAdminService';
+import usePersistentTableState from '../hooks/usePersistentTableState';
 
 const CartList = () => {
-  const [carts, setCarts] = useState([]);
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
-  const [totalPages, setTotalPages] = useState(0);
-  const [sort, setSort] = useState('createDate,desc');
-
-  // Filter states
-  const [filter, setFilter] = useState({
+  const {
+    page, setPage,
+    size, setSize,
+    sort, handleSort,
+    filter, handleFilterChange,
+    appliedFilter,
+    handleFilterSubmit, handleClearFilter
+  } = usePersistentTableState('admin_carts_list_state', {
     cartId: '',
     orderIdentifier: '',
     customerName: '',
     dateFrom: '',
     dateTo: '',
-  });
-  const [appliedFilter, setAppliedFilter] = useState({});
+  }, 'createDate,desc');
+
+  const [carts, setCarts] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     const fetchCarts = async () => {
@@ -31,41 +34,6 @@ const CartList = () => {
     };
     fetchCarts();
   }, [page, sort, size, appliedFilter]);
-
-  const handleSort = (field) => {
-    const [currentField, currentDirection] = sort.split(',');
-    if (currentField === field) {
-      setSort(`${field},${currentDirection === 'asc' ? 'desc' : 'asc'}`);
-    } else {
-      setSort(`${field},asc`);
-    }
-  };
-
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilter({
-      ...filter,
-      [name]: value,
-    });
-  };
-
-  const handleFilterSubmit = () => {
-    setAppliedFilter(filter);
-    setPage(0);
-  };
-
-  const handleClearFilter = () => {
-    const emptyFilter = {
-      cartId: '',
-      orderIdentifier: '',
-      customerName: '',
-      dateFrom: '',
-      dateTo: '',
-    };
-    setFilter(emptyFilter);
-    setAppliedFilter({});
-    setPage(0);
-  };
 
   return (
     <div>

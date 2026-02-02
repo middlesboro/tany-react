@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getPages, deletePage } from '../services/pageAdminService';
+import usePersistentTableState from '../hooks/usePersistentTableState';
 
 const PageList = () => {
+  const {
+    page, setPage,
+    size, setSize,
+    sort, handleSort
+  } = usePersistentTableState('admin_pages_list_state', {}, 'title,asc');
+
   const [pages, setPages] = useState([]);
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
-  const [sort, setSort] = useState('title,asc');
 
   useEffect(() => {
     const fetchPages = async () => {
@@ -22,15 +26,6 @@ const PageList = () => {
     if (window.confirm('Are you sure you want to delete this page?')) {
       await deletePage(id);
       setPages(pages.filter((p) => p.id !== id));
-    }
-  };
-
-  const handleSort = (field) => {
-    const [currentField, currentDirection] = sort.split(',');
-    if (currentField === field) {
-      setSort(`${field},${currentDirection === 'asc' ? 'desc' : 'asc'}`);
-    } else {
-      setSort(`${field},asc`);
     }
   };
 

@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getCustomers, deleteCustomer } from '../services/customerAdminService';
+import usePersistentTableState from '../hooks/usePersistentTableState';
 
 const CustomerList = () => {
+  const {
+    page, setPage,
+    size, setSize,
+    sort, handleSort
+  } = usePersistentTableState('admin_customers_list_state', {}, 'lastname,asc');
+
   const [customers, setCustomers] = useState([]);
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
-  const [sort, setSort] = useState('lastname,asc');
 
   useEffect(() => {
     const fetchCustomers = async () => {
@@ -22,15 +26,6 @@ const CustomerList = () => {
     if (window.confirm('Are you sure you want to delete this customer?')) {
       await deleteCustomer(id);
       setCustomers(customers.filter((customer) => customer.id !== id));
-    }
-  };
-
-  const handleSort = (field) => {
-    const [currentField, currentDirection] = sort.split(',');
-    if (currentField === field) {
-      setSort(`${field},${currentDirection === 'asc' ? 'desc' : 'asc'}`);
-    } else {
-      setSort(`${field},asc`);
     }
   };
 

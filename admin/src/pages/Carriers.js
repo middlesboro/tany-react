@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getCarriers, deleteCarrier } from '../services/carrierAdminService';
+import usePersistentTableState from '../hooks/usePersistentTableState';
 
 const Carriers = () => {
+  const {
+    page, setPage,
+    size, setSize,
+    sort, handleSort
+  } = usePersistentTableState('admin_carriers_list_state', {}, 'order,asc');
+
   const [carriers, setCarriers] = useState([]);
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
-  const [sort, setSort] = useState('order,asc');
 
   useEffect(() => {
     const fetchCarriers = async () => {
@@ -31,15 +35,6 @@ const Carriers = () => {
         console.error("Failed to delete carrier", error);
         alert("Failed to delete carrier");
       }
-    }
-  };
-
-  const handleSort = (field) => {
-    const [currentField, currentDirection] = sort.split(',');
-    if (currentField === field) {
-      setSort(`${field},${currentDirection === 'asc' ? 'desc' : 'asc'}`);
-    } else {
-      setSort(`${field},asc`);
     }
   };
 
