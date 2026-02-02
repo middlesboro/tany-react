@@ -11,13 +11,22 @@ const CustomerEdit = () => {
     lastname: '',
     email: '',
     password: '',
+    role: 'CUSTOMER',
+    invoiceAddress: { street: '', city: '', zip: '', country: '' },
+    deliveryAddress: { street: '', city: '', zip: '', country: '' },
   });
 
   useEffect(() => {
     if (id) {
       const fetchCustomer = async () => {
         const data = await getCustomer(id);
-        setCustomer(data);
+        setCustomer({
+          password: '',
+          role: 'CUSTOMER',
+          ...data,
+          invoiceAddress: data.invoiceAddress || { street: '', city: '', zip: '', country: '' },
+          deliveryAddress: data.deliveryAddress || { street: '', city: '', zip: '', country: '' },
+        });
       };
       fetchCustomer();
     }
@@ -25,7 +34,18 @@ const CustomerEdit = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setCustomer({ ...customer, [name]: value });
+    if (name.includes('.')) {
+      const [parent, child] = name.split('.');
+      setCustomer({
+        ...customer,
+        [parent]: {
+          ...customer[parent],
+          [child]: value,
+        },
+      });
+    } else {
+      setCustomer({ ...customer, [name]: value });
+    }
   };
 
   const handleSubmit = async (e) => {
