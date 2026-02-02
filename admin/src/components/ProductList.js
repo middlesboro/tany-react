@@ -3,19 +3,17 @@ import { Link, useNavigate } from 'react-router-dom';
 import { getAdminProducts, deleteProduct, patchProduct, getProduct } from '../services/productAdminService';
 import { getBrands } from '../services/brandAdminService';
 import SearchSelect from './SearchSelect';
+import usePersistentTableState from '../hooks/usePersistentTableState';
 
 const ProductList = () => {
-  const navigate = useNavigate();
-  const [products, setProducts] = useState([]);
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
-  const [totalPages, setTotalPages] = useState(0);
-  const [sort, setSort] = useState('title,asc');
-  const [editingId, setEditingId] = useState(null);
-  const [editFormData, setEditFormData] = useState({});
-
-  // Filter states
-  const [filter, setFilter] = useState({
+  const {
+    page, setPage,
+    size, setSize,
+    sort, handleSort,
+    filter, setFilter, handleFilterChange,
+    appliedFilter,
+    handleFilterSubmit, handleClearFilter
+  } = usePersistentTableState('admin_products_list_state', {
     query: '',
     priceFrom: '',
     priceTo: '',
@@ -24,8 +22,13 @@ const ProductList = () => {
     externalStock: '',
     quantity: '',
     active: '',
-  });
-  const [appliedFilter, setAppliedFilter] = useState({});
+  }, 'title,asc');
+
+  const navigate = useNavigate();
+  const [products, setProducts] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+  const [editingId, setEditingId] = useState(null);
+  const [editFormData, setEditFormData] = useState({});
   const [brands, setBrands] = useState([]);
 
   useEffect(() => {
@@ -45,14 +48,6 @@ const ProductList = () => {
     fetchProducts();
   }, [page, sort, size, appliedFilter]);
 
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilter({
-      ...filter,
-      [name]: value,
-    });
-  };
-
   const handleBrandChange = (value) => {
     setFilter({
       ...filter,
@@ -60,40 +55,10 @@ const ProductList = () => {
     });
   };
 
-  const handleFilterSubmit = () => {
-    setAppliedFilter(filter);
-    setPage(0);
-  };
-
-  const handleClearFilter = () => {
-    const emptyFilter = {
-      query: '',
-      priceFrom: '',
-      priceTo: '',
-      brandId: '',
-      id: '',
-      externalStock: '',
-      quantity: '',
-      active: '',
-    };
-    setFilter(emptyFilter);
-    setAppliedFilter({});
-    setPage(0);
-  };
-
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this product?')) {
       await deleteProduct(id);
       setProducts(products.filter((product) => product.id !== id));
-    }
-  };
-
-  const handleSort = (field) => {
-    const [currentField, currentDirection] = sort.split(',');
-    if (currentField === field) {
-      setSort(`${field},${currentDirection === 'asc' ? 'desc' : 'asc'}`);
-    } else {
-      setSort(`${field},asc`);
     }
   };
 

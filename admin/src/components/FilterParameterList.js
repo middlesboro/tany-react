@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getFilterParameters, deleteFilterParameter } from '../services/filterParameterAdminService';
+import usePersistentTableState from '../hooks/usePersistentTableState';
 
 const FilterParameterList = () => {
+  const {
+    page, setPage,
+    size, setSize,
+    sort, handleSort
+  } = usePersistentTableState('admin_filter_parameters_list_state', {}, 'name,asc');
+
   const [filterParameters, setFilterParameters] = useState([]);
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
-  const [sort, setSort] = useState('name,asc');
 
   useEffect(() => {
     const fetchFilterParameters = async () => {
@@ -22,15 +26,6 @@ const FilterParameterList = () => {
     if (window.confirm('Are you sure you want to delete this filter parameter?')) {
       await deleteFilterParameter(id);
       setFilterParameters(filterParameters.filter((fp) => fp.id !== id));
-    }
-  };
-
-  const handleSort = (field) => {
-    const [currentField, currentDirection] = sort.split(',');
-    if (currentField === field) {
-      setSort(`${field},${currentDirection === 'asc' ? 'desc' : 'asc'}`);
-    } else {
-      setSort(`${field},asc`);
     }
   };
 

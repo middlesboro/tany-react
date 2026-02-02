@@ -4,55 +4,33 @@ import { getOrders, deleteOrder, getOrder } from '../services/orderAdminService'
 import { getCarriers } from '../services/carrierAdminService';
 import { getPayments } from '../services/paymentAdminService';
 import SearchSelect from './SearchSelect';
-
-const STORAGE_KEY = 'admin_orders_list_state';
-
-const getInitialState = (key, defaultValue) => {
-  try {
-    const saved = localStorage.getItem(key);
-    return saved ? JSON.parse(saved) : defaultValue;
-  } catch (e) {
-    return defaultValue;
-  }
-};
+import usePersistentTableState from '../hooks/usePersistentTableState';
 
 const OrderList = () => {
-  const savedState = getInitialState(STORAGE_KEY, {});
-
-  const [orders, setOrders] = useState([]);
-  const [page, setPage] = useState(savedState.page ?? 0);
-  const [size, setSize] = useState(savedState.size ?? 10);
-  const [totalPages, setTotalPages] = useState(0);
-  const [sort, setSort] = useState(savedState.sort ?? 'id,asc');
-
-  // Data for lookups
-  const [carriers, setCarriers] = useState([]);
-  const [payments, setPayments] = useState([]);
-
-  // Filter states
-  const [filter, setFilter] = useState({
+  const {
+    page, setPage,
+    size, setSize,
+    sort, handleSort,
+    filter, setFilter, handleFilterChange,
+    appliedFilter,
+    handleFilterSubmit, handleClearFilter
+  } = usePersistentTableState('admin_orders_list_state', {
     orderIdentifier: '',
     status: '',
     priceFrom: '',
     priceTo: '',
     carrierId: '',
     paymentId: '',
-    ...(savedState.appliedFilter || {}),
-  });
-  const [appliedFilter, setAppliedFilter] = useState(savedState.appliedFilter ?? {});
-  const navigate = useNavigate();
+  }, 'id,asc');
 
-  useEffect(() => {
-    localStorage.setItem(
-      STORAGE_KEY,
-      JSON.stringify({
-        page,
-        size,
-        sort,
-        appliedFilter,
-      })
-    );
-  }, [page, size, sort, appliedFilter]);
+  const [orders, setOrders] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
+
+  // Data for lookups
+  const [carriers, setCarriers] = useState([]);
+  const [payments, setPayments] = useState([]);
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -129,23 +107,6 @@ const OrderList = () => {
     }
   };
 
-  const handleSort = (field) => {
-    const [currentField, currentDirection] = sort.split(',');
-    if (currentField === field) {
-      setSort(`${field},${currentDirection === 'asc' ? 'desc' : 'asc'}`);
-    } else {
-      setSort(`${field},asc`);
-    }
-  };
-
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilter({
-      ...filter,
-      [name]: value,
-    });
-  };
-
   const handleCarrierChange = (value) => {
     setFilter({
       ...filter,
@@ -158,25 +119,6 @@ const OrderList = () => {
       ...filter,
       paymentId: value,
     });
-  };
-
-  const handleFilterSubmit = () => {
-    setAppliedFilter(filter);
-    setPage(0);
-  };
-
-  const handleClearFilter = () => {
-    const emptyFilter = {
-      orderIdentifier: '',
-      status: '',
-      priceFrom: '',
-      priceTo: '',
-      carrierId: '',
-      paymentId: '',
-    };
-    setFilter(emptyFilter);
-    setAppliedFilter({});
-    setPage(0);
   };
 
   return (

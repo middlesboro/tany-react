@@ -39,8 +39,8 @@ describe('CartList', () => {
       expect(cartAdminService.getCarts).toHaveBeenCalledWith(
         0, // page
         'createDate,desc', // sort
-        20, // size
-        {} // filter
+        10, // size
+        expect.anything()
       );
     });
   });

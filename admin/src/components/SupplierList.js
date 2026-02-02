@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getSuppliers, deleteSupplier } from '../services/supplierAdminService';
+import usePersistentTableState from '../hooks/usePersistentTableState';
 
 const SupplierList = () => {
+  const {
+    page, setPage,
+    size, setSize,
+    sort, handleSort
+  } = usePersistentTableState('admin_suppliers_list_state', {}, 'name,asc');
+
   const [suppliers, setSuppliers] = useState([]);
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
-  const [sort, setSort] = useState('name,asc');
 
   useEffect(() => {
     const fetchSuppliers = async () => {
@@ -22,15 +26,6 @@ const SupplierList = () => {
     if (window.confirm('Are you sure you want to delete this supplier?')) {
       await deleteSupplier(id);
       setSuppliers(suppliers.filter((supplier) => supplier.id !== id));
-    }
-  };
-
-  const handleSort = (field) => {
-    const [currentField, currentDirection] = sort.split(',');
-    if (currentField === field) {
-      setSort(`${field},${currentDirection === 'asc' ? 'desc' : 'asc'}`);
-    } else {
-      setSort(`${field},asc`);
     }
   };
 

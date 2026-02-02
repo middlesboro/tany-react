@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getBlogs, deleteBlog } from '../services/blogAdminService';
+import usePersistentTableState from '../hooks/usePersistentTableState';
 
 const BlogList = () => {
+  const {
+    page, setPage,
+    size, setSize,
+    sort, handleSort
+  } = usePersistentTableState('admin_blogs_list_state', {}, 'title,asc');
+
   const [blogs, setBlogs] = useState([]);
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
   const [totalPages, setTotalPages] = useState(0);
-  const [sort, setSort] = useState('title,asc');
 
   useEffect(() => {
     const fetchBlogs = async () => {
@@ -22,15 +26,6 @@ const BlogList = () => {
     if (window.confirm('Are you sure you want to delete this blog?')) {
       await deleteBlog(id);
       setBlogs(blogs.filter((blog) => blog.id !== id));
-    }
-  };
-
-  const handleSort = (field) => {
-    const [currentField, currentDirection] = sort.split(',');
-    if (currentField === field) {
-      setSort(`${field},${currentDirection === 'asc' ? 'desc' : 'asc'}`);
-    } else {
-      setSort(`${field},asc`);
     }
   };
 

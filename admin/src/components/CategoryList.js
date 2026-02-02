@@ -1,19 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getCategories, deleteCategory } from '../services/categoryAdminService';
+import usePersistentTableState from '../hooks/usePersistentTableState';
 
 const CategoryList = () => {
-  const [categories, setCategories] = useState([]);
-  const [page, setPage] = useState(0);
-  const [size, setSize] = useState(10);
-  const [totalPages, setTotalPages] = useState(0);
-  const [sort, setSort] = useState('title,asc');
-
-  // Filter state
-  const [filter, setFilter] = useState({
+  const {
+    page, setPage,
+    size, setSize,
+    sort, handleSort,
+    filter, handleFilterChange,
+    appliedFilter,
+    handleFilterSubmit, handleClearFilter
+  } = usePersistentTableState('admin_categories_list_state', {
     query: '',
-  });
-  const [appliedFilter, setAppliedFilter] = useState({});
+  }, 'title,asc');
+
+  const [categories, setCategories] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -24,38 +27,10 @@ const CategoryList = () => {
     fetchCategories();
   }, [page, sort, size, appliedFilter]);
 
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilter({
-      ...filter,
-      [name]: value,
-    });
-  };
-
-  const handleFilterSubmit = () => {
-    setAppliedFilter(filter);
-    setPage(0);
-  };
-
-  const handleClearFilter = () => {
-    setFilter({ query: '' });
-    setAppliedFilter({});
-    setPage(0);
-  };
-
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this category?')) {
       await deleteCategory(id);
       setCategories(categories.filter((category) => category.id !== id));
-    }
-  };
-
-  const handleSort = (field) => {
-    const [currentField, currentDirection] = sort.split(',');
-    if (currentField === field) {
-      setSort(`${field},${currentDirection === 'asc' ? 'desc' : 'asc'}`);
-    } else {
-      setSort(`${field},asc`);
     }
   };
 

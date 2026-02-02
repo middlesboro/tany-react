@@ -1,21 +1,26 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getCartDiscounts, deleteCartDiscount } from '../services/cartDiscountAdminService';
+import usePersistentTableState from '../hooks/usePersistentTableState';
 
 const CartDiscounts = () => {
+  const {
+    page, setPage,
+    size, setSize,
+    sort, handleSort
+  } = usePersistentTableState('admin_cart_discounts_list_state', {}, 'title,asc', 20);
+
   const [discounts, setDiscounts] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [page, setPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const size = 20;
 
   useEffect(() => {
     fetchDiscounts();
-  }, [page]);
+  }, [page, size, sort]);
 
   const fetchDiscounts = async () => {
     try {
-      const data = await getCartDiscounts(page, 'title,asc', size);
+      const data = await getCartDiscounts(page, sort, size);
       if (data.content) {
         setDiscounts(data.content);
         setTotalPages(data.totalPages);
@@ -40,12 +45,6 @@ const CartDiscounts = () => {
     }
   };
 
-  const handlePageChange = (newPage) => {
-    if (newPage >= 0 && newPage < totalPages) {
-      setPage(newPage);
-    }
-  };
-
   if (loading) return <div className="p-4">Loading...</div>;
 
   return (
@@ -61,11 +60,11 @@ const CartDiscounts = () => {
         <table className="min-w-full divide-y divide-gray-200">
           <thead className="bg-gray-50">
             <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Title</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Code</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Type</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Value</th>
-              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Active</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onClick={() => handleSort('title')}>Title</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onClick={() => handleSort('code')}>Code</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onClick={() => handleSort('discountType')}>Type</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onClick={() => handleSort('value')}>Value</th>
+              <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider cursor-pointer" onClick={() => handleSort('active')}>Active</th>
               <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
             </tr>
           </thead>
@@ -120,27 +119,42 @@ const CartDiscounts = () => {
         </table>
       </div>
 
-      {totalPages > 1 && (
-        <div className="mt-4 flex justify-between items-center">
+      <div className="flex justify-between items-center mt-4">
+        <div className="flex items-center">
+          <span className="mr-2">Items per page:</span>
+          <select
+            value={size}
+            onChange={(e) => {
+              setSize(Number(e.target.value));
+              setPage(0);
+            }}
+            className="border rounded p-1"
+          >
+            <option value={10}>10</option>
+            <option value={20}>20</option>
+            <option value={50}>50</option>
+          </select>
+        </div>
+        <div className="flex items-center">
           <button
-            onClick={() => handlePageChange(page - 1)}
+            onClick={() => setPage(page - 1)}
             disabled={page === 0}
-            className={`px-4 py-2 border rounded ${page === 0 ? 'bg-gray-100 text-gray-400' : 'bg-white text-gray-700 hover:bg-gray-50'}`}
+            className="bg-gray-300 text-gray-700 px-4 py-2 rounded mr-2"
           >
             Previous
           </button>
-          <span>
+          <span className="mr-2">
             Page {page + 1} of {totalPages}
           </span>
           <button
-            onClick={() => handlePageChange(page + 1)}
-            disabled={page === totalPages - 1}
-            className={`px-4 py-2 border rounded ${page === totalPages - 1 ? 'bg-gray-100 text-gray-400' : 'bg-white text-gray-700 hover:bg-gray-50'}`}
+            onClick={() => setPage(page + 1)}
+            disabled={page + 1 >= totalPages}
+            className="bg-gray-300 text-gray-700 px-4 py-2 rounded"
           >
             Next
           </button>
         </div>
-      )}
+      </div>
     </div>
   );
 };
