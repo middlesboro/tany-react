@@ -7,7 +7,6 @@ describe('CustomerForm', () => {
     firstname: 'John',
     lastname: 'Doe',
     email: 'john@example.com',
-    password: 'password123',
     role: 'CUSTOMER',
     invoiceAddress: {
       street: 'Inv Street 1',
@@ -39,8 +38,6 @@ describe('CustomerForm', () => {
     expect(screen.getByLabelText(/First Name/i)).toHaveValue('John');
     expect(screen.getByLabelText(/Last Name/i)).toHaveValue('Doe');
     expect(screen.getByLabelText(/Email/i)).toHaveValue('john@example.com');
-    // Password might differ depending on implementation, but checking existence
-    expect(screen.getByLabelText(/Password/i)).toHaveValue('password123');
 
     // Role
     expect(screen.getByLabelText(/Role/i)).toHaveValue('CUSTOMER');

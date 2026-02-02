@@ -10,7 +10,6 @@ const CustomerEdit = () => {
     firstname: '',
     lastname: '',
     email: '',
-    password: '',
     role: 'CUSTOMER',
     invoiceAddress: { street: '', city: '', zip: '', country: '' },
     deliveryAddress: { street: '', city: '', zip: '', country: '' },
@@ -21,7 +20,6 @@ const CustomerEdit = () => {
       const fetchCustomer = async () => {
         const data = await getCustomer(id);
         setCustomer({
-          password: '',
           role: 'CUSTOMER',
           ...data,
           invoiceAddress: data.invoiceAddress || { street: '', city: '', zip: '', country: '' },

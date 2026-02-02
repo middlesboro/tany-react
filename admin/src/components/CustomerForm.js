@@ -47,17 +47,6 @@ const CustomerForm = ({ customer, handleChange, handleSubmit }) => {
           className="w-full px-3 py-2 border rounded"
         />
       </div>
-      <div className="mb-4">
-        <label htmlFor="password" className="block text-gray-700">Password</label>
-        <input
-          id="password"
-          type="password"
-          name="password"
-          value={customer.password}
-          onChange={handleChange}
-          className="w-full px-3 py-2 border rounded"
-        />
-      </div>
 
       <div className="mb-4">
         <label htmlFor="role" className="block text-gray-700">Role</label>
