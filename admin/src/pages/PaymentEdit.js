@@ -13,6 +13,7 @@ const PaymentEdit = () => {
     price: 0,
     type: 'COD',
     order: 0,
+    iskladId: '',
   });
 
   useEffect(() => {
@@ -139,6 +140,19 @@ const PaymentEdit = () => {
             <option value="BESTERON">Besteron</option>
             <option value="BANK_TRANSFER">Bank Transfer</option>
           </select>
+        </div>
+        <div className="mb-4">
+          <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="iskladId">
+            Isklad ID
+          </label>
+          <input
+            type="text"
+            id="iskladId"
+            name="iskladId"
+            value={payment.iskladId || ''}
+            onChange={handleChange}
+            className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
         </div>
 
         <div className="flex items-center justify-between">
