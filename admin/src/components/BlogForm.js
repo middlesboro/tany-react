@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactQuill from 'react-quill-new';
-import { quillModules } from '../utils/quillConfig';
+import { quillModules, quillModulesTable } from '../utils/quillConfig';
 import 'react-quill-new/dist/quill.snow.css';
 
 const BlogForm = ({ blog, handleChange, handleSubmit, handleSaveAndStay }) => {
@@ -52,12 +52,12 @@ const BlogForm = ({ blog, handleChange, handleSubmit, handleSaveAndStay }) => {
 
       <div className="mb-4">
         <label className="block text-gray-700">Short Description</label>
-        <ReactQuill
-          theme="snow"
+        <textarea
+          name="shortDescription"
           value={blog.shortDescription}
-          onChange={handleQuillChange('shortDescription')}
-          modules={quillModules}
-          className="bg-white"
+          onChange={handleChange}
+          className="w-full px-3 py-2 border rounded bg-white"
+          rows="5"
         />
       </div>
 
@@ -67,7 +67,7 @@ const BlogForm = ({ blog, handleChange, handleSubmit, handleSaveAndStay }) => {
           theme="snow"
           value={blog.description}
           onChange={handleQuillChange('description')}
-          modules={quillModules}
+          modules={quillModulesTable}
           className="bg-white"
         />
       </div>
