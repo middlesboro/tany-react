@@ -88,7 +88,7 @@ const BlogDetail = () => {
              </div>
            )}
 
-           <div dangerouslySetInnerHTML={{ __html: blog.description }} />
+           <div dangerouslySetInnerHTML={{ __html: blog.description ? blog.description.replace(/&nbsp;|\u00A0/g, ' ') : '' }} />
         </div>
       </div>
     </div>
