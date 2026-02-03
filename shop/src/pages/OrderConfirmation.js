@@ -3,8 +3,10 @@ import { useParams, Link, useSearchParams, useLocation } from 'react-router-dom'
 import { getOrderConfirmation } from '../services/orderService';
 import { getPaymentInfo, checkBesteronStatus } from '../services/paymentService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
+import useNoIndex from '../hooks/useNoIndex';
 
 const OrderConfirmation = () => {
+  useNoIndex();
   const { id } = useParams();
   const { setBreadcrumbs } = useBreadcrumbs();
   const [searchParams] = useSearchParams();

@@ -109,4 +109,16 @@ describe('OrderConfirmation', () => {
     expect(screen.getByText('Suma:')).toBeInTheDocument();
     expect(screen.getAllByText('100.00 €')[0]).toBeInTheDocument();
   });
+
+  test('adds noindex meta tag on mount and removes it on unmount', () => {
+    const { unmount } = render(<OrderConfirmation />);
+
+    const metaTag = document.querySelector('meta[name="robots"]');
+    expect(metaTag).toBeInTheDocument();
+    expect(metaTag).toHaveAttribute('content', 'noindex');
+
+    unmount();
+
+    expect(document.querySelector('meta[name="robots"]')).not.toBeInTheDocument();
+  });
 });
