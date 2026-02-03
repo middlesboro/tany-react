@@ -13,7 +13,7 @@ const WishlistList = ({ wishlists, onDelete }) => {
               Customer
             </th>
             <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-              Products Count
+              Product Names
             </th>
             <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
               Actions
@@ -36,7 +36,7 @@ const WishlistList = ({ wishlists, onDelete }) => {
                 <p className="text-gray-900 whitespace-no-wrap">{wishlist.customerEmail || wishlist.customerName || 'N/A'}</p>
               </td>
               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                <p className="text-gray-900 whitespace-no-wrap">{wishlist.products ? wishlist.products.length : 0}</p>
+                <p className="text-gray-900 whitespace-no-wrap">{wishlist.productNames ? wishlist.productNames.join(', ') : ''}</p>
               </td>
               <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                 <div className="flex items-center">
