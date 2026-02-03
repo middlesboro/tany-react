@@ -39,6 +39,7 @@ import ProductLabelEdit from './pages/ProductLabelEdit';
 import CartDiscounts from './pages/CartDiscounts';
 import CartDiscountEdit from './pages/CartDiscountEdit';
 import Wishlists from './pages/Wishlists';
+import IskladInventoryDifferences from './pages/IskladInventoryDifferences';
 import { BreadcrumbProvider } from './context/BreadcrumbContext';
 import ScrollToTop from './components/ScrollToTop';
 
@@ -133,6 +134,7 @@ function App() {
               <Route path="orders" element={<Orders />} />
               <Route path="orders/new" element={<OrderEdit />} />
               <Route path="orders/:id" element={<OrderEdit />} />
+              <Route path="isklad/inventory-differences" element={<IskladInventoryDifferences />} />
             </Route>
           </Routes>
         </Router>

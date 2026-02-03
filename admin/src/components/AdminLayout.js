@@ -35,6 +35,12 @@ const menuItems = [
     ]
   },
   {
+    title: 'Isklad',
+    children: [
+      { title: 'Inventory Differences', path: '/isklad/inventory-differences' },
+    ]
+  },
+  {
     title: 'Pages',
     path: '/pages'
   },
