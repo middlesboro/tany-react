@@ -1,11 +1,22 @@
 import React from 'react';
 import ReactQuill from 'react-quill-new';
 import SearchSelect from './SearchSelect';
+import MultiSearchSelect from './MultiSearchSelect';
 import { quillModules } from '../utils/quillConfig';
 import 'react-quill-new/dist/quill.snow.css';
 
-const CategoryForm = ({ category, handleChange, handleSubmit, categories = [], handleParentChange }) => {
+const CategoryForm = ({ category, handleChange, handleSubmit, categories = [], handleParentChange, filterParameters = [] }) => {
   const parentOptions = categories.map((c) => ({ id: c.id, name: c.title }));
+
+  const handleFilterParamChange = (newIds) => {
+    const newParams = newIds.map(id => ({ id }));
+    handleChange({
+      target: {
+        name: 'filterParameters',
+        value: newParams
+      }
+    });
+  };
 
   const handleQuillChange = (name) => (value) => {
     // ReactQuill returns the HTML value directly
@@ -89,6 +100,15 @@ const CategoryForm = ({ category, handleChange, handleSubmit, categories = [], h
         <label htmlFor="defaultCategory" className="text-gray-700 cursor-pointer">
           Default Category
         </label>
+      </div>
+      <div className="mb-4">
+        <MultiSearchSelect
+          label="Filter Parameters"
+          options={filterParameters}
+          value={(category.filterParameters || []).map(p => p.id)}
+          onChange={handleFilterParamChange}
+          placeholder="Select filter parameters..."
+        />
       </div>
       <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
         Save
