@@ -7,6 +7,7 @@ const OrderStatus = [
   'PAID',
   'COD',
   'SENT',
+  'READY_FOR_PICKUP',
   'PACKING',
   'DELIVERED',
   'CANCELED'
