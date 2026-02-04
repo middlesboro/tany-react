@@ -273,7 +273,7 @@ describe('Checkout Component', () => {
       );
 
       // Try to submit without selecting pickup point
-      const submitBtn = screen.getByText('Dokončiť objednávku');
+        const submitBtn = screen.getByText('Objednať s povinnosťou platby');
       fireEvent.click(submitBtn);
 
       await waitFor(() => {
