@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { useModal } from '../context/ModalContext';
 import { requestMagicLink } from '../services/authService';
 
 const LoginModal = () => {
   const { isLoginModalOpen, closeLoginModal, loginMessage } = useModal();
+  const location = useLocation();
   const [email, setEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
   const [message, setMessage] = useState(null);
@@ -16,6 +18,10 @@ const LoginModal = () => {
     setIsLoading(true);
     setError(null);
     setMessage(null);
+
+    // Save current location as redirect target
+    const currentPath = location.pathname + location.search;
+    localStorage.setItem('post_login_redirect', currentPath);
 
     try {
       await requestMagicLink(email);
