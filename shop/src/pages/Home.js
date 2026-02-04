@@ -3,8 +3,11 @@ import { getProducts } from '../services/productService';
 import { getHomepageGrids } from '../services/homepageService';
 import ProductCard from '../components/ProductCard';
 import ImageSlider from '../components/ImageSlider';
+import usePageMeta from '../hooks/usePageMeta';
 
 const Home = () => {
+  usePageMeta("Prírodná kozmetika a henna na vlasy", "Vaša obľúbená prírodná kozmetika a henna na vlasy.");
+
   const [products, setProducts] = useState([]);
   const [homepageGrids, setHomepageGrids] = useState([]);
   const [page, setPage] = useState(0);

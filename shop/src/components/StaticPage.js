@@ -1,8 +1,11 @@
 import React, { useEffect } from 'react';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
+import usePageMeta from '../hooks/usePageMeta';
 
-const StaticPage = ({ title, children }) => {
+const StaticPage = ({ title, description, children }) => {
   const { setBreadcrumbs } = useBreadcrumbs();
+
+  usePageMeta(title, description);
 
   useEffect(() => {
     setBreadcrumbs([

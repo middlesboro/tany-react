@@ -16,6 +16,7 @@ import ProductJsonLd from '../components/ProductJsonLd';
 import StarRating from '../components/StarRating';
 import { addToWishlist, removeFromWishlist } from '../services/wishlistService';
 import { VAT_RATE } from '../utils/constants';
+import usePageMeta from '../hooks/usePageMeta';
 
 const REASONS = [
   "Sme malá Slovenská spoločnosť. Každú objednávku si vážime rovnako a tak k nej aj pristupujeme",
@@ -348,6 +349,8 @@ const ProductDetail = () => {
   const [isFullViewOpen, setIsFullViewOpen] = useState(false);
   const [inWishlist, setInWishlist] = useState(false);
   const [wishlistLoading, setWishlistLoading] = useState(false);
+
+  usePageMeta(product?.metaTitle || product?.title, product?.metaDescription);
 
   useEffect(() => {
     const fetchProduct = async () => {

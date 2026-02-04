@@ -4,7 +4,10 @@ import StaticPage from '../../components/StaticPage';
 
 const HennaNaObocie = () => {
   return (
-    <StaticPage title="Henna na obočie">
+    <StaticPage
+      title="Henna na obočie"
+      description="Ak vám sa už stalo, že ste pri farbení vlasov rozmýšľala či je možné hennu použiť aj na obočie? Odpoveď znie áno! Henna vie rovnako dobre zafarbiť vlasy ako aj obočie."
+    >
       <h2 className="text-xl font-semibold mt-6 mb-2">Môžem použiť hennu aj na obočie?</h2>
       <h3 className="text-lg font-medium mt-4 mb-2">Prírodné farbenie obočia hennou</h3>
       <p>

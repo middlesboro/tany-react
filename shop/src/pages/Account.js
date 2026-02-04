@@ -7,8 +7,10 @@ import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import ProductCard from '../components/ProductCard';
 import CustomerOrderList from '../components/CustomerOrderList';
 import CustomerOrderDetail from '../components/CustomerOrderDetail';
+import usePageMeta from '../hooks/usePageMeta';
 
 const Account = () => {
+  usePageMeta("Môj účet", "Správa vášho účtu a objednávok.");
   const navigate = useNavigate();
   const { tab, orderId } = useParams();
   const { setBreadcrumbs } = useBreadcrumbs();

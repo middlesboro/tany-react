@@ -4,7 +4,10 @@ import StaticPage from '../../components/StaticPage';
 
 const BezfarebnaHenna = () => {
   return (
-    <StaticPage title="Bezfarebná henna na vlasy">
+    <StaticPage
+      title="Bezfarebná henna na vlasy"
+      description="Keď sa povie henna, väčšina z nás si ihneď predstaví farbu na vlasy. Zvyčajne je dobre známe aj to, že farbenie hennou má množstvo zdravotných výhod pre naše vlasy."
+    >
       <h2 className="text-xl font-semibold mt-6 mb-2">Bezfarebná henna na vlasy</h2>
       <p>
         Keď sa povie henna, väčšina z nás si ihneď predstaví farbu na vlasy.

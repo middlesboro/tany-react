@@ -1,8 +1,10 @@
 import React, { useEffect } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { generatePKCE } from '../services/authService';
+import usePageMeta from '../hooks/usePageMeta';
 
 const MagicLinkPage = () => {
+  usePageMeta("Prihlasovanie...", "Prebieha prihlasovanie do systému.");
   const [searchParams] = useSearchParams();
   const token = searchParams.get('token');
 

@@ -3,6 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { getReviewsByBrand } from '../services/reviewService';
 import StarRating from '../components/StarRating';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
+import usePageMeta from '../hooks/usePageMeta';
 
 const BrandReviews = ({ brandIds: propBrandIds, brandId: propBrandId, title, description }) => {
   const { brandId: paramBrandId } = useParams();
@@ -18,6 +19,8 @@ const BrandReviews = ({ brandIds: propBrandIds, brandId: propBrandId, title, des
 
   const brandIdsKey = brandIds.join(',');
   const { setBreadcrumbs } = useBreadcrumbs();
+
+  usePageMeta(title, description);
 
   const [reviews, setReviews] = useState([]);
   const [stats, setStats] = useState({ averageRating: 0, reviewsCount: 0 });

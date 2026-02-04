@@ -4,7 +4,10 @@ import StaticPage from '../../components/StaticPage';
 
 const HennaNaVlasy = () => {
   return (
-    <StaticPage title="Najlepšia henna na vlasy">
+    <StaticPage
+      title="Najlepšia henna na vlasy"
+      description="Množstvo našich zákazníčok sa na nás obracia s otázkou, ktorá henna ja tá najlepšia a na túto otázku neexistuje jednoznačná odpoveď."
+    >
       <h2 className="text-xl font-semibold mt-6 mb-2">Najlepšia henna na vlasy</h2>
       <p>
         Množstvo našich zákazníčok sa na nás obracia s otázkou, ktorá henna ja

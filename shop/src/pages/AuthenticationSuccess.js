@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { useNavigate, useSearchParams } from 'react-router-dom';
 import { setToken, exchangeToken, getDecodedToken } from '../services/authService';
+import usePageMeta from '../hooks/usePageMeta';
 
 const AuthenticationSuccess = () => {
+  usePageMeta("Prihlasovanie...", "Prebieha prihlasovanie do systému.");
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const [error, setError] = useState('');

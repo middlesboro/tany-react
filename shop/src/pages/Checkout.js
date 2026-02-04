@@ -6,6 +6,7 @@ import { createOrder } from '../services/orderService';
 import { debounce } from '../utils/debounce';
 import { isValidName, isValidSlovakPhone, isValidSlovakZip, isValidEmail, checkEmailTypos } from '../utils/validation';
 import './Checkout.css';
+import usePageMeta from '../hooks/usePageMeta';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -13,6 +14,9 @@ const Checkout = () => {
   const [errors, setErrors] = useState({});
   const [warnings, setWarnings] = useState({});
   const { setBreadcrumbs } = useBreadcrumbs();
+
+  usePageMeta("Pokladňa", "Dokončite svoju objednávku.");
+
   const [selectedCarrier, setSelectedCarrier] = useState(null);
   const selectedCarrierRef = useRef(null);
   const [selectedPayment, setSelectedPayment] = useState(null);

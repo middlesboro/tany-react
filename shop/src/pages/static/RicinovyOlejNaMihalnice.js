@@ -4,7 +4,10 @@ import StaticPage from '../../components/StaticPage';
 
 const RicinovyOlejNaMihalnice = () => {
   return (
-    <StaticPage title="Ricínový olej na mihalnice">
+    <StaticPage
+      title="Ricínový olej na mihalnice"
+      description="Ricínový olej sa získava zo semien jednoročnej rastliny ricínovníka, rastúcej v tropických oblastiach. Má svetložltú farbu a obsahuje viac ako 90% kyseliny ricínovej, ktorá ma silné antibakteriálne účinky."
+    >
       <h2 className="text-xl font-semibold mt-6 mb-2">Ricínový olej na mihalnice</h2>
       <p>
         Ricínový olej sa získava zo semien jednoročnej rastliny ricínovníka,

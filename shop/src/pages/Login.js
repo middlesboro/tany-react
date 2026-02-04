@@ -2,8 +2,10 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { login } from '../services/authService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
+import usePageMeta from '../hooks/usePageMeta';
 
 const Login = ({ isAdmin = false }) => {
+  usePageMeta("Prihlásenie", "Prihláste sa do svojho účtu.");
   const { setBreadcrumbs } = useBreadcrumbs();
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');

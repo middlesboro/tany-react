@@ -5,10 +5,13 @@ import { Link } from 'react-router-dom';
 import CartItem from '../components/CartItem';
 import { VAT_RATE } from '../utils/constants';
 import './Cart.css';
+import usePageMeta from '../hooks/usePageMeta';
 
 const Cart = () => {
   const { cart, loading, addDiscount, removeDiscount, updateCart } = useCart();
   const { setBreadcrumbs } = useBreadcrumbs();
+
+  usePageMeta("Nákupný košík", "Skontrolujte si svoj nákupný košík.");
   const [discountCode, setDiscountCode] = useState('');
   const [discountError, setDiscountError] = useState(null);
   const [discountLoading, setDiscountLoading] = useState(false);

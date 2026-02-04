@@ -4,7 +4,10 @@ import StaticPage from '../../components/StaticPage';
 
 const NajkvalitnejsieFarbyNaVlasy = () => {
   return (
-    <StaticPage title="Najkvalitnejšie farby na vlasy">
+    <StaticPage
+      title="Najkvalitnejšie farby na vlasy"
+      description="Aby sme ľuďom pomohli nájsť dokonalú farbu vlasov pre ich jedinečný tón pleti, zostavili sme zoznam najkvalitnejších farieb na vlasy dostupných v našom eshope Tany.sk."
+    >
       <h2 className="text-xl font-semibold mt-6 mb-2">Najkvalitnejšie farby na vlasy</h2>
       <p>
         Aby sme ľuďom pomohli nájsť dokonalú farbu vlasov pre ich jedinečný tón

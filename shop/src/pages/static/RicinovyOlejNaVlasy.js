@@ -4,7 +4,10 @@ import StaticPage from '../../components/StaticPage';
 
 const RicinovyOlejNaVlasy = () => {
   return (
-    <StaticPage title="Ricínový olej na vlasy - prírodný záchranca vlasov">
+    <StaticPage
+      title="Ricínový olej na vlasy - prírodný záchranca vlasov"
+      description="Problémy s vlasmi poznáme skoro každý. Či už to je vypadávanie vlasov, rednutie, alebo štiepenie. Bohužiaľ našim životným štýlom, nedostatkom pohybu a nesprávnym stravovaním vlasom neposkytujeme všetky potrebné živiny na správny vývin."
+    >
       <h2 className="text-xl font-semibold mt-6 mb-2">Ricínový olej na vlasy - prírodný záchranca vlasov</h2>
       <p>
         Problémy s vlasmi poznáme skoro každý. Či už to je vypadávanie vlasov,
