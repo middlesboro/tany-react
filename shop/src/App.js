@@ -15,6 +15,7 @@ import BlogDetail from './pages/BlogDetail';
 import Account from './pages/Account';
 import PublicPage from './pages/PublicPage';
 import PacketaPage from './pages/PacketaPage';
+import Brands from './pages/Brands';
 import BrandReviews from './pages/BrandReviews';
 import MagicLinkPage from './pages/MagicLinkPage';
 import OAuthCallbackPage from './pages/OAuthCallbackPage';
@@ -65,6 +66,7 @@ function App() {
                 <Route path="/account/:tab" element={<Account />} />
                 <Route path="/account/orders/:orderId" element={<Account />} />
                 <Route path="/packeta" element={<PacketaPage />} />
+                <Route path="/ponukane-znacky" element={<Brands />} />
                 <Route path="/biokap-recenzie" element={
                   <BrandReviews
                     brandId="799185bf-064a-4c63-b02b-f0336b99ace4"
