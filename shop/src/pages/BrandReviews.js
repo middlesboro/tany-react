@@ -3,7 +3,7 @@ import { useParams, Link } from 'react-router-dom';
 import { getReviewsByBrand } from '../services/reviewService';
 import StarRating from '../components/StarRating';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
-import usePageMeta from '../hooks/usePageMeta';
+import SeoHead from '../components/SeoHead';
 
 const BrandReviews = ({ brandIds: propBrandIds, brandId: propBrandId, title, description }) => {
   const { brandId: paramBrandId } = useParams();
@@ -19,8 +19,6 @@ const BrandReviews = ({ brandIds: propBrandIds, brandId: propBrandId, title, des
 
   const brandIdsKey = brandIds.join(',');
   const { setBreadcrumbs } = useBreadcrumbs();
-
-  usePageMeta(title, description);
 
   const [reviews, setReviews] = useState([]);
   const [stats, setStats] = useState({ averageRating: 0, reviewsCount: 0 });
@@ -63,6 +61,7 @@ const BrandReviews = ({ brandIds: propBrandIds, brandId: propBrandId, title, des
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <SeoHead title={title} description={description} />
        {/* Breadcrumb-ish Link */}
        <Link to="/" className="inline-flex items-center text-gray-500 hover:text-tany-green mb-6 transition-colors text-sm font-medium">
         <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M10 19l-7-7m0 0l7-7m-7 7h18"></path></svg>

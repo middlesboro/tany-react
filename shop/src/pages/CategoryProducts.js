@@ -9,7 +9,7 @@ import CategoryFilter from '../components/CategoryFilter';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import useMediaQuery from '../hooks/useMediaQuery';
 import { serializeFilters, parseFilters } from '../utils/filterUrlUtils';
-import usePageMeta from '../hooks/usePageMeta';
+import SeoHead from '../components/SeoHead';
 
 const CategoryProductsContent = () => {
   const { slug } = useParams();
@@ -34,8 +34,6 @@ const CategoryProductsContent = () => {
 
   const isDesktop = useMediaQuery('(min-width: 768px)');
   const [portalTarget, setPortalTarget] = useState(null);
-
-  usePageMeta(category?.metaTitle || category?.title, category?.metaDescription);
 
   useEffect(() => {
     setPortalTarget(document.getElementById('sidebar-filter-root'));
@@ -211,6 +209,10 @@ const CategoryProductsContent = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <SeoHead
+        title={category?.metaTitle || category?.title}
+        description={category?.metaDescription}
+      />
       <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4 border-b border-gray-200 pb-4">
         <h1 className="text-xl font-bold uppercase text-gray-800">{category?.title}</h1>
 

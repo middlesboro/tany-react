@@ -16,7 +16,7 @@ import ProductJsonLd from '../components/ProductJsonLd';
 import StarRating from '../components/StarRating';
 import { addToWishlist, removeFromWishlist } from '../services/wishlistService';
 import { VAT_RATE } from '../utils/constants';
-import usePageMeta from '../hooks/usePageMeta';
+import SeoHead from '../components/SeoHead';
 
 const REASONS = [
   "Sme malá Slovenská spoločnosť. Každú objednávku si vážime rovnako a tak k nej aj pristupujeme",
@@ -350,8 +350,6 @@ const ProductDetail = () => {
   const [inWishlist, setInWishlist] = useState(false);
   const [wishlistLoading, setWishlistLoading] = useState(false);
 
-  usePageMeta(product?.metaTitle || product?.title, product?.metaDescription);
-
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
@@ -475,6 +473,13 @@ const ProductDetail = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <SeoHead
+        title={product.metaTitle || product.title}
+        description={product.metaDescription || product.description}
+        type="product"
+        image={product.images && product.images.length > 0 ? product.images[0] : null}
+        product={product}
+      />
       <ProductJsonLd product={product} />
       {/* Breadcrumb-ish Link */}
       <Link to="/" className="inline-flex items-center text-gray-500 hover:text-tany-green mb-6 transition-colors text-sm font-medium">

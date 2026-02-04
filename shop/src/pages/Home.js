@@ -3,11 +3,9 @@ import { getProducts } from '../services/productService';
 import { getHomepageGrids } from '../services/homepageService';
 import ProductCard from '../components/ProductCard';
 import ImageSlider from '../components/ImageSlider';
-import usePageMeta from '../hooks/usePageMeta';
+import SeoHead from '../components/SeoHead';
 
 const Home = () => {
-  usePageMeta("Prírodná kozmetika a henna na vlasy", "Vaša obľúbená prírodná kozmetika a henna na vlasy.");
-
   const [products, setProducts] = useState([]);
   const [homepageGrids, setHomepageGrids] = useState([]);
   const [page, setPage] = useState(0);
@@ -72,6 +70,10 @@ const Home = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <SeoHead
+        title="Prírodná kozmetika a henna na vlasy"
+        description="Vaša obľúbená prírodná kozmetika a henna na vlasy."
+      />
       <ImageSlider slides={slides} />
 
       {homepageGrids.map((grid) => (

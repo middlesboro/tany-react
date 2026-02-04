@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getPageBySlug } from '../services/pageService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
-import usePageMeta from '../hooks/usePageMeta';
+import SeoHead from '../components/SeoHead';
 
 const PublicPage = () => {
   const { slug } = useParams();
@@ -10,8 +10,6 @@ const PublicPage = () => {
   const [page, setPage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  usePageMeta(page?.metaTitle || page?.title, page?.metaDescription);
 
   useEffect(() => {
     const fetchPage = async () => {
@@ -60,6 +58,10 @@ const PublicPage = () => {
     <div className="container mx-auto px-4 py-8 overflow-x-hidden">
       {page && (
         <>
+          <SeoHead
+            title={page.metaTitle || page.title}
+            description={page.metaDescription}
+          />
           <h1 className="text-3xl font-bold mb-6 text-gray-800">{page.title}</h1>
           <div
             className="prose text-gray-700"
