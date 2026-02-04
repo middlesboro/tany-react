@@ -6,8 +6,8 @@ export const ORDER_STATUS_MAPPING = {
   'COD': 'Dobierka',
   'SENT': 'Odoslaná',
   'READY_FOR_PICKUP': 'Pripravená na vyzdvihnutie',
-  'PACKING': 'Pripravuje sa',
-  'PACKED': 'Zabalená',
+  'PACKING': 'Objednávka sa vybavuje',
+  'PACKED': 'Objednávka je zabalená a čaká na expedíciu',
   'DELIVERED': 'Doručená',
   'CANCELED': 'Zrušená'
 };
