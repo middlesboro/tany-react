@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getOrders } from '../services/orderService';
+import { ORDER_STATUS_MAPPING } from '../utils/constants';
 
 const CustomerOrderList = ({ onOrderSelect }) => {
   const [orders, setOrders] = useState([]);
@@ -73,7 +74,7 @@ const CustomerOrderList = ({ onOrderSelect }) => {
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <span className={`relative inline-block px-3 py-1 font-semibold leading-tight text-gray-900`}>
                     <span aria-hidden className="absolute inset-0 bg-gray-200 opacity-50 rounded-full"></span>
-                    <span className="relative">{order.status}</span>
+                    <span className="relative">{ORDER_STATUS_MAPPING[order.status] || order.status}</span>
                   </span>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
