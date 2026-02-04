@@ -1,5 +1,7 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import { getBrands } from '../services/brandService';
+import { removeDiacritics, customEncode } from '../utils/filterUrlUtils';
 
 const Brands = () => {
   const [brands, setBrands] = useState([]);
@@ -37,7 +39,11 @@ const Brands = () => {
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-6">
           {brands.map((brand) => (
-            <div key={brand.id} className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-100 flex flex-col items-center justify-center h-full">
+            <Link
+              key={brand.id}
+              to={`/category/vsetky-produkty?q=Brand-${customEncode(removeDiacritics(brand.name))}`}
+              className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-100 flex flex-col items-center justify-center h-full"
+            >
                <div className="w-full h-32 flex items-center justify-center mb-4 overflow-hidden p-2">
                  {brand.image ? (
                    <img
@@ -52,7 +58,7 @@ const Brands = () => {
                  )}
                </div>
                <h3 className="text-lg font-bold text-gray-800 text-center">{brand.name}</h3>
-            </div>
+            </Link>
           ))}
         </div>
       )}

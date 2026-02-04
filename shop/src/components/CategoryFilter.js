@@ -25,6 +25,20 @@ const CategoryFilter = ({ filterParameters, selectedFilters, onFilterChange }) =
     setIsOpen(!isOpen);
   };
 
+  const getDisplayName = (param) => {
+    if (param.type === 'BRAND') return 'Značka';
+    if (param.type === 'AVAILABILITY') return 'Dostupnosť';
+    return param.name;
+  };
+
+  const getDisplayValue = (param, val) => {
+    if (param.type === 'AVAILABILITY') {
+      if (val.name === 'ON_STOCK') return 'Skladom';
+      if (val.name === 'SOLD_OUT') return 'Vypredané';
+    }
+    return val.name;
+  };
+
   return (
     <div className="bg-white border border-gray-200 rounded-sm overflow-hidden mb-6">
       {/* Main Header */}
@@ -56,7 +70,7 @@ const CategoryFilter = ({ filterParameters, selectedFilters, onFilterChange }) =
                   onClick={() => toggleSection(param.id)}
                   className="w-full flex justify-between items-center py-4 px-2 hover:bg-gray-50 focus:outline-none"
                 >
-                  <h4 className="font-bold text-gray-800 text-sm uppercase">{param.name}</h4>
+                  <h4 className="font-bold text-gray-800 text-sm uppercase">{getDisplayName(param)}</h4>
                   <span className="text-gray-500">
                     {isExpanded ? (
                       <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
@@ -85,7 +99,7 @@ const CategoryFilter = ({ filterParameters, selectedFilters, onFilterChange }) =
                               className="h-4 w-4 text-tany-green focus:ring-tany-green border-gray-300 rounded"
                             />
                             <label htmlFor={`filter-${param.id}-${val.id}`} className="ml-2 text-sm text-gray-600 cursor-pointer hover:text-tany-green">
-                              {val.name}
+                              {getDisplayValue(param, val)}
                             </label>
                           </li>
                         );
