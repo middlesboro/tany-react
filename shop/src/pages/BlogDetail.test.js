@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
+import { HelmetProvider } from 'react-helmet-async';
 import BlogDetail from './BlogDetail';
 import { getBlog } from '../services/blogService';
 import { BreadcrumbProvider } from '../context/BreadcrumbContext';
@@ -11,13 +12,15 @@ jest.mock('../services/blogService');
 // Mock useParams by wrapping in MemoryRouter
 const renderWithRouter = (ui, { route = '/blog/1' } = {}) => {
   return render(
-    <BreadcrumbProvider>
-      <MemoryRouter initialEntries={[route]}>
-        <Routes>
-          <Route path="/blog/:id" element={ui} />
-        </Routes>
-      </MemoryRouter>
-    </BreadcrumbProvider>
+    <HelmetProvider>
+      <BreadcrumbProvider>
+        <MemoryRouter initialEntries={[route]}>
+          <Routes>
+            <Route path="/blog/:id" element={ui} />
+          </Routes>
+        </MemoryRouter>
+      </BreadcrumbProvider>
+    </HelmetProvider>
   );
 };
 

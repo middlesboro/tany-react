@@ -1,5 +1,7 @@
 import React from 'react';
 import { render, waitFor, screen } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import ProductDetail from './ProductDetail';
 import * as productService from '../services/productService';
 import * as categoryService from '../services/categoryService';
@@ -79,7 +81,13 @@ describe('ProductDetail Breadcrumbs', () => {
     productService.getProductBySlug.mockResolvedValue(mockProduct);
     categoryService.getCategories.mockResolvedValue(mockCategories);
 
-    render(<ProductDetail />);
+    render(
+      <HelmetProvider>
+        <MemoryRouter>
+          <ProductDetail />
+        </MemoryRouter>
+      </HelmetProvider>
+    );
 
     await waitFor(() => {
       expect(mockSetBreadcrumbs).toHaveBeenCalledWith([
@@ -116,7 +124,13 @@ describe('ProductDetail Breadcrumbs', () => {
     productService.getProductBySlug.mockResolvedValue(mockProduct);
     categoryService.getCategories.mockResolvedValue(mockCategories);
 
-    render(<ProductDetail />);
+    render(
+      <HelmetProvider>
+        <MemoryRouter>
+          <ProductDetail />
+        </MemoryRouter>
+      </HelmetProvider>
+    );
 
     await waitFor(() => {
         // Should find path: Domov -> Parent -> Child -> Product

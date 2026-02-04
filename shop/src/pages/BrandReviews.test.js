@@ -1,6 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { MemoryRouter, Routes, Route } from 'react-router-dom';
+import { HelmetProvider } from 'react-helmet-async';
 import BrandReviews from './BrandReviews';
 import { getReviewsByBrand } from '../services/reviewService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
@@ -20,11 +21,13 @@ describe('BrandReviews Page', () => {
 
   const renderComponent = (brandId = '123') => {
     return render(
-      <MemoryRouter initialEntries={[`/brand-reviews/${brandId}`]}>
-        <Routes>
-          <Route path="/brand-reviews/:brandId" element={<BrandReviews />} />
-        </Routes>
-      </MemoryRouter>
+      <HelmetProvider>
+        <MemoryRouter initialEntries={[`/brand-reviews/${brandId}`]}>
+          <Routes>
+            <Route path="/brand-reviews/:brandId" element={<BrandReviews />} />
+          </Routes>
+        </MemoryRouter>
+      </HelmetProvider>
     );
   };
 
@@ -89,14 +92,16 @@ describe('BrandReviews Page', () => {
 
     const brandIds = ['123', '456'];
     render(
-      <MemoryRouter>
-        <BrandReviews brandIds={brandIds} />
-      </MemoryRouter>
+      <HelmetProvider>
+        <MemoryRouter>
+          <BrandReviews brandIds={brandIds} />
+        </MemoryRouter>
+      </HelmetProvider>
     );
 
     await waitFor(() => {
         // We expect the first argument to be the array of brand IDs
-        expect(getReviewsByBrand).toHaveBeenCalledWith(['123', '456'], 0);
+        expect(getReviewsByBrand).toHaveBeenCalledWith(['123', '456'], 0, 30);
     });
   });
 });
