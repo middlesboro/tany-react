@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { getOrder } from '../services/orderService';
-import { VAT_RATE } from '../utils/constants';
+import { VAT_RATE, ORDER_STATUS_MAPPING } from '../utils/constants';
 
 const CustomerOrderDetail = ({ orderId, onBack }) => {
   const [order, setOrder] = useState(null);
@@ -45,7 +45,7 @@ const CustomerOrderDetail = ({ orderId, onBack }) => {
       <div className="border-b border-gray-200 pb-4 mb-4">
         <h2 className="text-2xl font-bold mb-2">Objednávka #{order.orderIdentifier}</h2>
         <div className="flex flex-wrap gap-4 text-sm text-gray-600">
-           <div><span className="font-bold">Stav:</span> {order.status}</div>
+           <div><span className="font-bold">Stav:</span> {ORDER_STATUS_MAPPING[order.status] || order.status}</div>
            <div><span className="font-bold">Platba:</span> {order.paymentName}</div>
            <div><span className="font-bold">Doprava:</span> {order.carrierName}</div>
         </div>
@@ -57,7 +57,7 @@ const CustomerOrderDetail = ({ orderId, onBack }) => {
           <ul className="space-y-2">
             {order.statusHistory.map((history, index) => (
               <li key={index} className="text-sm text-gray-700 flex items-center">
-                 <span className="font-semibold min-w-[120px]">{history.status}</span>
+                 <span className="font-semibold min-w-[120px]">{ORDER_STATUS_MAPPING[history.status] || history.status}</span>
                  <span className="text-gray-500">{new Date(history.createdAt).toLocaleString('sk-SK')}</span>
               </li>
             ))}
