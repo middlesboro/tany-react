@@ -183,6 +183,14 @@ const PublicLayout = () => {
                   Obchodné podmienky
                 </NavLink>
              </li>
+             <li>
+                <NavLink
+                  to="/ponukane-znacky"
+                  className={({ isActive }) => `block py-4 px-5 border-b-2 transition-all duration-200 ${isActive ? 'border-tany-green text-tany-green' : 'border-transparent hover:text-tany-green hover:border-tany-green'}`}
+                >
+                  Ponúkané značky
+                </NavLink>
+             </li>
            </ul>
         </div>
 
