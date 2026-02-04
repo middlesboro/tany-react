@@ -9,6 +9,7 @@ const OrderStatus = [
   'SENT',
   'READY_FOR_PICKUP',
   'PACKING',
+  'PACKED',
   'DELIVERED',
   'CANCELED'
 ];
