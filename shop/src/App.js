@@ -36,12 +36,14 @@ import { ModalProvider } from './context/ModalContext';
 import ScrollToTop from './components/ScrollToTop';
 import LoginModal from './components/LoginModal';
 import MessageModal from './components/MessageModal';
+import { HelmetProvider } from 'react-helmet-async';
 
 function App() {
   return (
-    <CartProvider>
-      <BreadcrumbProvider>
-        <ModalProvider>
+    <HelmetProvider>
+      <CartProvider>
+        <BreadcrumbProvider>
+          <ModalProvider>
           <Router>
             <ScrollToTop />
             <LoginModal />
@@ -139,9 +141,10 @@ Farby na vlasy Voono sú 100% prírodné, neobsahujú amoniak, peroxid ani žiad
               </Route>
             </Routes>
           </Router>
-        </ModalProvider>
-      </BreadcrumbProvider>
-    </CartProvider>
+          </ModalProvider>
+        </BreadcrumbProvider>
+      </CartProvider>
+    </HelmetProvider>
   );
 }
 

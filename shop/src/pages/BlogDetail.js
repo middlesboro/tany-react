@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getBlog } from '../services/blogService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
+import SeoHead from '../components/SeoHead';
 
 const BlogDetail = () => {
   const { id } = useParams();
@@ -62,6 +63,12 @@ const BlogDetail = () => {
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-4xl">
+      <SeoHead
+        title={blog.title}
+        description={blog.shortDescription || blog.description}
+        type="article"
+        image={blog.image}
+      />
       <div className="mb-8">
         <h1 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">{blog.title}</h1>
 

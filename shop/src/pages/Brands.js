@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { getBrands } from '../services/brandService';
 import { removeDiacritics, customEncode } from '../utils/filterUrlUtils';
+import SeoHead from '../components/SeoHead';
 
 const Brands = () => {
   const [brands, setBrands] = useState([]);
@@ -33,6 +34,7 @@ const Brands = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <SeoHead title="Ponúkané značky" description="Prezrite si zoznam všetkých značiek prírodnej kozmetiky a henny na vlasy, ktoré ponúkame na Tany.sk." />
       <h1 className="text-3xl font-bold mb-8 text-center text-gray-800">Ponúkané značky</h1>
       {brands.length === 0 ? (
         <p className="text-center text-gray-500">Momentálne neponúkame žiadne značky.</p>
