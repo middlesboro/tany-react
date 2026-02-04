@@ -4,7 +4,10 @@ import StaticPage from '../../components/StaticPage';
 
 const NajlepsiaFarbaNaVlasyBezAmoniaku = () => {
   return (
-    <StaticPage title="Najlepšia farba na vlasy bez amoniaku">
+    <StaticPage
+      title="Najlepšia farba na vlasy bez amoniaku"
+      description="V minulosti bol amoniak bežnou súčasťou farieb na vlasy a prakticky neexistovala farba bez amoniaku. Amoniak slúži vo farbe nato, aby sa farba dobre uchytila vo vlasoch."
+    >
       <h2 className="text-xl font-semibold mt-6 mb-2">Najlepšia farba na vlasy bez amoniaku</h2>
       <p>
         V minulosti bol amoniak bežnou súčasťou farieb na vlasy a prakticky

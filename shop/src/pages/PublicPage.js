@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { getPageBySlug } from '../services/pageService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
+import usePageMeta from '../hooks/usePageMeta';
 
 const PublicPage = () => {
   const { slug } = useParams();
@@ -9,6 +10,8 @@ const PublicPage = () => {
   const [page, setPage] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+
+  usePageMeta(page?.metaTitle || page?.title, page?.metaDescription);
 
   useEffect(() => {
     const fetchPage = async () => {

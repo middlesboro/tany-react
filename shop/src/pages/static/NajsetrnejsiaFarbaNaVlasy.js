@@ -4,7 +4,10 @@ import StaticPage from '../../components/StaticPage';
 
 const NajsetrnejsiaFarbaNaVlasy = () => {
   return (
-    <StaticPage title="Najšetrnejšia farba na vlasy">
+    <StaticPage
+      title="Najšetrnejšia farba na vlasy"
+      description="Nato aby sme mohli povedať, ktorá farba na vlasy je najšetrnejšia, musí spĺňať jedno dôležité kritérium. Farba musí byť 100% prírodná."
+    >
       <h2 className="text-xl font-semibold mt-6 mb-2">Najšetrnejšia farba na vlasy</h2>
       <p>
         Nato aby sme mohli povedať, ktorá farba na vlasy je najšetrnejšia, musí

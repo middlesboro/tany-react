@@ -4,7 +4,10 @@ import StaticPage from '../../components/StaticPage';
 
 const RysaveVlasy = () => {
   return (
-    <StaticPage title="Ako na ryšavé vlasy">
+    <StaticPage
+      title="Ako na ryšavé vlasy"
+      description="Ryšavá farba vlasov je najmenej vyskytujúca sa farba vlasov na svete. Približne len 1-2 percentá populácie je ryšavých. Je to z toho dôvodu, že nato aby ste mali ryšavé vlasy ich musíte zdediť po oboch rodičoch."
+    >
       <h2 className="text-xl font-semibold mt-6 mb-2">Ako na ryšavé vlasy</h2>
       <p>
         Ryšavá farba vlasov je najmenej vyskytujúca sa farba vlasov na svete.

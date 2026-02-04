@@ -4,7 +4,10 @@ import StaticPage from '../../components/StaticPage';
 
 const AlergiaNaFarby = () => {
   return (
-    <StaticPage title="Ako predísť alergii na farbu na vlasy">
+    <StaticPage
+      title="Ako predísť alergii na farbu na vlasy"
+      description="Zmeniť farbu vlasov je pre mnohé z nás veľké lákadlo, no predtým je dôležité zvážiť všetky možné dôsledky a jedným z nich je aj možnosť alergickej reakcie."
+    >
       <p>
         Zmeniť farbu vlasov je pre mnohé z nás veľké lákadlo, no predtým je
         dôležité zvážiť všetky možné dôsledky a jedným z nich je aj možnosť

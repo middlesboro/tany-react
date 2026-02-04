@@ -2,8 +2,10 @@ import React, { useEffect, useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { exchangeToken, setToken } from '../services/authService';
 import { useCart } from '../context/CartContext';
+import usePageMeta from '../hooks/usePageMeta';
 
 const OAuthCallbackPage = () => {
+  usePageMeta("Prihlasovanie...", "Dokončovanie prihlásenia.");
   const [searchParams] = useSearchParams();
   const navigate = useNavigate();
   const { refreshCustomer } = useCart();

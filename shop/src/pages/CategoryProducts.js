@@ -9,6 +9,7 @@ import CategoryFilter from '../components/CategoryFilter';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import useMediaQuery from '../hooks/useMediaQuery';
 import { serializeFilters, parseFilters } from '../utils/filterUrlUtils';
+import usePageMeta from '../hooks/usePageMeta';
 
 const CategoryProductsContent = () => {
   const { slug } = useParams();
@@ -33,6 +34,8 @@ const CategoryProductsContent = () => {
 
   const isDesktop = useMediaQuery('(min-width: 768px)');
   const [portalTarget, setPortalTarget] = useState(null);
+
+  usePageMeta(category?.metaTitle || category?.title, category?.metaDescription);
 
   useEffect(() => {
     setPortalTarget(document.getElementById('sidebar-filter-root'));

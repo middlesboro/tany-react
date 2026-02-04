@@ -4,7 +4,10 @@ import StaticPage from '../../components/StaticPage';
 
 const PrirodneFarbyNaVlasy = () => {
   return (
-    <StaticPage title="Prírodné farby na vlasy">
+    <StaticPage
+      title="Prírodné farby na vlasy"
+      description="Čoraz viac žien sa snaží používať a vyhľadávať, čo najprírodnejšie farby na vlasy, pretože si uvedomujú, ako veľmi škodia vlasom pri používaní klasických chemických farieb."
+    >
       <h2 className="text-xl font-semibold mt-6 mb-2">Prírodné farby na vlasy</h2>
       <p>
         Čoraz viac žien sa snaží používať a vyhľadávať, čo najprírodnejšie
