@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getCategory, createCategory, updateCategory, getCategories } from '../services/categoryAdminService';
+import { getFilterParameters } from '../services/filterParameterAdminService';
 import CategoryForm from '../components/CategoryForm';
 
 const CategoryEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [allCategories, setAllCategories] = useState([]);
+  const [allFilterParameters, setAllFilterParameters] = useState([]);
   const [category, setCategory] = useState({
     title: '',
     description: '',
@@ -15,6 +17,7 @@ const CategoryEdit = () => {
     slug: '',
     parentId: '',
     defaultCategory: false,
+    filterParameters: [],
   });
 
   useEffect(() => {
@@ -24,10 +27,19 @@ const CategoryEdit = () => {
     };
     fetchCategories();
 
+    const fetchFilterParameters = async () => {
+      const data = await getFilterParameters(0, 'name,asc', 1000);
+      setAllFilterParameters(data.content);
+    };
+    fetchFilterParameters();
+
     if (id) {
       const fetchCategory = async () => {
         const data = await getCategory(id);
-        setCategory(data);
+        setCategory({
+          ...data,
+          filterParameters: data.filterParameters || [],
+        });
       };
       fetchCategory();
     }
@@ -61,6 +73,7 @@ const CategoryEdit = () => {
         handleSubmit={handleSubmit}
         categories={allCategories.filter((c) => c.id !== id)}
         handleParentChange={handleParentChange}
+        filterParameters={allFilterParameters}
       />
     </div>
   );
