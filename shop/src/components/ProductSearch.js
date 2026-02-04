@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { searchProducts } from '../services/productService';
+import { logSearch, logSelectItem } from '../utils/analytics';
 
 const ProductSearch = () => {
   const [query, setQuery] = useState('');
@@ -49,7 +50,16 @@ const ProductSearch = () => {
     return () => clearTimeout(timeoutId);
   }, [query]);
 
+  // GA4: Log search
+  useEffect(() => {
+      if (showResults && results.length > 0) {
+          logSearch(query);
+      }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [results, showResults]); // Log when results are displayed
+
   const handleProductClick = (product) => {
+    logSelectItem(product);
     navigate(`/product/${product.slug}`);
     setShowResults(false);
     setQuery('');

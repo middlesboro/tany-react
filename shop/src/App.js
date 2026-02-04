@@ -37,6 +37,16 @@ import ScrollToTop from './components/ScrollToTop';
 import LoginModal from './components/LoginModal';
 import MessageModal from './components/MessageModal';
 import { HelmetProvider } from 'react-helmet-async';
+import { initGA } from './utils/analytics';
+import usePageTracking from './hooks/usePageTracking';
+
+// Initialize GA
+initGA();
+
+const PageTracker = () => {
+  usePageTracking();
+  return null;
+};
 
 function App() {
   return (
@@ -45,6 +55,7 @@ function App() {
         <BreadcrumbProvider>
           <ModalProvider>
           <Router>
+            <PageTracker />
             <ScrollToTop />
             <LoginModal />
             <MessageModal />

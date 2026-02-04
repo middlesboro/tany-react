@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { getBlog } from '../services/blogService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import SeoHead from '../components/SeoHead';
+import { logViewBlogPost } from '../utils/analytics';
 
 const BlogDetail = () => {
   const { id } = useParams();
@@ -21,6 +22,7 @@ const BlogDetail = () => {
             { label: 'Domov', path: '/' },
             { label: data.title, path: null } // Or { label: 'Blog', path: '/blog' }, { label: data.title, path: null } if a blog index exists
           ]);
+          logViewBlogPost(data);
         } else {
           setError('Blog not found');
         }

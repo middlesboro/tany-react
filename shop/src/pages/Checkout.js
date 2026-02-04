@@ -7,6 +7,7 @@ import { debounce } from '../utils/debounce';
 import { isValidName, isValidSlovakPhone, isValidSlovakZip, isValidEmail, checkEmailTypos } from '../utils/validation';
 import './Checkout.css';
 import usePageMeta from '../hooks/usePageMeta';
+import { logBeginCheckout, logAddShippingInfo, logAddPaymentInfo } from '../utils/analytics';
 
 const Checkout = () => {
   const navigate = useNavigate();
@@ -48,6 +49,39 @@ const Checkout = () => {
   // Dynamic data from cart
   const carriers = cart?.carriers || [];
   const payments = cart?.payments || [];
+
+  // GA4 Events
+  const beginCheckoutLogged = useRef(false);
+
+  useEffect(() => {
+     if (initialized && cart && !beginCheckoutLogged.current) {
+        const items = cart.items || cart.products || [];
+        if (items.length > 0) {
+            logBeginCheckout(cart);
+            beginCheckoutLogged.current = true;
+        }
+     }
+  }, [initialized, cart]);
+
+  useEffect(() => {
+     if (selectedCarrier && initialized && cart) {
+         const carrier = carriers.find(c => c.id === selectedCarrier);
+         if (carrier) {
+             logAddShippingInfo(carrier, cart);
+         }
+     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedCarrier]); // Only when selection changes, assuming initialized/cart don't change meaningfully for this event context effectively
+
+  useEffect(() => {
+     if (selectedPayment && initialized && cart) {
+         const payment = payments.find(p => p.id === selectedPayment);
+         if (payment) {
+             logAddPaymentInfo(payment, cart);
+         }
+     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selectedPayment]);
 
   useEffect(() => {
       selectedCarrierRef.current = selectedCarrier;
