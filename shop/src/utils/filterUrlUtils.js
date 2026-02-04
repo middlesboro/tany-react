@@ -1,11 +1,11 @@
 
 // Helper to remove diacritics
-const removeDiacritics = (str) => {
+export const removeDiacritics = (str) => {
   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 };
 
 // Custom encoder: escapes only delimiters and % to preserve structure and allow "pretty" UTF-8
-const customEncode = (str) => {
+export const customEncode = (str) => {
   return str
     .replace(/%/g, '%25') // Must be first
     .replace(/-/g, '%2D')
