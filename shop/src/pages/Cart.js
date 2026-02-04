@@ -6,6 +6,7 @@ import CartItem from '../components/CartItem';
 import { VAT_RATE } from '../utils/constants';
 import './Cart.css';
 import usePageMeta from '../hooks/usePageMeta';
+import { logViewCart, logGenerateLead } from '../utils/analytics';
 
 const Cart = () => {
   const { cart, loading, addDiscount, removeDiscount, updateCart } = useCart();
@@ -22,6 +23,18 @@ const Cart = () => {
       { label: 'Nákupný košík', path: null }
     ]);
   }, [setBreadcrumbs]);
+
+  // GA4: Log view_cart
+  const viewCartLogged = React.useRef(false);
+  useEffect(() => {
+    if (!loading && cart && !viewCartLogged.current) {
+        const items = cart.items || cart.products || [];
+        if (items.length > 0) {
+            logViewCart(cart);
+            viewCartLogged.current = true;
+        }
+    }
+  }, [cart, loading]);
 
   const handleApplyDiscount = async (e) => {
     e.preventDefault();
@@ -59,6 +72,9 @@ const Cart = () => {
         cartId,
         discountForNewsletter: checked
       });
+      if (checked) {
+          logGenerateLead("Newsletter Cart");
+      }
     } catch (err) {
       console.error("Failed to update newsletter discount", err);
     }

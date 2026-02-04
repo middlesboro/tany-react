@@ -5,6 +5,7 @@ import { getPaymentInfo, checkBesteronStatus } from '../services/paymentService'
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import useNoIndex from '../hooks/useNoIndex';
 import usePageMeta from '../hooks/usePageMeta';
+import { logPurchase } from '../utils/analytics';
 
 const OrderConfirmation = () => {
   useNoIndex();
@@ -54,6 +55,14 @@ const OrderConfirmation = () => {
 
         if (!isPaid && data.paymentType !== 'COD') {
             setShowPaymentInfo(true);
+        }
+
+        // GA4: Log purchase
+        // Use sessionStorage to prevent duplicate logging on refresh
+        const key = `ga_logged_order_${data.id}`;
+        if (!sessionStorage.getItem(key)) {
+             logPurchase(data);
+             sessionStorage.setItem(key, 'true');
         }
 
       } catch (err) {

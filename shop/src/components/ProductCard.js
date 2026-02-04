@@ -8,6 +8,7 @@ import ProductJsonLd from './ProductJsonLd';
 import StarRating from './StarRating';
 import { addToWishlist, removeFromWishlist } from '../services/wishlistService';
 import { isAuthenticated } from '../services/authService';
+import { logSelectItem, logAddToCart, logAddToWishlist } from '../utils/analytics';
 
 const ProductCard = ({ product }) => {
   const { addToCart, cart } = useCart();
@@ -41,6 +42,7 @@ const ProductCard = ({ product }) => {
     setAdding(true);
     try {
       await addToCart(product.id, quantity);
+      logAddToCart(product, quantity);
     } catch (error) {
       if (error.status === 400) {
           openMessageModal("Upozornenie", "Pre tento produkt nie je na sklade dostatočné množstvo.");
@@ -68,6 +70,7 @@ const ProductCard = ({ product }) => {
       } else {
         await addToWishlist(product.id);
         setInWishlist(true);
+        logAddToWishlist(product);
       }
     } catch (error) {
       console.error("Wishlist action failed", error);
@@ -109,7 +112,11 @@ const ProductCard = ({ product }) => {
             </svg>
         </button>
 
-      <Link to={`/product/${product.slug}`} className="block relative overflow-hidden flex-shrink-0 aspect-square">
+      <Link
+        to={`/product/${product.slug}`}
+        className="block relative overflow-hidden flex-shrink-0 aspect-square"
+        onClick={() => logSelectItem(product)}
+      >
          {/* Overlay on hover not typically used in this specific prestashop theme, but image zoom/swap is common.
              We keep it simple but cleaner. */}
         {product.images && product.images.length > 0 ? (
@@ -126,7 +133,11 @@ const ProductCard = ({ product }) => {
       </Link>
 
       <div className="p-2 md:p-4 flex flex-col flex-grow text-center">
-        <Link to={`/product/${product.slug}`} className="block mb-2">
+        <Link
+            to={`/product/${product.slug}`}
+            className="block mb-2"
+            onClick={() => logSelectItem(product)}
+        >
           <h3 className="text-sm font-normal text-gray-800 hover:text-tany-green transition-colors leading-relaxed h-10 overflow-hidden" title={product.title}>
               {product.title}
           </h3>

@@ -17,6 +17,7 @@ import StarRating from '../components/StarRating';
 import { addToWishlist, removeFromWishlist } from '../services/wishlistService';
 import { VAT_RATE } from '../utils/constants';
 import SeoHead from '../components/SeoHead';
+import { logViewItem, logAddToCart, logAddToWishlist, logGenerateLead, logOutOfStockNotify } from '../utils/analytics';
 
 const REASONS = [
   "Sme malá Slovenská spoločnosť. Každú objednávku si vážime rovnako a tak k nej aj pristupujeme",
@@ -44,6 +45,8 @@ const StockNotificationForm = ({ productId }) => {
     try {
       await createEmailNotification({ productId, email });
       setSuccess(true);
+      logOutOfStockNotify(productId);
+      logGenerateLead("Stock Notification");
     } catch (err) {
       setError('Nepodarilo sa vytvoriť upozornenie. Skúste to neskôr.');
     } finally {
@@ -392,6 +395,9 @@ const ProductDetail = () => {
         crumbs.push({ label: data.title, path: null }); // Current product
         setBreadcrumbs(crumbs);
 
+        // GA4: Log view_item
+        logViewItem(data);
+
         try {
           const related = await getRelatedProducts(data.id);
           setRelatedProducts(Array.isArray(related) ? related.slice(0, 5) : []);
@@ -415,6 +421,7 @@ const ProductDetail = () => {
     setAdding(true);
     try {
       await addToCart(product.id, quantity);
+      logAddToCart(product, quantity);
       // Optional: Add a toast notification here
     } catch (err) {
       if (err.status === 400) {
@@ -446,6 +453,7 @@ const ProductDetail = () => {
         } else {
             await addToWishlist(product.id);
             setInWishlist(true);
+            logAddToWishlist(product);
         }
     } catch (error) {
         console.error("Wishlist action failed", error);

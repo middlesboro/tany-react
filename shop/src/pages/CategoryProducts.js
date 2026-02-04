@@ -10,6 +10,7 @@ import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import useMediaQuery from '../hooks/useMediaQuery';
 import { serializeFilters, parseFilters } from '../utils/filterUrlUtils';
 import SeoHead from '../components/SeoHead';
+import { logViewItemList } from '../utils/analytics';
 
 const CategoryProductsContent = () => {
   const { slug } = useParams();
@@ -142,6 +143,12 @@ const CategoryProductsContent = () => {
     window.scrollTo(0, 0);
   }, [category, initialFacets, selectedFilters, page, sort, size]);
 
+  // GA4: Log view_item_list
+  useEffect(() => {
+    if (products.length > 0 && category) {
+      logViewItemList(products, category.title);
+    }
+  }, [products, category]);
 
   // Handlers
   const handleFilterChange = (paramId, valueId, checked) => {

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { useCart } from '../context/CartContext';
 import { useModal } from '../context/ModalContext';
+import { logRemoveFromCart } from '../utils/analytics';
 
 const CartItem = ({ item }) => {
   const { addToCart, removeFromCart } = useCart();
@@ -39,6 +40,7 @@ const CartItem = ({ item }) => {
 
   const handleRemove = async () => {
     setUpdating(true);
+    logRemoveFromCart(item);
     try {
       await removeFromCart(item.productId || item.id);
     } catch (error) {
