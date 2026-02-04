@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
+import { BrowserRouter } from 'react-router-dom';
 import Brands from './Brands';
 import * as brandService from '../services/brandService';
 
@@ -34,14 +35,14 @@ describe('Brands Page', () => {
 
   test('renders loading state initially', () => {
     brandService.getBrands.mockReturnValue(new Promise(() => {})); // Never resolves
-    render(<Brands />);
+    render(<Brands />, { wrapper: BrowserRouter });
     expect(screen.getByText('Načítavam...')).toBeInTheDocument();
   });
 
   test('renders brands after loading', async () => {
     brandService.getBrands.mockResolvedValue({ content: mockBrands });
 
-    render(<Brands />);
+    render(<Brands />, { wrapper: BrowserRouter });
 
     // Should wait for loading to finish
     await waitFor(() => {
@@ -64,7 +65,7 @@ describe('Brands Page', () => {
   test('renders error message on failure', async () => {
     brandService.getBrands.mockRejectedValue(new Error('Network error'));
 
-    render(<Brands />);
+    render(<Brands />, { wrapper: BrowserRouter });
 
     await waitFor(() => {
         expect(screen.getByText('Nepodarilo sa načítať značky.')).toBeInTheDocument();
@@ -74,7 +75,7 @@ describe('Brands Page', () => {
   test('renders empty state when no brands', async () => {
       brandService.getBrands.mockResolvedValue({ content: [] });
 
-      render(<Brands />);
+      render(<Brands />, { wrapper: BrowserRouter });
 
       await waitFor(() => {
           expect(screen.getByText('Momentálne neponúkame žiadne značky.')).toBeInTheDocument();
