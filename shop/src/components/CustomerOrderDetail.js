@@ -30,6 +30,9 @@ const CustomerOrderDetail = ({ orderId, onBack }) => {
   if (error) return <div className="text-center py-8 text-red-600">{error}</div>;
   if (!order) return null;
 
+  const deliveryItem = order.priceBreakDown?.items?.find(i => i.type === 'CARRIER');
+  const deliveryPrice = deliveryItem ? deliveryItem.priceWithVat : (order.deliveryPrice || 0);
+
   return (
     <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <button
@@ -167,7 +170,7 @@ const CustomerOrderDetail = ({ orderId, onBack }) => {
            <div className="flex justify-between py-2 border-b border-gray-100">
              <span className="text-gray-600">Doprava:</span>
              <span className="font-medium">
-                {order.deliveryPrice ? order.deliveryPrice.toFixed(2) : '0.00'} €
+                {deliveryPrice.toFixed(2)} €
              </span>
            </div>
            <div className="flex justify-between py-2 border-b border-gray-100">
