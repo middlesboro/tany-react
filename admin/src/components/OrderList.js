@@ -122,6 +122,18 @@ const OrderList = () => {
     });
   };
 
+  const handleStatusChange = (value) => {
+    setFilter({
+      ...filter,
+      status: value,
+    });
+  };
+
+  const statusOptions = Object.entries(ORDER_STATUS_MAPPING).map(([key, value]) => ({
+    id: key,
+    name: value,
+  }));
+
   return (
     <div>
       {/* Filter Section */}
@@ -141,15 +153,12 @@ const OrderList = () => {
             />
           </div>
           <div>
-            <label className="block text-gray-700">Status</label>
-            <input
-              type="text"
-              name="status"
+            <SearchSelect
+              label="Status"
+              options={statusOptions}
               value={filter.status}
-              onChange={handleFilterChange}
-              onKeyDown={(e) => e.key === 'Enter' && handleFilterSubmit()}
-              placeholder="Status"
-              className="w-full px-3 py-2 border rounded"
+              onChange={handleStatusChange}
+              placeholder="Select Status"
             />
           </div>
           <div>

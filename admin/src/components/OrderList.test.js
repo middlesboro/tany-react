@@ -97,8 +97,12 @@ describe('OrderList', () => {
       expect(orderAdminService.getOrders).toHaveBeenCalled();
     });
 
-    const statusInput = screen.getByPlaceholderText('Status');
-    fireEvent.change(statusInput, { target: { value: 'PAID' } });
+    const statusInput = screen.getByPlaceholderText('Select Status');
+    fireEvent.focus(statusInput);
+    fireEvent.change(statusInput, { target: { value: 'Zap' } });
+
+    const option = await screen.findByText('Zaplatená');
+    fireEvent.click(option);
 
     const filterButton = screen.getByText('Filter');
     fireEvent.click(filterButton);
@@ -151,7 +155,7 @@ describe('OrderList', () => {
       );
     });
 
-    expect(screen.getByPlaceholderText('Status')).toHaveValue('DELIVERED');
+    expect(screen.getByPlaceholderText('Select Status')).toHaveValue('Doručená');
   });
 
   test('handles order duplication correctly', async () => {
