@@ -14,7 +14,7 @@ import CategoryProducts from './pages/CategoryProducts';
 import BlogDetail from './pages/BlogDetail';
 import Account from './pages/Account';
 import PublicPage from './pages/PublicPage';
-import PacketaPage from './pages/PacketaPage';
+import PickupPointsPage from './pages/PickupPointsPage';
 import Brands from './pages/Brands';
 import BrandReviews from './pages/BrandReviews';
 import MagicLinkPage from './pages/MagicLinkPage';
@@ -78,7 +78,7 @@ function App() {
                 <Route path="/account" element={<Navigate to="/account/personal-data" replace />} />
                 <Route path="/account/:tab" element={<Account />} />
                 <Route path="/account/orders/:orderId" element={<Account />} />
-                <Route path="/packeta" element={<PacketaPage />} />
+                <Route path="/odberne-miesta" element={<PickupPointsPage />} />
                 <Route path="/ponukane-znacky" element={<Brands />} />
                 <Route path="/biokap-recenzie" element={
                   <BrandReviews
