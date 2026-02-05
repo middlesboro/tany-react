@@ -4,6 +4,7 @@ import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import { Link } from 'react-router-dom';
 import CartItem from '../components/CartItem';
 import ProductCard from '../components/ProductCard';
+import QuantityChangeNotification from '../components/QuantityChangeNotification';
 import { VAT_RATE } from '../utils/constants';
 import './Cart.css';
 import usePageMeta from '../hooks/usePageMeta';
@@ -132,6 +133,7 @@ const Cart = () => {
       <div className="cart-page">
          <div className="container">
             <h1>Nákupný košík</h1>
+            {cart && <QuantityChangeNotification changes={cart.quantityChanges} />}
             <div className="card text-center" style={{ padding: '60px 20px' }}>
                 <p className="muted mb-6" style={{ marginBottom: '24px', fontSize: '16px' }}>Váš košík je prázdny.</p>
                 <Link className="btn" style={{ maxWidth: '300px', margin: '0 auto' }} to="/">
@@ -147,6 +149,8 @@ const Cart = () => {
     <div className="cart-page">
       <div className="container">
         <h1>Nákupný košík</h1>
+
+        {cart && <QuantityChangeNotification changes={cart.quantityChanges} />}
 
         <div className="cart-layout">
            {/* Items Column */}

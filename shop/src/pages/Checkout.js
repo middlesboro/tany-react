@@ -6,6 +6,7 @@ import { createOrder } from '../services/orderService';
 import { debounce } from '../utils/debounce';
 import { isValidName, isValidSlovakPhone, isValidSlovakZip, isValidEmail, checkEmailTypos } from '../utils/validation';
 import './Checkout.css';
+import QuantityChangeNotification from '../components/QuantityChangeNotification';
 import usePageMeta from '../hooks/usePageMeta';
 import { logBeginCheckout, logAddShippingInfo, logAddPaymentInfo } from '../utils/analytics';
 
@@ -519,6 +520,8 @@ const Checkout = () => {
     <div className="checkout-page">
       <div className="container">
         <h1>Objednávka</h1>
+
+        {cart && <QuantityChangeNotification changes={cart.quantityChanges} />}
 
         <form onSubmit={handleSubmit} noValidate>
           {/* Step 1: Osobné údaje */}
