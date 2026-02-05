@@ -6,3 +6,8 @@
 .prose p {
   min-height: 1.5em;
 }
+
+/* Style links in blog content as CTA buttons */
+.blog-content a {
+  @apply inline-flex items-center justify-center bg-tany-green text-white font-bold rounded px-4 py-2 hover:bg-green-700 transition-colors shadow-sm uppercase tracking-wide no-underline;
+}
