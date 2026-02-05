@@ -29,12 +29,53 @@ const OrderForm = ({
   const selectedCarrier = carriers.find(c => c.id === order.carrierId);
   const isPacketa = selectedCarrier && selectedCarrier.type === 'PACKETA';
 
+  const enrichedPriceBreakDown = React.useMemo(() => {
+    if (!order.priceBreakDown || !order.priceBreakDown.items) return order.priceBreakDown;
+
+    const productMap = new Map();
+    if (order.items) {
+      order.items.forEach(item => {
+        const pId = item.productId || item.id;
+        if (pId) productMap.set(String(pId), item);
+        if (item.name) productMap.set(item.name, item);
+      });
+    }
+
+    const newItems = order.priceBreakDown.items.map(pdItem => {
+      if (pdItem.type === 'PRODUCT') {
+        let match = null;
+        if (pdItem.productId) {
+          match = productMap.get(String(pdItem.productId));
+        } else if (pdItem.id) {
+          match = productMap.get(String(pdItem.id));
+        }
+
+        if (!match && pdItem.name) {
+          match = productMap.get(pdItem.name);
+        }
+
+        if (match) {
+          const quantity = match.currentQuantity !== undefined ? match.currentQuantity : match.stockQuantity;
+          if (quantity !== undefined) {
+            return { ...pdItem, currentQuantity: quantity };
+          }
+        }
+      }
+      return pdItem;
+    });
+
+    return {
+      ...order.priceBreakDown,
+      items: newItems
+    };
+  }, [order.priceBreakDown, order.items]);
+
   const getOutOfStockItems = () => {
     if (isCreateMode) {
       return (order.items || []).filter(item => item.stockQuantity !== undefined && item.stockQuantity <= 0);
     } else {
-      if (!order.priceBreakDown || !order.priceBreakDown.items) return [];
-      return order.priceBreakDown.items.filter(item => item.type === 'PRODUCT' && item.currentQuantity !== undefined && item.currentQuantity <= 0);
+      if (!enrichedPriceBreakDown || !enrichedPriceBreakDown.items) return [];
+      return enrichedPriceBreakDown.items.filter(item => item.type === 'PRODUCT' && item.currentQuantity !== undefined && item.currentQuantity <= 0);
     }
   };
 
@@ -361,8 +402,8 @@ const OrderForm = ({
                 onUpdateItem={onUpdateItem}
             />
         ) : (
-            order.priceBreakDown ? (
-                <PriceBreakdown priceBreakDown={order.priceBreakDown} showItems={true} />
+            enrichedPriceBreakDown ? (
+                <PriceBreakdown priceBreakDown={enrichedPriceBreakDown} showItems={true} />
             ) : (
                 <div className="text-gray-500">No price breakdown available.</div>
             )
