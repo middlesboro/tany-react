@@ -36,7 +36,7 @@ const Cart = () => {
                   UPSELL_CATEGORY_ID,
                   { filterParameters: [] },
                   0,
-                  'title,asc',
+                  'NAME_ASC',
                   6
               );
               if (data && data.products && data.products.content) {
