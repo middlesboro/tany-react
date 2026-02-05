@@ -6,3 +6,20 @@
 .prose p {
   min-height: 1.5em;
 }
+
+/* Quill Video Responsive Support */
+.ql-video, .prose iframe {
+  @apply w-full aspect-video;
+  height: auto;
+}
+
+/* Quill Alignment Support */
+.ql-align-center {
+  text-align: center;
+}
+.ql-align-right {
+  text-align: right;
+}
+.ql-align-justify {
+  text-align: justify;
+}
