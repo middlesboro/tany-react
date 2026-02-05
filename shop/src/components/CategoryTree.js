@@ -7,6 +7,7 @@ const CategoryTreeItem = ({ category }) => {
   const hasChildren = category.children && category.children.length > 0;
 
   const isActive = location.pathname === `/category/${category.slug}`;
+  const isSale = ['výpredaj', 'vypredaj'].includes(category.title.toLowerCase());
 
   const hasActiveDescendant = useMemo(() => {
     const check = (cats) => {
@@ -33,7 +34,13 @@ const CategoryTreeItem = ({ category }) => {
       <div className={`flex items-center justify-between transition-colors ${isActive ? 'bg-gray-50' : 'hover:bg-gray-50'}`}>
         <Link
           to={`/category/${category.slug}`}
-          className={`block py-3 px-4 text-sm flex-grow ${isActive ? 'font-bold text-tany-green' : 'text-gray-700 hover:text-tany-green'}`}
+          className={`block py-3 px-4 text-sm flex-grow ${
+            isSale
+              ? 'bg-red-600 text-white font-bold hover:bg-red-700'
+              : isActive
+              ? 'font-bold text-tany-green'
+              : 'text-gray-700 hover:text-tany-green'
+          }`}
         >
           {category.title}
         </Link>

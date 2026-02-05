@@ -258,6 +258,24 @@ const CategoryProductsContent = () => {
         </div>
       </div>
 
+      {/* Banner for Henna na vlasy */}
+      {(category?.slug === 'henna-na-vlasy' || category?.title === 'Henna na vlasy') && (
+        <div className="mb-8">
+          <a
+            href="https://www.facebook.com/groups/1591395294237008/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="block"
+          >
+            <img
+              src="https://www.tany.sk/img/cms/Henn%20FB%20poradna.jpg"
+              alt="Henna FB Poradňa"
+              className="w-full h-auto rounded-sm shadow-sm"
+            />
+          </a>
+        </div>
+      )}
+
       {/* Mobile Filter */}
       {!isDesktop && (
         <CategoryFilter

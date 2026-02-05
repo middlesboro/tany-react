@@ -28,7 +28,12 @@ const PriceBreakdown = ({ priceBreakDown, showItems = false }) => {
                                     className="w-10 h-10 object-cover mr-3 rounded"
                                 />
                             )}
-                            <span>{item.name} {item.quantity > 1 ? `(${item.quantity} ks)` : ''}</span>
+                            <div>
+                                <div>{item.name}</div>
+                                <div className="text-xs text-gray-500">
+                                    Objednané: {item.quantity} ks, Skladom: {item.currentQuantity !== undefined ? item.currentQuantity : '-'} ks
+                                </div>
+                            </div>
                         </div>
                         <span>{item.priceWithVat} €</span>
                     </div>
