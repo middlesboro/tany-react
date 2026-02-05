@@ -65,7 +65,7 @@ const PickupPointsPage = () => {
 
       {/* Packeta Section */}
       <section className="mb-16">
-        <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Packeta / Zásielkovňa</h2>
+        <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Packeta / Balíkovo</h2>
         <p className="mb-8 text-gray-600">
           Packeta je sieť partnerských predajní a prevádzok, na ktorých si
           môžete prevziať tovar zakúpený v našom eshope.
