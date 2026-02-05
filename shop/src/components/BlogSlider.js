@@ -81,17 +81,19 @@ const BlogSlider = ({ blogs }) => {
                 <div key={`${blog.id}-${idx}`} className="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-100 flex flex-col h-full">
                     {/* Image Section */}
                     <div className="h-48 relative overflow-hidden">
-                        {blog.image ? (
-                            <img
-                                src={blog.image}
-                                alt={blog.title}
-                                className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
-                            />
-                        ) : (
-                            <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
-                                Bez obrázku
-                            </div>
-                        )}
+                        <Link to={`/blog/${blog.id}`} className="block w-full h-full">
+                            {blog.image ? (
+                                <img
+                                    src={blog.image}
+                                    alt={blog.title}
+                                    className="w-full h-full object-cover transition-transform duration-500 hover:scale-105"
+                                />
+                            ) : (
+                                <div className="w-full h-full bg-gray-200 flex items-center justify-center text-gray-400">
+                                    Bez obrázku
+                                </div>
+                            )}
+                        </Link>
                     </div>
 
                     {/* Content Section */}
