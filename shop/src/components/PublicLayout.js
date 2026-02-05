@@ -151,6 +151,14 @@ const PublicLayout = () => {
                   Domov
                 </NavLink>
              </li>
+               <li>
+                   <NavLink
+                       to="/packeta"
+                       className={({ isActive }) => `block py-4 px-5 border-b-2 transition-all duration-200 ${isActive ? 'border-tany-green text-tany-green' : 'border-transparent hover:text-tany-green hover:border-tany-green'}`}
+                   >
+                       Odberné miesta
+                   </NavLink>
+               </li>
              <li>
                 <NavLink
                   to="/doprava"
@@ -255,11 +263,46 @@ const PublicLayout = () => {
             <div>
               <h4 className="font-bold text-gray-800 text-lg mb-4 uppercase">Informácie</h4>
               <ul className="space-y-2">
-                <li><a href="#" className="hover:text-tany-green transition-colors">Obchodné podmienky</a></li>
-                <li><a href="#" className="hover:text-tany-green transition-colors">Doprava</a></li>
-                <li><a href="#" className="hover:text-tany-green transition-colors">Možnosti platby</a></li>
-                <li><a href="#" className="hover:text-tany-green transition-colors">Newsletter – ochrana údajov</a></li>
-                <li><a href="#" className="hover:text-tany-green transition-colors">Reklamácie</a></li>
+                <li>
+                    <NavLink
+                        to="/doprava"
+                        className="hover:text-tany-green transition-colors"
+                    >
+                        Doprava
+                    </NavLink>
+                </li>
+                <li>
+                    <NavLink
+                        to="/moznosti-platby"
+                        className="hover:text-tany-green transition-colors"
+                    >
+                        Možnosti platby
+                    </NavLink>
+                </li>
+                  <li>
+                      <NavLink
+                          to="/obchodne-podmienky"
+                          className="hover:text-tany-green transition-colors"
+                      >
+                          Obchodné podmienky
+                      </NavLink>
+                  </li>
+                <li>
+                    <NavLink
+                        to="/reklamacie-a-vratenie-tovaru"
+                        className="hover:text-tany-green transition-colors"
+                    >
+                        Reklamácie
+                    </NavLink>
+                </li>
+                  <li>
+                      <NavLink
+                          to="/newsletter-ochrana-osobnych-udajov"
+                          className="hover:text-tany-green transition-colors"
+                      >
+                          Newsletter a ochrana osobných údajov
+                      </NavLink>
+                  </li>
               </ul>
             </div>
 
@@ -268,9 +311,8 @@ const PublicLayout = () => {
               <h4 className="font-bold text-gray-800 text-lg mb-4 uppercase">Váš účet</h4>
               <ul className="space-y-2">
                 <li><Link to="/account" className="hover:text-tany-green transition-colors">Osobné údaje</Link></li>
-                <li><Link to="/account" className="hover:text-tany-green transition-colors">Objednávky</Link></li>
-                <li><Link to="/account" className="hover:text-tany-green transition-colors">Adresy</Link></li>
-                <li><a href="#" className="hover:text-tany-green transition-colors">Sledovanie objednávky</a></li>
+                <li><Link to="/account/orders" className="hover:text-tany-green transition-colors">Objednávky</Link></li>
+                <li><Link to="/account/orders" className="hover:text-tany-green transition-colors">Sledovanie objednávky</Link></li>
               </ul>
             </div>
 
@@ -298,7 +340,6 @@ const PublicLayout = () => {
 
           <div className="border-t border-gray-300 pt-6 flex flex-col md:flex-row justify-between items-center text-xs text-gray-500">
              <p>&copy; {new Date().getFullYear()} Tany.sk. Všetky práva vyhradené.</p>
-             <p>Vytvorené na mieru.</p>
           </div>
         </div>
       </footer>
