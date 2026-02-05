@@ -3,6 +3,7 @@ import { render, screen, fireEvent, waitFor } from '@testing-library/react';
 import Cart from './Cart';
 import { useCart } from '../context/CartContext';
 import { BrowserRouter } from 'react-router-dom';
+import { searchProductsByCategory } from '../services/productService';
 
 // Mock react-router-dom
 jest.mock('react-router-dom', () => ({
@@ -14,6 +15,11 @@ jest.mock('react-router-dom', () => ({
 // Mock the CartContext
 jest.mock('../context/CartContext', () => ({
   useCart: jest.fn(),
+}));
+
+// Mock the ProductService
+jest.mock('../services/productService', () => ({
+  searchProductsByCategory: jest.fn(),
 }));
 
 // Mock the ModalContext
@@ -50,6 +56,7 @@ describe('Cart Component', () => {
     mockUpdateCart.mockResolvedValue({});
     mockAddDiscount.mockResolvedValue({});
     mockRemoveDiscount.mockResolvedValue({});
+    searchProductsByCategory.mockResolvedValue({ products: { content: [] } });
 
     useCart.mockReturnValue({
       cart: mockCart,

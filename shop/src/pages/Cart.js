@@ -3,10 +3,14 @@ import { useCart } from '../context/CartContext';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import { Link } from 'react-router-dom';
 import CartItem from '../components/CartItem';
+import ProductCard from '../components/ProductCard';
 import { VAT_RATE } from '../utils/constants';
 import './Cart.css';
 import usePageMeta from '../hooks/usePageMeta';
 import { logViewCart, logGenerateLead } from '../utils/analytics';
+import { searchProductsByCategory } from '../services/productService';
+
+const UPSELL_CATEGORY_ID = '6be9f7a5-70fd-41f0-b667-be6036ae6441';
 
 const Cart = () => {
   const { cart, loading, addDiscount, removeDiscount, updateCart } = useCart();
@@ -16,6 +20,7 @@ const Cart = () => {
   const [discountCode, setDiscountCode] = useState('');
   const [discountError, setDiscountError] = useState(null);
   const [discountLoading, setDiscountLoading] = useState(false);
+  const [upsellProducts, setUpsellProducts] = useState([]);
 
   useEffect(() => {
     setBreadcrumbs([
@@ -23,6 +28,26 @@ const Cart = () => {
       { label: 'Nákupný košík', path: null }
     ]);
   }, [setBreadcrumbs]);
+
+  useEffect(() => {
+      const fetchUpsellProducts = async () => {
+          try {
+              const data = await searchProductsByCategory(
+                  UPSELL_CATEGORY_ID,
+                  { filterParameters: [] },
+                  0,
+                  'title,asc',
+                  6
+              );
+              if (data && data.products && data.products.content) {
+                  setUpsellProducts(data.products.content);
+              }
+          } catch (err) {
+              console.error("Failed to fetch upsell products", err);
+          }
+      };
+      fetchUpsellProducts();
+  }, []);
 
   // GA4: Log view_cart
   const viewCartLogged = React.useRef(false);
@@ -243,6 +268,19 @@ const Cart = () => {
                </div>
            </div>
         </div>
+
+        {upsellProducts.length > 0 && (
+            <div className="mt-12 mb-12">
+                <h2 className="text-xl font-bold mb-4">Mohlo by sa Vám páčiť</h2>
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                    {upsellProducts.map(product => (
+                        <div key={product.id} className="h-full">
+                            <ProductCard product={product} />
+                        </div>
+                    ))}
+                </div>
+            </div>
+        )}
       </div>
     </div>
   );
