@@ -1,0 +1,156 @@
+import React, { useEffect } from 'react';
+
+const PickupPointsPage = () => {
+  useEffect(() => {
+    const spsScriptId = 'sps-widget-script';
+    const containerId = 'sps-map-container';
+
+    // Helper to cleanup existing widget artifacts
+    const cleanupWidget = () => {
+        const wrapper = document.getElementById('balikovo.wrapper');
+        if (wrapper) wrapper.remove();
+        const iframe = document.getElementById('balikovo');
+        if (iframe) iframe.remove();
+
+        if (window.SPSwidget) {
+            window.SPSwidget.initialized = false;
+        }
+    };
+
+    const initWidget = () => {
+        // Ensure clean state before init
+        cleanupWidget();
+
+        const SPSwidget = window.SPSwidget || {};
+        window.SPSwidget = SPSwidget;
+        SPSwidget.config = SPSwidget.config || {};
+        SPSwidget.config.embedded_id = containerId;
+        SPSwidget.config.country = 'sk';
+
+        // Remove callback if it exists from other pages
+        delete SPSwidget.config.callback;
+
+        if (SPSwidget.showMap) {
+            SPSwidget.showMap();
+        }
+    };
+
+    if (!document.getElementById(spsScriptId)) {
+        const script = document.createElement('script');
+        script.id = spsScriptId;
+        script.src = 'https://balikomat.sps-sro.sk/widget/v1/widget/js/widget.js';
+        script.async = true;
+        script.onload = initWidget;
+        document.body.appendChild(script);
+    } else {
+        // If script is already loaded, init immediately
+        // Check if SPSwidget is available
+        if (window.SPSwidget) {
+            initWidget();
+        } else {
+             // Fallback if script tag exists but object not ready (race condition)
+             const script = document.getElementById(spsScriptId);
+             script.addEventListener('load', initWidget);
+        }
+    }
+
+    return () => {
+        cleanupWidget();
+    };
+  }, []);
+
+  return (
+    <div className="container mx-auto px-4 py-8">
+      <h1 className="text-3xl font-bold mb-8 text-gray-800">Odberné miesta</h1>
+
+      {/* Packeta Section */}
+      <section className="mb-16">
+        <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">Packeta / Balíkovo</h2>
+        <p className="mb-8 text-gray-600">
+          Packeta je sieť partnerských predajní a prevádzok, na ktorých si
+          môžete prevziať tovar zakúpený v našom eshope.
+        </p>
+
+        <h3 className="text-xl font-bold mb-4 text-gray-800">Ako to funguje?</h3>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-12">
+          <div className="flex flex-col items-center text-center">
+            <img
+              src="https://files.packeta.com/web/images/page/pickup_step1.png"
+              alt="Krok 1"
+              className="h-32 mb-4 object-contain"
+            />
+            <p className="text-gray-600">
+              Pri objednávke v našom eshope si vyberte pobočku, ktorú máte
+              najbližšie.
+            </p>
+          </div>
+          <div className="flex flex-col items-center text-center">
+            <img
+              src="https://files.packeta.com/web/images/page/pickup_step2.png"
+              alt="Krok 2"
+              className="h-32 mb-4 object-contain"
+            />
+            <p className="text-gray-600">
+              Hneď ako odovzdáme tovar k preprave, tak vám Packeta pošle email
+              s trasovacím číslom. Cestu vašej zásielky tak môžete sledovať
+              online.
+            </p>
+          </div>
+          <div className="flex flex-col items-center text-center">
+            <img
+              src="https://files.packeta.com/web/images/page/pickup_step3.png"
+              alt="Krok 3"
+              className="h-32 mb-4 object-contain"
+            />
+            <p className="text-gray-600">
+              Po doručení zásielky na vami zvolené výdajné miesto vám pošle
+              Packeta SMS a e-mail s heslom. Od tejto chvíle si ju môžete
+              kedykoľvek do 7 dní vyzdvihnúť. Dobu na vyzdvihnutie je možné
+              predĺžiť až na 21 dní.
+            </p>
+          </div>
+        </div>
+
+        <h3 className="text-xl font-bold mb-4 text-gray-800">Mapa výdajných miest Packeta</h3>
+        <p className="mb-4 text-gray-600">
+          Nižšie nájdete prehľad všetkých pobočiek s aktuálnymi informáciami. Po
+          kliknutí na názov pobočky sa zobrazia detailnejšie informácie o pobočke.
+          Tú, na ktorej si tovar preberiete si zvolíte až na stránke s
+          objednávkou. Prehľad nižšie má informačný charakter.
+        </p>
+
+        <div className="w-full h-[600px] border border-gray-200">
+          <iframe
+            src="https://widget.packeta.com/#/?&gpsOff=1&apiKey=96cee6278e535aa5&country=sk&carriers=packeta&language=sk&primaryButtonColor=white"
+            width="100%"
+            height="100%"
+            title="Packeta widget"
+            className="w-full h-full"
+          ></iframe>
+        </div>
+      </section>
+
+      {/* SPS Section */}
+      <section>
+        <h2 className="text-2xl font-bold mb-6 text-gray-800 border-b pb-2">SPS Balíkovo</h2>
+        <p className="mb-8 text-gray-600">
+          Balíkovo je sieť výdajných miest a Balíkovo Boxov, vďaka ktorej si môžete zásielky vyzdvihnúť pohodlne a rýchlo.
+        </p>
+
+        <h3 className="text-xl font-bold mb-4 text-gray-800">Ako to funguje?</h3>
+        <div className="mb-8 text-gray-600">
+            <p className="mb-2">Pri objednávke si vyberte Balíkovo Box alebo výdajné miesto, ktoré vám vyhovuje. Po doručení zásielky obdržíte SMS a e-mail s PIN kódom pre vyzdvihnutie.</p>
+        </div>
+
+        <h3 className="text-xl font-bold mb-4 text-gray-800">SPS Balíkovo mapa</h3>
+        <p className="mb-4 text-gray-600">
+          Nájdite si najbližšie výdajné miesto alebo Balíkovo box na mape nižšie.
+        </p>
+
+        <div id="sps-map-container" className="w-full h-[600px] border border-gray-200"></div>
+      </section>
+    </div>
+  );
+};
+
+export default PickupPointsPage;

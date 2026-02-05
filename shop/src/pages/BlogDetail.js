@@ -90,7 +90,7 @@ const BlogDetail = () => {
           </div>
         )}
 
-        <div className="prose prose-lg max-w-none text-gray-700">
+        <div className="prose prose-lg max-w-none text-gray-700 blog-content">
            {/* If there is a short description, we can show it as an intro */}
            {blog.shortDescription && (
              <div className="font-bold mb-6 text-xl text-gray-600 leading-relaxed">
