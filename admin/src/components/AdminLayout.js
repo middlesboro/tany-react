@@ -56,6 +56,16 @@ const AdminLayout = () => {
   const userEmail = getUserEmail();
   const [expandedGroups, setExpandedGroups] = useState({});
 
+  const [isPinned, setIsPinned] = useState(() => {
+    const saved = localStorage.getItem('admin_sidebar_pinned');
+    return saved !== null ? JSON.parse(saved) : true;
+  });
+  const [isHovered, setIsHovered] = useState(false);
+
+  useEffect(() => {
+    localStorage.setItem('admin_sidebar_pinned', JSON.stringify(isPinned));
+  }, [isPinned]);
+
   useEffect(() => {
     const currentPath = location.pathname;
     const newExpanded = {};
@@ -86,11 +96,46 @@ const AdminLayout = () => {
     }));
   };
 
+  const togglePin = () => {
+    setIsPinned(!isPinned);
+  };
+
+  const isSidebarVisible = isPinned || isHovered;
+
   return (
-    <div className="flex min-h-screen">
-      <nav className="w-64 h-screen bg-gray-800 text-white p-4 flex flex-col justify-between overflow-y-auto sticky top-0 flex-shrink-0">
+    <div className="flex min-h-screen relative">
+      {!isPinned && (
+        <div
+          className="fixed top-0 left-0 w-4 h-full z-40"
+          onMouseEnter={() => setIsHovered(true)}
+        />
+      )}
+      <nav
+        className={`bg-gray-800 text-white p-4 flex flex-col justify-between overflow-y-auto transition-all duration-300 ease-in-out h-screen top-0 flex-shrink-0
+        ${isPinned ? 'sticky w-64' : 'fixed left-0 z-50 w-64 shadow-2xl'}
+        ${!isPinned && !isSidebarVisible ? '-translate-x-full' : 'translate-x-0'}`}
+        onMouseEnter={() => !isPinned && setIsHovered(true)}
+        onMouseLeave={() => !isPinned && setIsHovered(false)}
+      >
         <div>
-          <h1 className="text-2xl font-bold mb-4">Admin</h1>
+          <div className="flex justify-between items-center mb-4">
+            <h1 className="text-2xl font-bold">Admin</h1>
+            <button
+              onClick={togglePin}
+              className="text-gray-400 hover:text-white focus:outline-none p-1 rounded hover:bg-gray-700"
+              title={isPinned ? "Unpin sidebar" : "Pin sidebar"}
+            >
+              {isPinned ? (
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
+                </svg>
+              )}
+            </button>
+          </div>
           <ul>
             {menuItems.map((item) => (
               <li key={item.title} className="mb-2">
