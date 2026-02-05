@@ -149,4 +149,32 @@ describe('OrderForm', () => {
     expect(screen.getByText(/\(Skladom: 0 ks\)/)).toBeInTheDocument(); // In warning
     expect(screen.getByText(/Objednané: 2 ks, Skladom: 0 ks/)).toBeInTheDocument(); // In breakdown
   });
+
+  test('enriches price breakdown with quantity from items', () => {
+    const orderWithMissingQuantity = {
+      ...mockOrder,
+      items: [
+         { id: 101, productId: 101, name: 'Product B', currentQuantity: 5 } // Item has quantity
+      ],
+      priceBreakDown: {
+        items: [
+          { type: 'PRODUCT', productId: 101, name: 'Product B', quantity: 1, priceWithVat: 10 } // Missing currentQuantity
+        ],
+        totalPrice: 10,
+        totalPriceWithoutVat: 0,
+        totalPriceVatValue: 0
+      }
+    };
+
+    render(
+        <OrderForm
+            order={orderWithMissingQuantity}
+            handleChange={mockHandleChange}
+            handleSubmit={mockHandleSubmit}
+        />
+    );
+
+    // Should show Skladom: 5 ks because it takes it from order.items
+    expect(screen.getByText(/Objednané: 1 ks, Skladom: 5 ks/)).toBeInTheDocument();
+  });
 });
