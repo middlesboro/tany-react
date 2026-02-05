@@ -57,10 +57,10 @@ const ImageSlider = ({ slides }) => {
 
       {/* Text Overlay */}
       {slides[currentIndex].title && (
-        <div className="absolute top-1/2 left-8 md:left-16 transform -translate-y-1/2 bg-white/90 p-6 md:p-8 max-w-xs md:max-w-md rounded-sm shadow-lg z-20 text-left hidden sm:block pointer-events-auto">
-            <h2 className="text-xl md:text-2xl font-bold text-gray-800 mb-2 uppercase border-b-2 border-tany-green inline-block pb-1">{slides[currentIndex].title}</h2>
-            {slides[currentIndex].text && <p className="text-gray-600 mb-6 text-sm md:text-base leading-relaxed">{slides[currentIndex].text}</p>}
-            <a href={slides[currentIndex].link} className="inline-block bg-tany-green text-white font-bold py-3 px-6 rounded-sm hover:bg-green-700 transition-colors uppercase text-xs tracking-wider">
+        <div className="absolute bottom-8 right-8 md:right-16 bg-white/90 p-4 md:p-6 max-w-md md:max-w-lg rounded-sm shadow-lg z-20 text-left hidden sm:block pointer-events-auto">
+            <h2 className="text-lg md:text-xl font-bold text-gray-800 mb-2 uppercase border-b-2 border-tany-green inline-block pb-1">{slides[currentIndex].title}</h2>
+            {slides[currentIndex].text && <p className="text-gray-600 mb-4 text-xs md:text-sm leading-relaxed">{slides[currentIndex].text}</p>}
+            <a href={slides[currentIndex].link} className="inline-block bg-tany-green text-white font-bold py-2 px-4 rounded-sm hover:bg-green-700 transition-colors uppercase text-xs tracking-wider">
                 Zistiť viac
             </a>
         </div>
