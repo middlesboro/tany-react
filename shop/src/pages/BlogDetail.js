@@ -4,6 +4,7 @@ import { getBlog } from '../services/blogService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import SeoHead from '../components/SeoHead';
 import { logViewBlogPost } from '../utils/analytics';
+import { restoreIframes } from '../utils/videoUtils';
 
 const BlogDetail = () => {
   const { id } = useParams();
@@ -97,7 +98,7 @@ const BlogDetail = () => {
              </div>
            )}
 
-           <div dangerouslySetInnerHTML={{ __html: blog.description ? blog.description.replace(/&nbsp;|\u00A0/g, ' ') : '' }} />
+           <div dangerouslySetInnerHTML={{ __html: blog.description ? restoreIframes(blog.description).replace(/&nbsp;|\u00A0/g, ' ') : '' }} />
         </div>
       </div>
     </div>
