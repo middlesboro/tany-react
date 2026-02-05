@@ -117,4 +117,36 @@ describe('OrderForm', () => {
     expect(link).toBeInTheDocument();
     expect(link).toHaveAttribute('href', 'https://tracking.example.com/123');
   });
+
+  test('renders out of stock warning', () => {
+    const outOfStockOrder = {
+      ...mockOrder,
+      priceBreakDown: {
+        items: [
+          { type: 'PRODUCT', name: 'Product A', quantity: 2, currentQuantity: 0, priceWithVat: 10 }
+        ],
+        totalPrice: 20,
+        totalPriceWithoutVat: 0,
+        totalPriceVatValue: 0
+      }
+    };
+
+    render(
+        <OrderForm
+            order={outOfStockOrder}
+            handleChange={mockHandleChange}
+            handleSubmit={mockHandleSubmit}
+        />
+    );
+
+    expect(screen.getByText(/Upozornenie: Niektoré produkty nie sú na sklade/i)).toBeInTheDocument();
+
+    // "Product A" appears in both the warning box and the price breakdown
+    const productElements = screen.getAllByText(/Product A/);
+    expect(productElements.length).toBeGreaterThanOrEqual(1);
+
+    // Check for specific text formats in warning and breakdown
+    expect(screen.getByText(/\(Skladom: 0 ks\)/)).toBeInTheDocument(); // In warning
+    expect(screen.getByText(/Objednané: 2 ks, Skladom: 0 ks/)).toBeInTheDocument(); // In breakdown
+  });
 });
