@@ -188,4 +188,31 @@ describe('OrderList', () => {
       },
     });
   });
+
+  test('renders translated status text', async () => {
+    orderAdminService.getOrders.mockResolvedValue({
+      content: [
+        {
+          id: 101,
+          orderIdentifier: 'ORD-TEST-STATUS',
+          customerName: 'Jane Doe',
+          status: 'PAID',
+          carrierName: 'DHL',
+          paymentName: 'Card',
+          finalPrice: 100.0,
+        },
+      ],
+      totalPages: 1,
+    });
+
+    render(
+      <MemoryRouter>
+        <OrderList />
+      </MemoryRouter>
+    );
+
+    await waitFor(() => {
+      expect(screen.getByText('Zaplatená')).toBeInTheDocument();
+    });
+  });
 });
