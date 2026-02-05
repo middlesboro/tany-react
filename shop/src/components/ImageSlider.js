@@ -1,5 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
+/**
+ * ImageSlider Component
+ *
+ * Recommended Image Resolutions:
+ * - Desktop: 1600x350 px
+ * - Mobile: 800x400 px
+ */
 const ImageSlider = ({ slides }) => {
   const [currentIndex, setCurrentIndex] = useState(0);
 
@@ -35,11 +42,16 @@ const ImageSlider = ({ slides }) => {
     <div className="w-full relative group mb-8">
       <div className="w-full h-[200px] sm:h-[250px] md:h-[300px] lg:h-[350px] relative overflow-hidden rounded-md shadow-sm">
          <a href={slides[currentIndex].link} className="block w-full h-full">
-            <img
-                src={slides[currentIndex].url}
-                alt={`Slide ${currentIndex + 1}`}
-                className="w-full h-full object-cover block"
-            />
+            <picture className="w-full h-full block">
+                {slides[currentIndex].mobileUrl && (
+                    <source media="(max-width: 768px)" srcSet={slides[currentIndex].mobileUrl} />
+                )}
+                <img
+                    src={slides[currentIndex].desktopUrl || slides[currentIndex].url}
+                    alt={`Slide ${currentIndex + 1}`}
+                    className="w-full h-full object-cover block"
+                />
+            </picture>
          </a>
       </div>
 
