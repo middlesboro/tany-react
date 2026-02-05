@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useMemo } from 'react';
 import ReactQuill from 'react-quill-new';
 import { quillModules, quillModulesTable } from '../utils/quillConfig';
+import { restoreIframes } from '../utils/videoUtils';
 import 'react-quill-new/dist/quill.snow.css';
 
 const BlogForm = ({ blog, handleChange, handleSubmit, handleSaveAndStay }) => {
@@ -65,7 +66,7 @@ const BlogForm = ({ blog, handleChange, handleSubmit, handleSaveAndStay }) => {
         <label className="block text-gray-700">Description</label>
         <ReactQuill
           theme="snow"
-          value={blog.description}
+          value={useMemo(() => restoreIframes(blog.description), [blog.description])}
           onChange={handleQuillChange('description')}
           modules={quillModulesTable}
           className="bg-white"
