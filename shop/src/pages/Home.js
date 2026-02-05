@@ -58,25 +58,11 @@ const Home = () => {
   // Mobile: 800x400 px
   const slides = [
     {
-      desktopUrl: 'https://www.tany.sk/themes/leo_tea/assets/img/modules/appagebuilder/images/1.jpg',
+      desktopUrl: 'https://tany.sk/themes/leo_tea/assets/img/modules/leoslideshow/Tany.sk_banner_henna_na_vlasy.jpg',
       mobileUrl: 'https://www.tany.sk/themes/leo_tea/assets/img/modules/appagebuilder/images/1.jpg',
       link: 'https://www.tany.sk/23-vlasova-kozmetika?q=Značka-Indian Natural Hair Care',
       title: 'Prírodná starostlivosť o vlasy',
       text: 'Predstavujeme Vám prírodné produkty a farby na vlasy Indian Natural Hair Care'
-    },
-    {
-      desktopUrl: 'https://www.tany.sk/themes/leo_tea/assets/img/modules/appagebuilder/images/3.jpg',
-      mobileUrl: 'https://www.tany.sk/themes/leo_tea/assets/img/modules/appagebuilder/images/3.jpg',
-      link: 'https://www.tany.sk/244-tuli-a-tuli',
-      title: 'Ťuli a Ťuli',
-      text: 'Slovenská prírodná kozmetika'
-    },
-    {
-      desktopUrl: 'https://www.tany.sk/themes/leo_tea/assets/img/modules/appagebuilder/images/2.jpg',
-      mobileUrl: 'https://www.tany.sk/themes/leo_tea/assets/img/modules/appagebuilder/images/2.jpg',
-      link: 'https://www.tany.sk/99_ponio',
-      title: 'Ponio prírodná kozmetika',
-      text: 'Novinka v ponuke! Slovenská prírodná zero waste kozmetika Ponio. Šampúchy, pazúchy a prírodné mydlá.'
     }
   ];
 
