@@ -5,6 +5,7 @@ import { getCarriers } from '../services/carrierAdminService';
 import { getPayments } from '../services/paymentAdminService';
 import SearchSelect from './SearchSelect';
 import usePersistentTableState from '../hooks/usePersistentTableState';
+import { ORDER_STATUS_MAPPING, ORDER_STATUS_COLORS } from '../utils/constants';
 
 const OrderList = () => {
   const {
@@ -244,7 +245,11 @@ const OrderList = () => {
               <td className="py-2 px-4 border-b">
                 {order.customerName}
               </td>
-              <td className="py-2 px-4 border-b">{order.status}</td>
+              <td className="py-2 px-4 border-b">
+                <span className={`px-2 py-1 rounded-full text-xs font-semibold ${ORDER_STATUS_COLORS[order.status] || 'bg-gray-100 text-gray-800'}`}>
+                  {ORDER_STATUS_MAPPING[order.status] || order.status}
+                </span>
+              </td>
               <td className="py-2 px-4 border-b">
                 {order.carrierName}
               </td>
