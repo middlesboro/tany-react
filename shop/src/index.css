@@ -1,3 +1,8 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/* Fix for empty paragraphs in content areas to ensure they take up space */
+.prose p {
+  min-height: 1.5em;
+}
