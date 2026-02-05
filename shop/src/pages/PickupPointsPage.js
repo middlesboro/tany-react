@@ -1,6 +1,64 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 
 const PickupPointsPage = () => {
+  useEffect(() => {
+    const spsScriptId = 'sps-widget-script';
+    const containerId = 'sps-map-container';
+
+    // Helper to cleanup existing widget artifacts
+    const cleanupWidget = () => {
+        const wrapper = document.getElementById('balikovo.wrapper');
+        if (wrapper) wrapper.remove();
+        const iframe = document.getElementById('balikovo');
+        if (iframe) iframe.remove();
+
+        if (window.SPSwidget) {
+            window.SPSwidget.initialized = false;
+        }
+    };
+
+    const initWidget = () => {
+        // Ensure clean state before init
+        cleanupWidget();
+
+        const SPSwidget = window.SPSwidget || {};
+        window.SPSwidget = SPSwidget;
+        SPSwidget.config = SPSwidget.config || {};
+        SPSwidget.config.embedded_id = containerId;
+        SPSwidget.config.country = 'sk';
+
+        // Remove callback if it exists from other pages
+        delete SPSwidget.config.callback;
+
+        if (SPSwidget.showMap) {
+            SPSwidget.showMap();
+        }
+    };
+
+    if (!document.getElementById(spsScriptId)) {
+        const script = document.createElement('script');
+        script.id = spsScriptId;
+        script.src = 'https://balikomat.sps-sro.sk/widget/v1/widget/js/widget.js';
+        script.async = true;
+        script.onload = initWidget;
+        document.body.appendChild(script);
+    } else {
+        // If script is already loaded, init immediately
+        // Check if SPSwidget is available
+        if (window.SPSwidget) {
+            initWidget();
+        } else {
+             // Fallback if script tag exists but object not ready (race condition)
+             const script = document.getElementById(spsScriptId);
+             script.addEventListener('load', initWidget);
+        }
+    }
+
+    return () => {
+        cleanupWidget();
+    };
+  }, []);
+
   return (
     <div className="container mx-auto px-4 py-8">
       <h1 className="text-3xl font-bold mb-8 text-gray-800">Odberné miesta</h1>
@@ -89,15 +147,7 @@ const PickupPointsPage = () => {
           Nájdite si najbližšie výdajné miesto alebo Balíkovo box na mape nižšie.
         </p>
 
-        <div className="w-full h-[600px] border border-gray-200">
-          <iframe
-            src="https://balikomat.sps-sro.sk/openstreetmap/"
-            width="100%"
-            height="100%"
-            title="SPS Balíkovo mapa"
-            className="w-full h-full"
-          ></iframe>
-        </div>
+        <div id="sps-map-container" className="w-full h-[600px] border border-gray-200"></div>
       </section>
     </div>
   );
