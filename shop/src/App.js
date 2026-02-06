@@ -30,6 +30,7 @@ import PrirodneFarbyNaVlasy from './pages/static/PrirodneFarbyNaVlasy';
 import RicinovyOlejNaMihalnice from './pages/static/RicinovyOlejNaMihalnice';
 import RicinovyOlejNaVlasy from './pages/static/RicinovyOlejNaVlasy';
 import RysaveVlasy from './pages/static/RysaveVlasy';
+import NotFound from './pages/NotFound';
 import { CartProvider } from './context/CartContext';
 import { BreadcrumbProvider } from './context/BreadcrumbContext';
 import { ModalProvider } from './context/ModalContext';
@@ -149,6 +150,7 @@ Farby na vlasy Voono sú 100% prírodné, neobsahujú amoniak, peroxid ani žiad
                 <Route path="/ricinovy-olej-na-vlasy" element={<RicinovyOlejNaVlasy />} />
                 <Route path="/rysave-vlasy" element={<RysaveVlasy />} />
                 <Route path="/:slug" element={<PublicPage />} />
+                <Route path="*" element={<NotFound />} />
               </Route>
             </Routes>
           </Router>

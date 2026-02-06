@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import { getPageBySlug } from '../services/pageService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import SeoHead from '../components/SeoHead';
+import NotFound from './NotFound';
 
 const PublicPage = () => {
   const { slug } = useParams();
@@ -46,12 +47,7 @@ const PublicPage = () => {
   }
 
   if (error) {
-    return (
-      <div className="container mx-auto px-4 py-8">
-        <h1 className="text-2xl font-bold text-red-600 mb-4">Chyba</h1>
-        <p>{error}</p>
-      </div>
-    );
+    return <NotFound />;
   }
 
   return (
