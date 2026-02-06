@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { getOrder, createOrder, updateOrder, patchOrder, downloadInvoice } from '../services/orderAdminService';
+import { getOrder, createOrder, patchOrder, downloadInvoice } from '../services/orderAdminService';
 import { getCarriers } from '../services/carrierAdminService';
 import { getPayments } from '../services/paymentAdminService';
 import { getCartDiscounts } from '../services/cartDiscountAdminService';

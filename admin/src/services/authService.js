@@ -1,5 +1,3 @@
-const API_URL = `${process.env.REACT_APP_API_URL}`;
-
 export const requestMagicLink = async (email) => {
   // Using relative path assuming proxy handles it, matching shop implementation
   const response = await fetch(`/auth/magic-link/request?email=${encodeURIComponent(email)}`, {
