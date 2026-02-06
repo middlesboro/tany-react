@@ -52,6 +52,13 @@ const CustomerOrderDetail = ({ orderId, onBack }) => {
            <div><span className="font-bold">Platba:</span> {order.paymentName}</div>
            <div><span className="font-bold">Doprava:</span> {order.carrierName}</div>
         </div>
+        {order.carrierOrderStateLink && (
+            <div className="mt-4">
+                <a href={order.carrierOrderStateLink} target="_blank" rel="noopener noreferrer" className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-tany-green hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                    Sledovať zásielku
+                </a>
+            </div>
+        )}
       </div>
 
       {order.statusHistory && order.statusHistory.length > 0 && (

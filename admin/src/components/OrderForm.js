@@ -192,6 +192,17 @@ const OrderForm = ({
                 </option>
               ))}
             </select>
+            <div className="mt-2">
+              <label className="block text-sm text-gray-600">Carrier Tracking Link</label>
+              <input
+                type="text"
+                name="carrierOrderStateLink"
+                value={order.carrierOrderStateLink || ''}
+                onChange={handleChange}
+                className="w-full px-3 py-2 border rounded text-sm"
+                placeholder="https://..."
+              />
+            </div>
             {isCreateMode && (
                 <div className="mt-2">
                      <label className="block text-sm text-gray-600">Pickup Point ID</label>

@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams, Link, useSearchParams, useLocation } from 'react-router-dom';
 import { getOrderConfirmation } from '../services/orderService';
+import { ORDER_STATUS_MAPPING } from '../utils/constants';
 import { getPaymentInfo, checkBesteronStatus } from '../services/paymentService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import useNoIndex from '../hooks/useNoIndex';
@@ -180,6 +181,16 @@ const OrderConfirmation = () => {
           <span className="inline-block mt-3 px-4 py-1.5 rounded-full bg-[#e9f6ef] text-[#1f7a4d] font-semibold">
               Objednávka #{order.orderIdentifier}
           </span>
+          <div className="mt-2 text-lg text-gray-700 font-medium">
+             Stav: {ORDER_STATUS_MAPPING[order.status] || order.status}
+          </div>
+          {order.carrierOrderStateLink && (
+              <div className="mt-4">
+                  <a href={order.carrierOrderStateLink} target="_blank" rel="noopener noreferrer" className="inline-block px-6 py-2 border border-transparent text-base font-medium rounded-md text-white bg-[#1f7a4d] hover:bg-green-700">
+                      Sledovať zásielku
+                  </a>
+              </div>
+          )}
           <p className="mt-4 text-gray-600">
               Ďakujeme za váš nákup!<br/>
               Potvrdenie sme poslali na <strong>{order.email}</strong>
@@ -220,7 +231,7 @@ const OrderConfirmation = () => {
                    <div className="bg-white rounded-[14px] p-5 shadow-[0_6px_20px_rgba(0,0,0,0.05)] border-l-4 border-[#1f7a4d]">
                       <h3 className="text-lg font-bold mb-4 text-[#1f7a4d]">Platba</h3>
 
-                      {order.paymentType === 'GLOBAL_PAYMENTS' && paymentInfo.globalPaymentDetails ? (
+                      {order.paymentType === 'GLOBAL_PAYMENTS' && paymentInfo && paymentInfo.globalPaymentDetails ? (
                          <div className="flex flex-col items-center">
                              <p className="mb-4 text-gray-700">Pre platbu kartou kliknite nižšie:</p>
                              <form action={paymentInfo.globalPaymentDetails.paymentUrl} method="POST">
@@ -234,7 +245,7 @@ const OrderConfirmation = () => {
                              </form>
                          </div>
                       ) : (
-                        paymentInfo.qrCode && (
+                        paymentInfo && paymentInfo.qrCode && (
                             <div className="flex flex-col items-center">
                                 <p className="mb-4 text-gray-700 text-sm">Naskenujte QR kód pre platbu:</p>
                                 <img src={`data:image/png;base64,${paymentInfo.qrCode}`} alt="Payment QR Code" className="w-48 h-48 border border-gray-200 rounded mb-4" />
