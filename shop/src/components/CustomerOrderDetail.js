@@ -60,7 +60,7 @@ const CustomerOrderDetail = ({ orderId, onBack }) => {
           <ul className="space-y-2">
             {order.statusHistory.map((history, index) => (
               <li key={index} className="text-sm text-gray-700 flex items-center">
-                 <span className="font-semibold min-w-[120px]">{ORDER_STATUS_MAPPING[history.status] || history.status}</span>
+                 <span className="font-semibold min-w-[120px]">{ORDER_STATUS_MAPPING[history.status] || history.status} &nbsp;</span>
                  <span className="text-gray-500">{new Date(history.createdAt).toLocaleString('sk-SK')}</span>
               </li>
             ))}

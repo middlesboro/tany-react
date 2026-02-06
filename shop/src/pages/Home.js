@@ -58,8 +58,8 @@ const Home = () => {
   // Mobile: 800x400 px
   const slides = [
     {
-      desktopUrl: 'https://tany.sk/themes/leo_tea/assets/img/modules/leoslideshow/Tany.sk_banner_henna_na_vlasy.jpg',
-      mobileUrl: 'https://www.tany.sk/themes/leo_tea/assets/img/modules/appagebuilder/images/1.jpg',
+      desktopUrl: 'https://ik.imagekit.io/8grotfwks/tany.sk_banner_henna_na_vlasy.jpg?updatedAt=1770369499232',
+      mobileUrl: 'https://ik.imagekit.io/8grotfwks/tany.sk_banner_henna_na_vlasy_mobil.jpg?updatedAt=1770369499227',
       link: 'https://www.tany.sk/23-vlasova-kozmetika?q=Značka-Indian Natural Hair Care',
       title: 'Prírodná starostlivosť o vlasy',
       text: 'Predstavujeme Vám prírodné produkty a farby na vlasy Indian Natural Hair Care'

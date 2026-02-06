@@ -65,7 +65,7 @@ const PublicPage = () => {
           <h1 className="text-3xl font-bold mb-6 text-gray-800">{page.title}</h1>
           <div
             className="prose text-gray-700"
-            dangerouslySetInnerHTML={{ __html: page.description }}
+            dangerouslySetInnerHTML={{ __html: page.description ? page.description.replace(/&nbsp;|\u00A0/g, ' ') : '' }}
           />
         </>
       )}
