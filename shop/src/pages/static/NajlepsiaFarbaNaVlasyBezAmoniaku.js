@@ -48,8 +48,8 @@ const NajlepsiaFarbaNaVlasyBezAmoniaku = () => {
       </ul>
 
       <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <ProductEmbed slug="indicka-henna-medena" />
-        <ProductEmbed slug="henna-voono-dark-brown" />
+        <ProductEmbed slug="100-indicka-henna-200g-medena-kura-indian-natural-hair-care" />
+        <ProductEmbed slug="henna-prirodna-farba-na-vlasy-voono-dark-brown-tmavo-hneda-100g" />
       </div>
 
       <div className="my-4">
@@ -86,12 +86,12 @@ const NajlepsiaFarbaNaVlasyBezAmoniaku = () => {
       </ul>
 
        <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <ProductEmbed slug="biokap-rapid-prirodzena-hneda" />
-        <ProductEmbed slug="biokap-rapid-svedsky-blond" />
+        <ProductEmbed slug="farba-na-vlasy-nutricolor-delicato-rapid-prirodzena-hneda-40-140ml-biokap" />
+        <ProductEmbed slug="nutricolor-delicato-rapid-farba-na-vlasy-svedsky-blond-71-140ml-biokap" />
       </div>
 
        <div className="my-4">
-        <Link to="/category/biokap" className="text-tany-green font-bold hover:underline">Zobraziť farby Biokap</Link>
+        <Link to="/category/vsetky-produkty?q=Brand-Biosline%20-%20Biokap" className="text-tany-green font-bold hover:underline">Zobraziť farby Biokap</Link>
       </div>
 
     </StaticPage>

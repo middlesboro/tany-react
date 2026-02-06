@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import StaticPage from '../../components/StaticPage';
+import ProductEmbed from "../../components/ProductEmbed";
 
 const HennaNaObocie = () => {
   return (
@@ -30,22 +31,13 @@ const HennaNaObocie = () => {
       </ul>
 
       <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="border rounded p-4">
-          <Link to="/product/henna-voono-copper" className="font-bold text-lg hover:text-tany-green block mb-2">Henna prírodná farba na vlasy Voono Copper (Medená)</Link>
-          <p className="text-sm mb-2">Najpredávanejší produkt</p>
-          <p className="font-bold text-tany-green">Cena 10,76 €</p>
-          <Link to="/product/henna-voono-copper" className="inline-block mt-2 text-white bg-tany-green px-4 py-2 rounded">Detail</Link>
-        </div>
-        <div className="border rounded p-4">
-          <Link to="/product/henna-eyebrows-svetla-hneda" className="font-bold text-lg hover:text-tany-green block mb-2">Henna Eyebrows pero na obočie Svetlá hnedá</Link>
-          <p className="font-bold text-tany-green">Cena 15,17 €</p>
-          <Link to="/product/henna-eyebrows-svetla-hneda" className="inline-block mt-2 text-white bg-tany-green px-4 py-2 rounded">Detail</Link>
-        </div>
+        <ProductEmbed slug="henna-prirodna-farba-na-vlasy-voono-copper-medena-100g" />
+        <ProductEmbed slug="henna-eyebrows-pero-na-obocie-svetla-hneda-henna-penna" />
       </div>
 
       <h2 className="text-xl font-semibold mt-6 mb-2">Ako postupovať pri farbení</h2>
       <p>
-        Na farbenie obočia odporúčame použiť značku <Link to="/category/voono" className="text-tany-green hover:underline">Voono</Link>. Nemal by byť problém
+        Na farbenie obočia odporúčame použiť značku <Link to="/category/henna-na-vlasy?q=Brand-Voono+Henna+na+vlasy" className="text-tany-green hover:underline">Voono</Link>. Nemal by byť problém
         ani s inými značkami, ale Voono vyložene píše, že ich farby sú nato
         vhodné. Pri ostatných značkách som takúto informáciu nenašla.
       </p>
@@ -59,7 +51,7 @@ const HennaNaObocie = () => {
       </ul>
 
       <div className="my-4">
-        <Link to="/category/voono" className="text-tany-green font-bold hover:underline">Zobraziť všetky Voono henny na obočie</Link>
+        <Link to="/category/henna-na-vlasy?q=Brand-Voono+Henna+na+vlasy" className="text-tany-green font-bold hover:underline">Zobraziť všetky Voono henny na obočie</Link>
       </div>
     </StaticPage>
   );

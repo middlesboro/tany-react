@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import StaticPage from '../../components/StaticPage';
+import ProductEmbed from "../../components/ProductEmbed";
 
 const RicinovyOlejNaVlasy = () => {
   return (
@@ -31,12 +32,9 @@ const RicinovyOlejNaVlasy = () => {
         <li>jednoduchá aplikácia</li>
       </ul>
 
-      <div className="my-8 max-w-md mx-auto">
-        <div className="border rounded p-4">
-          <Link to="/product/ricinovy-olej" className="font-bold text-lg hover:text-tany-green block mb-2">100% BIO ricínový olej 100ml - Dr.Feelgood</Link>
-          <p className="font-bold text-tany-green">Cena 8,30 €</p>
-          <Link to="/product/ricinovy-olej" className="inline-block mt-2 text-white bg-tany-green px-4 py-2 rounded">Detail</Link>
-        </div>
+      <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <ProductEmbed slug="100-bio-ricinovy-olej-100ml-drfeelgood" />
+        <ProductEmbed slug="100-ricinovy-olej-100ml-ancient-wisdom" />
       </div>
 
       <h2 className="text-xl font-semibold mt-6 mb-2">Ricínový olej na rýchlejší rast vlasov</h2>
@@ -59,7 +57,7 @@ const RicinovyOlejNaVlasy = () => {
       <p>
         Olej je vhodné kombinovať s esenciálnymi olejmi, ktoré zmes oleja
         krásne prevoňajú a ešte viac posilnia účinky. Vhodné je zmiešať
-        ricínový olej s 1-2 kvapkami <Link to="/product/esencialny-olej-rozmarin" className="text-tany-green hover:underline">esenciálneho oleja rozmarín</Link>, ktorý má
+        ricínový olej s 1-2 kvapkami <Link to="/product/rozmarin-prirodny-esencialny-olej-10ml-tuli-a-tuli" className="text-tany-green hover:underline">esenciálneho oleja rozmarín</Link>, ktorý má
         taktiež priaznivé účinky na vlasy a podporuje ich rast.
       </p>
 

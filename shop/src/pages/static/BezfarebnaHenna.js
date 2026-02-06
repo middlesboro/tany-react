@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import StaticPage from '../../components/StaticPage';
+import ProductEmbed from "../../components/ProductEmbed";
 
 const BezfarebnaHenna = () => {
   return (
@@ -49,45 +50,19 @@ const BezfarebnaHenna = () => {
         <li>má priaznivé účinky na pokožku hlavy a vytvára na nich ochrannú vrstvu</li>
       </ul>
 
-      <div className="my-8 space-y-6">
-        <div className="border rounded p-4">
-          <Link to="/product/henne-color-bezfarebna" className="font-bold text-lg hover:text-tany-green block">Bezfarebná henna Henné Color</Link>
-          <ul className="list-disc pl-5 mt-2 text-sm text-gray-600">
-             <li>Francúzska bezfarebná henna Henné Color</li>
-             <li>najpredávanejší produkt</li>
-             <li>v ponuke aj bylinková vitamínová henna</li>
-             <li>100g balenia</li>
-          </ul>
-           <Link to="/product/henne-color-bezfarebna" className="inline-block mt-2 text-tany-green hover:underline font-bold">Zobraziť detail</Link>
-        </div>
-
-        <div className="border rounded p-4">
-          <Link to="/product/indicka-bezfarebna-henna" className="font-bold text-lg hover:text-tany-green block">Indická bezfarebná henna</Link>
-          <ul className="list-disc pl-5 mt-2 text-sm text-gray-600">
-             <li>Indická bezfarebná henna</li>
-             <li>produkty v BIO kvalite</li>
-             <li>k dispozícií v 200g a 1kg baleniach</li>
-          </ul>
-           <Link to="/product/indicka-bezfarebna-henna" className="inline-block mt-2 text-tany-green hover:underline font-bold">Zobraziť detail</Link>
-        </div>
-
-        <div className="border rounded p-4">
-          <Link to="/product/henne-color-bylinkova" className="font-bold text-lg hover:text-tany-green block">Henné color bylinková henna</Link>
-          <ul className="list-disc pl-5 mt-2 text-sm text-gray-600">
-             <li>bezfarebná henna s bylinkami (chininovník, cassia, rozmarín, dúška tymianová a iné)</li>
-             <li>prírodná regeneračná kúra na vlasy</li>
-             <li>100g balenia</li>
-          </ul>
-           <Link to="/product/henne-color-bylinkova" className="inline-block mt-2 text-tany-green hover:underline font-bold">Zobraziť detail</Link>
-        </div>
+      <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <ProductEmbed slug="henna-neutre-bezfarebna-100g-henne-color" />
+        <ProductEmbed slug="cassia-200g-bezfarebny-hennovy-zabal-indian-natural-hair-care" />
+        <ProductEmbed slug="henna-quinquina-bylinkova-bezfarebna-100g-henne-color" />
+        <ProductEmbed slug="balicek-bezfarebnej-henny-so-samponom-550g" />
       </div>
 
       <h2 className="text-xl font-semibold mt-6 mb-2">Pre ktorú bezfarebnú hennu sa rozhodnúť?</h2>
       <p>
         Všetky henny ktoré máme v ponuke sú kvalitné a overené, ale chápeme že
         vybrať si medzi nimi môže byť niekedy problém. Ak idete skúšať prvý
-        krát bezfarebnú hennu odporúčame siahnuť po <Link to="/category/henne-color" className="text-tany-green hover:underline">Henné color</Link> (overená
-        kvalita, dobrá cena), alebo skúsiť <Link to="/category/indicka-henna" className="text-tany-green hover:underline">Indickú hennu</Link> (vhodná ak máte
+        krát bezfarebnú hennu odporúčame siahnuť po <Link to="/category/henna-na-vlasy?q=Brand-Henne+Color" className="text-tany-green hover:underline">Henné color</Link> (overená
+        kvalita, dobrá cena), alebo skúsiť <Link to="http://localhost:3001/category/henna-na-vlasy?q=Brand-Indian+Natural+Hair+Care" className="text-tany-green hover:underline">Indickú hennu</Link> (vhodná ak máte
         dlhšie vlasy - 200g balenie, BIO produkt).
       </p>
       <p className="mt-4">

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import StaticPage from '../../components/StaticPage';
+import ProductEmbed from "../../components/ProductEmbed";
 
 const AlergiaNaFarby = () => {
   return (
@@ -81,6 +82,12 @@ const AlergiaNaFarby = () => {
         stranu s hennou nedosiahnete blond odtieň ak máte tmavé vlasy a niekedy
         je ťažšie dosiahnuť presne ten odtieň, ktorý požadujete.
       </p>
+
+      <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <ProductEmbed slug="100-indicka-henna-200g-medena-kura-indian-natural-hair-care" />
+        <ProductEmbed slug="henna-prirodna-farba-na-vlasy-voono-dark-brown-tmavo-hneda-100g" />
+      </div>
+
       <div className="my-4">
         <Link to="/category/henna-na-vlasy" className="text-tany-green font-bold hover:underline">Zobraziť všetky henny na vlasy</Link>
       </div>
@@ -91,7 +98,7 @@ const AlergiaNaFarby = () => {
         na nikel (obsah niklu na minimálnej a bezpečnej úrovni - 1 ppm).
       </p>
       <div className="my-4">
-        <Link to="/product/biokap" className="text-tany-green font-bold hover:underline">Zobraziť farby Biokap</Link>
+        <Link to="/category/vsetky-produkty?q=Brand-Biosline%20-%20Biokap" className="text-tany-green font-bold hover:underline">Zobraziť farby Biokap</Link>
       </div>
       <p>
         Poslednou alternatívou je nechať si svoju pôvodnú farbu vlasov :)

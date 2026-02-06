@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import StaticPage from '../../components/StaticPage';
+import ProductEmbed from "../../components/ProductEmbed";
 
 const RysaveVlasy = () => {
   return (
@@ -43,23 +44,24 @@ const RysaveVlasy = () => {
       <p>
         Ihneď na začiatku je potrebné povedať, že farbenie hennou na ryšavo
         nie je pre každého. Keďže henna je 100% prírodná nevie vlasy zosvetliť.
-        Takže ak máte tmavé vlasy, s hennou ryšavú nikdy nedosiahnete.
-      </p>
-      <p className="mt-2">
-        Farbenie hennou nie je vôbec také komplikované ako si mnohé z nás
-        myslia. Na začiatok odporúčame použiť hennu značky <Link to="/category/voono" className="text-tany-green hover:underline">Voono</Link>. Veľmi dobre sa nanáša a medzi zákazníčkami je obľúbená.
+        Takže ak máte tmavé vlasy, s hennou ryšavú nikdy nedosiahnete.  Pre približnú predstavu aký odtieň môžete dosiahnuť prikladáme nasledujúci obrázok.
       </p>
 
-      <div className="my-8 max-w-md mx-auto">
-        <div className="border rounded p-4">
-          <Link to="/product/henna-voono-copper" className="font-bold text-lg hover:text-tany-green block mb-2">Henna prírodná farba na vlasy Voono Copper (Medená) 100g</Link>
-          <p className="font-bold text-tany-green">Cena 10,76 €</p>
-          <Link to="/product/henna-voono-copper" className="inline-block mt-2 text-white bg-tany-green px-4 py-2 rounded">Detail</Link>
-        </div>
+      <img src="https://ik.imagekit.io/8grotfwks/rysave-vlasy-odtiene.png?updatedAt=1770379611544"/>
+
+      <p className="mt-2">
+        Farbenie hennou nie je vôbec také komplikované ako si mnohé z nás
+        myslia. Na začiatok odporúčame použiť hennu značky <Link to="/category/henna-na-vlasy?q=Brand-Voono+Henna+na+vlasy" className="text-tany-green hover:underline">Voono</Link>. Veľmi dobre sa nanáša a medzi zákazníčkami je obľúbená.
+        Postup ako nato si môžete pozrieť v našom článku <Link to="/blog/059261d5-a28c-4d58-b3f6-42b83fa036ff" className="text-tany-green hover:underline">Ako farbiť vlasy hennou</Link>.
+      </p>
+
+      <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <ProductEmbed slug="henna-prirodna-farba-na-vlasy-voono-copper-medena-100g" />
+        <ProductEmbed slug="100-indicka-henna-200g-medena-kura-indian-natural-hair-care" />
       </div>
 
        <div className="my-4">
-        <Link to="/category/medene-farby" className="text-tany-green font-bold hover:underline">Zobraziť všetky medené farby na vlasy</Link>
+        <Link to="/category/henna-na-vlasy?q=Odtien-Medena" className="text-tany-green font-bold hover:underline">Zobraziť všetky medené farby na vlasy</Link>
       </div>
 
 
@@ -72,12 +74,8 @@ const RysaveVlasy = () => {
         sa znižuje možnosť alergickej reakcie.
       </p>
 
-      <div className="my-8 max-w-md mx-auto">
-        <div className="border rounded p-4">
-          <Link to="/product/biokap-medeny-blond" className="font-bold text-lg hover:text-tany-green block mb-2">Nutricolor farba na vlasy - Medený blond 7.4 140ml - Biokap</Link>
-          <p className="font-bold text-tany-green">Cena 12,15 €</p>
-          <Link to="/product/biokap-medeny-blond" className="inline-block mt-2 text-white bg-tany-green px-4 py-2 rounded">Detail</Link>
-        </div>
+      <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <ProductEmbed slug="nutricolor-farba-na-vlasy-medeny-blond-74-140ml-biokap" />
       </div>
     </StaticPage>
   );

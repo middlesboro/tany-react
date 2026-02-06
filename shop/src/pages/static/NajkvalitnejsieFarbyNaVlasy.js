@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import StaticPage from '../../components/StaticPage';
+import ProductEmbed from "../../components/ProductEmbed";
 
 const NajkvalitnejsieFarbyNaVlasy = () => {
   return (
@@ -13,7 +14,7 @@ const NajkvalitnejsieFarbyNaVlasy = () => {
         Aby sme ľuďom pomohli nájsť dokonalú farbu vlasov pre ich jedinečný tón
         pleti, zostavili sme zoznam najkvalitnejších farieb na vlasy dostupných
         v našom eshope Tany.sk.
-        V ponuke máme 100% prírodné <Link to="/category/henna-na-vlasy" className="text-tany-green hover:underline">henny na vlasy</Link>, alebo farby <Link to="/category/biokap" className="text-tany-green hover:underline">Biokap</Link>,
+        V ponuke máme 100% prírodné <Link to="/category/henna-na-vlasy" className="text-tany-green hover:underline">henny na vlasy</Link>, alebo farby <Link to="/category/farby-na-vlasy?q=Brand-Biosline+%252D+Biokap" className="text-tany-green hover:underline">Biokap</Link>,
         ktoré sú bez PPD, amoniaku a najčastejších alergénov.
       </p>
 
@@ -37,17 +38,8 @@ const NajkvalitnejsieFarbyNaVlasy = () => {
       </ul>
 
       <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="border rounded p-4">
-          <Link to="/product/indicka-henna-medena" className="font-bold text-lg hover:text-tany-green block mb-2">100% Indická Henna 200g (MEDENÁ kúra)</Link>
-          <p className="text-sm mb-2">Najpredávanejší produkt</p>
-          <p className="font-bold text-tany-green">Cena 9,50 €</p>
-          <Link to="/product/indicka-henna-medena" className="inline-block mt-2 text-white bg-tany-green px-4 py-2 rounded">Detail</Link>
-        </div>
-        <div className="border rounded p-4">
-          <Link to="/product/henna-voono-copper" className="font-bold text-lg hover:text-tany-green block mb-2">Henna prírodná farba na vlasy Voono Copper (Medená)</Link>
-          <p className="font-bold text-tany-green">Cena 10,76 €</p>
-          <Link to="/product/henna-voono-copper" className="inline-block mt-2 text-white bg-tany-green px-4 py-2 rounded">Detail</Link>
-        </div>
+        <ProductEmbed slug="100-indicka-henna-200g-medena-kura-indian-natural-hair-care" />
+        <ProductEmbed slug="henna-prirodna-farba-na-vlasy-voono-copper-medena-100g" />
       </div>
 
       <div className="my-4">
@@ -81,20 +73,12 @@ const NajkvalitnejsieFarbyNaVlasy = () => {
       </ul>
 
       <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="border rounded p-4">
-          <Link to="/product/biokap-rapid-prirodzena-hneda" className="font-bold text-lg hover:text-tany-green block mb-2">Farba na vlasy Nutricolor Delicato RAPID Prirodzená hnedá</Link>
-          <p className="font-bold text-tany-green">Cena 13,27 €</p>
-          <Link to="/product/biokap-rapid-prirodzena-hneda" className="inline-block mt-2 text-white bg-tany-green px-4 py-2 rounded">Detail</Link>
-        </div>
-         <div className="border rounded p-4">
-          <Link to="/product/biokap-rapid-svedsky-blond" className="font-bold text-lg hover:text-tany-green block mb-2">Nutricolor Delicato RAPID farba na vlasy - Švédsky blond</Link>
-          <p className="font-bold text-tany-green">Cena 13,27 €</p>
-          <Link to="/product/biokap-rapid-svedsky-blond" className="inline-block mt-2 text-white bg-tany-green px-4 py-2 rounded">Detail</Link>
-        </div>
+        <ProductEmbed slug="farba-na-vlasy-nutricolor-delicato-rapid-prirodzena-hneda-40-140ml-biokap" />
+        <ProductEmbed slug="nutricolor-delicato-rapid-farba-na-vlasy-svedsky-blond-71-140ml-biokap" />
       </div>
 
        <div className="my-4">
-        <Link to="/category/biokap" className="text-tany-green font-bold hover:underline">Zobraziť farby Biokap</Link>
+        <Link to="/category/vsetky-produkty?q=Brand-Biosline%20-%20Biokap" className="text-tany-green font-bold hover:underline">Zobraziť farby Biokap</Link>
       </div>
     </StaticPage>
   );

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import StaticPage from '../../components/StaticPage';
+import ProductEmbed from "../../components/ProductEmbed";
 
 const PrirodneFarbyNaVlasy = () => {
   return (
@@ -18,8 +19,7 @@ const PrirodneFarbyNaVlasy = () => {
         prírodné alternatívy k chemickým farbám.
       </p>
       <p className="mt-2">
-        Postupne si predstavíme hennu na vlasy, permanentnú farbu Indus Valley
-        a farby na vlasy Biokap.
+        Postupne si predstavíme hennu na vlasy a farby na vlasy Biokap.
       </p>
 
       <h2 className="text-xl font-semibold mt-6 mb-2">Henna na vlasy</h2>
@@ -48,6 +48,12 @@ const PrirodneFarbyNaVlasy = () => {
         <li>niekomu vadí vôňa henny, ale to sa dá jednoducho vyriešiť pridaním obľúbeného esenciálneho oleja do zmesi s hennou</li>
         <li>keďže sa jedná o prírodnú farbu niekedy je ťažšie dosiahnuť presne odtieň, ktorý by ste chcela a je potrebné experimentovať</li>
       </ul>
+
+      <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <ProductEmbed slug="100-indicka-henna-200g-medena-kura-indian-natural-hair-care" />
+        <ProductEmbed slug="henna-prirodna-farba-na-vlasy-voono-copper-medena-100g" />
+      </div>
+
       <div className="my-4">
         <Link to="/category/henna-na-vlasy" className="text-tany-green font-bold hover:underline">Zobraziť všetky henny na vlasy</Link>
       </div>
@@ -77,34 +83,12 @@ const PrirodneFarbyNaVlasy = () => {
         <li>vymývajú sa rýchlejšie, ako práškové henny</li>
       </ul>
       <div className="my-4">
-        <Link to="/category/kremove-henny" className="text-tany-green font-bold hover:underline">Zobraziť krémové henny na vlasy</Link>
+        <Link to="/category/kremove-henny-na-vlasy" className="text-tany-green font-bold hover:underline">Zobraziť krémové henny na vlasy</Link>
       </div>
 
-      <h2 className="text-xl font-semibold mt-6 mb-2">Permanentná farba na vlasy Indus Valley</h2>
-      <p>
-        Jedná sa o celosvetovo prvú farbu na vlasy, ktorá sa môže pýšiť PHAB
-        certifikátom, ktorý garantuje, že vo farbe nie sú použité chemikálie
-        ako benzén, amoniak a taktiež žiadne ťažké kovy.
-        Obsahuje vysoký podiel prírodných zložiek, ako napríklad henna,
-        jojobový olej, aloe vera, amla a ďalšie.
-      </p>
-
-      <h3 className="text-lg font-medium mt-4 mb-2">Výhody farby Indus Valley</h3>
-      <ul className="list-disc pl-5 space-y-1">
-        <li>má krémovú konzistenciu a ľahko sa nanáša</li>
-        <li>veľký pomer prírodných zložiek</li>
-        <li>vhodná aj na šedivé vlasy</li>
-        <li>príjemná vôňa</li>
-        <li>vhodná, aj na poškodené vlasy</li>
-      </ul>
-
-      <h3 className="text-lg font-medium mt-4 mb-2">Nevýhody farby Indus Valley</h3>
-      <ul className="list-disc pl-5 space-y-1">
-        <li>nejedná sa o 100% prírodnú farbu</li>
-        <li>obsahuje zlúčeninu peroxidu vodíka (ak ste alergická na peroxid tak táto farba pre vás nebude vhodná)</li>
-      </ul>
-      <div className="my-4">
-        <Link to="/category/indus-valley" className="text-tany-green font-bold hover:underline">Zobraziť farby Indus Valley</Link>
+      <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-4">
+        <ProductEmbed slug="henna-powder-cuivre-medena-100g-henne-color" />
+        <ProductEmbed slug="baq-henna-natural-na-vlasy-aj-telo-500g-ayumi" />
       </div>
 
       <h2 className="text-xl font-semibold mt-6 mb-2">Prírodné farby na vlasy Biokap</h2>
@@ -133,7 +117,7 @@ const PrirodneFarbyNaVlasy = () => {
         <li>vyššia cena</li>
       </ul>
       <div className="my-4">
-        <Link to="/category/biokap" className="text-tany-green font-bold hover:underline">Zobraziť farby Biokap</Link>
+        <Link to="/category/farby-na-vlasy?q=Brand-Biosline+%252D+Biokap" className="text-tany-green font-bold hover:underline">Zobraziť farby Biokap</Link>
       </div>
     </StaticPage>
   );
