@@ -1,7 +1,16 @@
 import React, { useEffect } from 'react';
+import SeoHead from '../components/SeoHead';
+import { useBreadcrumbs } from '../context/BreadcrumbContext';
 
 const PickupPointsPage = () => {
+  const { setBreadcrumbs } = useBreadcrumbs();
+
   useEffect(() => {
+    setBreadcrumbs([
+      { label: 'Domov', path: '/' },
+      { label: 'Odberné miesta', path: null }
+    ]);
+
     const spsScriptId = 'sps-widget-script';
     const containerId = 'sps-map-container';
 
@@ -61,6 +70,10 @@ const PickupPointsPage = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
+      <SeoHead
+        title="Odberné miesta"
+        description="Zoznam odberných miest Packeta a SPS Balíkovo, kde si môžete vyzdvihnúť svoje objednávky z Tany.sk."
+      />
       <h1 className="text-3xl font-bold mb-8 text-gray-800">Odberné miesta</h1>
 
       {/* Packeta Section */}
