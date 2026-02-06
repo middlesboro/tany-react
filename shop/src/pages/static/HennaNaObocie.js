@@ -37,7 +37,7 @@ const HennaNaObocie = () => {
 
       <h2 className="text-xl font-semibold mt-6 mb-2">Ako postupovať pri farbení</h2>
       <p>
-        Na farbenie obočia odporúčame použiť značku <Link to="/category/henna-na-vlasy?q=Brand-Voono+Henna+na+vlasy" className="text-tany-green hover:underline">Voono</Link>. Nemal by byť problém
+        Na farbenie obočia odporúčame použiť značku <Link to="/kategoria/henna-na-vlasy?q=Brand-Voono+Henna+na+vlasy" className="text-tany-green hover:underline">Voono</Link>. Nemal by byť problém
         ani s inými značkami, ale Voono vyložene píše, že ich farby sú nato
         vhodné. Pri ostatných značkách som takúto informáciu nenašla.
       </p>
@@ -51,7 +51,7 @@ const HennaNaObocie = () => {
       </ul>
 
       <div className="my-4">
-        <Link to="/category/henna-na-vlasy?q=Brand-Voono+Henna+na+vlasy" className="text-tany-green font-bold hover:underline">Zobraziť všetky Voono henny na obočie</Link>
+        <Link to="/kategoria/henna-na-vlasy?q=Brand-Voono+Henna+na+vlasy" className="text-tany-green font-bold hover:underline">Zobraziť všetky Voono henny na obočie</Link>
       </div>
     </StaticPage>
   );

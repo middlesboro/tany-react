@@ -55,7 +55,7 @@ const PrirodneFarbyNaVlasy = () => {
       </div>
 
       <div className="my-4">
-        <Link to="/category/henna-na-vlasy" className="text-tany-green font-bold hover:underline">Zobraziť všetky henny na vlasy</Link>
+        <Link to="/kategoria/henna-na-vlasy" className="text-tany-green font-bold hover:underline">Zobraziť všetky henny na vlasy</Link>
       </div>
 
       <h2 className="text-xl font-semibold mt-6 mb-2">Krémové henny na vlasy</h2>
@@ -83,7 +83,7 @@ const PrirodneFarbyNaVlasy = () => {
         <li>vymývajú sa rýchlejšie, ako práškové henny</li>
       </ul>
       <div className="my-4">
-        <Link to="/category/kremove-henny-na-vlasy" className="text-tany-green font-bold hover:underline">Zobraziť krémové henny na vlasy</Link>
+        <Link to="/kategoria/kremove-henny-na-vlasy" className="text-tany-green font-bold hover:underline">Zobraziť krémové henny na vlasy</Link>
       </div>
 
       <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -117,7 +117,7 @@ const PrirodneFarbyNaVlasy = () => {
         <li>vyššia cena</li>
       </ul>
       <div className="my-4">
-        <Link to="/category/farby-na-vlasy?q=Brand-Biosline+%252D+Biokap" className="text-tany-green font-bold hover:underline">Zobraziť farby Biokap</Link>
+        <Link to="/kategoria/farby-na-vlasy?q=Brand-Biosline+%252D+Biokap" className="text-tany-green font-bold hover:underline">Zobraziť farby Biokap</Link>
       </div>
     </StaticPage>
   );

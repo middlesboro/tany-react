@@ -372,7 +372,7 @@ const ProductDetail = () => {
           const defaultCategory = findCategoryById(categories, data.defaultCategoryId);
           crumbs.push({
             label: data.defaultCategoryTitle,
-            path: defaultCategory ? `/category/${defaultCategory.slug}` : null
+            path: defaultCategory ? `/kategoria/${defaultCategory.slug}` : null
           });
         } else {
           let path = [];
@@ -387,7 +387,7 @@ const ProductDetail = () => {
 
           if (path) {
             path.forEach(p => {
-              crumbs.push({ label: p.title, path: `/category/${p.slug}` });
+              crumbs.push({ label: p.title, path: `/kategoria/${p.slug}` });
             });
           }
         }

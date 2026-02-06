@@ -60,7 +60,7 @@ const ProductSearch = () => {
 
   const handleProductClick = (product) => {
     logSelectItem(product);
-    navigate(`/product/${product.slug}`);
+    navigate(`/produkt/${product.slug}`);
     setShowResults(false);
     setQuery('');
   };

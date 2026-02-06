@@ -22,7 +22,7 @@ const NajlepsiaFarbaNaVlasyBezAmoniaku = () => {
         ale nespôsobuje len amoniak. Pozor si musíte dať aj na zložky farieb
         ako PPD, rôzne chemické parfúmy alebo nikel.
         Ak chcete farbiť vlasy naozaj prírodne, bez obavy z poškodenia vlasov
-        odporúčame <Link to="/category/henna-na-vlasy" className="text-tany-green hover:underline">hennu na vlasy</Link>. Dôvod je jednoduchý. Čistý prášok henny
+        odporúčame <Link to="/kategoria/henna-na-vlasy" className="text-tany-green hover:underline">hennu na vlasy</Link>. Dôvod je jednoduchý. Čistý prášok henny
         neobsahuje nič iné, len pomleté listy rastliny Lawsonia inermis.
       </p>
 
@@ -53,7 +53,7 @@ const NajlepsiaFarbaNaVlasyBezAmoniaku = () => {
       </div>
 
       <div className="my-4">
-        <Link to="/category/henna-na-vlasy" className="text-tany-green font-bold hover:underline">Zobraziť všetky henny na vlasy</Link>
+        <Link to="/kategoria/henna-na-vlasy" className="text-tany-green font-bold hover:underline">Zobraziť všetky henny na vlasy</Link>
       </div>
 
       <h2 className="text-xl font-semibold mt-6 mb-2">Prírodné farby na vlasy Biokap</h2>
@@ -91,7 +91,7 @@ const NajlepsiaFarbaNaVlasyBezAmoniaku = () => {
       </div>
 
        <div className="my-4">
-        <Link to="/category/vsetky-produkty?q=Brand-Biosline%20-%20Biokap" className="text-tany-green font-bold hover:underline">Zobraziť farby Biokap</Link>
+        <Link to="/kategoria/vsetky-produkty?q=Brand-Biosline%20-%20Biokap" className="text-tany-green font-bold hover:underline">Zobraziť farby Biokap</Link>
       </div>
 
     </StaticPage>

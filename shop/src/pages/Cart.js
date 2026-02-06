@@ -205,17 +205,17 @@ const Cart = () => {
                       </div>
                   )}
 
-                  <div className="mt-4 pt-4 separator">
-                      <label className="checkbox-label">
-                         <input
-                            type="checkbox"
-                            checked={cart.discountForNewsletter || false}
-                            onChange={handleNewsletterChange}
-                            className="checkbox-input"
-                         />
-                         <span>Odber newslettera (zľava 10%)</span>
-                      </label>
-                  </div>
+                  {/*<div className="mt-4 pt-4 separator">*/}
+                  {/*    <label className="checkbox-label">*/}
+                  {/*       <input*/}
+                  {/*          type="checkbox"*/}
+                  {/*          checked={cart.discountForNewsletter || false}*/}
+                  {/*          onChange={handleNewsletterChange}*/}
+                  {/*          className="checkbox-input"*/}
+                  {/*       />*/}
+                  {/*       <span>Odber newslettera (zľava 10%)</span>*/}
+                  {/*    </label>*/}
+                  {/*</div>*/}
                </div>
 
                <div className="card">

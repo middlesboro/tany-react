@@ -61,8 +61,8 @@ const BezfarebnaHenna = () => {
       <p>
         Všetky henny ktoré máme v ponuke sú kvalitné a overené, ale chápeme že
         vybrať si medzi nimi môže byť niekedy problém. Ak idete skúšať prvý
-        krát bezfarebnú hennu odporúčame siahnuť po <Link to="/category/henna-na-vlasy?q=Brand-Henne+Color" className="text-tany-green hover:underline">Henné color</Link> (overená
-        kvalita, dobrá cena), alebo skúsiť <Link to="http://localhost:3001/category/henna-na-vlasy?q=Brand-Indian+Natural+Hair+Care" className="text-tany-green hover:underline">Indickú hennu</Link> (vhodná ak máte
+        krát bezfarebnú hennu odporúčame siahnuť po <Link to="/kategoria/henna-na-vlasy?q=Brand-Henne+Color" className="text-tany-green hover:underline">Henné color</Link> (overená
+        kvalita, dobrá cena), alebo skúsiť <Link to="/kategoria/henna-na-vlasy?q=Brand-Indian+Natural+Hair+Care" className="text-tany-green hover:underline">Indickú hennu</Link> (vhodná ak máte
         dlhšie vlasy - 200g balenie, BIO produkt).
       </p>
       <p className="mt-4">

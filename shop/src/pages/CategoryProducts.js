@@ -76,7 +76,7 @@ const CategoryProductsContent = () => {
               { label: 'Domov', path: '/' },
               ...path.map(cat => ({
                   label: cat.title,
-                  path: `/category/${cat.slug}`
+                  path: `/kategoria/${cat.slug}`
               }))
            ];
            setBreadcrumbs(crumbs);

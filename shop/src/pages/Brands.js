@@ -43,7 +43,7 @@ const Brands = () => {
           {brands.map((brand) => (
             <Link
               key={brand.id}
-              to={`/category/vsetky-produkty?q=Brand-${customEncode(removeDiacritics(brand.name))}`}
+              to={`/kategoria/vsetky-produkty?q=Brand-${customEncode(removeDiacritics(brand.name))}`}
               className="bg-white p-6 rounded-lg shadow-sm hover:shadow-md transition-shadow border border-gray-100 flex flex-col items-center justify-center h-full"
             >
                <div className="w-full h-32 flex items-center justify-center mb-4 overflow-hidden p-2">

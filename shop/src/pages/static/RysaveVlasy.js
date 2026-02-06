@@ -51,7 +51,7 @@ const RysaveVlasy = () => {
 
       <p className="mt-2">
         Farbenie hennou nie je vôbec také komplikované ako si mnohé z nás
-        myslia. Na začiatok odporúčame použiť hennu značky <Link to="/category/henna-na-vlasy?q=Brand-Voono+Henna+na+vlasy" className="text-tany-green hover:underline">Voono</Link>. Veľmi dobre sa nanáša a medzi zákazníčkami je obľúbená.
+        myslia. Na začiatok odporúčame použiť hennu značky <Link to="/kategoria/henna-na-vlasy?q=Brand-Voono+Henna+na+vlasy" className="text-tany-green hover:underline">Voono</Link>. Veľmi dobre sa nanáša a medzi zákazníčkami je obľúbená.
         Postup ako nato si môžete pozrieť v našom článku <Link to="/blog/059261d5-a28c-4d58-b3f6-42b83fa036ff" className="text-tany-green hover:underline">Ako farbiť vlasy hennou</Link>.
       </p>
 
@@ -61,7 +61,7 @@ const RysaveVlasy = () => {
       </div>
 
        <div className="my-4">
-        <Link to="/category/henna-na-vlasy?q=Odtien-Medena" className="text-tany-green font-bold hover:underline">Zobraziť všetky medené farby na vlasy</Link>
+        <Link to="/kategoria/henna-na-vlasy?q=Odtien-Medena" className="text-tany-green font-bold hover:underline">Zobraziť všetky medené farby na vlasy</Link>
       </div>
 
 

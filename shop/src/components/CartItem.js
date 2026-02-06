@@ -72,7 +72,7 @@ const CartItem = ({ item }) => {
 
       {/* Details */}
       <div className="flex-1">
-        <Link to={`/product/${item.slug}`} className="block font-bold text-gray-800 hover:text-[#2f6f4f] no-underline mb-1">
+        <Link to={`/produkt/${item.slug}`} className="block font-bold text-gray-800 hover:text-[#2f6f4f] no-underline mb-1">
           {displayName}
         </Link>
         <div className="muted">

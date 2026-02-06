@@ -125,7 +125,7 @@ const CustomerOrderDetail = ({ orderId, onBack }) => {
                      )}
                      <div className="flex-1">
                          {item.slug || item.productSlug ? (
-                           <Link to={`/product/${item.slug || item.productSlug}`} className="text-gray-900 hover:text-tany-green hover:underline block">
+                           <Link to={`/produkt/${item.slug || item.productSlug}`} className="text-gray-900 hover:text-tany-green hover:underline block">
                              {item.name}
                            </Link>
                          ) : (

@@ -78,7 +78,7 @@ describe('BrandReviews Page', () => {
     const links = screen.getAllByRole('link', { name: 'Awesome Product' });
     expect(links.length).toBeGreaterThanOrEqual(1);
     links.forEach(link => {
-        expect(link).toHaveAttribute('href', '/product/product-slug');
+        expect(link).toHaveAttribute('href', '/produkt/product-slug');
     });
   });
 

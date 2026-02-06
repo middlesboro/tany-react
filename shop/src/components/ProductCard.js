@@ -113,7 +113,7 @@ const ProductCard = ({ product }) => {
         </button>
 
       <Link
-        to={`/product/${product.slug}`}
+        to={`/produkt/${product.slug}`}
         className="block relative overflow-hidden flex-shrink-0 aspect-square"
         onClick={() => logSelectItem(product)}
       >
@@ -134,7 +134,7 @@ const ProductCard = ({ product }) => {
 
       <div className="p-2 md:p-4 flex flex-col flex-grow text-center">
         <Link
-            to={`/product/${product.slug}`}
+            to={`/produkt/${product.slug}`}
             className="block mb-2"
             onClick={() => logSelectItem(product)}
         >

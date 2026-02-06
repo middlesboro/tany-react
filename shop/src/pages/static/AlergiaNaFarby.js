@@ -49,7 +49,7 @@ const AlergiaNaFarby = () => {
       <p>
         Predtým ako sa pustíte do farbenia vlasov je dôležité vykonať test na
         alergickú reakciu. Nezáleží či sa idete farbiť 100% prírodnou farbou
-        ako je <Link to="/category/henna-na-vlasy" className="text-tany-green hover:underline">henna</Link>, alebo chemickou farbou. Alergickú reakciu totiž
+        ako je <Link to="/kategoria/henna-na-vlasy" className="text-tany-green hover:underline">henna</Link>, alebo chemickou farbou. Alergickú reakciu totiž
         môžete mať na každú farbu na vlasy. Tak ako môžeme byť alergický alebo
         citlivý na mlieko, lepok atď. môžeme byť alergický aj na určité zložky
         farby. Či už prírodné, alebo nie. V ideálnom prípade si test na alergiu
@@ -67,7 +67,7 @@ const AlergiaNaFarby = () => {
       <h2 className="text-xl font-semibold mt-6 mb-2">Látky ktoré najčastejšie spôsobujú alergickú reakciu</h2>
       <ul className="list-disc pl-5 space-y-1">
         <li>peroxid (Používa sa na zosvetlenie vlasov a obsahujú ho skoro všetky chemické farby.)</li>
-        <li>amoniak (Pomáha farbe lepšie preniknúť do vlasov. Je možné kúpiť aj farby bez amoniaku ako napríklad <Link to="/product/biokap" className="text-tany-green hover:underline">Biokap</Link>.)</li>
+        <li>amoniak (Pomáha farbe lepšie preniknúť do vlasov. Je možné kúpiť aj farby bez amoniaku ako napríklad <Link to="/kategoria/farby-na-vlasy?q=Brand-Biosline+%252D+Biokap" className="text-tany-green hover:underline">Biokap</Link>.)</li>
         <li>PPD (Najčastejší alergén. Často sa neprejaví pri prvom použití, ale zhoršuje sa to časom ak používate často chemické farby s obsahom PPD)</li>
         <li>parabény (Konzervanty bežne sú používané v kozmetike. Sú vyrábané z ropy a je lepšie sa im vyhnúť.)</li>
         <li>nikel</li>
@@ -89,7 +89,7 @@ const AlergiaNaFarby = () => {
       </div>
 
       <div className="my-4">
-        <Link to="/category/henna-na-vlasy" className="text-tany-green font-bold hover:underline">Zobraziť všetky henny na vlasy</Link>
+        <Link to="/kategoria/henna-na-vlasy" className="text-tany-green font-bold hover:underline">Zobraziť všetky henny na vlasy</Link>
       </div>
       <p>
         Ďalšou alternatívou je používať chemické farby s čo najmenšou
@@ -98,7 +98,7 @@ const AlergiaNaFarby = () => {
         na nikel (obsah niklu na minimálnej a bezpečnej úrovni - 1 ppm).
       </p>
       <div className="my-4">
-        <Link to="/category/vsetky-produkty?q=Brand-Biosline%20-%20Biokap" className="text-tany-green font-bold hover:underline">Zobraziť farby Biokap</Link>
+        <Link to="/kategoria/vsetky-produkty?q=Brand-Biosline%20-%20Biokap" className="text-tany-green font-bold hover:underline">Zobraziť farby Biokap</Link>
       </div>
       <p>
         Poslednou alternatívou je nechať si svoju pôvodnú farbu vlasov :)

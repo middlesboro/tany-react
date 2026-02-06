@@ -94,7 +94,7 @@ const BrandReviews = ({ brandIds: propBrandIds, brandId: propBrandId, title, des
                 <div className="flex gap-4">
                     {review.productImage && (
                         <div className="flex-shrink-0">
-                            <Link to={`/product/${review.productSlug || '#'}`}>
+                            <Link to={`/produkt/${review.productSlug || '#'}`}>
                                 <img
                                     src={review.productImage}
                                     alt={review.productName || review.productTitle || 'Product'}
@@ -118,7 +118,7 @@ const BrandReviews = ({ brandIds: propBrandIds, brandId: propBrandId, title, des
                         </div>
 
                         {(review.productName || review.productTitle) && (
-                            <Link to={`/product/${review.productSlug || '#'}`} className="text-sm text-tany-green hover:underline mb-2 block font-medium">
+                            <Link to={`/produkt/${review.productSlug || '#'}`} className="text-sm text-tany-green hover:underline mb-2 block font-medium">
                                 {review.productName || review.productTitle}
                             </Link>
                         )}

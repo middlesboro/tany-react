@@ -92,7 +92,7 @@ describe('ProductDetail Breadcrumbs', () => {
     await waitFor(() => {
       expect(mockSetBreadcrumbs).toHaveBeenCalledWith([
         { label: 'Domov', path: '/' },
-        { label: 'Test Category', path: '/category/test-category' },
+        { label: 'Test Category', path: '/kategoria/test-category' },
         { label: 'Test Product', path: null }
       ]);
     });
@@ -136,8 +136,8 @@ describe('ProductDetail Breadcrumbs', () => {
         // Should find path: Domov -> Parent -> Child -> Product
       expect(mockSetBreadcrumbs).toHaveBeenCalledWith([
         { label: 'Domov', path: '/' },
-        { label: 'Parent Category', path: '/category/parent-category' },
-        { label: 'Child Category', path: '/category/child-category' },
+        { label: 'Parent Category', path: '/kategoria/parent-category' },
+        { label: 'Child Category', path: '/kategoria/child-category' },
         { label: 'Test Product', path: null }
       ]);
     });

@@ -6,13 +6,13 @@ const CategoryTreeItem = ({ category }) => {
   const location = useLocation();
   const hasChildren = category.children && category.children.length > 0;
 
-  const isActive = location.pathname === `/category/${category.slug}`;
+  const isActive = location.pathname === `/kategoria/${category.slug}`;
   const isSale = ['výpredaj', 'vypredaj'].includes(category.title.toLowerCase());
 
   const hasActiveDescendant = useMemo(() => {
     const check = (cats) => {
       if (!cats) return false;
-      return cats.some((c) => `/category/${c.slug}` === location.pathname || check(c.children));
+      return cats.some((c) => `/kategoria/${c.slug}` === location.pathname || check(c.children));
     };
     return check(category.children);
   }, [category.children, location.pathname]);
@@ -33,7 +33,7 @@ const CategoryTreeItem = ({ category }) => {
     <li className="border-b border-gray-100 last:border-0">
       <div className={`flex items-center justify-between transition-colors ${isActive ? 'bg-gray-50' : 'hover:bg-gray-50'}`}>
         <Link
-          to={`/category/${category.slug}`}
+          to={`/kategoria/${category.slug}`}
           className={`block py-3 px-4 text-sm flex-grow ${
             isSale
               ? 'bg-red-600 text-white font-bold hover:bg-red-700'

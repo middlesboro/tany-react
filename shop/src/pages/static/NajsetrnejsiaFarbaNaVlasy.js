@@ -18,7 +18,7 @@ const NajsetrnejsiaFarbaNaVlasy = () => {
         názvov a chemických výrazov, tak si môžeme byť istý, že o šetrnej farbe
         nemôže byť žiadna reč.
         Naopak existuje jeden druh farby, kde môžeme s určitosťou povedať, že
-        je šetrná k vlasom a to je <Link to="/category/henna-na-vlasy" className="text-tany-green hover:underline">henna</Link>. Dôvod je jednoduchý. Čistý prášok
+        je šetrná k vlasom a to je <Link to="/kategoria/henna-na-vlasy" className="text-tany-green hover:underline">henna</Link>. Dôvod je jednoduchý. Čistý prášok
         henny neobsahuje nič iné, len pomleté listy rastliny Lawsonia inermis.
       </p>
 
@@ -49,7 +49,7 @@ const NajsetrnejsiaFarbaNaVlasy = () => {
       </div>
 
       <div className="my-4">
-        <Link to="/category/henna-na-vlasy" className="text-tany-green font-bold hover:underline">Zobraziť všetky henny na vlasy</Link>
+        <Link to="/kategoria/henna-na-vlasy" className="text-tany-green font-bold hover:underline">Zobraziť všetky henny na vlasy</Link>
       </div>
 
       <h2 className="text-xl font-semibold mt-6 mb-2">Prírodné farby na vlasy Biokap</h2>
@@ -87,7 +87,7 @@ const NajsetrnejsiaFarbaNaVlasy = () => {
       </div>
 
        <div className="my-4">
-        <Link to="/category/vsetky-produkty?q=Brand-Biosline%20-%20Biokap" className="text-tany-green font-bold hover:underline">Zobraziť farby Biokap</Link>
+        <Link to="/kategoria/vsetky-produkty?q=Brand-Biosline%20-%20Biokap" className="text-tany-green font-bold hover:underline">Zobraziť farby Biokap</Link>
       </div>
     </StaticPage>
   );

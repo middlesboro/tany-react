@@ -14,7 +14,7 @@ const NajkvalitnejsieFarbyNaVlasy = () => {
         Aby sme ľuďom pomohli nájsť dokonalú farbu vlasov pre ich jedinečný tón
         pleti, zostavili sme zoznam najkvalitnejších farieb na vlasy dostupných
         v našom eshope Tany.sk.
-        V ponuke máme 100% prírodné <Link to="/category/henna-na-vlasy" className="text-tany-green hover:underline">henny na vlasy</Link>, alebo farby <Link to="/category/farby-na-vlasy?q=Brand-Biosline+%252D+Biokap" className="text-tany-green hover:underline">Biokap</Link>,
+        V ponuke máme 100% prírodné <Link to="/kategoria/henna-na-vlasy" className="text-tany-green hover:underline">henny na vlasy</Link>, alebo farby <Link to="/kategoria/farby-na-vlasy?q=Brand-Biosline+%252D+Biokap" className="text-tany-green hover:underline">Biokap</Link>,
         ktoré sú bez PPD, amoniaku a najčastejších alergénov.
       </p>
 
@@ -43,7 +43,7 @@ const NajkvalitnejsieFarbyNaVlasy = () => {
       </div>
 
       <div className="my-4">
-        <Link to="/category/henna-na-vlasy" className="text-tany-green font-bold hover:underline">Zobraziť všetky henny na vlasy</Link>
+        <Link to="/kategoria/henna-na-vlasy" className="text-tany-green font-bold hover:underline">Zobraziť všetky henny na vlasy</Link>
       </div>
 
       <h2 className="text-xl font-semibold mt-6 mb-2">Prírodné farby na vlasy Biokap</h2>
@@ -78,7 +78,7 @@ const NajkvalitnejsieFarbyNaVlasy = () => {
       </div>
 
        <div className="my-4">
-        <Link to="/category/vsetky-produkty?q=Brand-Biosline%20-%20Biokap" className="text-tany-green font-bold hover:underline">Zobraziť farby Biokap</Link>
+        <Link to="/kategoria/vsetky-produkty?q=Brand-Biosline%20-%20Biokap" className="text-tany-green font-bold hover:underline">Zobraziť farby Biokap</Link>
       </div>
     </StaticPage>
   );

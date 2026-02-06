@@ -57,7 +57,7 @@ const RicinovyOlejNaVlasy = () => {
       <p>
         Olej je vhodné kombinovať s esenciálnymi olejmi, ktoré zmes oleja
         krásne prevoňajú a ešte viac posilnia účinky. Vhodné je zmiešať
-        ricínový olej s 1-2 kvapkami <Link to="/product/rozmarin-prirodny-esencialny-olej-10ml-tuli-a-tuli" className="text-tany-green hover:underline">esenciálneho oleja rozmarín</Link>, ktorý má
+        ricínový olej s 1-2 kvapkami <Link to="/produkt/rozmarin-prirodny-esencialny-olej-10ml-tuli-a-tuli" className="text-tany-green hover:underline">esenciálneho oleja rozmarín</Link>, ktorý má
         taktiež priaznivé účinky na vlasy a podporuje ich rast.
       </p>
 

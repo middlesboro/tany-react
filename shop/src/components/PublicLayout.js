@@ -52,7 +52,7 @@ const PublicLayout = () => {
   const displayCategories = [
     ...categories.map(cat => ({
       name: cat.title,
-      path: `/category/${cat.slug}`,
+      path: `/kategoria/${cat.slug}`,
     }))
   ];
 
