@@ -1,11 +1,56 @@
 import ReactGA from 'react-ga4';
 
 const GA_MEASUREMENT_ID = process.env.REACT_APP_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX';
+const GOOGLE_ADS_ID = process.env.REACT_APP_GOOGLE_ADS_ID;
+const GOOGLE_ADS_CONVERSION_LABEL = process.env.REACT_APP_GOOGLE_ADS_CONVERSION_LABEL;
 
 export const initGA = () => {
     // Check if ID is present to avoid errors in dev/test if missing
     if (GA_MEASUREMENT_ID) {
         ReactGA.initialize(GA_MEASUREMENT_ID);
+    }
+};
+
+export const initGoogleAds = () => {
+    if (GOOGLE_ADS_ID && typeof window !== 'undefined') {
+        // Inject gtag script if not present
+        const scriptId = 'google-ads-script';
+        if (!document.getElementById(scriptId)) {
+            const script = document.createElement('script');
+            script.id = scriptId;
+            script.async = true;
+            script.src = `https://www.googletagmanager.com/gtag/js?id=${GOOGLE_ADS_ID}`;
+            document.head.appendChild(script);
+        }
+
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){window.dataLayer.push(arguments);}
+        // Ensure gtag is available on window if not already
+        if (!window.gtag) {
+            window.gtag = gtag;
+        }
+        // Config Google Ads
+        window.gtag('config', GOOGLE_ADS_ID);
+    }
+};
+
+export const logGoogleAdsConversion = (order) => {
+    if (GOOGLE_ADS_ID && GOOGLE_ADS_CONVERSION_LABEL && typeof window.gtag === 'function') {
+        window.gtag('event', 'conversion', {
+            'send_to': `${GOOGLE_ADS_ID}/${GOOGLE_ADS_CONVERSION_LABEL}`,
+            'value': order.priceBreakDown?.totalPrice || order.finalPrice,
+            'currency': 'EUR',
+            'transaction_id': order.orderIdentifier || order.id
+        });
+    }
+};
+
+export const logGoogleAdsRemarketing = (eventName, params) => {
+    if (GOOGLE_ADS_ID && typeof window.gtag === 'function') {
+        window.gtag('event', eventName, {
+            'send_to': GOOGLE_ADS_ID,
+            ...params
+        });
     }
 };
 
@@ -52,6 +97,17 @@ export const logViewItem = (item) => {
             item_name: item.title,
             price: item.discountPrice || item.price,
             item_category: item.categoryTitle || (item.category ? item.category.title : undefined)
+        }]
+    });
+
+    // Google Ads Remarketing
+    logGoogleAdsRemarketing('view_item', {
+        ecomm_prodid: item.id || item.productId,
+        ecomm_totalvalue: item.discountPrice || item.price,
+        ecomm_pagetype: 'product',
+        items: [{
+            id: item.id || item.productId,
+            google_business_vertical: 'retail'
         }]
     });
 };
@@ -237,6 +293,13 @@ export const logPurchase = (order) => {
             price: item.priceWithVat || item.price, // Check what order items contain
             quantity: item.quantity
         }))
+    });
+
+    // Google Ads Remarketing
+    logGoogleAdsRemarketing('purchase', {
+        ecomm_prodid: items.map(i => i.id),
+        ecomm_totalvalue: order.priceBreakDown?.totalPrice || order.finalPrice,
+        ecomm_pagetype: 'purchase'
     });
 };
 
