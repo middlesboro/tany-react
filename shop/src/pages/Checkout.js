@@ -16,6 +16,7 @@ const Checkout = () => {
   const [errors, setErrors] = useState({});
   const [warnings, setWarnings] = useState({});
   const { setBreadcrumbs } = useBreadcrumbs();
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   usePageMeta("Pokladňa", "Dokončite svoju objednávku.");
 
@@ -460,6 +461,8 @@ const Checkout = () => {
         return;
     }
 
+    setIsSubmitting(true);
+
     const carrierObj = carriers.find(c => c.id === selectedCarrier);
     const paymentObj = payments.find(p => p.id === selectedPayment);
     const shippingPrice = calculateShippingPrice(carrierObj);
@@ -472,6 +475,7 @@ const Checkout = () => {
         if (carrierElement) {
             carrierElement.scrollIntoView({ behavior: 'smooth', block: 'center' });
         }
+        setIsSubmitting(false);
         return;
     }
 
@@ -509,6 +513,7 @@ const Checkout = () => {
     } catch (error) {
       console.error('Order creation failed', error);
       alert('Nepodarilo sa vytvoriť objednávku. Skúste to prosím znova.');
+      setIsSubmitting(false);
     }
   };
 
@@ -807,8 +812,15 @@ const Checkout = () => {
                 Bez DPH: {(cart?.priceBreakDown?.totalPriceWithoutVat || 0).toFixed(2)} € · DPH: {(cart?.priceBreakDown?.totalPriceVatValue || 0).toFixed(2)} €
             </div>
 
-            <button className="btn" type="submit" disabled={!selectedCarrier || !selectedPayment}>
-                Objednať s povinnosťou platby
+            <button className="btn" type="submit" disabled={!selectedCarrier || !selectedPayment || isSubmitting}>
+                {isSubmitting ? (
+                    <>
+                        <span className="spinner"></span>
+                        Objednávka sa vytvára...
+                    </>
+                ) : (
+                    "Objednať s povinnosťou platby"
+                )}
             </button>
           </div>
 
