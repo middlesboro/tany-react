@@ -1,8 +1,11 @@
 import React from 'react';
-import RichTextEditor from './RichTextEditor';
+import ReactQuill from 'react-quill-new';
+import { quillModulesTable } from '../utils/quillConfig';
+import 'react-quill-new/dist/quill.snow.css';
 
 const BlogForm = ({ blog, handleChange, handleSubmit, handleSaveAndStay }) => {
-  const handleEditorChange = (name) => (value) => {
+  const handleQuillChange = (name) => (value) => {
+    // ReactQuill returns the HTML value directly
     handleChange({
       target: {
         name,
@@ -60,9 +63,12 @@ const BlogForm = ({ blog, handleChange, handleSubmit, handleSaveAndStay }) => {
 
       <div className="mb-4">
         <label className="block text-gray-700">Description</label>
-        <RichTextEditor
+        <ReactQuill
+          theme="snow"
           value={blog.description}
-          onChange={handleEditorChange('description')}
+          onChange={handleQuillChange('description')}
+          modules={quillModulesTable}
+          className="bg-white"
         />
       </div>
 

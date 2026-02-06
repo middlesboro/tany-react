@@ -12,8 +12,6 @@
     "react-dom": "^19.2.3",
     "react-quill-new": "^3.7.0",
     "react-scripts": "5.0.1",
-    "suneditor": "^2.47.8",
-    "suneditor-react": "^3.6.1",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
