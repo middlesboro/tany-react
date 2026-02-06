@@ -66,10 +66,10 @@ const CustomerOrderList = ({ onOrderSelect }) => {
             {orders.map((order) => (
               <tr key={order.id}>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">{order.orderIdentifier}</p>
+                  <p className="text-gray-900 whitespace-nowrap">{order.orderIdentifier}</p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">{new Date(order.createDate).toLocaleString('sk-SK')}</p>
+                  <p className="text-gray-900 whitespace-nowrap">{new Date(order.createDate).toLocaleString('sk-SK')}</p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <span className={`relative inline-block px-3 py-1 font-semibold leading-tight text-gray-900`}>
@@ -78,7 +78,7 @@ const CustomerOrderList = ({ onOrderSelect }) => {
                   </span>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-no-wrap">{order.finalPrice?.toFixed(2)} €</p>
+                  <p className="text-gray-900 whitespace-nowrap">{order.finalPrice?.toFixed(2)} €</p>
                 </td>
                 <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                   <button
