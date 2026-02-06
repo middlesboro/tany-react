@@ -1,35 +1,30 @@
-import React, { useRef } from 'react';
-import { Editor } from '@tinymce/tinymce-react';
+import React from 'react';
+import SunEditor from 'suneditor-react';
+import 'suneditor/dist/css/suneditor.min.css'; // Import Sun Editor's CSS File
 
 const RichTextEditor = ({ value, onChange, disabled }) => {
-  const editorRef = useRef(null);
-
   return (
-    <Editor
-      onInit={(evt, editor) => editorRef.current = editor}
-      value={value}
-      disabled={disabled}
-      init={{
-        height: 500,
-        menubar: true,
-        plugins: [
-          'advlist', 'autolink', 'lists', 'link', 'image', 'charmap', 'preview',
-          'anchor', 'searchreplace', 'visualblocks', 'code', 'fullscreen',
-          'insertdatetime', 'media', 'table', 'code', 'help', 'wordcount'
+    <SunEditor
+      setContents={value}
+      onChange={onChange}
+      disable={disabled}
+      setOptions={{
+        height: '500px',
+        buttonList: [
+            ['undo', 'redo'],
+            ['font', 'fontSize', 'formatBlock'],
+            ['paragraphStyle', 'blockquote'],
+            ['bold', 'underline', 'italic', 'strike', 'subscript', 'superscript'],
+            ['fontColor', 'hiliteColor', 'textStyle'],
+            ['removeFormat'],
+            ['outdent', 'indent'],
+            ['align', 'horizontalRule', 'list', 'lineHeight'],
+            ['table', 'link', 'image', 'video', 'audio'], // video handles youtube iframes
+            ['fullScreen', 'showBlocks', 'codeView'],
+            ['preview', 'print']
         ],
-        toolbar: 'undo redo | blocks | ' +
-          'bold italic forecolor | alignleft aligncenter ' +
-          'alignright alignjustify | bullist numlist outdent indent | ' +
-          'removeformat | help | image media table link',
-        content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
-        image_title: true,
-        automatic_uploads: true,
-        file_picker_types: 'image',
-        // Note: For real image upload to server, we would need images_upload_handler
-        // For now, we rely on base64 or URL inputs which is default behavior if no handler
-      }}
-      onEditorChange={(content, editor) => {
-        onChange(content);
+        // Additional options for handling video
+        youtubeQuery: 'autoplay=0&controls=1',
       }}
     />
   );
