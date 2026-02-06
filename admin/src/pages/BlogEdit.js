@@ -3,7 +3,6 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getBlog, createBlog, updateBlog } from '../services/blogAdminService';
 import BlogForm from '../components/BlogForm';
 import BlogImageManager from '../components/BlogImageManager';
-import { restoreIframes } from '../utils/videoUtils';
 
 const BlogEdit = () => {
   const { id } = useParams();
@@ -24,9 +23,7 @@ const BlogEdit = () => {
     if (id) {
       const fetchBlogData = async () => {
         const data = await getBlog(id);
-        if (data && data.description) {
-          data.description = restoreIframes(data.description);
-        }
+        // Removed restoreIframes as TinyMCE handles embeds robustly
         setBlog(data);
       };
       fetchBlogData();
