@@ -38,11 +38,12 @@ import ScrollToTop from './components/ScrollToTop';
 import LoginModal from './components/LoginModal';
 import MessageModal from './components/MessageModal';
 import { HelmetProvider } from 'react-helmet-async';
-import { initGA } from './utils/analytics';
+import { initGA, initGoogleAds } from './utils/analytics';
 import usePageTracking from './hooks/usePageTracking';
 
-// Initialize GA
+// Initialize GA and Google Ads
 initGA();
+initGoogleAds();
 
 const PageTracker = () => {
   usePageTracking();

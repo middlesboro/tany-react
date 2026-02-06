@@ -6,7 +6,7 @@ import { getPaymentInfo, checkBesteronStatus } from '../services/paymentService'
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import useNoIndex from '../hooks/useNoIndex';
 import usePageMeta from '../hooks/usePageMeta';
-import { logPurchase } from '../utils/analytics';
+import { logPurchase, logGoogleAdsConversion } from '../utils/analytics';
 
 const OrderConfirmation = () => {
   useNoIndex();
@@ -63,6 +63,39 @@ const OrderConfirmation = () => {
         const key = `ga_logged_order_${data.id}`;
         if (!sessionStorage.getItem(key)) {
              logPurchase(data);
+             logGoogleAdsConversion(data);
+
+             // Heureka Conversion Tracking
+             try {
+                // Initialize Heureka (safe to call multiple times as it queues)
+                (function(t, r, a, c, k, i, n, g) {t['ROIDataObject'] = k;
+                t[k]=t[k]||function(){(t[k].q=t[k].q||[]).push(arguments)},t[k].c=i;
+                if(r.getElementById('heureka-conversion-script')) return; // Prevent duplicates
+                n=r.createElement(a);n.id='heureka-conversion-script';
+                g=r.getElementsByTagName(a)[0];n.async=1;n.src=c;
+                if (g) { g.parentNode.insertBefore(n,g); } else { r.head.appendChild(n); }
+                })(window, document, 'script', '//www.heureka.sk/ocm/sdk.js?version=2&page=thank_you', 'heureka', 'sk');
+
+                if (window.heureka) {
+                    window.heureka('authenticate', '497e269df0cd77843a3273d5a445b716f799');
+                    window.heureka('set_order_id', data.orderIdentifier); // ORDER_ID
+
+                    const items = data.items || [];
+                    items.forEach(item => {
+                         // 'PRODUCT_ITEM_ID', 'PRODUCT_NAME', 'SINGLE_PRODUCT_PRICE_VAT', 'NUMBER_OF_PRODUCTS'
+                         // Use priceWithVat if available, otherwise fallback to price
+                         const price = item.priceWithVat !== undefined ? item.priceWithVat : item.price;
+                         window.heureka('add_product', item.id, item.name, price, item.quantity);
+                    });
+
+                    window.heureka('set_total_vat', data.priceBreakDown?.totalPrice || data.finalPrice); // TOTAL_PRICE_WITH_VAT
+                    window.heureka('set_currency', 'EUR');
+                    window.heureka('send', 'Order');
+                }
+             } catch (heurekaErr) {
+                 console.error("Heureka tracking failed", heurekaErr);
+             }
+
              sessionStorage.setItem(key, 'true');
         }
 

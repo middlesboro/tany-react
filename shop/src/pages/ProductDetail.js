@@ -354,6 +354,36 @@ const ProductDetail = () => {
   const [wishlistLoading, setWishlistLoading] = useState(false);
 
   useEffect(() => {
+    // Heureka Product Detail Script
+    const scriptId = 'heureka-product-script';
+    const runHeurekaSnippet = () => {
+       (function(t, r, a, c, k, i, n, g) {t['ROIDataObject'] = k;
+       t[k]=t[k]||function(){(t[k].q=t[k].q||[]).push(arguments)},t[k].c=i;
+       if (document.getElementById(scriptId)) return;
+       n=r.createElement(a);
+       n.id = scriptId;
+       g=r.getElementsByTagName(a)[0];
+       n.async=1;
+       n.src=c;
+       if (g) {
+         g.parentNode.insertBefore(n,g);
+       } else {
+         r.head.appendChild(n);
+       }
+       })(window, document, 'script', '//www.heureka.sk/ocm/sdk.js?version=2&page=product_detail', 'heureka', 'sk');
+    };
+
+    runHeurekaSnippet();
+
+    return () => {
+        const script = document.getElementById(scriptId);
+        if (script) {
+            script.parentNode.removeChild(script);
+        }
+    };
+  }, [slug]);
+
+  useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
       try {
