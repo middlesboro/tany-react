@@ -176,14 +176,11 @@ const OrderConfirmation = () => {
                <svg width="1em" height="1em" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M20 6L9 17L4 12" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/></svg>
           </div>
           <h1 className="text-2xl md:text-3xl font-bold mb-2">
-            {isPaid ? "Objednávka úspešne vytvorená" : "Objednávka prijatá"}
+              {ORDER_STATUS_MAPPING[order.status] || order.status}
           </h1>
           <span className="inline-block mt-3 px-4 py-1.5 rounded-full bg-[#e9f6ef] text-[#1f7a4d] font-semibold">
               Objednávka #{order.orderIdentifier}
           </span>
-          <div className="mt-2 text-lg text-gray-700 font-medium">
-             Stav: {ORDER_STATUS_MAPPING[order.status] || order.status}
-          </div>
           {order.carrierOrderStateLink && (
               <div className="mt-4">
                   <a href={order.carrierOrderStateLink} target="_blank" rel="noopener noreferrer" className="inline-block px-6 py-2 border border-transparent text-base font-medium rounded-md text-white bg-[#1f7a4d] hover:bg-green-700">
@@ -202,7 +199,7 @@ const OrderConfirmation = () => {
           {/* RIGHT */}
           <div className="space-y-4">
                <div className="bg-white rounded-[14px] p-5 shadow-[0_6px_20px_rgba(0,0,0,0.05)]">
-                  <h3 className="text-lg font-bold mb-4">Osobné údaje a doručovacie údaje</h3>
+                  <h3 className="text-lg font-bold mb-4">Osobné a doručovacie údaje</h3>
                   <div className="text-gray-600 mb-1.5">{order.firstname} {order.lastname}</div>
                   <div className="text-gray-600 mb-1.5">{order.email}</div>
                   <div className="text-gray-600 mb-4">{order.phone}</div>
