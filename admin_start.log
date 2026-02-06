@@ -2,22 +2,28 @@
 > admin@0.1.0 start
 > cross-env PORT=3000 react-scripts start
 
-(node:2859) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:4011) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 (Use `node --trace-deprecation ...` to show where the warning was created)
-(node:2859) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:4011) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 Starting the development server...
 
 Compiled with warnings.
 
 [eslint]
+src/components/BlogForm.js
+  Line 3:10:  'quillModules' is defined but never used  no-unused-vars
+
 src/pages/CartDiscounts.js
-  Line 14:6:  React Hook useEffect has a missing dependency: 'fetchDiscounts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 19:6:  React Hook useEffect has a missing dependency: 'fetchDiscounts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
 src/pages/FilterParameterValueEdit.js
   Line 57:6:  React Hook useEffect has a missing dependency: 'fetchAssignedProducts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
 src/pages/OrderEdit.js
   Line 3:33:  'updateOrder' is defined but never used  no-unused-vars
+
+src/pages/Wishlists.js
+  Line 34:6:  React Hook useEffect has a missing dependency: 'fetchWishlists'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
 src/services/authService.js
   Line 1:7:  'API_URL' is assigned a value but never used  no-unused-vars
@@ -26,8 +32,11 @@ Search for the keywords to learn more about each warning.
 To ignore, add // eslint-disable-next-line to the line before.
 
 WARNING in [eslint]
+src/components/BlogForm.js
+  Line 3:10:  'quillModules' is defined but never used  no-unused-vars
+
 src/pages/CartDiscounts.js
-  Line 14:6:  React Hook useEffect has a missing dependency: 'fetchDiscounts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 19:6:  React Hook useEffect has a missing dependency: 'fetchDiscounts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
 src/pages/FilterParameterValueEdit.js
   Line 57:6:  React Hook useEffect has a missing dependency: 'fetchAssignedProducts'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
@@ -35,7 +44,22 @@ src/pages/FilterParameterValueEdit.js
 src/pages/OrderEdit.js
   Line 3:33:  'updateOrder' is defined but never used  no-unused-vars
 
+src/pages/Wishlists.js
+  Line 34:6:  React Hook useEffect has a missing dependency: 'fetchWishlists'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
 src/services/authService.js
   Line 1:7:  'API_URL' is assigned a value but never used  no-unused-vars
 
 webpack compiled with 1 warning
+(node:4011) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+Proxy error: Could not proxy request /api/admin/shop-settings from localhost:3000 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/admin/carriers?page=0&size=100&sort=name,asc from localhost:3000 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/admin/payments?page=0&size=100&sort=name,asc from localhost:3000 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/admin/cart-discounts?page=0&size=100&sort=title%2Casc from localhost:3000 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
