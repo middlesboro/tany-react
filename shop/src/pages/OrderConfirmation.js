@@ -4,6 +4,7 @@ import { getOrderConfirmation } from '../services/orderService';
 import { ORDER_STATUS_MAPPING } from '../utils/constants';
 import { getPaymentInfo, checkBesteronStatus } from '../services/paymentService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
+import { useCookieConsent } from '../context/CookieConsentContext';
 import useNoIndex from '../hooks/useNoIndex';
 import usePageMeta from '../hooks/usePageMeta';
 import { logPurchase, logGoogleAdsConversion } from '../utils/analytics';
@@ -14,6 +15,7 @@ const OrderConfirmation = () => {
   const { id } = useParams();
   const { setBreadcrumbs } = useBreadcrumbs();
   const [searchParams] = useSearchParams();
+  const { consent } = useCookieConsent();
   const location = useLocation();
   const paymentStatus = searchParams.get('paymentStatus');
   const verifyPayment = searchParams.get('verifyPayment');
@@ -58,47 +60,6 @@ const OrderConfirmation = () => {
             setShowPaymentInfo(true);
         }
 
-        // GA4: Log purchase
-        // Use sessionStorage to prevent duplicate logging on refresh
-        const key = `ga_logged_order_${data.id}`;
-        if (!sessionStorage.getItem(key)) {
-             logPurchase(data);
-             logGoogleAdsConversion(data);
-
-             // Heureka Conversion Tracking
-             try {
-                // Initialize Heureka (safe to call multiple times as it queues)
-                (function(t, r, a, c, k, i, n, g) {t['ROIDataObject'] = k;
-                t[k]=t[k]||function(){(t[k].q=t[k].q||[]).push(arguments)},t[k].c=i;
-                if(r.getElementById('heureka-conversion-script')) return; // Prevent duplicates
-                n=r.createElement(a);n.id='heureka-conversion-script';
-                g=r.getElementsByTagName(a)[0];n.async=1;n.src=c;
-                if (g) { g.parentNode.insertBefore(n,g); } else { r.head.appendChild(n); }
-                })(window, document, 'script', '//www.heureka.sk/ocm/sdk.js?version=2&page=thank_you', 'heureka', 'sk');
-
-                if (window.heureka) {
-                    window.heureka('authenticate', '497e269df0cd77843a3273d5a445b716f799');
-                    window.heureka('set_order_id', data.orderIdentifier); // ORDER_ID
-
-                    const items = data.items || [];
-                    items.forEach(item => {
-                         // 'PRODUCT_ITEM_ID', 'PRODUCT_NAME', 'SINGLE_PRODUCT_PRICE_VAT', 'NUMBER_OF_PRODUCTS'
-                         // Use priceWithVat if available, otherwise fallback to price
-                         const price = item.priceWithVat !== undefined ? item.priceWithVat : item.price;
-                         window.heureka('add_product', item.id, item.name, price, item.quantity);
-                    });
-
-                    window.heureka('set_total_vat', data.priceBreakDown?.totalPrice || data.finalPrice); // TOTAL_PRICE_WITH_VAT
-                    window.heureka('set_currency', 'EUR');
-                    window.heureka('send', 'Order');
-                }
-             } catch (heurekaErr) {
-                 console.error("Heureka tracking failed", heurekaErr);
-             }
-
-             sessionStorage.setItem(key, 'true');
-        }
-
       } catch (err) {
         console.error(err);
         setError('Failed to load order details.');
@@ -110,6 +71,77 @@ const OrderConfirmation = () => {
       fetchOrder();
     }
   }, [id, paymentStatus]);
+
+  // Analytics - Depends on consent and order data
+  useEffect(() => {
+    if (!order) return;
+
+    // GA4 & Google Ads: Log purchase
+    // The functions themselves check for initialization/consent, but we can also check here for clarity
+    // Use sessionStorage to prevent duplicate logging on refresh
+    const key = `ga_logged_order_${order.id}`;
+    if (!sessionStorage.getItem(key)) {
+         // These functions now check if analytics/ads are initialized (which depends on consent)
+         // So it's safe to call them. If consent isn't granted, they won't fire.
+         // However, we only want to mark it as "logged" in session storage IF consent is present?
+         // Actually, if consent is missing, we shouldn't log. If user grants consent later on this page, we might want to log then?
+         // For simplicity: We try to log. If consent is OFF, logPurchase returns early.
+         // If we mark as logged, and user accepts later, we miss it.
+         // BUT: The cookie consent might trigger initialization later.
+
+         // Better approach:
+         // If consent.analytics is true -> log purchase.
+         if (consent && consent.analytics) {
+             logPurchase(order);
+         }
+
+         if (consent && consent.marketing) {
+             logGoogleAdsConversion(order);
+         }
+
+         // Heureka Conversion Tracking (Marketing)
+         if (consent && consent.marketing) {
+             try {
+                // Initialize Heureka (safe to call multiple times as it queues)
+                /* eslint-disable */
+                (function(t, r, a, c, k, i, n, g) {t['ROIDataObject'] = k;
+                t[k]=t[k]||function(){(t[k].q=t[k].q||[]).push(arguments)},t[k].c=i;
+                if(r.getElementById('heureka-conversion-script')) return; // Prevent duplicates
+                n=r.createElement(a);n.id='heureka-conversion-script';
+                g=r.getElementsByTagName(a)[0];n.async=1;n.src=c;
+                if (g) { g.parentNode.insertBefore(n,g); } else { r.head.appendChild(n); }
+                })(window, document, 'script', '//www.heureka.sk/ocm/sdk.js?version=2&page=thank_you', 'heureka', 'sk');
+                /* eslint-enable */
+
+                if (window.heureka) {
+                    window.heureka('authenticate', '497e269df0cd77843a3273d5a445b716f799');
+                    window.heureka('set_order_id', order.orderIdentifier); // ORDER_ID
+
+                    const items = order.items || [];
+                    items.forEach(item => {
+                         // 'PRODUCT_ITEM_ID', 'PRODUCT_NAME', 'SINGLE_PRODUCT_PRICE_VAT', 'NUMBER_OF_PRODUCTS'
+                         // Use priceWithVat if available, otherwise fallback to price
+                         const price = item.priceWithVat !== undefined ? item.priceWithVat : item.price;
+                         window.heureka('add_product', item.id, item.name, price, item.quantity);
+                    });
+
+                    window.heureka('set_total_vat', order.priceBreakDown?.totalPrice || order.finalPrice); // TOTAL_PRICE_WITH_VAT
+                    window.heureka('set_currency', 'EUR');
+                    window.heureka('send', 'Order');
+                }
+             } catch (heurekaErr) {
+                 console.error("Heureka tracking failed", heurekaErr);
+             }
+         }
+
+         // Only mark as logged if we actually had a chance to log (i.e., consent was decided)
+         // If consent is NULL (loading), we shouldn't mark yet.
+         if (consent !== null) {
+             sessionStorage.setItem(key, 'true');
+         }
+    }
+  }, [order, consent]);
+
 
   // Handle Besteron payment verification polling
   useEffect(() => {
