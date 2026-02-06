@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactQuill from 'react-quill-new';
-import { quillModules, quillModulesTable } from '../utils/quillConfig';
+import { quillModulesTable } from '../utils/quillConfig';
 import 'react-quill-new/dist/quill.snow.css';
 
 const BlogForm = ({ blog, handleChange, handleSubmit, handleSaveAndStay }) => {

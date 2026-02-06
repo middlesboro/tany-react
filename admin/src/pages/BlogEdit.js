@@ -43,7 +43,7 @@ const BlogEdit = () => {
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     const val = type === 'checkbox' ? checked : value;
-    setBlog({ ...blog, [name]: val });
+    setBlog(prevBlog => ({ ...prevBlog, [name]: val }));
   };
 
   const handleSubmit = async (e) => {
