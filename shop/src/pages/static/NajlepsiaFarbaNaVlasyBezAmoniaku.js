@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import StaticPage from '../../components/StaticPage';
+import ProductEmbed from '../../components/ProductEmbed';
 
 const NajlepsiaFarbaNaVlasyBezAmoniaku = () => {
   return (
@@ -47,17 +48,8 @@ const NajlepsiaFarbaNaVlasyBezAmoniaku = () => {
       </ul>
 
       <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="border rounded p-4">
-          <Link to="/product/indicka-henna-medena" className="font-bold text-lg hover:text-tany-green block mb-2">100% Indická Henna 200g (MEDENÁ kúra)</Link>
-          <p className="text-sm mb-2">Najpredávanejší produkt</p>
-          <p className="font-bold text-tany-green">Cena 9,50 €</p>
-          <Link to="/product/indicka-henna-medena" className="inline-block mt-2 text-white bg-tany-green px-4 py-2 rounded">Detail</Link>
-        </div>
-        <div className="border rounded p-4">
-          <Link to="/product/henna-voono-dark-brown" className="font-bold text-lg hover:text-tany-green block mb-2">Henna prírodná farba na vlasy Voono Dark Brown</Link>
-          <p className="font-bold text-tany-green">Cena 10,76 €</p>
-          <Link to="/product/henna-voono-dark-brown" className="inline-block mt-2 text-white bg-tany-green px-4 py-2 rounded">Detail</Link>
-        </div>
+        <ProductEmbed slug="indicka-henna-medena" />
+        <ProductEmbed slug="henna-voono-dark-brown" />
       </div>
 
       <div className="my-4">
@@ -94,16 +86,8 @@ const NajlepsiaFarbaNaVlasyBezAmoniaku = () => {
       </ul>
 
        <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div className="border rounded p-4">
-          <Link to="/product/biokap-rapid-prirodzena-hneda" className="font-bold text-lg hover:text-tany-green block mb-2">Farba na vlasy Nutricolor Delicato RAPID Prirodzená hnedá</Link>
-          <p className="font-bold text-tany-green">Cena 13,27 €</p>
-          <Link to="/product/biokap-rapid-prirodzena-hneda" className="inline-block mt-2 text-white bg-tany-green px-4 py-2 rounded">Detail</Link>
-        </div>
-         <div className="border rounded p-4">
-          <Link to="/product/biokap-rapid-svedsky-blond" className="font-bold text-lg hover:text-tany-green block mb-2">Nutricolor Delicato RAPID farba na vlasy - Švédsky blond</Link>
-          <p className="font-bold text-tany-green">Cena 13,27 €</p>
-          <Link to="/product/biokap-rapid-svedsky-blond" className="inline-block mt-2 text-white bg-tany-green px-4 py-2 rounded">Detail</Link>
-        </div>
+        <ProductEmbed slug="biokap-rapid-prirodzena-hneda" />
+        <ProductEmbed slug="biokap-rapid-svedsky-blond" />
       </div>
 
        <div className="my-4">
