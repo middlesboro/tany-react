@@ -1,10 +1,10 @@
 import { debounce } from './debounce';
 
 describe('debounce', () => {
-  jest.useFakeTimers();
+  vi.useFakeTimers();
 
   test('should debounce function calls', () => {
-    const func = jest.fn();
+    const func = vi.fn();
     const debouncedFunc = debounce(func, 1000);
 
     debouncedFunc('a');
@@ -13,14 +13,14 @@ describe('debounce', () => {
 
     expect(func).not.toHaveBeenCalled();
 
-    jest.advanceTimersByTime(1000);
+    vi.advanceTimersByTime(1000);
 
     expect(func).toHaveBeenCalledTimes(1);
     expect(func).toHaveBeenCalledWith('c');
   });
 
   test('should flush pending call', () => {
-    const func = jest.fn();
+    const func = vi.fn();
     const debouncedFunc = debounce(func, 1000);
 
     debouncedFunc('test');
@@ -32,12 +32,12 @@ describe('debounce', () => {
     expect(func).toHaveBeenCalledWith('test');
 
     // Ensure timer is cleared/invalidated
-    jest.advanceTimersByTime(1000);
+    vi.advanceTimersByTime(1000);
     expect(func).toHaveBeenCalledTimes(1);
   });
 
   test('should not flush if no pending call', () => {
-      const func = jest.fn();
+      const func = vi.fn();
       const debouncedFunc = debounce(func, 1000);
 
       debouncedFunc.flush();

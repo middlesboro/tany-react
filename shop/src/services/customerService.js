@@ -1,6 +1,6 @@
 import { authFetch } from '../utils/authFetch';
 
-const API_URL = `${process.env.REACT_APP_API_URL}/customer`;
+const API_URL = `${import.meta.env.VITE_API_URL}/customer`;
 
 export const getCustomerContext = async (cartId) => {
   let url = `${API_URL}/context`;
@@ -30,7 +30,7 @@ export const getCustomer = async () => {
 };
 
 export const createEmailNotification = async (notification) => {
-    const response = await authFetch(`${process.env.REACT_APP_API_URL}/customer/email-notification`, {
+    const response = await authFetch(`${import.meta.env.VITE_API_URL}/customer/email-notification`, {
         method: 'POST',
         headers: {
             'Content-Type': 'application/json',

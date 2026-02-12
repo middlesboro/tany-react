@@ -1,6 +1,6 @@
 import { authFetch } from '../utils/authFetch';
 
-const API_URL = `${process.env.REACT_APP_API_URL}/admin/carts`;
+const API_URL = `${import.meta.env.VITE_API_URL}/admin/carts`;
 
 export const getCarts = async (page = 0, sort = 'createDate,desc', size = 10, filter = {}) => {
   const params = new URLSearchParams({

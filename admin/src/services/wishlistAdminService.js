@@ -1,6 +1,6 @@
 import { authFetch } from '../utils/authFetch';
 
-const API_ADMIN_URL = `${process.env.REACT_APP_API_URL}/admin/wishlists`;
+const API_ADMIN_URL = `${import.meta.env.VITE_API_URL}/admin/wishlists`;
 
 export const getAdminWishlists = async (page = 0, size = 20, sort = 'id,desc') => {
   const params = new URLSearchParams({

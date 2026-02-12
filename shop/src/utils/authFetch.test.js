@@ -1,12 +1,12 @@
 import { authFetch } from './authFetch';
 import * as authService from '../services/authService';
 
-jest.mock('../services/authService');
+vi.mock('../services/authService');
 
 describe('authFetch', () => {
   beforeEach(() => {
-    jest.clearAllMocks();
-    global.fetch = jest.fn(() => Promise.resolve({
+    vi.clearAllMocks();
+    global.fetch = vi.fn(() => Promise.resolve({
       status: 200,
       json: () => Promise.resolve({}),
       ok: true

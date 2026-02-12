@@ -1,6 +1,6 @@
 import { authFetch } from '../utils/authFetch';
 
-const API_URL = `${process.env.REACT_APP_API_URL}/reviews`;
+const API_URL = `${import.meta.env.VITE_API_URL}/reviews`;
 
 export const getReviewsByProduct = async (productId, page = 0, size = 10, sort = 'createDate,desc') => {
   const response = await authFetch(`${API_URL}/product/${productId}?page=${page}&size=${size}&sort=${sort}`);

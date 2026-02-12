@@ -1,7 +1,7 @@
 import { authFetch } from './authFetch';
 import { getToken } from '../services/authService';
 
-jest.mock('../services/authService');
+vi.mock('../services/authService');
 
 describe('authFetch', () => {
   const originalLocation = window.location;
@@ -16,9 +16,9 @@ describe('authFetch', () => {
   });
 
   beforeEach(() => {
-    jest.clearAllMocks();
+    vi.clearAllMocks();
     window.location.href = '';
-    global.fetch = jest.fn();
+    global.fetch = vi.fn();
   });
 
   it('should add Authorization header if token exists', async () => {

@@ -1,15 +1,15 @@
 import { initGA, initGoogleAds, logEvent } from './analytics';
 import ReactGA from 'react-ga4';
 
-jest.mock('react-ga4');
+vi.mock('react-ga4');
 
 describe('Analytics Utils', () => {
     beforeEach(() => {
-        jest.clearAllMocks();
+        vi.clearAllMocks();
         // Reset window.gtag
         delete window.gtag;
         // Reset Google Ads ID
-        process.env.REACT_APP_GOOGLE_ADS_ID = 'AW-TEST';
+        import.meta.env.VITE_GOOGLE_ADS_ID = 'AW-TEST';
     });
 
     test('initGA initializes only if not already initialized', () => {

@@ -1,6 +1,6 @@
 import { authFetch } from '../utils/authFetch';
 
-const API_URL = `${process.env.REACT_APP_API_URL}/admin/shop-settings`;
+const API_URL = `${import.meta.env.VITE_API_URL}/admin/shop-settings`;
 
 export const getShopSettings = async () => {
   const response = await authFetch(API_URL);

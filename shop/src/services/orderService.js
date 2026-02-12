@@ -1,6 +1,6 @@
 import { authFetch } from '../utils/authFetch';
 
-const API_URL = `${process.env.REACT_APP_API_URL}/orders`;
+const API_URL = `${import.meta.env.VITE_API_URL}/orders`;
 
 export const createOrder = async (orderData) => {
   const response = await authFetch(API_URL, {
