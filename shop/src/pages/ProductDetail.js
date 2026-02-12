@@ -9,6 +9,7 @@ import { createEmailNotification } from '../services/customerService';
 import { useCart } from '../context/CartContext';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import { useModal } from '../context/ModalContext';
+import { useCookieConsent } from '../context/CookieConsentContext';
 import AddToCartButton from '../components/AddToCartButton';
 import ProductLabel from '../components/ProductLabel';
 import ProductCard from '../components/ProductCard';
@@ -342,6 +343,7 @@ const ProductDetail = () => {
   const { addToCart } = useCart();
   const { openLoginModal, openMessageModal } = useModal();
   const { setBreadcrumbs } = useBreadcrumbs();
+  const { consent } = useCookieConsent();
   const [product, setProduct] = useState(null);
   const [relatedProducts, setRelatedProducts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -354,9 +356,12 @@ const ProductDetail = () => {
   const [wishlistLoading, setWishlistLoading] = useState(false);
 
   useEffect(() => {
-    // Heureka Product Detail Script
+    // Heureka Product Detail Script - Only if marketing consent is given
+    if (!consent || !consent.marketing) return;
+
     const scriptId = 'heureka-product-script';
     const runHeurekaSnippet = () => {
+       /* eslint-disable */
        (function(t, r, a, c, k, i, n, g) {t['ROIDataObject'] = k;
        t[k]=t[k]||function(){(t[k].q=t[k].q||[]).push(arguments)},t[k].c=i;
        if (document.getElementById(scriptId)) return;
@@ -371,6 +376,7 @@ const ProductDetail = () => {
          r.head.appendChild(n);
        }
        })(window, document, 'script', '//www.heureka.sk/ocm/sdk.js?version=2&page=product_detail', 'heureka', 'sk');
+       /* eslint-enable */
     };
 
     runHeurekaSnippet();
@@ -381,7 +387,7 @@ const ProductDetail = () => {
             script.parentNode.removeChild(script);
         }
     };
-  }, [slug]);
+  }, [slug, consent]);
 
   useEffect(() => {
     const fetchProduct = async () => {
@@ -426,6 +432,7 @@ const ProductDetail = () => {
         setBreadcrumbs(crumbs);
 
         // GA4: Log view_item
+        // We can call this regardless, the function checks for consent internally
         logViewItem(data);
 
         try {

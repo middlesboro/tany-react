@@ -137,6 +137,12 @@
     margin-right: 10px;
 }
 
+.checkout-page .option strong {
+    white-space: nowrap;
+    flex-shrink: 0;
+    margin-left: 8px;
+}
+
 .checkout-page .active-option {
     border-color: var(--green);
     background-color: var(--green-light);
