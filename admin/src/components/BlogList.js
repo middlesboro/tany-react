@@ -40,6 +40,9 @@ const BlogList = () => {
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('author')}>
               Author
             </th>
+            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('order')}>
+              Order
+            </th>
             <th className="py-2 px-4 border-b">
               Image
             </th>
@@ -54,6 +57,7 @@ const BlogList = () => {
             <tr key={blog.id}>
               <td className="py-2 px-4 border-b">{blog.title}</td>
               <td className="py-2 px-4 border-b">{blog.author}</td>
+              <td className="py-2 px-4 border-b">{blog.order}</td>
               <td className="py-2 px-4 border-b">
                 {blog.image && (
                   <img src={blog.image} alt={blog.title} className="h-10 w-10 object-cover rounded" />
