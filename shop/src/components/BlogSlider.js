@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
 
 const BlogSlider = ({ blogs }) => {
@@ -27,19 +27,6 @@ const BlogSlider = ({ blogs }) => {
         return (prevIndex - 1 + blogs.length) % blogs.length;
     });
   };
-
-  const goToSlide = (index) => {
-    setCurrentIndex(index);
-  };
-
-  useEffect(() => {
-    if (blogs.length > itemsPerPage) {
-        const interval = setInterval(() => {
-        nextSlide();
-        }, 5000);
-        return () => clearInterval(interval);
-    }
-  }, [nextSlide, blogs.length, itemsPerPage]);
 
   if (!blogs || blogs.length === 0) {
     return null;
