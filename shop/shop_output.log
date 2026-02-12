@@ -2,58 +2,308 @@
 > shop@0.1.0 start
 > cross-env PORT=3001 react-scripts start
 
-(node:3514) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:3955) [DEP_WEBPACK_DEV_SERVER_ON_AFTER_SETUP_MIDDLEWARE] DeprecationWarning: 'onAfterSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 (Use `node --trace-deprecation ...` to show where the warning was created)
-(node:3514) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
+(node:3955) [DEP_WEBPACK_DEV_SERVER_ON_BEFORE_SETUP_MIDDLEWARE] DeprecationWarning: 'onBeforeSetupMiddleware' option is deprecated. Please use the 'setupMiddlewares' option.
 Starting the development server...
 
+Failed to compile.
+
+[eslint]
+src/pages/OrderConfirmation.js
+  Line 107:17:  Expected an assignment or function call and instead saw an expression  no-unused-expressions
+
+src/pages/ProductDetail.js
+  Line 365:8:  Expected an assignment or function call and instead saw an expression  no-unused-expressions
+
+Search for the keywords to learn more about each error.
+WARNING in [eslint]
+src/components/BlogSlider.js
+  Line 31:9:  'goToSlide' is assigned a value but never used  no-unused-vars
+
+src/components/CookieConsentBanner.js
+  Line 5:45:   'acceptRequired' is assigned a value but never used  no-unused-vars
+  Line 5:100:  'setShowBanner' is assigned a value but never used   no-unused-vars
+
+src/components/ProductCard.js
+  Line 29:43:  Expected '===' and instead saw '=='  eqeqeq
+  Line 30:29:  Expected '===' and instead saw '=='  eqeqeq
+
+src/pages/BlogDetail.js
+  Line 39:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/BrandReviews.js
+  Line 45:6:  React Hook React.useCallback has a missing dependency: 'brandIds'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Cart.js
+  Line 93:9:  'handleNewsletterChange' is assigned a value but never used  no-unused-vars
+
+src/pages/Checkout.js
+  Line 249:27:  React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead                react-hooks/exhaustive-deps
+  Line 296:6:   React Hook useEffect has missing dependencies: 'carriers' and 'cart'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Home.js
+  Line 9:10:   'products' is assigned a value but never used          no-unused-vars
+  Line 13:10:  'totalPages' is assigned a value but never used        no-unused-vars
+  Line 15:10:  'loading' is assigned a value but never used           no-unused-vars
+  Line 47:9:   'handleSortChange' is assigned a value but never used  no-unused-vars
+  Line 51:9:   'handleSizeChange' is assigned a value but never used  no-unused-vars
+
+src/pages/OrderConfirmation.js
+  Line 19:9:    'location' is assigned a value but never used                                                              no-unused-vars
+  Line 73:6:    React Hook useEffect has a missing dependency: 'isPaid'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 107:75:  Unexpected use of comma operator                                                                           no-sequences
+
+src/pages/PickupPointsPage.js
+  Line 69:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/ProductDetail.js
+  Line 365:66:  Unexpected use of comma operator                                                                                   no-sequences
+  Line 452:6:   React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/PublicPage.js
+  Line 39:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/static/RicinovyOlejNaMihalnice.js
+  Line 2:10:  'Link' is defined but never used  no-unused-vars
+
+src/pages/static/RysaveVlasy.js
+  Line 50:7:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+ERROR in [eslint]
+src/pages/OrderConfirmation.js
+  Line 107:17:  Expected an assignment or function call and instead saw an expression  no-unused-expressions
+
+src/pages/ProductDetail.js
+  Line 365:8:  Expected an assignment or function call and instead saw an expression  no-unused-expressions
+
+Search for the keywords to learn more about each error.
+
+webpack compiled with 1 error and 1 warning
+(node:3955) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+Proxy error: Could not proxy request /api/products?page=0&size=12&sort=title,asc from localhost:3001 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/homepage-grids from localhost:3001 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/categories from localhost:3001 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/blogs from localhost:3001 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/customer/context from localhost:3001 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Compiling...
+Failed to compile.
+
+[eslint]
+src/pages/OrderConfirmation.js
+  Line 106:17:  Expected an assignment or function call and instead saw an expression  no-unused-expressions
+
+src/pages/ProductDetail.js
+  Line 365:8:  Expected an assignment or function call and instead saw an expression  no-unused-expressions
+
+Search for the keywords to learn more about each error.
+WARNING in [eslint]
+src/components/BlogSlider.js
+  Line 31:9:  'goToSlide' is assigned a value but never used  no-unused-vars
+
+src/components/CookieConsentBanner.js
+  Line 5:45:   'acceptRequired' is assigned a value but never used  no-unused-vars
+  Line 5:100:  'setShowBanner' is assigned a value but never used   no-unused-vars
+
+src/components/ProductCard.js
+  Line 29:43:  Expected '===' and instead saw '=='  eqeqeq
+  Line 30:29:  Expected '===' and instead saw '=='  eqeqeq
+
+src/pages/BlogDetail.js
+  Line 39:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/BrandReviews.js
+  Line 45:6:  React Hook React.useCallback has a missing dependency: 'brandIds'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Cart.js
+  Line 93:9:  'handleNewsletterChange' is assigned a value but never used  no-unused-vars
+
+src/pages/Checkout.js
+  Line 249:27:  React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead                react-hooks/exhaustive-deps
+  Line 296:6:   React Hook useEffect has missing dependencies: 'carriers' and 'cart'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Home.js
+  Line 9:10:   'products' is assigned a value but never used          no-unused-vars
+  Line 13:10:  'totalPages' is assigned a value but never used        no-unused-vars
+  Line 15:10:  'loading' is assigned a value but never used           no-unused-vars
+  Line 47:9:   'handleSortChange' is assigned a value but never used  no-unused-vars
+  Line 51:9:   'handleSizeChange' is assigned a value but never used  no-unused-vars
+
+src/pages/OrderConfirmation.js
+  Line 72:6:    React Hook useEffect has a missing dependency: 'isPaid'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 106:75:  Unexpected use of comma operator                                                                           no-sequences
+
+src/pages/PickupPointsPage.js
+  Line 69:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/ProductDetail.js
+  Line 365:66:  Unexpected use of comma operator                                                                                   no-sequences
+  Line 452:6:   React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/PublicPage.js
+  Line 39:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/static/RicinovyOlejNaMihalnice.js
+  Line 2:10:  'Link' is defined but never used  no-unused-vars
+
+src/pages/static/RysaveVlasy.js
+  Line 50:7:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+ERROR in [eslint]
+src/pages/OrderConfirmation.js
+  Line 106:17:  Expected an assignment or function call and instead saw an expression  no-unused-expressions
+
+src/pages/ProductDetail.js
+  Line 365:8:  Expected an assignment or function call and instead saw an expression  no-unused-expressions
+
+Search for the keywords to learn more about each error.
+
+webpack compiled with 1 error and 1 warning
+Proxy error: Could not proxy request /api/products?page=0&size=12&sort=title,asc from localhost:3001 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/homepage-grids from localhost:3001 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/categories from localhost:3001 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/blogs from localhost:3001 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/customer/context from localhost:3001 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Compiling...
+Failed to compile.
+
+[eslint]
+src/pages/ProductDetail.js
+  Line 365:8:  Expected an assignment or function call and instead saw an expression  no-unused-expressions
+
+Search for the keywords to learn more about each error.
+WARNING in [eslint]
+src/components/BlogSlider.js
+  Line 31:9:  'goToSlide' is assigned a value but never used  no-unused-vars
+
+src/components/CookieConsentBanner.js
+  Line 5:45:   'acceptRequired' is assigned a value but never used  no-unused-vars
+  Line 5:100:  'setShowBanner' is assigned a value but never used   no-unused-vars
+
+src/components/ProductCard.js
+  Line 29:43:  Expected '===' and instead saw '=='  eqeqeq
+  Line 30:29:  Expected '===' and instead saw '=='  eqeqeq
+
+src/pages/BlogDetail.js
+  Line 39:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/BrandReviews.js
+  Line 45:6:  React Hook React.useCallback has a missing dependency: 'brandIds'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Cart.js
+  Line 93:9:  'handleNewsletterChange' is assigned a value but never used  no-unused-vars
+
+src/pages/Checkout.js
+  Line 249:27:  React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead                react-hooks/exhaustive-deps
+  Line 296:6:   React Hook useEffect has missing dependencies: 'carriers' and 'cart'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Home.js
+  Line 9:10:   'products' is assigned a value but never used          no-unused-vars
+  Line 13:10:  'totalPages' is assigned a value but never used        no-unused-vars
+  Line 15:10:  'loading' is assigned a value but never used           no-unused-vars
+  Line 47:9:   'handleSortChange' is assigned a value but never used  no-unused-vars
+  Line 51:9:   'handleSizeChange' is assigned a value but never used  no-unused-vars
+
+src/pages/OrderConfirmation.js
+  Line 19:9:  'location' is assigned a value but never used                                                              no-unused-vars
+  Line 73:6:  React Hook useEffect has a missing dependency: 'isPaid'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/PickupPointsPage.js
+  Line 69:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/ProductDetail.js
+  Line 365:66:  Unexpected use of comma operator                                                                                   no-sequences
+  Line 452:6:   React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/PublicPage.js
+  Line 39:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/static/RicinovyOlejNaMihalnice.js
+  Line 2:10:  'Link' is defined but never used  no-unused-vars
+
+src/pages/static/RysaveVlasy.js
+  Line 50:7:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
+
+ERROR in [eslint]
+src/pages/ProductDetail.js
+  Line 365:8:  Expected an assignment or function call and instead saw an expression  no-unused-expressions
+
+Search for the keywords to learn more about each error.
+
+webpack compiled with 1 error and 1 warning
+Compiling...
 Compiled with warnings.
 
 [eslint]
 src/components/BlogSlider.js
   Line 31:9:  'goToSlide' is assigned a value but never used  no-unused-vars
 
-src/components/ProductCard.js
-  Line 28:43:  Expected '===' and instead saw '=='  eqeqeq
-  Line 29:29:  Expected '===' and instead saw '=='  eqeqeq
+src/components/CookieConsentBanner.js
+  Line 5:45:   'acceptRequired' is assigned a value but never used  no-unused-vars
+  Line 5:100:  'setShowBanner' is assigned a value but never used   no-unused-vars
 
-src/components/PublicLayout.js
-  Line 258:21:  The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md  jsx-a11y/anchor-is-valid
-  Line 259:21:  The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md  jsx-a11y/anchor-is-valid
-  Line 260:21:  The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md  jsx-a11y/anchor-is-valid
-  Line 261:21:  The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md  jsx-a11y/anchor-is-valid
-  Line 262:21:  The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md  jsx-a11y/anchor-is-valid
-  Line 273:21:  The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md  jsx-a11y/anchor-is-valid
+src/components/ProductCard.js
+  Line 29:43:  Expected '===' and instead saw '=='  eqeqeq
+  Line 30:29:  Expected '===' and instead saw '=='  eqeqeq
 
 src/pages/BlogDetail.js
-  Line 35:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 39:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
 src/pages/BrandReviews.js
-  Line 47:6:  React Hook React.useCallback has a missing dependency: 'brandIds'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 45:6:  React Hook React.useCallback has a missing dependency: 'brandIds'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Cart.js
+  Line 93:9:  'handleNewsletterChange' is assigned a value but never used  no-unused-vars
 
 src/pages/Checkout.js
-  Line 213:27:  React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead                react-hooks/exhaustive-deps
-  Line 260:6:   React Hook useEffect has missing dependencies: 'carriers' and 'cart'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  Line 249:27:  React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead                react-hooks/exhaustive-deps
+  Line 296:6:   React Hook useEffect has missing dependencies: 'carriers' and 'cart'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
 
 src/pages/Home.js
-  Line 11:10:  'products' is assigned a value but never used          no-unused-vars
-  Line 15:10:  'totalPages' is assigned a value but never used        no-unused-vars
-  Line 17:10:  'loading' is assigned a value but never used           no-unused-vars
-  Line 49:9:   'handleSortChange' is assigned a value but never used  no-unused-vars
-  Line 53:9:   'handleSizeChange' is assigned a value but never used  no-unused-vars
+  Line 9:10:   'products' is assigned a value but never used          no-unused-vars
+  Line 13:10:  'totalPages' is assigned a value but never used        no-unused-vars
+  Line 15:10:  'loading' is assigned a value but never used           no-unused-vars
+  Line 47:9:   'handleSortChange' is assigned a value but never used  no-unused-vars
+  Line 51:9:   'handleSizeChange' is assigned a value but never used  no-unused-vars
 
 src/pages/OrderConfirmation.js
-  Line 15:9:  'location' is assigned a value but never used                                                              no-unused-vars
-  Line 69:6:  React Hook useEffect has a missing dependency: 'isPaid'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 19:9:  'location' is assigned a value but never used                                                              no-unused-vars
+  Line 73:6:  React Hook useEffect has a missing dependency: 'isPaid'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/PickupPointsPage.js
+  Line 69:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
 src/pages/ProductDetail.js
-  Line 413:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 454:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
 src/pages/PublicPage.js
-  Line 40:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 39:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
-src/services/authService.js
-  Line 1:7:  'API_URL' is assigned a value but never used  no-unused-vars
+src/pages/static/RicinovyOlejNaMihalnice.js
+  Line 2:10:  'Link' is defined but never used  no-unused-vars
+
+src/pages/static/RysaveVlasy.js
+  Line 50:7:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
 
 Search for the keywords to learn more about each warning.
 To ignore, add // eslint-disable-next-line to the line before.
@@ -62,57 +312,91 @@ WARNING in [eslint]
 src/components/BlogSlider.js
   Line 31:9:  'goToSlide' is assigned a value but never used  no-unused-vars
 
-src/components/ProductCard.js
-  Line 28:43:  Expected '===' and instead saw '=='  eqeqeq
-  Line 29:29:  Expected '===' and instead saw '=='  eqeqeq
+src/components/CookieConsentBanner.js
+  Line 5:45:   'acceptRequired' is assigned a value but never used  no-unused-vars
+  Line 5:100:  'setShowBanner' is assigned a value but never used   no-unused-vars
 
-src/components/PublicLayout.js
-  Line 258:21:  The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md  jsx-a11y/anchor-is-valid
-  Line 259:21:  The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md  jsx-a11y/anchor-is-valid
-  Line 260:21:  The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md  jsx-a11y/anchor-is-valid
-  Line 261:21:  The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md  jsx-a11y/anchor-is-valid
-  Line 262:21:  The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md  jsx-a11y/anchor-is-valid
-  Line 273:21:  The href attribute requires a valid value to be accessible. Provide a valid, navigable address as the href value. If you cannot provide a valid href, but still need the element to resemble a link, use a button and change it with appropriate styles. Learn more: https://github.com/jsx-eslint/eslint-plugin-jsx-a11y/blob/HEAD/docs/rules/anchor-is-valid.md  jsx-a11y/anchor-is-valid
+src/components/ProductCard.js
+  Line 29:43:  Expected '===' and instead saw '=='  eqeqeq
+  Line 30:29:  Expected '===' and instead saw '=='  eqeqeq
 
 src/pages/BlogDetail.js
-  Line 35:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 39:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
 src/pages/BrandReviews.js
-  Line 47:6:  React Hook React.useCallback has a missing dependency: 'brandIds'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 45:6:  React Hook React.useCallback has a missing dependency: 'brandIds'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/Cart.js
+  Line 93:9:  'handleNewsletterChange' is assigned a value but never used  no-unused-vars
 
 src/pages/Checkout.js
-  Line 213:27:  React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead                react-hooks/exhaustive-deps
-  Line 260:6:   React Hook useEffect has missing dependencies: 'carriers' and 'cart'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  Line 249:27:  React Hook useCallback received a function whose dependencies are unknown. Pass an inline function instead                react-hooks/exhaustive-deps
+  Line 296:6:   React Hook useEffect has missing dependencies: 'carriers' and 'cart'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
 
 src/pages/Home.js
-  Line 11:10:  'products' is assigned a value but never used          no-unused-vars
-  Line 15:10:  'totalPages' is assigned a value but never used        no-unused-vars
-  Line 17:10:  'loading' is assigned a value but never used           no-unused-vars
-  Line 49:9:   'handleSortChange' is assigned a value but never used  no-unused-vars
-  Line 53:9:   'handleSizeChange' is assigned a value but never used  no-unused-vars
+  Line 9:10:   'products' is assigned a value but never used          no-unused-vars
+  Line 13:10:  'totalPages' is assigned a value but never used        no-unused-vars
+  Line 15:10:  'loading' is assigned a value but never used           no-unused-vars
+  Line 47:9:   'handleSortChange' is assigned a value but never used  no-unused-vars
+  Line 51:9:   'handleSizeChange' is assigned a value but never used  no-unused-vars
 
 src/pages/OrderConfirmation.js
-  Line 15:9:  'location' is assigned a value but never used                                                              no-unused-vars
-  Line 69:6:  React Hook useEffect has a missing dependency: 'isPaid'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 19:9:  'location' is assigned a value but never used                                                              no-unused-vars
+  Line 73:6:  React Hook useEffect has a missing dependency: 'isPaid'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+src/pages/PickupPointsPage.js
+  Line 69:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
 src/pages/ProductDetail.js
-  Line 413:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 454:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
 src/pages/PublicPage.js
-  Line 40:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  Line 39:6:  React Hook useEffect has a missing dependency: 'setBreadcrumbs'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
 
-src/services/authService.js
-  Line 1:7:  'API_URL' is assigned a value but never used  no-unused-vars
+src/pages/static/RicinovyOlejNaMihalnice.js
+  Line 2:10:  'Link' is defined but never used  no-unused-vars
+
+src/pages/static/RysaveVlasy.js
+  Line 50:7:  img elements must have an alt prop, either with meaningful text, or an empty string for decorative images  jsx-a11y/alt-text
 
 webpack compiled with 1 warning
-(node:3514) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+Proxy error: Could not proxy request /api/products?page=0&size=12&sort=title,asc from localhost:3001 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/homepage-grids from localhost:3001 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/categories from localhost:3001 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
 Proxy error: Could not proxy request /api/blogs from localhost:3001 to http://localhost:8080.
 See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
 
 Proxy error: Could not proxy request /api/customer/context from localhost:3001 to http://localhost:8080.
 See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
 
-Proxy error: Could not proxy request /api/products/category/1/search?page=0&size=1 from localhost:3001 to http://localhost:8080.
+Proxy error: Could not proxy request /api/products?page=0&size=12&sort=title,asc from localhost:3001 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/homepage-grids from localhost:3001 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/categories from localhost:3001 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/blogs from localhost:3001 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/customer/context from localhost:3001 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/products?page=0&size=12&sort=title,asc from localhost:3001 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/homepage-grids from localhost:3001 to http://localhost:8080.
+See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
+
+Proxy error: Could not proxy request /api/categories from localhost:3001 to http://localhost:8080.
 See https://nodejs.org/api/errors.html#errors_common_system_errors for more information (ECONNREFUSED).
 
 Proxy error: Could not proxy request /api/blogs from localhost:3001 to http://localhost:8080.

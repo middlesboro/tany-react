@@ -4,9 +4,13 @@ const GA_MEASUREMENT_ID = process.env.REACT_APP_GA_MEASUREMENT_ID || 'G-XXXXXXXX
 const GOOGLE_ADS_ID = process.env.REACT_APP_GOOGLE_ADS_ID;
 const GOOGLE_ADS_CONVERSION_LABEL = process.env.REACT_APP_GOOGLE_ADS_CONVERSION_LABEL;
 
+// Helper to check if analytics are initialized
+const isGaInitialized = () => ReactGA.isInitialized;
+const isAdsInitialized = () => typeof window !== 'undefined' && typeof window.gtag === 'function';
+
 export const initGA = () => {
     // Check if ID is present to avoid errors in dev/test if missing
-    if (GA_MEASUREMENT_ID) {
+    if (GA_MEASUREMENT_ID && !ReactGA.isInitialized) {
         ReactGA.initialize(GA_MEASUREMENT_ID);
     }
 };
@@ -35,7 +39,7 @@ export const initGoogleAds = () => {
 };
 
 export const logGoogleAdsConversion = (order) => {
-    if (GOOGLE_ADS_ID && GOOGLE_ADS_CONVERSION_LABEL && typeof window.gtag === 'function') {
+    if (isAdsInitialized() && GOOGLE_ADS_ID && GOOGLE_ADS_CONVERSION_LABEL) {
         window.gtag('event', 'conversion', {
             'send_to': `${GOOGLE_ADS_ID}/${GOOGLE_ADS_CONVERSION_LABEL}`,
             'value': order.priceBreakDown?.totalPrice || order.finalPrice,
@@ -46,7 +50,7 @@ export const logGoogleAdsConversion = (order) => {
 };
 
 export const logGoogleAdsRemarketing = (eventName, params) => {
-    if (GOOGLE_ADS_ID && typeof window.gtag === 'function') {
+    if (isAdsInitialized() && GOOGLE_ADS_ID) {
         window.gtag('event', eventName, {
             'send_to': GOOGLE_ADS_ID,
             ...params
@@ -55,12 +59,16 @@ export const logGoogleAdsRemarketing = (eventName, params) => {
 };
 
 export const logPageView = () => {
-    ReactGA.send({ hitType: "pageview", page: window.location.pathname + window.location.search });
+    if (isGaInitialized()) {
+        ReactGA.send({ hitType: "pageview", page: window.location.pathname + window.location.search });
+    }
 };
 
 // Generic event logging
 export const logEvent = (category, action, label) => {
-    ReactGA.event({ category, action, label });
+    if (isGaInitialized()) {
+        ReactGA.event({ category, action, label });
+    }
 };
 
 // Ecommerce Events
@@ -71,17 +79,19 @@ export const logEvent = (category, action, label) => {
  * @param {string} listName - Name of the list (e.g., category name)
  */
 export const logViewItemList = (items, listName) => {
-    ReactGA.event("view_item_list", {
-        item_list_id: listName,
-        item_list_name: listName,
-        items: items.map((item, index) => ({
-            item_id: item.id || item.productId,
-            item_name: item.title || item.productName,
-            price: item.discountPrice || item.price,
-            index: index,
-            item_category: item.categoryTitle // if available
-        }))
-    });
+    if (isGaInitialized()) {
+        ReactGA.event("view_item_list", {
+            item_list_id: listName,
+            item_list_name: listName,
+            items: items.map((item, index) => ({
+                item_id: item.id || item.productId,
+                item_name: item.title || item.productName,
+                price: item.discountPrice || item.price,
+                index: index,
+                item_category: item.categoryTitle // if available
+            }))
+        });
+    }
 };
 
 /**
@@ -89,16 +99,18 @@ export const logViewItemList = (items, listName) => {
  * @param {Object} item - Product object
  */
 export const logViewItem = (item) => {
-    ReactGA.event("view_item", {
-        currency: "EUR",
-        value: item.discountPrice || item.price,
-        items: [{
-            item_id: item.id,
-            item_name: item.title,
-            price: item.discountPrice || item.price,
-            item_category: item.categoryTitle || (item.category ? item.category.title : undefined)
-        }]
-    });
+    if (isGaInitialized()) {
+        ReactGA.event("view_item", {
+            currency: "EUR",
+            value: item.discountPrice || item.price,
+            items: [{
+                item_id: item.id,
+                item_name: item.title,
+                price: item.discountPrice || item.price,
+                item_category: item.categoryTitle || (item.category ? item.category.title : undefined)
+            }]
+        });
+    }
 
     // Google Ads Remarketing
     logGoogleAdsRemarketing('view_item', {
@@ -117,15 +129,17 @@ export const logViewItem = (item) => {
  * @param {Object} item - Product object
  */
 export const logSelectItem = (item) => {
-    ReactGA.event("select_item", {
-        item_list_id: "general_list", // You might want to pass this if you know where it came from
-        item_list_name: "General List",
-        items: [{
-            item_id: item.id,
-            item_name: item.title,
-            price: item.discountPrice || item.price
-        }]
-    });
+    if (isGaInitialized()) {
+        ReactGA.event("select_item", {
+            item_list_id: "general_list", // You might want to pass this if you know where it came from
+            item_list_name: "General List",
+            items: [{
+                item_id: item.id,
+                item_name: item.title,
+                price: item.discountPrice || item.price
+            }]
+        });
+    }
 };
 
 /**
@@ -133,9 +147,11 @@ export const logSelectItem = (item) => {
  * @param {string} searchTerm
  */
 export const logSearch = (searchTerm) => {
-    ReactGA.event("search", {
-        search_term: searchTerm
-    });
+    if (isGaInitialized()) {
+        ReactGA.event("search", {
+            search_term: searchTerm
+        });
+    }
 };
 
 /**
@@ -144,16 +160,18 @@ export const logSearch = (searchTerm) => {
  * @param {number} quantity
  */
 export const logAddToCart = (item, quantity = 1) => {
-    ReactGA.event("add_to_cart", {
-        currency: "EUR",
-        value: (item.discountPrice || item.price) * quantity,
-        items: [{
-            item_id: item.id || item.productId,
-            item_name: item.title || item.productName,
-            price: item.discountPrice || item.price,
-            quantity: quantity
-        }]
-    });
+    if (isGaInitialized()) {
+        ReactGA.event("add_to_cart", {
+            currency: "EUR",
+            value: (item.discountPrice || item.price) * quantity,
+            items: [{
+                item_id: item.id || item.productId,
+                item_name: item.title || item.productName,
+                price: item.discountPrice || item.price,
+                quantity: quantity
+            }]
+        });
+    }
 };
 
 /**
@@ -161,19 +179,21 @@ export const logAddToCart = (item, quantity = 1) => {
  * @param {Object} cart - Cart object
  */
 export const logViewCart = (cart) => {
-    const items = cart.items || cart.products || [];
-    const value = cart.finalPrice !== undefined ? cart.finalPrice : (cart.totalProductPrice || 0);
+    if (isGaInitialized()) {
+        const items = cart.items || cart.products || [];
+        const value = cart.finalPrice !== undefined ? cart.finalPrice : (cart.totalProductPrice || 0);
 
-    ReactGA.event("view_cart", {
-        currency: "EUR",
-        value: value,
-        items: items.map(item => ({
-            item_id: item.id || item.productId,
-            item_name: item.title || item.productName || item.name,
-            price: item.discountPrice || item.price,
-            quantity: item.quantity
-        }))
-    });
+        ReactGA.event("view_cart", {
+            currency: "EUR",
+            value: value,
+            items: items.map(item => ({
+                item_id: item.id || item.productId,
+                item_name: item.title || item.productName || item.name,
+                price: item.discountPrice || item.price,
+                quantity: item.quantity
+            }))
+        });
+    }
 };
 
 /**
@@ -181,16 +201,18 @@ export const logViewCart = (cart) => {
  * @param {Object} item - Cart item object
  */
 export const logRemoveFromCart = (item) => {
-    ReactGA.event("remove_from_cart", {
-        currency: "EUR",
-        value: (item.discountPrice || item.price) * item.quantity,
-        items: [{
-            item_id: item.id || item.productId,
-            item_name: item.title || item.productName || item.name,
-            price: item.discountPrice || item.price,
-            quantity: item.quantity
-        }]
-    });
+    if (isGaInitialized()) {
+        ReactGA.event("remove_from_cart", {
+            currency: "EUR",
+            value: (item.discountPrice || item.price) * item.quantity,
+            items: [{
+                item_id: item.id || item.productId,
+                item_name: item.title || item.productName || item.name,
+                price: item.discountPrice || item.price,
+                quantity: item.quantity
+            }]
+        });
+    }
 };
 
 /**
@@ -198,15 +220,17 @@ export const logRemoveFromCart = (item) => {
  * @param {Object} item - Product object
  */
 export const logAddToWishlist = (item) => {
-    ReactGA.event("add_to_wishlist", {
-        currency: "EUR",
-        value: item.discountPrice || item.price,
-        items: [{
-            item_id: item.id,
-            item_name: item.title,
-            price: item.discountPrice || item.price
-        }]
-    });
+    if (isGaInitialized()) {
+        ReactGA.event("add_to_wishlist", {
+            currency: "EUR",
+            value: item.discountPrice || item.price,
+            items: [{
+                item_id: item.id,
+                item_name: item.title,
+                price: item.discountPrice || item.price
+            }]
+        });
+    }
 };
 
 /**
@@ -214,19 +238,21 @@ export const logAddToWishlist = (item) => {
  * @param {Object} cart - Cart object
  */
 export const logBeginCheckout = (cart) => {
-    const items = cart.items || cart.products || [];
-    const value = cart.finalPrice !== undefined ? cart.finalPrice : (cart.totalProductPrice || 0);
+    if (isGaInitialized()) {
+        const items = cart.items || cart.products || [];
+        const value = cart.finalPrice !== undefined ? cart.finalPrice : (cart.totalProductPrice || 0);
 
-    ReactGA.event("begin_checkout", {
-        currency: "EUR",
-        value: value,
-        items: items.map(item => ({
-            item_id: item.id || item.productId,
-            item_name: item.title || item.productName || item.name,
-            price: item.discountPrice || item.price,
-            quantity: item.quantity
-        }))
-    });
+        ReactGA.event("begin_checkout", {
+            currency: "EUR",
+            value: value,
+            items: items.map(item => ({
+                item_id: item.id || item.productId,
+                item_name: item.title || item.productName || item.name,
+                price: item.discountPrice || item.price,
+                quantity: item.quantity
+            }))
+        });
+    }
 };
 
 /**
@@ -235,20 +261,22 @@ export const logBeginCheckout = (cart) => {
  * @param {Object} cart - Cart object (for context)
  */
 export const logAddShippingInfo = (carrier, cart) => {
-    const items = cart.items || cart.products || [];
-    const value = cart.finalPrice !== undefined ? cart.finalPrice : (cart.totalProductPrice || 0);
+    if (isGaInitialized()) {
+        const items = cart.items || cart.products || [];
+        const value = cart.finalPrice !== undefined ? cart.finalPrice : (cart.totalProductPrice || 0);
 
-    ReactGA.event("add_shipping_info", {
-        currency: "EUR",
-        value: value,
-        shipping_tier: carrier.name,
-        items: items.map(item => ({
-             item_id: item.id || item.productId,
-             item_name: item.title || item.productName || item.name,
-             price: item.discountPrice || item.price,
-             quantity: item.quantity
-        }))
-    });
+        ReactGA.event("add_shipping_info", {
+            currency: "EUR",
+            value: value,
+            shipping_tier: carrier.name,
+            items: items.map(item => ({
+                item_id: item.id || item.productId,
+                item_name: item.title || item.productName || item.name,
+                price: item.discountPrice || item.price,
+                quantity: item.quantity
+            }))
+        });
+    }
 };
 
 /**
@@ -257,20 +285,22 @@ export const logAddShippingInfo = (carrier, cart) => {
  * @param {Object} cart - Cart object (for context)
  */
 export const logAddPaymentInfo = (payment, cart) => {
-    const items = cart.items || cart.products || [];
-    const value = cart.finalPrice !== undefined ? cart.finalPrice : (cart.totalProductPrice || 0);
+    if (isGaInitialized()) {
+        const items = cart.items || cart.products || [];
+        const value = cart.finalPrice !== undefined ? cart.finalPrice : (cart.totalProductPrice || 0);
 
-    ReactGA.event("add_payment_info", {
-        currency: "EUR",
-        value: value,
-        payment_type: payment.name,
-        items: items.map(item => ({
-             item_id: item.id || item.productId,
-             item_name: item.title || item.productName || item.name,
-             price: item.discountPrice || item.price,
-             quantity: item.quantity
-        }))
-    });
+        ReactGA.event("add_payment_info", {
+            currency: "EUR",
+            value: value,
+            payment_type: payment.name,
+            items: items.map(item => ({
+                item_id: item.id || item.productId,
+                item_name: item.title || item.productName || item.name,
+                price: item.discountPrice || item.price,
+                quantity: item.quantity
+            }))
+        });
+    }
 };
 
 /**
@@ -281,19 +311,21 @@ export const logPurchase = (order) => {
     // items mapping might differ based on order structure
     const items = order.items || [];
 
-    ReactGA.event("purchase", {
-        transaction_id: order.orderIdentifier || order.id,
-        value: order.finalPrice || order.priceBreakDown?.totalPrice,
-        tax: order.priceBreakDown?.totalPriceVatValue,
-        shipping: order.priceBreakDown?.items.find(i => i.type === 'CARRIER')?.priceWithVat,
-        currency: "EUR",
-        items: items.map(item => ({
-            item_id: item.id, // might need to check if this is product id or line item id
-            item_name: item.name,
-            price: item.priceWithVat || item.price, // Check what order items contain
-            quantity: item.quantity
-        }))
-    });
+    if (isGaInitialized()) {
+        ReactGA.event("purchase", {
+            transaction_id: order.orderIdentifier || order.id,
+            value: order.finalPrice || order.priceBreakDown?.totalPrice,
+            tax: order.priceBreakDown?.totalPriceVatValue,
+            shipping: order.priceBreakDown?.items.find(i => i.type === 'CARRIER')?.priceWithVat,
+            currency: "EUR",
+            items: items.map(item => ({
+                item_id: item.id, // might need to check if this is product id or line item id
+                item_name: item.name,
+                price: item.priceWithVat || item.price, // Check what order items contain
+                quantity: item.quantity
+            }))
+        });
+    }
 
     // Google Ads Remarketing
     logGoogleAdsRemarketing('purchase', {
@@ -308,11 +340,13 @@ export const logPurchase = (order) => {
  * @param {string} label - Lead source/type
  */
 export const logGenerateLead = (label) => {
-    ReactGA.event("generate_lead", {
-        currency: "EUR",
-        value: 0, // Leads usually have 0 value unless assigned
-        label: label
-    });
+    if (isGaInitialized()) {
+        ReactGA.event("generate_lead", {
+            currency: "EUR",
+            value: 0, // Leads usually have 0 value unless assigned
+            label: label
+        });
+    }
 };
 
 /**
@@ -320,9 +354,11 @@ export const logGenerateLead = (label) => {
  * @param {string} productId
  */
 export const logOutOfStockNotify = (productId) => {
-    ReactGA.event("out_of_stock_notify", {
-        product_id: productId
-    });
+    if (isGaInitialized()) {
+        ReactGA.event("out_of_stock_notify", {
+            product_id: productId
+        });
+    }
 };
 
 /**
@@ -330,9 +366,11 @@ export const logOutOfStockNotify = (productId) => {
  * @param {Object} blog
  */
 export const logViewBlogPost = (blog) => {
-    ReactGA.event("view_blog_post", {
-        blog_id: blog.id,
-        blog_title: blog.title,
-        blog_author: blog.author
-    });
+    if (isGaInitialized()) {
+        ReactGA.event("view_blog_post", {
+            blog_id: blog.id,
+            blog_title: blog.title,
+            blog_author: blog.author
+        });
+    }
 };
