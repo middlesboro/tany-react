@@ -29,6 +29,17 @@ const BlogForm = ({ blog, handleChange, handleSubmit, handleSaveAndStay }) => {
       </div>
 
       <div className="mb-4">
+        <label className="block text-gray-700">Order</label>
+        <input
+          type="number"
+          name="order"
+          value={blog.order || 0}
+          onChange={handleChange}
+          className="w-full px-3 py-2 border rounded"
+        />
+      </div>
+
+      <div className="mb-4">
         <label className="block text-gray-700">Slug</label>
         <input
           type="text"

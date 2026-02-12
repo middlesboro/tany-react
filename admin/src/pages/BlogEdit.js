@@ -18,6 +18,7 @@ const BlogEdit = () => {
     author: '',
     visible: true,
     image: '',
+    order: 0,
   });
 
   useEffect(() => {
