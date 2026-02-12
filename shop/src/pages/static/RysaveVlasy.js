@@ -52,7 +52,7 @@ const RysaveVlasy = () => {
       <p className="mt-2">
         Farbenie hennou nie je vôbec také komplikované ako si mnohé z nás
         myslia. Na začiatok odporúčame použiť hennu značky <Link to="/kategoria/henna-na-vlasy?q=Brand-Voono+Henna+na+vlasy" className="text-tany-green hover:underline">Voono</Link>. Veľmi dobre sa nanáša a medzi zákazníčkami je obľúbená.
-        Postup ako nato si môžete pozrieť v našom článku <Link to="/blog/059261d5-a28c-4d58-b3f6-42b83fa036ff" className="text-tany-green hover:underline">Ako farbiť vlasy hennou</Link>.
+        Postup ako nato si môžete pozrieť v našom článku <Link to="/blog/ako-farbit-vlasy-hennou" className="text-tany-green hover:underline">Ako farbiť vlasy hennou</Link>.
       </p>
 
       <div className="my-8 grid grid-cols-1 md:grid-cols-2 gap-4">
