@@ -33,11 +33,13 @@ const Checkout = () => {
     street: '',
     city: '',
     zip: '',
+    country: '',
   });
   const [deliveryAddress, setDeliveryAddress] = useState({
     street: '',
     city: '',
     zip: '',
+    country: '',
   });
   const [differentDeliveryAddress, setDifferentDeliveryAddress] = useState(false);
 
@@ -185,7 +187,8 @@ const Checkout = () => {
           setInvoiceAddress(prev => ({
               street: cartInvoice.street || profileInvoice.street || prev.street,
               city: cartInvoice.city || profileInvoice.city || prev.city,
-              zip: cartInvoice.zip || profileInvoice.zip || prev.zip
+              zip: cartInvoice.zip || profileInvoice.zip || prev.zip,
+              country: cartInvoice.country || profileInvoice.country || prev.country
           }));
 
           if (cart.selectedPickupPointId && initialCarrierId) {
@@ -206,13 +209,15 @@ const Checkout = () => {
                setDeliveryAddress(prev => ({
                    street: cartDelivery.street || prev.street,
                    city: cartDelivery.city || prev.city,
-                   zip: cartDelivery.zip || prev.zip
+                   zip: cartDelivery.zip || prev.zip,
+                   country: cartDelivery.country || prev.country
                }));
 
                const targetInvoice = {
                     street: cartInvoice.street || profileInvoice.street || '',
                     city: cartInvoice.city || profileInvoice.city || '',
-                    zip: cartInvoice.zip || profileInvoice.zip || ''
+                    zip: cartInvoice.zip || profileInvoice.zip || '',
+                   country: cartInvoice.country || profileInvoice.v || ''
                };
 
                const isDifferent = cartDelivery.street !== targetInvoice.street ||
@@ -226,13 +231,15 @@ const Checkout = () => {
                   setDeliveryAddress(prev => ({
                       street: profileDelivery.street || prev.street,
                       city: profileDelivery.city || prev.city,
-                      zip: profileDelivery.zip || prev.zip
+                      zip: profileDelivery.zip || prev.zip,
+                      country: profileDelivery.country || prev.country
                   }));
 
                    const targetInvoice = {
                         street: cartInvoice.street || profileInvoice.street || '',
                         city: cartInvoice.city || profileInvoice.city || '',
-                        zip: cartInvoice.zip || profileInvoice.zip || ''
+                        zip: cartInvoice.zip || profileInvoice.zip || '',
+                       country: cartInvoice.country || profileInvoice.country || ''
                    };
 
                    const isDifferent = profileDelivery.street !== targetInvoice.street ||
@@ -583,7 +590,7 @@ const Checkout = () => {
 
           {/* Step 2: Fakturačná adresa */}
           <div className="card">
-            <h2><span className="step">2</span> Fakturačná adresa</h2>
+            <h2><span className="step">2</span> Fakturačná a doručovacia adresa</h2>
             <div className="grid">
               <div className="grid-1">
                 <label>Ulica a číslo</label>
@@ -618,6 +625,15 @@ const Checkout = () => {
                 />
                 {errors.invoice_zip && <div className="error-msg">{errors.invoice_zip}</div>}
               </div>
+                <div>
+                    <label>Krajina</label>
+                    <input
+                        type="text"
+                        name="country"
+                        value={invoiceAddress.country}
+                        readOnly={true}
+                    />
+                </div>
             </div>
 
             <div className="mt-16">
@@ -667,14 +683,22 @@ const Checkout = () => {
                     />
                     {errors.delivery_zip && <div className="error-msg">{errors.delivery_zip}</div>}
                  </div>
+                  <div>
+                      <label>Krajina</label>
+                      <input
+                          type="text"
+                          name="country"
+                          value={deliveryAddress.country}
+                          readOnly={true}
+                      />
+                  </div>
               </div>
             )}
           </div>
 
-          {/* Step 3: Platba & doprava */}
+          {/* Step 3: Doprava */}
           <div className="card">
-            <h2><span className="step">3</span> Platba & doprava</h2>
-
+            <h2><span className="step">3</span> Doprava</h2>
             {/* Carriers */}
             {carriers.map(carrier => {
                  const price = calculateShippingPrice(carrier);
@@ -728,15 +752,18 @@ const Checkout = () => {
                     </div>
                  );
             })}
+          </div>
 
-            <div className="spacer-20"></div>
+          {/* Step 3: Platba */}
+          <div className="card">
+            <h2><span className="step">4</span> Platba</h2>
 
             {/* Payments */}
             {selectedCarrier && payments.map(payment => {
-                 const price = calculatePaymentPrice(payment);
-                 const isSelected = selectedPayment === payment.id;
+                const price = calculatePaymentPrice(payment);
+                const isSelected = selectedPayment === payment.id;
 
-                 return (
+                return (
                     <label key={payment.id} className={`option ${isSelected ? 'active-option' : ''}`}>
                         <div className="flex-row">
                             <input
@@ -753,9 +780,9 @@ const Checkout = () => {
                         </div>
                         <strong>{price === 0 ? 'Zadarmo' : `${price.toFixed(2)} €`}</strong>
                     </label>
-                 );
+                );
             })}
-          </div>
+        </div>
 
           {/* Note Section */}
           <div className="card">
