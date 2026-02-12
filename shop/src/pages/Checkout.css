@@ -234,15 +234,15 @@
 }
 
 .checkout-page .carrier-icon {
-    width: 32px;
-    height: 32px;
+    width: 70px;
+    height: 70px;
     object-fit: contain;
     margin-right: 12px;
 }
 
 .checkout-page .payment-image {
     display: block;
-    max-width: 100px;
+    max-width: 400px;
     height: auto;
     margin-top: 8px;
     border-radius: 4px;
@@ -254,5 +254,12 @@
     }
     .checkout-page .grid-1 {
       grid-column: auto;
+    }
+    .checkout-page .payment-image {
+        display: block;
+        max-width: 250px;
+        height: auto;
+        margin-top: 8px;
+        border-radius: 4px;
     }
 }
