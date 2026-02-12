@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 
 const PriceBreakdown = ({ priceBreakDown, showItems = false }) => {
   if (!priceBreakDown) return null;
@@ -29,7 +30,13 @@ const PriceBreakdown = ({ priceBreakDown, showItems = false }) => {
                                 />
                             )}
                             <div>
-                                <div>{item.name}</div>
+                                {item.productId ? (
+                                  <Link to={`/products/${item.productId}`} className="text-blue-600 hover:underline">
+                                    {item.name}
+                                  </Link>
+                                ) : (
+                                  <div>{item.name}</div>
+                                )}
                                 <div className="text-xs text-gray-500">
                                     Objednané: {item.quantity} ks, Skladom: {item.currentQuantity !== undefined ? item.currentQuantity : '-'} ks
                                 </div>

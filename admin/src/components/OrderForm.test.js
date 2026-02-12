@@ -1,5 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
+import { MemoryRouter } from 'react-router-dom';
 import OrderForm from './OrderForm';
 
 // Mock OrderCreateItems to avoid service calls and complex interactions in this test
@@ -23,11 +24,13 @@ describe('OrderForm', () => {
 
   test('renders dates in Slovak format', () => {
     render(
-      <OrderForm
-        order={mockOrder}
-        handleChange={mockHandleChange}
-        handleSubmit={mockHandleSubmit}
-      />
+      <MemoryRouter>
+        <OrderForm
+          order={mockOrder}
+          handleChange={mockHandleChange}
+          handleSubmit={mockHandleSubmit}
+        />
+      </MemoryRouter>
     );
 
     const slovakDateRegex = /25\.\s*10\.\s*2023/;
@@ -49,11 +52,13 @@ describe('OrderForm', () => {
     };
 
     render(
-      <OrderForm
-        order={orderWithCustomer}
-        handleChange={mockHandleChange}
-        handleSubmit={mockHandleSubmit}
-      />
+      <MemoryRouter>
+        <OrderForm
+          order={orderWithCustomer}
+          handleChange={mockHandleChange}
+          handleSubmit={mockHandleSubmit}
+        />
+      </MemoryRouter>
     );
 
     expect(screen.queryByText('Customer ID')).not.toBeInTheDocument();
@@ -72,13 +77,15 @@ describe('OrderForm', () => {
     };
 
     render(
-      <OrderForm
-        order={createOrder}
-        handleChange={mockHandleChange}
-        handleSubmit={mockHandleSubmit}
-        isCreateMode={true}
-        cartDiscounts={[{ id: 'd1', title: 'Discount 1' }]}
-      />
+      <MemoryRouter>
+        <OrderForm
+          order={createOrder}
+          handleChange={mockHandleChange}
+          handleSubmit={mockHandleSubmit}
+          isCreateMode={true}
+          cartDiscounts={[{ id: 'd1', title: 'Discount 1' }]}
+        />
+      </MemoryRouter>
     );
 
     // Check for First Name / Last Name instead of Customer Name
@@ -106,11 +113,13 @@ describe('OrderForm', () => {
     };
 
     render(
-      <OrderForm
-        order={orderWithLink}
-        handleChange={mockHandleChange}
-        handleSubmit={mockHandleSubmit}
-      />
+      <MemoryRouter>
+        <OrderForm
+          order={orderWithLink}
+          handleChange={mockHandleChange}
+          handleSubmit={mockHandleSubmit}
+        />
+      </MemoryRouter>
     );
 
     const link = screen.getByText('Track Package');
@@ -132,11 +141,13 @@ describe('OrderForm', () => {
     };
 
     render(
+      <MemoryRouter>
         <OrderForm
             order={outOfStockOrder}
             handleChange={mockHandleChange}
             handleSubmit={mockHandleSubmit}
         />
+      </MemoryRouter>
     );
 
     expect(screen.getByText(/Upozornenie: Niektoré produkty nie sú na sklade/i)).toBeInTheDocument();
@@ -167,11 +178,13 @@ describe('OrderForm', () => {
     };
 
     render(
+      <MemoryRouter>
         <OrderForm
             order={orderWithMissingQuantity}
             handleChange={mockHandleChange}
             handleSubmit={mockHandleSubmit}
         />
+      </MemoryRouter>
     );
 
     // Should show Skladom: 5 ks because it takes it from order.items
