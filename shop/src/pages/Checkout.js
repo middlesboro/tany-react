@@ -722,6 +722,9 @@ const Checkout = () => {
                                         }
                                     }}
                                 />
+                            {carrier.image && (
+                                <img src={carrier.image} alt={carrier.name} className="carrier-icon" />
+                            )}
                                 <div>
                                     <div className="font-bold">{carrier.name}</div>
                                     {carrier.description && <div className="muted">{carrier.description}</div>}
@@ -776,6 +779,9 @@ const Checkout = () => {
                             <div>
                                 <div className="font-bold">{payment.name}</div>
                                 {payment.description && <div className="muted">{payment.description}</div>}
+                                {payment.image && (
+                                    <img src={payment.image} alt={payment.name} className="payment-image" />
+                                )}
                             </div>
                         </div>
                         <strong>{price === 0 ? 'Zadarmo' : `${price.toFixed(2)} €`}</strong>
