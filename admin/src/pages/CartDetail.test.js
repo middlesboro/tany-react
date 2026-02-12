@@ -58,7 +58,8 @@ describe('CartDetail', () => {
     await screen.findByText('12345');
 
     // Check price breakdown
-    await screen.findByText('Product 1 (2 ks)');
+    await screen.findByText('Product 1');
+    await screen.findByText(/Objednané:\s+2\s+ks/);
     // We check for total price formatted. PriceBreakdown displays "100.00 €"
     const prices = await screen.findAllByText('100.00 €');
     expect(prices.length).toBeGreaterThanOrEqual(1);

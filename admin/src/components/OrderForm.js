@@ -56,9 +56,15 @@ const OrderForm = ({
 
         if (match) {
           const quantity = match.currentQuantity !== undefined ? match.currentQuantity : match.stockQuantity;
+          const newItem = { ...pdItem };
+
           if (quantity !== undefined) {
-            return { ...pdItem, currentQuantity: quantity };
+            newItem.currentQuantity = quantity;
           }
+          if (!newItem.productId && match.productId) {
+            newItem.productId = match.productId;
+          }
+          return newItem;
         }
       }
       return pdItem;
