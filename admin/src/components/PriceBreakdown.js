@@ -30,8 +30,8 @@ const PriceBreakdown = ({ priceBreakDown, showItems = false }) => {
                                 />
                             )}
                             <div>
-                                {item.productId ? (
-                                  <Link to={`/products/${item.productId}`} className="text-blue-600 hover:underline">
+                                {item.id ? (
+                                  <Link to={`/products/${item.id}`} className="text-blue-600 hover:underline">
                                     {item.name}
                                   </Link>
                                 ) : (
