@@ -68,3 +68,8 @@ export const downloadInvoice = async (id) => {
   const response = await authFetch(`${API_URL}/${id}/invoice`);
   return response;
 };
+
+export const downloadCreditNote = async (id) => {
+  const response = await authFetch(`${API_URL}/${id}/credit-note`);
+  return response;
+};

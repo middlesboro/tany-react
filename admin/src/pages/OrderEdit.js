@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { getOrder, createOrder, patchOrder, downloadInvoice } from '../services/orderAdminService';
+import { getOrder, createOrder, patchOrder, downloadInvoice, downloadCreditNote } from '../services/orderAdminService';
 import { getCarriers } from '../services/carrierAdminService';
 import { getPayments } from '../services/paymentAdminService';
 import { getCartDiscounts } from '../services/cartDiscountAdminService';
@@ -134,34 +134,46 @@ const OrderEdit = () => {
     navigate('/orders');
   };
 
+  const processDownloadResponse = async (response, defaultFilename) => {
+    if (response.ok) {
+      let fileName = defaultFilename;
+      const contentDisposition = response.headers.get('Content-Disposition');
+      if (contentDisposition) {
+        const fileNameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
+        if (fileNameMatch != null && fileNameMatch[1]) {
+          fileName = fileNameMatch[1].replace(/['"]/g, '');
+        }
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = fileName;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } else {
+      console.error('Failed to download file');
+    }
+  };
+
   const handleDownloadInvoice = async () => {
     try {
       const response = await downloadInvoice(id);
-      if (response.ok) {
-
-        let fileName = `invoice-${id}.pdf`;
-        const contentDisposition = response.headers.get('Content-Disposition');
-        if (contentDisposition) {
-          const fileNameMatch = contentDisposition.match(/filename[^;=\n]*=((['"]).*?\2|[^;\n]*)/);
-          if (fileNameMatch != null && fileNameMatch[1]) {
-            fileName = fileNameMatch[1].replace(/['"]/g, '');
-          }
-        }
-
-        const blob = await response.blob();
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = fileName;
-        document.body.appendChild(a);
-        a.click();
-        a.remove();
-        window.URL.revokeObjectURL(url);
-      } else {
-        console.error('Failed to download invoice');
-      }
+      await processDownloadResponse(response, `invoice-${id}.pdf`);
     } catch (error) {
       console.error('Error downloading invoice:', error);
+    }
+  };
+
+  const handleDownloadCreditNote = async () => {
+    try {
+      const response = await downloadCreditNote(id);
+      await processDownloadResponse(response, `credit-note-${id}.pdf`);
+    } catch (error) {
+      console.error('Error downloading credit note:', error);
     }
   };
 
@@ -170,12 +182,22 @@ const OrderEdit = () => {
       <div className="flex justify-between items-center mb-4">
         <h1 className="text-2xl font-bold">{id ? 'Edit Order' : 'Create Order'}</h1>
         {id && (
-          <button
-            onClick={handleDownloadInvoice}
-            className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow transition duration-150 ease-in-out"
-          >
-            Download Invoice
-          </button>
+          <div className="flex gap-2">
+            {order.status === 'CANCELED' && (
+              <button
+                onClick={handleDownloadCreditNote}
+                className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow transition duration-150 ease-in-out"
+              >
+                Download Credit Note
+              </button>
+            )}
+            <button
+              onClick={handleDownloadInvoice}
+              className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded shadow transition duration-150 ease-in-out"
+            >
+              Download Invoice
+            </button>
+          </div>
         )}
       </div>
       <OrderForm
