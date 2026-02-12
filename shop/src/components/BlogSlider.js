@@ -68,7 +68,7 @@ const BlogSlider = ({ blogs }) => {
                 <div key={`${blog.id}-${idx}`} className="bg-white shadow-lg rounded-lg overflow-hidden border border-gray-100 flex flex-col h-full">
                     {/* Image Section */}
                     <div className="h-48 relative overflow-hidden">
-                        <Link to={`/blog/${blog.id}`} className="block w-full h-full">
+                        <Link to={`/blog/${blog.slug}`} className="block w-full h-full">
                             {blog.image ? (
                                 <img
                                     src={blog.image}
@@ -85,7 +85,7 @@ const BlogSlider = ({ blogs }) => {
 
                     {/* Content Section */}
                     <div className="p-6 flex flex-col flex-grow">
-                        <Link to={`/blog/${blog.id}`} className="text-xl font-bold text-gray-800 hover:text-tany-green transition-colors mb-2 line-clamp-2">
+                        <Link to={`/blog/${blog.slug}`} className="text-xl font-bold text-gray-800 hover:text-tany-green transition-colors mb-2 line-clamp-2">
                             {blog.title}
                         </Link>
 
@@ -99,7 +99,7 @@ const BlogSlider = ({ blogs }) => {
                         </div>
 
                         <div className="mt-auto">
-                             <Link to={`/blog/${blog.id}`} className="inline-block bg-tany-green text-white font-bold py-2 px-6 rounded hover:bg-green-700 transition-colors uppercase text-sm">
+                             <Link to={`/blog/${blog.slug}`} className="inline-block bg-tany-green text-white font-bold py-2 px-6 rounded hover:bg-green-700 transition-colors uppercase text-sm">
                                 Prečítať
                              </Link>
                         </div>
