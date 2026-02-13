@@ -1,8 +1,8 @@
 import ReactGA from 'react-ga4';
 
-const GA_MEASUREMENT_ID = process.env.REACT_APP_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX';
-const GOOGLE_ADS_ID = process.env.REACT_APP_GOOGLE_ADS_ID;
-const GOOGLE_ADS_CONVERSION_LABEL = process.env.REACT_APP_GOOGLE_ADS_CONVERSION_LABEL;
+const GA_MEASUREMENT_ID = import.meta.env.VITE_GA_MEASUREMENT_ID || 'G-XXXXXXXXXX';
+const GOOGLE_ADS_ID = import.meta.env.VITE_GOOGLE_ADS_ID;
+const GOOGLE_ADS_CONVERSION_LABEL = import.meta.env.VITE_GOOGLE_ADS_CONVERSION_LABEL;
 
 // Helper to check if analytics are initialized
 const isGaInitialized = () => ReactGA.isInitialized;

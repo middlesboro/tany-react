@@ -1,7 +1,7 @@
 
 import { authFetch } from '../utils/authFetch';
 
-const API_URL = `${process.env.REACT_APP_API_URL}/blogs`;
+const API_URL = `${import.meta.env.VITE_API_URL}/blogs`;
 
 export const getBlogs = async () => {
   const response = await authFetch(API_URL);
