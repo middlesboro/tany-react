@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import { getBlog } from '../services/blogService';
+import { getBlogBySlug } from '../services/blogService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import SeoHead from '../components/SeoHead';
 import { logViewBlogPost } from '../utils/analytics';
 import { restoreIframes } from '../utils/videoUtils';
 
 const BlogDetail = () => {
-  const { id } = useParams();
+  const { slug } = useParams();
   const { setBreadcrumbs } = useBreadcrumbs();
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -16,7 +16,7 @@ const BlogDetail = () => {
   useEffect(() => {
     const fetchBlog = async () => {
       try {
-        const data = await getBlog(id);
+        const data = await getBlogBySlug(slug);
         if (data) {
           setBlog(data);
           setBreadcrumbs([
@@ -36,7 +36,7 @@ const BlogDetail = () => {
     };
 
     fetchBlog();
-  }, [id]);
+  }, [slug]);
 
   if (loading) {
     return (

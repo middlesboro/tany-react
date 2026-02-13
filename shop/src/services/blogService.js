@@ -11,6 +11,17 @@ export const getBlogs = async () => {
   return response.json();
 };
 
+export const getBlogBySlug = async (slug) => {
+  const response = await authFetch(`${API_URL}/slug/${slug}`);
+  if (!response.ok) {
+      if (response.status === 404) {
+          return null;
+      }
+      throw new Error('Failed to fetch blog');
+  }
+  return response.json();
+};
+
 export const getBlog = async (id) => {
   const response = await authFetch(`${API_URL}/${id}`);
   if (!response.ok) {

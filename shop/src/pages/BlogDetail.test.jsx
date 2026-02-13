@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import { HelmetProvider } from 'react-helmet-async';
 import BlogDetail from './BlogDetail';
-import { getBlog } from '../services/blogService';
+import { getBlogBySlug } from '../services/blogService';
 import { BreadcrumbProvider } from '../context/BreadcrumbContext';
 import { MemoryRouter, Route, Routes } from 'react-router-dom';
 
@@ -10,13 +10,13 @@ import { MemoryRouter, Route, Routes } from 'react-router-dom';
 vi.mock('../services/blogService');
 
 // Mock useParams by wrapping in MemoryRouter
-const renderWithRouter = (ui, { route = '/blog/1' } = {}) => {
+const renderWithRouter = (ui, { route = '/blog/test-blog' } = {}) => {
   return render(
     <HelmetProvider>
       <BreadcrumbProvider>
         <MemoryRouter initialEntries={[route]}>
           <Routes>
-            <Route path="/blog/:id" element={ui} />
+            <Route path="/blog/:slug" element={ui} />
           </Routes>
         </MemoryRouter>
       </BreadcrumbProvider>
@@ -27,6 +27,7 @@ const renderWithRouter = (ui, { route = '/blog/1' } = {}) => {
 describe('BlogDetail', () => {
   const mockBlog = {
     id: 1,
+    slug: 'test-blog',
     title: 'Test Blog',
     author: 'Test Author',
     createdDate: '2023-01-01',
@@ -37,11 +38,11 @@ describe('BlogDetail', () => {
   };
 
   beforeEach(() => {
-    getBlog.mockResolvedValue(mockBlog);
+    getBlogBySlug.mockResolvedValue(mockBlog);
   });
 
   test('sanitizes blog description by replacing non-breaking spaces', async () => {
-    renderWithRouter(<BlogDetail />, { route: '/blog/1' });
+    renderWithRouter(<BlogDetail />, { route: '/blog/test-blog' });
 
     // Wait for the blog to load
     await waitFor(() => screen.getByText('Test Blog'));

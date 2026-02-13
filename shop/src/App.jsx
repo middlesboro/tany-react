@@ -74,7 +74,7 @@ function App() {
                     <Route path="/besteron-callback" element={<BesteronCallback />} />
                     <Route path="/kategoria/:slug" element={<CategoryProducts />} />
                     <Route path="/produkt/:slug" element={<ProductDetail />} />
-                    <Route path="/blog/:id" element={<BlogDetail />} />
+                    <Route path="/blog/:slug" element={<BlogDetail />} />
                     <Route path="/login" element={<Login isAdmin={false} />} />
                     <Route path="/account" element={<Navigate to="/account/personal-data" replace />} />
                     <Route path="/account/:tab" element={<Account />} />
