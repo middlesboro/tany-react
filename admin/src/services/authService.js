@@ -1,6 +1,6 @@
 export const requestMagicLink = async (email) => {
   // Using relative path assuming proxy handles it, matching shop implementation
-  const response = await fetch(`/auth/magic-link/request?email=${encodeURIComponent(email)}`, {
+  const response = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/auth/magic-link/request?email=${encodeURIComponent(email)}`, {
     method: 'POST'
   });
   if (!response.ok) {
