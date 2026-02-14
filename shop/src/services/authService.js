@@ -1,5 +1,5 @@
 export const requestMagicLink = async (email) => {
-  const response = await fetch(`/auth/magic-link/request?email=${encodeURIComponent(email)}`, {
+  const response = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/auth/magic-link/request?email=${encodeURIComponent(email)}`, {
     method: 'POST'
   });
   if (!response.ok) {
@@ -30,7 +30,7 @@ export const exchangeToken = async (code, verifier) => {
   params.append('code', code);
   params.append('code_verifier', verifier);
 
-  const response = await fetch(`/oauth2/token`, {
+  const response = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}/oauth2/token`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
     body: params

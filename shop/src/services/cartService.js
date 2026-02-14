@@ -1,6 +1,6 @@
 import { authFetch } from '../utils/authFetch';
 
-const API_URL = `${import.meta.env.VITE_API_URL}/cart`;
+const API_URL = `${import.meta.env.VITE_BACKEND_BASE_URL}${import.meta.env.VITE_API_URL}/cart`;
 
 export const addToCart = async (cartId, productId, quantity) => {
   let url = `${API_URL}/items`;
