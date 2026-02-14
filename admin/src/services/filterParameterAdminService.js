@@ -1,6 +1,6 @@
 import { authFetch } from '../utils/authFetch';
 
-const API_ADMIN_URL = `${import.meta.env.VITE_API_URL}/admin/filter-parameters`;
+const API_ADMIN_URL = `${import.meta.env.VITE_BACKEND_BASE_URL}${import.meta.env.VITE_API_URL}/admin/filter-parameters`;
 
 export const getFilterParameters = async (page = 0, sort = 'name,asc', size = 20) => {
   const response = await authFetch(`${API_ADMIN_URL}?page=${page}&size=${size}&sort=${sort}`);

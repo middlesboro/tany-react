@@ -1,6 +1,6 @@
 import { authFetch } from '../utils/authFetch';
 
-const API_URL = `${import.meta.env.VITE_API_URL}/admin/categories`;
+const API_URL = `${import.meta.env.VITE_BACKEND_BASE_URL}${import.meta.env.VITE_API_URL}/admin/categories`;
 
 export const getCategories = async (page = 0, sort = 'title,asc', size = 20, filter = {}) => {
   const params = new URLSearchParams({

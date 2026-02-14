@@ -1,6 +1,6 @@
 import { authFetch } from '../utils/authFetch';
 
-const API_ADMIN_URL = `${import.meta.env.VITE_API_URL}/admin/cart-discounts`;
+const API_ADMIN_URL = `${import.meta.env.VITE_BACKEND_BASE_URL}${import.meta.env.VITE_API_URL}/admin/cart-discounts`;
 
 export const getCartDiscounts = async (page = 0, sort = 'title,asc', size = 20) => {
   const params = new URLSearchParams({
