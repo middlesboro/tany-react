@@ -55,6 +55,32 @@ describe('Legacy Redirects', () => {
       expect(screen.getByTestId('location')).toHaveTextContent('/produkt/iphone-15');
     });
 
+    it('redirects /category/999-product-ean.html to /produkt/product (strips EAN)', () => {
+      render(
+        <MemoryRouter initialEntries={['/elektronika/999-iphone-15-8588006069075.html']}>
+          <Routes>
+            <Route path="/:categorySlug/:productSlug" element={<LegacyProductRedirect />} />
+            <Route path="/produkt/:slug" element={<LocationDisplay />} />
+          </Routes>
+        </MemoryRouter>
+      );
+      // EAN (13 digits) should be stripped, keeping "iphone-15"
+      expect(screen.getByTestId('location')).toHaveTextContent('/produkt/iphone-15');
+    });
+
+    it('does NOT strip short numbers (like model versions)', () => {
+      render(
+        <MemoryRouter initialEntries={['/elektronika/999-iphone-1234567.html']}>
+          <Routes>
+            <Route path="/:categorySlug/:productSlug" element={<LegacyProductRedirect />} />
+            <Route path="/produkt/:slug" element={<LocationDisplay />} />
+          </Routes>
+        </MemoryRouter>
+      );
+      // "1234567" is 7 digits, less than 8, so it is treated as part of the slug
+      expect(screen.getByTestId('location')).toHaveTextContent('/produkt/iphone-1234567');
+    });
+
     it('renders NotFound for non-legacy 2-segment URL', () => {
       render(
         <MemoryRouter initialEntries={['/about/team']}>

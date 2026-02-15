@@ -16,14 +16,29 @@ export const LegacyContentRedirect = () => {
 };
 
 // Handles /{categorySlug}/{productId}-{slug}.html -> /produkt/{slug}
+// Also handles /{categorySlug}/{productId}-{slug}-{ean}.html -> /produkt/{slug}
 export const LegacyProductRedirect = () => {
   const { productSlug } = useParams();
-  // Check if productSlug matches {id}-{slug}.html
+  // Check if productSlug matches {id}-{slug}.html or {id}-{slug}-{ean}.html
+  // Regex:
+  // ^(\d+)-    Starts with digits (ID) and hyphen
+  // (.*)       Captures the slug (greedy, potentially including EAN part initially)
+  // \.html$    Ends with .html
   const match = productSlug?.match(/^(\d+)-(.*)\.html$/);
 
   if (match) {
+    let slug = match[2];
+
+    // Check if the slug part ends with an EAN (hyphen followed by 8+ digits)
+    // EAN-8, EAN-13, UPC-A (12), GTIN-14 are common.
+    // We'll use 8 digits as a safe minimum to distinguish from version numbers like "iphone-15".
+    const eanMatch = slug.match(/^(.*)-(\d{8,})$/);
+    if (eanMatch) {
+      slug = eanMatch[1];
+    }
+
     // Redirect to /produkt/{slug}
-    return <Navigate to={`/produkt/${match[2]}`} replace />;
+    return <Navigate to={`/produkt/${slug}`} replace />;
   }
 
   return <NotFound />;
