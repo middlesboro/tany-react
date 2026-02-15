@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Navigate } from 'react-router-dom';
 import { getPageBySlug } from '../services/pageService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import SeoHead from '../components/SeoHead';
@@ -47,6 +47,12 @@ const PublicPage = () => {
   }
 
   if (error) {
+    // Check if the slug matches the legacy category pattern: {id}-{slug}
+    // If so, redirect to /kategoria/{slug}
+    const legacyMatch = slug?.match(/^(\d+)-(.*)$/);
+    if (legacyMatch) {
+      return <Navigate to={`/kategoria/${legacyMatch[2]}`} replace />;
+    }
     return <NotFound />;
   }
 
