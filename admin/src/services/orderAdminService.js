@@ -73,3 +73,10 @@ export const downloadCreditNote = async (id) => {
   const response = await authFetch(`${API_URL}/${id}/credit-note`);
   return response;
 };
+
+export const exportToIsklad = async (id) => {
+  const response = await authFetch(`${API_URL}/${id}/export-isklad`, {
+    method: 'POST',
+  });
+  return response;
+};

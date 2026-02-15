@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getOrders, deleteOrder, getOrder } from '../services/orderAdminService';
+import { getOrders, deleteOrder, getOrder, exportToIsklad } from '../services/orderAdminService';
 import { getCarriers } from '../services/carrierAdminService';
 import { getPayments } from '../services/paymentAdminService';
 import SearchSelect from './SearchSelect';
@@ -30,6 +30,8 @@ const OrderList = () => {
   // Data for lookups
   const [carriers, setCarriers] = useState([]);
   const [payments, setPayments] = useState([]);
+
+  const [refreshKey, setRefreshKey] = useState(0);
 
   const navigate = useNavigate();
 
@@ -62,7 +64,11 @@ const OrderList = () => {
     return () => {
       ignore = true;
     };
-  }, [page, sort, size, appliedFilter]);
+  }, [page, sort, size, appliedFilter, refreshKey]);
+
+  const refreshOrders = () => {
+    setRefreshKey((prev) => prev + 1);
+  };
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this order?')) {
@@ -104,6 +110,19 @@ const OrderList = () => {
       } catch (error) {
         console.error('Failed to duplicate order:', error);
         alert('Failed to duplicate order.');
+      }
+    }
+  };
+
+  const handleExportToIsklad = async (id) => {
+    if (window.confirm('Are you sure you want to export this order to Isklad?')) {
+      try {
+        await exportToIsklad(id);
+        alert('Order exported to Isklad successfully.');
+        refreshOrders();
+      } catch (error) {
+        console.error('Failed to export order to Isklad:', error);
+        alert('Failed to export order to Isklad.');
       }
     }
   };
@@ -241,6 +260,7 @@ const OrderList = () => {
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('createDate')}>
               Create Date
             </th>
+            <th className="py-2 px-4 border-b">Isklad Import</th>
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('finalPrice')}>
               Price
             </th>
@@ -268,6 +288,9 @@ const OrderList = () => {
               <td className="py-2 px-4 border-b">
                 {order.createDate ? new Date(order.createDate).toLocaleString() : ''}
               </td>
+              <td className="py-2 px-4 border-b">
+                {order.iskladImportDate ? new Date(order.iskladImportDate).toLocaleString() : ''}
+              </td>
               <td className="py-2 px-4 border-b">{order.finalPrice} €</td>
               <td className="py-2 px-4 border-b">
                 <Link
@@ -286,6 +309,15 @@ const OrderList = () => {
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7v8a2 2 0 002 2h6M8 7V5a2 2 0 012-2h4.586a1 1 0 01.707.293l4.414 4.414a1 1 0 01.293.707V15a2 2 0 01-2 2h-2M8 7H6a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2v-2" />
+                  </svg>
+                </button>
+                <button
+                  onClick={() => handleExportToIsklad(order.id)}
+                  className="text-purple-500 hover:text-purple-700 mr-2 inline-block"
+                  title="Export to Isklad"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
                   </svg>
                 </button>
                 <button
