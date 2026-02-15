@@ -31,6 +31,7 @@ import RicinovyOlejNaMihalnice from './pages/static/RicinovyOlejNaMihalnice';
 import RicinovyOlejNaVlasy from './pages/static/RicinovyOlejNaVlasy';
 import RysaveVlasy from './pages/static/RysaveVlasy';
 import NotFound from './pages/NotFound';
+import { LegacyContentRedirect, LegacyProductRedirect, BlogLegacyWrapper } from './components/LegacyRedirects';
 import { CartProvider } from './context/CartContext';
 import { BreadcrumbProvider } from './context/BreadcrumbContext';
 import { ModalProvider } from './context/ModalContext';
@@ -74,7 +75,11 @@ function App() {
                     <Route path="/besteron-callback" element={<BesteronCallback />} />
                     <Route path="/kategoria/:slug" element={<CategoryProducts />} />
                     <Route path="/produkt/:slug" element={<ProductDetail />} />
-                    <Route path="/blog/:slug" element={<BlogDetail />} />
+                    <Route path="/blog/:slug" element={
+                      <BlogLegacyWrapper>
+                        <BlogDetail />
+                      </BlogLegacyWrapper>
+                    } />
                     <Route path="/login" element={<Login isAdmin={false} />} />
                     <Route path="/account" element={<Navigate to="/account/personal-data" replace />} />
                     <Route path="/account/:tab" element={<Account />} />
@@ -149,6 +154,8 @@ Farby na vlasy Voono sú 100% prírodné, neobsahujú amoniak, peroxid ani žiad
                     <Route path="/ricinovy-olej-na-mihalnice" element={<RicinovyOlejNaMihalnice />} />
                     <Route path="/ricinovy-olej-na-vlasy" element={<RicinovyOlejNaVlasy />} />
                     <Route path="/rysave-vlasy" element={<RysaveVlasy />} />
+                    <Route path="/content/:idSlug" element={<LegacyContentRedirect />} />
+                    <Route path="/:categorySlug/:productSlug" element={<LegacyProductRedirect />} />
                     <Route path="/:slug" element={<PublicPage />} />
                     <Route path="*" element={<NotFound />} />
                   </Route>
