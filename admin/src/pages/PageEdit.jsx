@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getPage, createPage, updatePage } from '../services/pageAdminService';
 import PageForm from '../components/PageForm';
+import ErrorAlert from '../components/ErrorAlert';
 
 const PageEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
   const [page, setPage] = useState({
     title: '',
     description: '',
@@ -33,26 +35,37 @@ const PageEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (id) {
-      await updatePage(id, page);
-    } else {
-      await createPage(page);
+    setError(null);
+    try {
+      if (id) {
+        await updatePage(id, page);
+      } else {
+        await createPage(page);
+      }
+      navigate('/pages');
+    } catch (error) {
+      setError(error.message);
     }
-    navigate('/pages');
   };
 
   const handleSaveAndStay = async () => {
-    if (id) {
-      await updatePage(id, page);
-    } else {
-      const newPage = await createPage(page);
-      navigate(`/pages/${newPage.id}`, { replace: true });
+    setError(null);
+    try {
+      if (id) {
+        await updatePage(id, page);
+      } else {
+        const newPage = await createPage(page);
+        navigate(`/pages/${newPage.id}`, { replace: true });
+      }
+    } catch (error) {
+      setError(error.message);
     }
   };
 
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">{id ? 'Edit Page' : 'Create Page'}</h1>
+      <ErrorAlert message={error} />
       <PageForm
         page={page}
         handleChange={handleChange}

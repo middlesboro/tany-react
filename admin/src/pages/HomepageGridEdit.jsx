@@ -5,10 +5,12 @@ import { getBrands } from '../services/brandAdminService';
 import { getCategories } from '../services/categoryAdminService';
 import { getAdminProducts } from '../services/productAdminService';
 import HomepageGridForm from '../components/HomepageGridForm';
+import ErrorAlert from '../components/ErrorAlert';
 
 const HomepageGridEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
   const [homepageGrid, setHomepageGrid] = useState({
     title: '',
     brandId: '',
@@ -55,26 +57,37 @@ const HomepageGridEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (id) {
-      await updateHomepageGrid(id, homepageGrid);
-    } else {
-      await createHomepageGrid(homepageGrid);
+    setError(null);
+    try {
+      if (id) {
+        await updateHomepageGrid(id, homepageGrid);
+      } else {
+        await createHomepageGrid(homepageGrid);
+      }
+      navigate('/homepage-grids');
+    } catch (error) {
+      setError(error.message);
     }
-    navigate('/homepage-grids');
   };
 
   const handleSaveAndStay = async () => {
-    if (id) {
-      await updateHomepageGrid(id, homepageGrid);
-    } else {
-      const newGrid = await createHomepageGrid(homepageGrid);
-      navigate(`/homepage-grids/${newGrid.id}`, { replace: true });
+    setError(null);
+    try {
+      if (id) {
+        await updateHomepageGrid(id, homepageGrid);
+      } else {
+        const newGrid = await createHomepageGrid(homepageGrid);
+        navigate(`/homepage-grids/${newGrid.id}`, { replace: true });
+      }
+    } catch (error) {
+      setError(error.message);
     }
   };
 
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">{id ? 'Edit Homepage Grid' : 'Create Homepage Grid'}</h1>
+      <ErrorAlert message={error} />
       <HomepageGridForm
         homepageGrid={homepageGrid}
         brands={brands}

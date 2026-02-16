@@ -35,6 +35,10 @@ export const createProduct = async (product) => {
     },
     body: JSON.stringify(product),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to create product');
+  }
   return response.json();
 };
 
@@ -46,6 +50,10 @@ export const updateProduct = async (id, product) => {
     },
     body: JSON.stringify(product),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to update product');
+  }
   return response.json();
 };
 
@@ -73,6 +81,10 @@ export const patchProduct = async (id, patchDto) => {
     },
     body: JSON.stringify(patchDto),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to patch product');
+  }
   return response.json();
 };
 

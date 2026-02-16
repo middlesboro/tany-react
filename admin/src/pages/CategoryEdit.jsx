@@ -3,12 +3,14 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getCategory, createCategory, updateCategory, getCategories } from '../services/categoryAdminService';
 import { getFilterParameters } from '../services/filterParameterAdminService';
 import CategoryForm from '../components/CategoryForm';
+import ErrorAlert from '../components/ErrorAlert';
 
 const CategoryEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [allCategories, setAllCategories] = useState([]);
   const [allFilterParameters, setAllFilterParameters] = useState([]);
+  const [error, setError] = useState(null);
   const [category, setCategory] = useState({
     title: '',
     description: '',
@@ -56,17 +58,23 @@ const CategoryEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (id) {
-      await updateCategory(id, category);
-    } else {
-      await createCategory(category);
+    setError(null);
+    try {
+      if (id) {
+        await updateCategory(id, category);
+      } else {
+        await createCategory(category);
+      }
+      navigate('/categories');
+    } catch (err) {
+      setError(err.message);
     }
-    navigate('/categories');
   };
 
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">{id ? 'Edit Category' : 'Create Category'}</h1>
+      <ErrorAlert message={error} />
       <CategoryForm
         category={category}
         handleChange={handleChange}

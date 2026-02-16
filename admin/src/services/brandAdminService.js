@@ -20,6 +20,10 @@ export const createBrand = async (brand) => {
     },
     body: JSON.stringify(brand),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to create brand');
+  }
   return response.json();
 };
 
@@ -31,6 +35,10 @@ export const updateBrand = async (id, brand) => {
     },
     body: JSON.stringify(brand),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to update brand');
+  }
   return response.json();
 };
 

@@ -20,6 +20,10 @@ export const createSupplier = async (supplier) => {
     },
     body: JSON.stringify(supplier),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to create supplier');
+  }
   return response.json();
 };
 
@@ -31,6 +35,10 @@ export const updateSupplier = async (id, supplier) => {
     },
     body: JSON.stringify(supplier),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to update supplier');
+  }
   return response.json();
 };
 

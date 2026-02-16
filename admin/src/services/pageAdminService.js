@@ -20,6 +20,10 @@ export const createPage = async (page) => {
     },
     body: JSON.stringify(page),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to create page');
+  }
   return response.json();
 };
 
@@ -31,6 +35,10 @@ export const updatePage = async (id, page) => {
     },
     body: JSON.stringify(page),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to update page');
+  }
   return response.json();
 };
 

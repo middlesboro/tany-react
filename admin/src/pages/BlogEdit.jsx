@@ -3,11 +3,13 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getBlog, createBlog, updateBlog } from '../services/blogAdminService';
 import BlogForm from '../components/BlogForm';
 import BlogImageManager from '../components/BlogImageManager';
+import ErrorAlert from '../components/ErrorAlert';
 import { restoreIframes } from '../utils/videoUtils';
 
 const BlogEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
   const [blog, setBlog] = useState({
     title: '',
     shortDescription: '',
@@ -49,26 +51,37 @@ const BlogEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (id) {
-      await updateBlog(id, blog);
-    } else {
-      await createBlog(blog);
+    setError(null);
+    try {
+      if (id) {
+        await updateBlog(id, blog);
+      } else {
+        await createBlog(blog);
+      }
+      navigate('/blogs');
+    } catch (err) {
+      setError(err.message);
     }
-    navigate('/blogs');
   };
 
   const handleSaveAndStay = async () => {
-    if (id) {
-      await updateBlog(id, blog);
-    } else {
-      const newBlog = await createBlog(blog);
-      navigate(`/blogs/${newBlog.id}`, { replace: true });
+    setError(null);
+    try {
+      if (id) {
+        await updateBlog(id, blog);
+      } else {
+        const newBlog = await createBlog(blog);
+        navigate(`/blogs/${newBlog.id}`, { replace: true });
+      }
+    } catch (err) {
+      setError(err.message);
     }
   };
 
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">{id ? 'Edit Blog' : 'Create Blog'}</h1>
+      <ErrorAlert message={error} />
       <BlogForm
         blog={blog}
         handleChange={handleChange}

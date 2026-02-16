@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getShopSettings, updateShopSettings } from '../services/shopSettingsService';
+import ErrorAlert from './ErrorAlert';
 
 const ShopSettingsForm = () => {
   const [formData, setFormData] = useState({
@@ -72,7 +73,7 @@ const ShopSettingsForm = () => {
       await updateShopSettings(formData);
       alert('Settings updated successfully');
     } catch (err) {
-      setError('Failed to save shop settings');
+      setError(err.message);
       console.error(err);
     } finally {
       setLoading(false);
@@ -85,7 +86,7 @@ const ShopSettingsForm = () => {
 
   return (
     <div className="bg-white p-6 rounded shadow">
-      {error && <div className="text-red-600 mb-4">{error}</div>}
+      <ErrorAlert message={error} />
       <form onSubmit={handleSubmit}>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="mb-4">
