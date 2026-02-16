@@ -1,6 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from 'react';
 import { Link } from 'react-router-dom';
-import { getHomepageGrids, deleteHomepageGrid } from '../services/homepageGridAdminService';
+import { getHomepageGrids, deleteHomepageGrid, updateHomepageGridOrder } from '../services/homepageGridAdminService';
 import usePersistentTableState from '../hooks/usePersistentTableState';
 
 const HomepageGridList = () => {
@@ -8,24 +8,48 @@ const HomepageGridList = () => {
     page, setPage,
     size, setSize,
     sort, handleSort
-  } = usePersistentTableState('admin_homepage_grids_list_state', {}, 'title,asc');
+  } = usePersistentTableState('admin_homepage_grids_list_state', {}, 'order,asc');
 
   const [grids, setGrids] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
 
-  useEffect(() => {
-    const fetchGrids = async () => {
-      const data = await getHomepageGrids(page, sort, size);
-      setGrids(data.content);
-      setTotalPages(data.totalPages);
-    };
-    fetchGrids();
+  const fetchGrids = useCallback(async () => {
+    const data = await getHomepageGrids(page, sort, size);
+    setGrids(data.content);
+    setTotalPages(data.totalPages);
   }, [page, sort, size]);
+
+  useEffect(() => {
+    fetchGrids();
+  }, [fetchGrids]);
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this grid?')) {
       await deleteHomepageGrid(id);
       setGrids(grids.filter((grid) => grid.id !== id));
+    }
+  };
+
+  const handleDragStart = (e, grid) => {
+    e.dataTransfer.setData('application/json', JSON.stringify({ id: grid.id, order: grid.order }));
+  };
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDrop = async (e, targetGrid) => {
+    e.preventDefault();
+    try {
+      const draggedData = JSON.parse(e.dataTransfer.getData('application/json'));
+
+      if (draggedData.id === targetGrid.id) return;
+
+      await updateHomepageGridOrder(draggedData.id, targetGrid.order);
+      await fetchGrids();
+    } catch (error) {
+      console.error("Failed to reorder", error);
+      alert("Failed to reorder grids.");
     }
   };
 
@@ -37,8 +61,8 @@ const HomepageGridList = () => {
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('title')}>
               Title
             </th>
-            <th className="py-2 px-4 border-b">
-              Result Count
+            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('order')}>
+              Order
             </th>
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('sortField')}>
               Sort Field
@@ -51,9 +75,16 @@ const HomepageGridList = () => {
         </thead>
         <tbody>
           {grids.map((grid) => (
-            <tr key={grid.id}>
+            <tr
+              key={grid.id}
+              draggable
+              onDragStart={(e) => handleDragStart(e, grid)}
+              onDragOver={handleDragOver}
+              onDrop={(e) => handleDrop(e, grid)}
+              className="cursor-move hover:bg-gray-50"
+            >
               <td className="py-2 px-4 border-b">{grid.title}</td>
-              <td className="py-2 px-4 border-b">{grid.resultCount}</td>
+              <td className="py-2 px-4 border-b">{grid.order}</td>
               <td className="py-2 px-4 border-b">{grid.sortField}</td>
               <td className="py-2 px-4 border-b">{grid.sortOrder}</td>
               <td className="py-2 px-4 border-b">
