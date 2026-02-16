@@ -9,12 +9,14 @@ import { getFilterParameterValues } from '../services/filterParameterValueAdminS
 import { getAllProductLabels } from '../services/productLabelAdminService';
 import ProductForm from '../components/ProductForm';
 import ProductImageManager from '../components/ProductImageManager';
+import ErrorAlert from '../components/ErrorAlert';
 
 const ProductEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [activeTab, setActiveTab] = useState('main');
   const location = useLocation();
+  const [error, setError] = useState(null);
   const [product, setProduct] = useState({
     title: '',
     shortDescription: '',
@@ -123,27 +125,37 @@ const ProductEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (id) {
-      await updateProduct(id, product);
-    } else {
-      await createProduct(product);
+    setError(null);
+    try {
+      if (id) {
+        await updateProduct(id, product);
+      } else {
+        await createProduct(product);
+      }
+      navigate('/products');
+    } catch (error) {
+      setError(error.message);
     }
-
-    navigate('/products');
   };
 
   const handleSaveAndStay = async () => {
-    if (id) {
-      await updateProduct(id, product);
-    } else {
-      const newProduct = await createProduct(product);
-      navigate(`/products/${newProduct.id}`, { replace: true });
+    setError(null);
+    try {
+      if (id) {
+        await updateProduct(id, product);
+      } else {
+        const newProduct = await createProduct(product);
+        navigate(`/products/${newProduct.id}`, { replace: true });
+      }
+    } catch (error) {
+      setError(error.message);
     }
   };
 
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">{id ? 'Edit Product' : 'Create Product'}</h1>
+      <ErrorAlert message={error} />
       <ProductForm
         activeTab={activeTab}
         setActiveTab={setActiveTab}

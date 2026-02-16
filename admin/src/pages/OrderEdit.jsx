@@ -5,11 +5,13 @@ import { getCarriers } from '../services/carrierAdminService';
 import { getPayments } from '../services/paymentAdminService';
 import { getCartDiscounts } from '../services/cartDiscountAdminService';
 import OrderForm from '../components/OrderForm';
+import ErrorAlert from '../components/ErrorAlert';
 
 const OrderEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
+  const [error, setError] = useState(null);
   const [carriers, setCarriers] = useState([]);
   const [payments, setPayments] = useState([]);
   const [cartDiscounts, setCartDiscounts] = useState([]);
@@ -115,23 +117,28 @@ const OrderEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (id) {
-      const changedFields = getDiff(initialOrder, order);
-      if (Object.keys(changedFields).length > 0) {
-        await patchOrder(id, changedFields);
+    setError(null);
+    try {
+      if (id) {
+        const changedFields = getDiff(initialOrder, order);
+        if (Object.keys(changedFields).length > 0) {
+          await patchOrder(id, changedFields);
+        }
+      } else {
+        const createPayload = {
+          ...order,
+          items: order.items.map(item => ({
+              id: item.id,
+              name: item.name,
+              quantity: item.quantity
+          }))
+        };
+        await createOrder(createPayload);
       }
-    } else {
-      const createPayload = {
-        ...order,
-        items: order.items.map(item => ({
-            id: item.id,
-            name: item.name,
-            quantity: item.quantity
-        }))
-      };
-      await createOrder(createPayload);
+      navigate('/orders');
+    } catch (error) {
+      setError(error.message);
     }
-    navigate('/orders');
   };
 
   const processDownloadResponse = async (response, defaultFilename) => {
@@ -200,6 +207,7 @@ const OrderEdit = () => {
           </div>
         )}
       </div>
+      <ErrorAlert message={error} />
       <OrderForm
         order={order}
         handleChange={handleChange}

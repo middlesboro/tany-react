@@ -15,5 +15,9 @@ export const updateShopSettings = async (data) => {
     },
     body: JSON.stringify(data),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to update shop settings');
+  }
   return response.json();
 };

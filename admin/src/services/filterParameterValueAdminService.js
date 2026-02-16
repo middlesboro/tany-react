@@ -20,6 +20,10 @@ export const createFilterParameterValue = async (filterParameterValue) => {
     },
     body: JSON.stringify(filterParameterValue),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to create filter parameter value');
+  }
   return response.json();
 };
 
@@ -31,6 +35,10 @@ export const updateFilterParameterValue = async (id, filterParameterValue) => {
     },
     body: JSON.stringify(filterParameterValue),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to update filter parameter value');
+  }
   return response.json();
 };
 

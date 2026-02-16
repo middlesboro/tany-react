@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getPayment, createPayment, updatePayment } from '../services/paymentAdminService';
 import PaymentImageManager from '../components/PaymentImageManager';
+import ErrorAlert from '../components/ErrorAlert';
 
 const PaymentEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
   const [payment, setPayment] = useState({
     name: '',
     description: '',
@@ -40,6 +42,7 @@ const PaymentEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
     try {
         if (id) {
             await updatePayment(id, payment);
@@ -48,12 +51,12 @@ const PaymentEdit = () => {
         }
         navigate('/payments');
     } catch (error) {
-        console.error("Error saving payment:", error);
-        alert("Error saving payment");
+        setError(error.message);
     }
   };
 
   const handleSaveAndStay = async () => {
+    setError(null);
     try {
         if (id) {
             await updatePayment(id, payment);
@@ -62,14 +65,14 @@ const PaymentEdit = () => {
             navigate(`/payments/${newPayment.id}`, { replace: true });
         }
     } catch (error) {
-        console.error("Error saving payment:", error);
-        alert("Error saving payment");
+        setError(error.message);
     }
   };
 
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">{id ? 'Edit Payment' : 'Create Payment'}</h1>
+      <ErrorAlert message={error} />
       <form onSubmit={handleSubmit} className="mb-8">
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">

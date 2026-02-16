@@ -20,6 +20,10 @@ export const createPayment = async (payment) => {
     },
     body: JSON.stringify(payment),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to create payment');
+  }
   return response.json();
 };
 
@@ -31,6 +35,10 @@ export const updatePayment = async (id, payment) => {
     },
     body: JSON.stringify(payment),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to update payment');
+  }
   return response.json();
 };
 

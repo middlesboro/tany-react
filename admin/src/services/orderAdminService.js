@@ -33,6 +33,10 @@ export const createOrder = async (order) => {
     },
     body: JSON.stringify(order),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to create order');
+  }
   return response.json();
 };
 
@@ -44,6 +48,10 @@ export const patchOrder = async (id, order) => {
     },
     body: JSON.stringify(order),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to patch order');
+  }
   return response.json();
 };
 
@@ -55,6 +63,10 @@ export const updateOrder = async (id, order) => {
     },
     body: JSON.stringify(order),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to update order');
+  }
   return response.json();
 };
 

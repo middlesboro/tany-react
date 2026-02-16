@@ -20,6 +20,10 @@ export const createProductLabel = async (productLabel) => {
     },
     body: JSON.stringify(productLabel),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to create product label');
+  }
   return response.json();
 };
 
@@ -31,6 +35,10 @@ export const updateProductLabel = async (id, productLabel) => {
     },
     body: JSON.stringify(productLabel),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to update product label');
+  }
   return response.json();
 };
 

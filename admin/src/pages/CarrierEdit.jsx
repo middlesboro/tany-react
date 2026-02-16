@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getCarrier, createCarrier, updateCarrier } from '../services/carrierAdminService';
 import CarrierImageManager from '../components/CarrierImageManager';
+import ErrorAlert from '../components/ErrorAlert';
 
 const CarrierEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
   const [carrier, setCarrier] = useState({
     name: '',
     description: '',
@@ -64,6 +66,7 @@ const CarrierEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
     try {
         if (id) {
             await updateCarrier(id, carrier);
@@ -72,12 +75,12 @@ const CarrierEdit = () => {
         }
         navigate('/carriers');
     } catch (error) {
-        console.error("Error saving carrier:", error);
-        alert("Error saving carrier");
+        setError(error.message);
     }
   };
 
   const handleSaveAndStay = async () => {
+    setError(null);
     try {
         if (id) {
             await updateCarrier(id, carrier);
@@ -86,14 +89,14 @@ const CarrierEdit = () => {
             navigate(`/carriers/${newCarrier.id}`, { replace: true });
         }
     } catch (error) {
-        console.error("Error saving carrier:", error);
-        alert("Error saving carrier");
+        setError(error.message);
     }
   };
 
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">{id ? 'Edit Carrier' : 'Create Carrier'}</h1>
+      <ErrorAlert message={error} />
       <form onSubmit={handleSubmit} className="mb-8">
         <div className="mb-4">
           <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="name">

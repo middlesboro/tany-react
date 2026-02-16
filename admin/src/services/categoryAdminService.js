@@ -28,6 +28,10 @@ export const createCategory = async (category) => {
     },
     body: JSON.stringify(category),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to create category');
+  }
   return response.json();
 };
 
@@ -39,6 +43,10 @@ export const updateCategory = async (id, category) => {
     },
     body: JSON.stringify(category),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to update category');
+  }
   return response.json();
 };
 

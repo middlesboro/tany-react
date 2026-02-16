@@ -20,6 +20,10 @@ export const createHomepageGrid = async (homepageGrid) => {
     },
     body: JSON.stringify(homepageGrid),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to create homepage grid');
+  }
   return response.json();
 };
 
@@ -31,6 +35,10 @@ export const updateHomepageGrid = async (id, homepageGrid) => {
     },
     body: JSON.stringify(homepageGrid),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to update homepage grid');
+  }
   return response.json();
 };
 

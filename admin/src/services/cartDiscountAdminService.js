@@ -26,6 +26,10 @@ export const createCartDiscount = async (cartDiscount) => {
     },
     body: JSON.stringify(cartDiscount),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to create cart discount');
+  }
   return response.json();
 };
 
@@ -37,6 +41,10 @@ export const updateCartDiscount = async (id, cartDiscount) => {
     },
     body: JSON.stringify(cartDiscount),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to update cart discount');
+  }
   return response.json();
 };
 

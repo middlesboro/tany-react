@@ -20,6 +20,10 @@ export const createCarrier = async (carrier) => {
     },
     body: JSON.stringify(carrier),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to create carrier');
+  }
   return response.json();
 };
 
@@ -31,6 +35,10 @@ export const updateCarrier = async (id, carrier) => {
     },
     body: JSON.stringify(carrier),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to update carrier');
+  }
   return response.json();
 };
 

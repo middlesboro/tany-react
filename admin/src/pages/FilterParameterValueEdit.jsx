@@ -5,12 +5,14 @@ import { getFilterParameters } from '../services/filterParameterAdminService';
 import { getProductsByFilterValue, getProduct, patchProduct } from '../services/productAdminService';
 import FilterParameterValueForm from '../components/FilterParameterValueForm';
 import AdminProductSearch from '../components/AdminProductSearch';
+import ErrorAlert from '../components/ErrorAlert';
 
 const FilterParameterValueEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const location = useLocation();
   const isEdit = Boolean(id);
+  const [error, setError] = useState(null);
   const [filterParameterValue, setFilterParameterValue] = useState({
     name: '',
     active: true,
@@ -67,6 +69,7 @@ const FilterParameterValueEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
     try {
       if (isEdit) {
         await updateFilterParameterValue(id, filterParameterValue);
@@ -75,8 +78,7 @@ const FilterParameterValueEdit = () => {
       }
       navigate('/filter-parameter-values');
     } catch (error) {
-      console.error('Failed to save filter parameter value', error);
-      alert('Failed to save filter parameter value');
+      setError(error.message);
     }
   };
 
@@ -130,6 +132,7 @@ const FilterParameterValueEdit = () => {
   return (
     <div className="max-w-2xl mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">{isEdit ? 'Edit Filter Parameter Value' : 'Create Filter Parameter Value'}</h2>
+      <ErrorAlert message={error} />
       <FilterParameterValueForm
         filterParameterValue={filterParameterValue}
         handleChange={handleChange}

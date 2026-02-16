@@ -3,10 +3,12 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getBrand, createBrand, updateBrand } from '../services/brandAdminService';
 import BrandForm from '../components/BrandForm';
 import BrandImageManager from '../components/BrandImageManager';
+import ErrorAlert from '../components/ErrorAlert';
 
 const BrandEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
   const [brand, setBrand] = useState({
     name: '',
     metaTitle: '',
@@ -40,26 +42,37 @@ const BrandEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (id) {
-      await updateBrand(id, brand);
-    } else {
-      await createBrand(brand);
+    setError(null);
+    try {
+      if (id) {
+        await updateBrand(id, brand);
+      } else {
+        await createBrand(brand);
+      }
+      navigate('/brands');
+    } catch (err) {
+      setError(err.message);
     }
-    navigate('/brands');
   };
 
   const handleSaveAndStay = async () => {
-    if (id) {
-      await updateBrand(id, brand);
-    } else {
-      const newBrand = await createBrand(brand);
-      navigate(`/brands/${newBrand.id}`, { replace: true });
+    setError(null);
+    try {
+      if (id) {
+        await updateBrand(id, brand);
+      } else {
+        const newBrand = await createBrand(brand);
+        navigate(`/brands/${newBrand.id}`, { replace: true });
+      }
+    } catch (err) {
+      setError(err.message);
     }
   };
 
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">{id ? 'Edit Brand' : 'Create Brand'}</h1>
+      <ErrorAlert message={error} />
       <BrandForm
         brand={brand}
         handleChange={handleChange}

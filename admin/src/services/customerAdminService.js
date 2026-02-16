@@ -20,6 +20,10 @@ export const createCustomer = async (customer) => {
     },
     body: JSON.stringify(customer),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to create customer');
+  }
   return response.json();
 };
 
@@ -31,6 +35,10 @@ export const updateCustomer = async (id, customer) => {
     },
     body: JSON.stringify(customer),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to update customer');
+  }
   return response.json();
 };
 

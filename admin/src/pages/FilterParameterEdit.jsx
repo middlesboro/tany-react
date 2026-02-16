@@ -2,11 +2,13 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getFilterParameter, createFilterParameter, updateFilterParameter } from '../services/filterParameterAdminService';
 import FilterParameterForm from '../components/FilterParameterForm';
+import ErrorAlert from '../components/ErrorAlert';
 
 const FilterParameterEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const isEdit = Boolean(id);
+  const [error, setError] = useState(null);
   const [filterParameter, setFilterParameter] = useState({
     name: '',
     type: '', // or default enum
@@ -39,6 +41,7 @@ const FilterParameterEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
     try {
       if (isEdit) {
         await updateFilterParameter(id, filterParameter);
@@ -47,14 +50,14 @@ const FilterParameterEdit = () => {
       }
       navigate('/filter-parameters');
     } catch (error) {
-      console.error('Failed to save filter parameter', error);
-      alert('Failed to save filter parameter');
+      setError(error.message);
     }
   };
 
   return (
     <div className="max-w-2xl mx-auto p-4">
       <h2 className="text-2xl font-bold mb-4">{isEdit ? 'Edit Filter Parameter' : 'Create Filter Parameter'}</h2>
+      <ErrorAlert message={error} />
       <FilterParameterForm
         filterParameter={filterParameter}
         handleChange={handleChange}

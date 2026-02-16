@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { createCartDiscount, getCartDiscount, updateCartDiscount } from '../services/cartDiscountAdminService';
 import MultiSearchSelect from '../components/MultiSearchSelect';
+import ErrorAlert from '../components/ErrorAlert';
 import { getBrands } from '../services/brandAdminService';
 import { getCategories } from '../services/categoryAdminService';
 import { getAdminProducts } from '../services/productAdminService';
@@ -109,7 +110,7 @@ const CartDiscountEdit = () => {
       }
       navigate('/cart-discounts');
     } catch (err) {
-      setError('Failed to save discount');
+      setError(err.message);
       setLoading(false);
     }
   };
@@ -125,7 +126,7 @@ const CartDiscountEdit = () => {
       </div>
       <h1 className="text-2xl font-bold mb-6">{isNew ? 'Create Cart Discount' : 'Edit Cart Discount'}</h1>
 
-      {error && <div className="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">{error}</div>}
+      <ErrorAlert message={error} />
 
       <form onSubmit={handleSubmit} className="bg-white shadow rounded-lg p-6 space-y-4">
         <div>

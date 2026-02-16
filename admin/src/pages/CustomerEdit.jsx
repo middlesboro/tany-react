@@ -2,10 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getCustomer, createCustomer, updateCustomer } from '../services/customerAdminService';
 import CustomerForm from '../components/CustomerForm';
+import ErrorAlert from '../components/ErrorAlert';
 
 const CustomerEdit = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [error, setError] = useState(null);
   const [customer, setCustomer] = useState({
     firstname: '',
     lastname: '',
@@ -48,17 +50,23 @@ const CustomerEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (id) {
-      await updateCustomer(id, customer);
-    } else {
-      await createCustomer(customer);
+    setError(null);
+    try {
+      if (id) {
+        await updateCustomer(id, customer);
+      } else {
+        await createCustomer(customer);
+      }
+      navigate('/customers');
+    } catch (err) {
+      setError(err.message);
     }
-    navigate('/customers');
   };
 
   return (
     <div>
       <h1 className="text-2xl font-bold mb-4">{id ? 'Edit Customer' : 'Create Customer'}</h1>
+      <ErrorAlert message={error} />
       <CustomerForm customer={customer} handleChange={handleChange} handleSubmit={handleSubmit} />
     </div>
   );

@@ -20,6 +20,10 @@ export const createBlog = async (blog) => {
     },
     body: JSON.stringify(blog),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to create blog');
+  }
   return response.json();
 };
 
@@ -31,6 +35,10 @@ export const updateBlog = async (id, blog) => {
     },
     body: JSON.stringify(blog),
   });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to update blog');
+  }
   return response.json();
 };
 
