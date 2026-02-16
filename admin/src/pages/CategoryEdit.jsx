@@ -47,7 +47,7 @@ const CategoryEdit = () => {
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
-    setCategory({ ...category, [name]: type === 'checkbox' ? checked : value });
+    setCategory((prevCategory) => ({ ...prevCategory, [name]: type === 'checkbox' ? checked : value }));
   };
 
   const handleParentChange = (parentId) => {
