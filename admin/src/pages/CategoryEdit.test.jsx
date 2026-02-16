@@ -19,10 +19,10 @@ vi.mock('react-quill-new', () => {
 
 // Mock MultiSearchSelect
 vi.mock('../components/MultiSearchSelect', () => ({
-  default: ({ onChange, value }) => (
+  default: ({ onChange, value, label }) => (
     <select
       multiple
-      data-testid="multi-select-mock"
+      data-testid={`multi-select-${label}`}
       value={value.map(String)}
       onChange={(e) => {
         const selected = Array.from(e.target.selectedOptions, option => parseInt(option.value, 10));
@@ -95,7 +95,7 @@ describe('CategoryEdit', () => {
       container = result.container;
     });
 
-    const select = screen.getByTestId('multi-select-mock');
+    const select = screen.getByTestId('multi-select-Filter Parameters');
     fireEvent.change(select, { target: { value: ['1'] } }); // Simulator for select change logic in mock is tricky, standard select works with array of strings if multiple
 
     // Since mock implementation of MultiSearchSelect uses manual onChange triggering from event,
@@ -115,6 +115,34 @@ describe('CategoryEdit', () => {
       expect(categoryAdminService.createCategory).toHaveBeenCalledWith(expect.objectContaining({
         title: 'Cat with Params',
         filterParameters: [{ id: 1 }]
+      }));
+    });
+  });
+
+  test('should include excluded filter parameters when saving', async () => {
+    let container;
+    await act(async () => {
+      const result = renderWithRouter(<CategoryEdit />);
+      container = result.container;
+    });
+
+    const select = screen.getByTestId('multi-select-Excluded Filter Parameters');
+    fireEvent.change(select, { target: { value: ['2'] } });
+
+    const option2 = select.querySelector('option[value="2"]');
+    option2.selected = true;
+    fireEvent.change(select);
+
+    const titleInput = container.querySelector('input[name="title"]');
+    fireEvent.change(titleInput, { target: { value: 'Cat with Excluded Params' } });
+
+    const saveButton = screen.getByText('Save');
+    fireEvent.click(saveButton);
+
+    await waitFor(() => {
+      expect(categoryAdminService.createCategory).toHaveBeenCalledWith(expect.objectContaining({
+        title: 'Cat with Excluded Params',
+        excludedFilterParameters: [{ id: 2 }]
       }));
     });
   });

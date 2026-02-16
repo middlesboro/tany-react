@@ -18,6 +18,7 @@ const CategoryEdit = () => {
     parentId: '',
     defaultCategory: false,
     filterParameters: [],
+    excludedFilterParameters: [],
   });
 
   useEffect(() => {
@@ -39,6 +40,7 @@ const CategoryEdit = () => {
         setCategory({
           ...data,
           filterParameters: data.filterParameters || [],
+          excludedFilterParameters: data.excludedFilterParameters || [],
         });
       };
       fetchCategory();
