@@ -19,6 +19,7 @@ const ProductEdit = () => {
   const [error, setError] = useState(null);
   const [product, setProduct] = useState({
     title: '',
+    productIdentifier: '',
     shortDescription: '',
     description: '',
     price: '',
@@ -44,6 +45,7 @@ const ProductEdit = () => {
   const mapProductToState = (data) => ({
     ...data,
     title: data.title || '',
+    productIdentifier: data.productIdentifier || '',
     shortDescription: data.shortDescription || '',
     description: data.description || '',
     price: data.price || '',
