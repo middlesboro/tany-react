@@ -27,6 +27,21 @@ export const createHomepageGrid = async (homepageGrid) => {
   return response.json();
 };
 
+export const updateHomepageGridOrder = async (id, order) => {
+  const response = await authFetch(`${API_ADMIN_URL}/${id}`, {
+    method: 'PATCH',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ order }),
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to update homepage grid order');
+  }
+  return response.json();
+};
+
 export const updateHomepageGrid = async (id, homepageGrid) => {
   const response = await authFetch(`${API_ADMIN_URL}/${id}`, {
     method: 'PUT',
