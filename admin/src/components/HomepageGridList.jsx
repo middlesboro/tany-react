@@ -45,10 +45,8 @@ const HomepageGridList = () => {
 
       if (draggedData.id === targetGrid.id) return;
 
-      let newOrder = targetGrid.order;
-      if (newOrder === null || newOrder === undefined) {
-        newOrder = (page * size) + grids.indexOf(targetGrid) + 1;
-      }
+      const targetIndex = grids.findIndex((g) => g.id === targetGrid.id);
+      const newOrder = (page * size) + targetIndex + 1;
 
       await updateHomepageGridOrder(draggedData.id, newOrder);
       await fetchGrids();
