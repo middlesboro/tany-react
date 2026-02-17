@@ -125,4 +125,39 @@ describe('OrderConfirmation', () => {
 
     expect(document.querySelector('meta[name="robots"]')).not.toBeInTheDocument();
   });
+
+  test('renders online payment button for Besteron', async () => {
+    const besteronOrder = {
+        ...mockOrder,
+        paymentType: 'BESTERON',
+        status: 'NEW',
+        priceBreakDown: {
+            items: [],
+            totalPrice: 100,
+            totalPriceWithoutVat: 80,
+            totalPriceVatValue: 20
+        }
+    };
+    const paymentInfo = {
+        paymentLink: 'https://gate.besteron.com/payment/xyz'
+    };
+
+    getOrderConfirmation.mockResolvedValue(besteronOrder);
+    getPaymentInfo.mockResolvedValue(paymentInfo);
+
+    render(<OrderConfirmation />);
+
+    await waitFor(() => {
+      expect(screen.getByText('Objednávka #123')).toBeInTheDocument();
+    });
+
+    expect(screen.getByText('Pre online platbu kliknite na tlačidlo nižšie:')).toBeInTheDocument();
+
+    const payButton = screen.getByText('Zaplatiť online');
+    expect(payButton).toBeInTheDocument();
+    expect(payButton).toHaveAttribute('href', 'https://gate.besteron.com/payment/xyz');
+
+    // Ensure QR code section is NOT present
+    expect(screen.queryByText('Naskenujte QR kód pre platbu:')).not.toBeInTheDocument();
+  });
 });

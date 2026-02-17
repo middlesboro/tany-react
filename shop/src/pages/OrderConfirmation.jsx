@@ -306,6 +306,16 @@ const OrderConfirmation = () => {
                                  </button>
                              </form>
                          </div>
+                      ) : order.paymentType === 'BESTERON' && paymentInfo && paymentInfo.paymentLink ? (
+                          <div className="flex flex-col items-center">
+                              <p className="mb-4 text-gray-700">Pre online platbu kliknite na tlačidlo nižšie:</p>
+                              <a
+                                  href={paymentInfo.paymentLink}
+                                  className="bg-[#1f7a4d] text-white font-bold py-2 px-6 rounded hover:bg-green-700 transition-colors inline-block text-center"
+                              >
+                                  Zaplatiť online
+                              </a>
+                          </div>
                       ) : (
                         paymentInfo && paymentInfo.qrCode && (
                             <div className="flex flex-col items-center">
