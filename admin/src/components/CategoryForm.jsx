@@ -18,6 +18,16 @@ const CategoryForm = ({ category, handleChange, handleSubmit, categories = [], h
     });
   };
 
+  const handleExcludedFilterParamChange = (newIds) => {
+    const newParams = newIds.map(id => ({ id }));
+    handleChange({
+      target: {
+        name: 'excludedFilterParameters',
+        value: newParams
+      }
+    });
+  };
+
   const handleQuillChange = (name) => (value) => {
     // ReactQuill returns the HTML value directly
     handleChange({
@@ -108,6 +118,15 @@ const CategoryForm = ({ category, handleChange, handleSubmit, categories = [], h
           value={(category.filterParameters || []).map(p => p.id)}
           onChange={handleFilterParamChange}
           placeholder="Select filter parameters..."
+        />
+      </div>
+      <div className="mb-4">
+        <MultiSearchSelect
+          label="Excluded Filter Parameters"
+          options={filterParameters}
+          value={(category.excludedFilterParameters || []).map(p => p.id)}
+          onChange={handleExcludedFilterParamChange}
+          placeholder="Select excluded filter parameters..."
         />
       </div>
       <button type="submit" className="bg-green-500 text-white px-4 py-2 rounded">
