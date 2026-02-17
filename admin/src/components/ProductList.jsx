@@ -18,6 +18,7 @@ const ProductList = () => {
     priceFrom: '',
     priceTo: '',
     brandId: '',
+    productIdentifier: '',
     id: '',
     externalStock: '',
     quantity: '',
@@ -68,6 +69,7 @@ const ProductList = () => {
       const duplicateData = {
         ...fullProduct,
         id: undefined,
+        productIdentifier: undefined,
         title: `${fullProduct.title} - copy`,
         images: [],
       };
@@ -128,14 +130,26 @@ const ProductList = () => {
             />
           </div>
           <div>
-            <label className="block text-gray-700">ID</label>
+            <label className="block text-gray-700">Id</label>
+            <input
+              type="number"
+              name="productIdentifier"
+              value={filter.productIdentifier}
+              onChange={handleFilterChange}
+              onKeyDown={(e) => e.key === 'Enter' && handleFilterSubmit()}
+              placeholder="Product ID"
+              className="w-full px-3 py-2 border rounded"
+            />
+          </div>
+          <div>
+            <label className="block text-gray-700">UUID</label>
             <input
               type="text"
               name="id"
               value={filter.id}
               onChange={handleFilterChange}
               onKeyDown={(e) => e.key === 'Enter' && handleFilterSubmit()}
-              placeholder="Product ID"
+              placeholder="UUID"
               className="w-full px-3 py-2 border rounded"
             />
           </div>
@@ -230,6 +244,9 @@ const ProductList = () => {
       <table className="min-w-full bg-white">
         <thead>
           <tr>
+            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('productIdentifier')}>
+              Id
+            </th>
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('title')}>
               Title
             </th>
@@ -250,6 +267,9 @@ const ProductList = () => {
             <tr key={product.id}>
               {editingId === product.id ? (
                 <>
+                  <td className="py-2 px-4 border-b">
+                    {product.productIdentifier}
+                  </td>
                   <td className="py-2 px-4 border-b">
                     <input
                       type="text"
@@ -321,6 +341,7 @@ const ProductList = () => {
                 </>
               ) : (
                 <>
+                  <td className="py-2 px-4 border-b">{product.productIdentifier}</td>
                   <td className="py-2 px-4 border-b">{product.title}</td>
                   <td className="py-2 px-4 border-b">
                     {product.discountPrice ? (
