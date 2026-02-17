@@ -45,7 +45,12 @@ const HomepageGridList = () => {
 
       if (draggedData.id === targetGrid.id) return;
 
-      await updateHomepageGridOrder(draggedData.id, targetGrid.order);
+      let newOrder = targetGrid.order;
+      if (newOrder === null || newOrder === undefined) {
+        newOrder = (page * size) + grids.indexOf(targetGrid) + 1;
+      }
+
+      await updateHomepageGridOrder(draggedData.id, newOrder);
       await fetchGrids();
     } catch (error) {
       console.error("Failed to reorder", error);
