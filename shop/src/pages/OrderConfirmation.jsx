@@ -254,7 +254,11 @@ const OrderConfirmation = () => {
               </div>
           )}
           <p className="mt-4 text-gray-600">
-              Ďakujeme za váš nákup!<br/>
+              Ďakujeme za váš nákup!
+              { ((order.paymentType === 'BESTERON' || order.paymentType === 'GLOBAL_PAYMENTS') && order.status !== 'PAID' ) && (
+                  <span> Pre zaplatenie objednávky kliknite na platobné tlačidlo nižšie.</span>
+              )}
+              <br/>
               Potvrdenie sme poslali na <strong>{order.email}</strong>
           </p>
       </section>
