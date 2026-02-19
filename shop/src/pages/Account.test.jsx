@@ -14,9 +14,9 @@ vi.mock('../services/authService');
 vi.mock('../context/BreadcrumbContext');
 
 // Mock ProductCard to avoid complex context dependencies
-vi.mock('../components/ProductCard', () => ({ product }) => (
-  <div data-testid="product-card">{product.title}</div>
-));
+vi.mock('../components/ProductCard', () => ({
+  default: ({ product }) => <div data-testid="product-card">{product?.title}</div>
+}));
 
 describe('Account Page', () => {
   const mockSetBreadcrumbs = vi.fn();
