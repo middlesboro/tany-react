@@ -97,7 +97,7 @@ const ProductCard = ({ product }) => {
 
         <button
           onClick={toggleWishlist}
-          className="absolute top-2 left-2 z-20 p-2 rounded-full bg-white/80 hover:bg-white text-red-500 hover:text-red-600 transition-colors"
+          className="absolute top-2 right-2 z-20 p-2 rounded-full bg-white/80 hover:bg-white text-red-500 hover:text-red-600 transition-colors"
           title={inWishlist ? "Odobrať z obľúbených" : "Pridať do obľúbených"}
         >
             <svg
@@ -167,7 +167,7 @@ const ProductCard = ({ product }) => {
                 value={quantity}
                 onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
                 disabled={adding}
-                className="w-12 h-10 border border-gray-300 text-center text-sm focus:border-tany-green focus:outline-none"
+                className="w-10 h-10 border border-gray-300 text-center text-sm focus:border-tany-green focus:outline-none"
               />
              )}
             <AddToCartButton

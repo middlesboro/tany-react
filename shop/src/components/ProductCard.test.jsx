@@ -26,12 +26,16 @@ vi.mock('../services/authService', () => ({
 }));
 
 // Mock ProductLabel to avoid rendering issues or dependencies
-vi.mock('./ProductLabel', () => () => <div data-testid="product-label">Label</div>);
+vi.mock('./ProductLabel', () => ({
+  default: () => <div data-testid="product-label">Label</div>
+}));
 
 // Mock AddToCartButton
-vi.mock('./AddToCartButton', () => ({ onClick, disabled, text }) => (
-  <button onClick={onClick} disabled={disabled}>{text}</button>
-));
+vi.mock('./AddToCartButton', () => ({
+  default: ({ onClick, disabled, text }) => (
+    <button onClick={onClick} disabled={disabled}>{text}</button>
+  )
+}));
 
 const mockProduct = {
   id: 1,
@@ -43,7 +47,7 @@ const mockProduct = {
   inWishlist: false,
 };
 
-test('renders wishlist button with left-2 class', () => {
+test('renders wishlist button with right-2 class', () => {
   useCart.mockReturnValue({ addToCart: vi.fn(), cart: { products: [] } });
   useModal.mockReturnValue({ openLoginModal: vi.fn() });
 
@@ -58,5 +62,5 @@ test('renders wishlist button with left-2 class', () => {
   expect(wishlistButton).toBeInTheDocument();
   expect(wishlistButton).toHaveClass('absolute');
   expect(wishlistButton).toHaveClass('top-2');
-  expect(wishlistButton).toHaveClass('left-2');
+  expect(wishlistButton).toHaveClass('right-2');
 });
