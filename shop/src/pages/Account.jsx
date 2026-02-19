@@ -22,6 +22,8 @@ const Account = () => {
     phone: '',
     invoiceAddress: { street: '', city: '', zip: '' },
     deliveryAddress: { street: '', city: '', zip: '' },
+    preferredPacketaBranchId: '',
+    preferredBalikovoBranchId: ''
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -44,13 +46,52 @@ const Account = () => {
   }, [setBreadcrumbs]);
 
   useEffect(() => {
+    const scriptId = 'packeta-widget-script';
+    if (!document.getElementById(scriptId)) {
+        const script = document.createElement('script');
+        script.id = scriptId;
+        script.src = 'https://widget.packeta.com/v6/www/js/library.js';
+        script.async = true;
+        document.body.appendChild(script);
+    }
+
+    const spsScriptId = 'sps-widget-script';
+    if (!document.getElementById(spsScriptId)) {
+        const script = document.createElement('script');
+        script.id = spsScriptId;
+        script.src = 'https://balikomat.sps-sro.sk/widget/v1/widget/js/widget.js';
+        script.async = true;
+        document.body.appendChild(script);
+    }
+
+    window.handleSPSPickupPoint = (point) => {
+        if (point) {
+            setCustomer(prev => ({
+                ...prev,
+                preferredBalikovoBranchId: point.id
+            }));
+        }
+    };
+
+    return () => {
+        delete window.handleSPSPickupPoint;
+    };
+  }, []);
+
+  useEffect(() => {
     const fetchCustomer = async () => {
       try {
         const data = await getCustomer();
         // Ensure addresses are not null
         const invoiceAddress = data.invoiceAddress || { street: '', city: '', zip: '' };
         const deliveryAddress = data.deliveryAddress || { street: '', city: '', zip: '' };
-        setCustomer({ ...data, invoiceAddress, deliveryAddress });
+        setCustomer({
+            ...data,
+            invoiceAddress,
+            deliveryAddress,
+            preferredPacketaBranchId: data.preferredPacketaBranchId || '',
+            preferredBalikovoBranchId: data.preferredBalikovoBranchId || ''
+        });
       } catch (err) {
         setError('Failed to load customer data.');
         console.error(err);
@@ -112,6 +153,46 @@ const Account = () => {
   const handleLogout = () => {
     removeToken();
     navigate('/');
+  };
+
+  const openPacketaWidget = () => {
+      const packetaApiKey = 'XXX XXX XXX96cee6278e535aa508c6be174a4d6d03';
+      const packetaOptions = {
+          country: "sk",
+          language: "sk",
+          valueFormat: "\"Packeta\",id,carrierId,carrierPickupPointId,name,city,street",
+          view: "modal"
+      };
+
+      if (window.Packeta && window.Packeta.Widget) {
+          window.Packeta.Widget.pick(packetaApiKey, (point) => {
+            if (point) {
+                setCustomer(prev => ({
+                    ...prev,
+                    preferredPacketaBranchId: point.id
+                }));
+            }
+          }, packetaOptions);
+      } else {
+          console.error("Packeta widget script not loaded yet.");
+          alert("Packeta widget is loading, please try again in a moment.");
+      }
+  };
+
+  const openBalikovoWidget = () => {
+      const SPSwidget = window.SPSwidget || {};
+      window.SPSwidget = SPSwidget;
+
+      SPSwidget.config = SPSwidget.config || {};
+      SPSwidget.config.callback = "handleSPSPickupPoint";
+      SPSwidget.config.country = "sk";
+
+      if (SPSwidget.showMap) {
+          SPSwidget.showMap();
+      } else {
+          console.error("SPS widget script not loaded yet.");
+          alert("Balikovo widget is loading, please try again in a moment.");
+      }
   };
 
   if (loading) return <div className="p-8">Loading...</div>;
@@ -345,6 +426,50 @@ const Account = () => {
                       value={customer.deliveryAddress.country || ''}
                       readOnly
                   />
+                </div>
+              </div>
+            </div>
+
+            <div className="mb-6">
+              <h2 className="text-xl font-bold mb-4">Preferované spôsoby doručenia</h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                   <label className="block text-gray-700 text-sm font-bold mb-2">Packeta</label>
+                   <div className="flex items-center gap-2">
+                       <input
+                           type="text"
+                           value={customer.preferredPacketaBranchId || ''}
+                           readOnly
+                           className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline flex-grow bg-gray-100"
+                           placeholder="Nevybrané"
+                       />
+                       <button
+                           type="button"
+                           onClick={openPacketaWidget}
+                           className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded"
+                       >
+                           Vybrať
+                       </button>
+                   </div>
+                </div>
+                <div>
+                   <label className="block text-gray-700 text-sm font-bold mb-2">Balíkovo</label>
+                   <div className="flex items-center gap-2">
+                       <input
+                           type="text"
+                           value={customer.preferredBalikovoBranchId || ''}
+                           readOnly
+                           className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline flex-grow bg-gray-100"
+                           placeholder="Nevybrané"
+                       />
+                       <button
+                           type="button"
+                           onClick={openBalikovoWidget}
+                           className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-4 rounded"
+                       >
+                           Vybrať
+                       </button>
+                   </div>
                 </div>
               </div>
             </div>

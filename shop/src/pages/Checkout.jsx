@@ -199,6 +199,27 @@ const Checkout = () => {
                      name: cart.selectedPickupPointName || "Uložené výdajné miesto"
                  }
              }));
+          } else if (initialCarrierId) {
+              const carrier = carriers.find(c => c.id === initialCarrierId);
+              if (carrier) {
+                  if (carrier.type === 'PACKETA' && profile.preferredPacketaBranchId) {
+                       setPickupPointMap(prev => ({
+                           ...prev,
+                           [initialCarrierId]: {
+                               id: profile.preferredPacketaBranchId,
+                               name: "Preferované výdajné miesto"
+                           }
+                       }));
+                  } else if (carrier.type === 'BALIKOVO' && profile.preferredBalikovoBranchId) {
+                       setPickupPointMap(prev => ({
+                           ...prev,
+                           [initialCarrierId]: {
+                               id: profile.preferredBalikovoBranchId,
+                               name: "Preferované výdajné miesto"
+                           }
+                       }));
+                  }
+              }
           }
 
           const cartDelivery = cart.deliveryAddress || {};
