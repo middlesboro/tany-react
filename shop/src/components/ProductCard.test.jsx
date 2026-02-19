@@ -47,7 +47,7 @@ const mockProduct = {
   inWishlist: false,
 };
 
-test('renders wishlist button with right-2 class', () => {
+test('renders wishlist button with left-2 class', () => {
   useCart.mockReturnValue({ addToCart: vi.fn(), cart: { products: [] } });
   useModal.mockReturnValue({ openLoginModal: vi.fn() });
 
@@ -62,5 +62,5 @@ test('renders wishlist button with right-2 class', () => {
   expect(wishlistButton).toBeInTheDocument();
   expect(wishlistButton).toHaveClass('absolute');
   expect(wishlistButton).toHaveClass('top-2');
-  expect(wishlistButton).toHaveClass('right-2');
+  expect(wishlistButton).toHaveClass('left-2');
 });
