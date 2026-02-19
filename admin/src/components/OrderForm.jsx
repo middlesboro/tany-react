@@ -99,7 +99,7 @@ const OrderForm = ({
             </div>
             <div className="ml-3">
               <h3 className="text-sm font-medium text-red-800">
-                Upozornenie: Niektoré produkty nie sú na sklade
+                Upozornenie na vypredané produkty:
               </h3>
               <div className="mt-2 text-sm text-red-700">
                 <ul className="list-disc pl-5 space-y-1">

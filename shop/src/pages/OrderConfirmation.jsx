@@ -56,7 +56,7 @@ const OrderConfirmation = () => {
             // We don't block the order view if payment info fails
         }
 
-        if (!isPaid && data.paymentType !== 'COD') {
+        if (data.status === 'CREATED' && data.paymentType !== 'COD') {
             setShowPaymentInfo(true);
         }
 
@@ -216,7 +216,7 @@ const OrderConfirmation = () => {
       {!isPaid && paymentStatus === 'ERROR' && (
         <div className="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-8" role="alert">
             <p className="font-bold">Platba zlyhala!</p>
-            <p>Pri spracovaní vašej platby nastala chyba.</p>
+            <p>Pri spracovaní vašej platby nastala chyba. Skúste platbu vykonať ešte raz, alebo nás prosím kontaktujte na info@tany.sk</p>
         </div>
       )}
 
@@ -263,6 +263,87 @@ const OrderConfirmation = () => {
           </p>
       </section>
 
+      <section className="mt-8">
+          {/* Payment Info Card if Not Paid */}
+          {showPaymentInfo && !verifyingPayment && (
+              <div className="bg-white rounded-[14px] p-5 shadow-[0_6px_20px_rgba(0,0,0,0.05)] border-l-4 border-[#1f7a4d]">
+                  <h3 className="text-lg font-bold mb-4 text-[#1f7a4d]">Platba</h3>
+
+                  {order.paymentType === 'GLOBAL_PAYMENTS' && paymentInfo && paymentInfo.globalPaymentDetails ? (
+                      <div className="flex flex-col items-center">
+                          <p className="mb-4 text-gray-700">Pre platbu kartou kliknite nižšie:</p>
+                          <form action={paymentInfo.globalPaymentDetails.paymentUrl} method="POST">
+                              {Object.entries(paymentInfo.globalPaymentDetails).map(([key, value]) => {
+                                  if (key === 'paymentUrl') return null;
+                                  return <input key={key} type="hidden" name={key.toUpperCase()} value={value} />;
+                              })}
+                              <button type="submit" className="bg-[#1f7a4d] text-white font-bold py-2 px-6 rounded hover:bg-green-700">
+                                  Zaplatiť
+                              </button>
+                          </form>
+                      </div>
+                  ) : order.paymentType === 'BESTERON' && paymentInfo && paymentInfo.paymentLink ? (
+                      <div className="flex flex-col items-center">
+                          <p className="mb-4 text-gray-700">Pre online platbu kliknite na tlačidlo nižšie:</p>
+                          <a
+                              href={paymentInfo.paymentLink}
+                              className="bg-[#1f7a4d] text-white font-bold py-2 px-6 rounded hover:bg-green-700 transition-colors inline-block text-center"
+                          >
+                              Zaplatiť online
+                          </a>
+                      </div>
+                  ) : (
+                      paymentInfo && paymentInfo.qrCode && (
+                          <div className="flex flex-col items-center">
+                              <p className="mb-4 text-gray-700 text-sm">Naskenujte QR kód pre platbu:</p>
+                              <img src={`data:image/png;base64,${paymentInfo.qrCode}`} alt="Payment QR Code" className="w-48 h-48 border border-gray-200 rounded mb-4" />
+
+                              {paymentInfo.paymentLink && (
+                                  <a
+                                      href={paymentInfo.paymentLink}
+                                      target="_blank"
+                                      rel="noopener noreferrer"
+                                      className="bg-[#1f7a4d] text-white font-bold py-2 px-6 rounded hover:bg-green-700 mb-6 text-sm"
+                                  >
+                                      Zaplatiť cez Payme
+                                  </a>
+                              )}
+
+                              <div className="w-full text-sm">
+                                  <div className="mb-2">
+                                      Zaplatiť za objednávku môžete cez službu Payme. Jedná sa o službu Slovenskej Bankovej Asociácie.
+                                      Po kilknutí na tlačidlo "Zaplatiť cez Payme" budete presmerovaný na stránku Payme, kde môžete dokončiť platbu prostredníctvom vašej bankovej aplikácie alebo QR kódu.
+                                  </div>
+                                  <div className="mb-2">
+                                      Taktiež môžete zaplatiť manuálnym zadaním údajom vo vašom internet bankingu pomocou nasledujúcich údajov:
+                                  </div>
+                                  {paymentInfo.iban && (
+                                      <div className="flex justify-between py-1 border-b">
+                                          <span className="text-gray-600">IBAN:</span>
+                                          <span className="font-medium break-all text-right ml-2">{paymentInfo.iban}</span>
+                                      </div>
+                                  )}
+                                  {paymentInfo.variableSymbol && (
+                                      <div className="flex justify-between py-1 border-b">
+                                          <span className="text-gray-600">Var. symbol:</span>
+                                          <span className="font-medium">{paymentInfo.variableSymbol}</span>
+                                      </div>
+                                  )}
+                                  <div className="flex justify-between py-1">
+                                      <span className="text-gray-600">Suma:</span>
+                                      <span className="font-bold text-[#1f7a4d]">
+                                            {order.priceBreakDown.totalPrice.toFixed(2)} €
+                                        </span>
+                                  </div>
+                              </div>
+                          </div>
+                      )
+                  )}
+              </div>
+          )}
+      </section>
+
+
       {/* GRID */}
       <section className=" gap-6 mt-8">
           {/* RIGHT */}
@@ -292,83 +373,6 @@ const OrderConfirmation = () => {
                    ) : <div className="text-gray-600">N/A</div>}
                </div>
 
-               {/* Payment Info Card if Not Paid */}
-               {showPaymentInfo && !verifyingPayment && (
-                   <div className="bg-white rounded-[14px] p-5 shadow-[0_6px_20px_rgba(0,0,0,0.05)] border-l-4 border-[#1f7a4d]">
-                      <h3 className="text-lg font-bold mb-4 text-[#1f7a4d]">Platba</h3>
-
-                      {order.paymentType === 'GLOBAL_PAYMENTS' && paymentInfo && paymentInfo.globalPaymentDetails ? (
-                         <div className="flex flex-col items-center">
-                             <p className="mb-4 text-gray-700">Pre platbu kartou kliknite nižšie:</p>
-                             <form action={paymentInfo.globalPaymentDetails.paymentUrl} method="POST">
-                                 {Object.entries(paymentInfo.globalPaymentDetails).map(([key, value]) => {
-                                     if (key === 'paymentUrl') return null;
-                                     return <input key={key} type="hidden" name={key.toUpperCase()} value={value} />;
-                                 })}
-                                 <button type="submit" className="bg-[#1f7a4d] text-white font-bold py-2 px-6 rounded hover:bg-green-700">
-                                     Zaplatiť
-                                 </button>
-                             </form>
-                         </div>
-                      ) : order.paymentType === 'BESTERON' && paymentInfo && paymentInfo.paymentLink ? (
-                          <div className="flex flex-col items-center">
-                              <p className="mb-4 text-gray-700">Pre online platbu kliknite na tlačidlo nižšie:</p>
-                              <a
-                                  href={paymentInfo.paymentLink}
-                                  className="bg-[#1f7a4d] text-white font-bold py-2 px-6 rounded hover:bg-green-700 transition-colors inline-block text-center"
-                              >
-                                  Zaplatiť online
-                              </a>
-                          </div>
-                      ) : (
-                        paymentInfo && paymentInfo.qrCode && (
-                            <div className="flex flex-col items-center">
-                                <p className="mb-4 text-gray-700 text-sm">Naskenujte QR kód pre platbu:</p>
-                                <img src={`data:image/png;base64,${paymentInfo.qrCode}`} alt="Payment QR Code" className="w-48 h-48 border border-gray-200 rounded mb-4" />
-
-                                {paymentInfo.paymentLink && (
-                                     <a
-                                        href={paymentInfo.paymentLink}
-                                        target="_blank"
-                                        rel="noopener noreferrer"
-                                        className="bg-[#1f7a4d] text-white font-bold py-2 px-6 rounded hover:bg-green-700 mb-6 text-sm"
-                                     >
-                                        Zaplatiť cez Payme
-                                     </a>
-                                )}
-
-                                <div className="w-full text-sm">
-                                    <div className="mb-2">
-                                        Zaplatiť za objednávku môžete cez službu Payme. Jedná sa o službu Slovenskej Bankovej Asociácie.
-                                        Po kilknutí na tlačidlo "Zaplatiť cez Payme" budete presmerovaný na stránku Payme, kde môžete dokončiť platbu prostredníctvom vašej bankovej aplikácie alebo QR kódu.
-                                    </div>
-                                    <div className="mb-2">
-                                        Taktiež môžete zaplatiť manuálnym zadaním údajom vo vašom internet bankingu pomocou nasledujúcich údajov:
-                                    </div>
-                                    {paymentInfo.iban && (
-                                        <div className="flex justify-between py-1 border-b">
-                                            <span className="text-gray-600">IBAN:</span>
-                                            <span className="font-medium break-all text-right ml-2">{paymentInfo.iban}</span>
-                                        </div>
-                                    )}
-                                    {paymentInfo.variableSymbol && (
-                                        <div className="flex justify-between py-1 border-b">
-                                            <span className="text-gray-600">Var. symbol:</span>
-                                            <span className="font-medium">{paymentInfo.variableSymbol}</span>
-                                        </div>
-                                    )}
-                                    <div className="flex justify-between py-1">
-                                        <span className="text-gray-600">Suma:</span>
-                                        <span className="font-bold text-[#1f7a4d]">
-                                            {order.priceBreakDown.totalPrice.toFixed(2)} €
-                                        </span>
-                                    </div>
-                                </div>
-                            </div>
-                        )
-                      )}
-                   </div>
-               )}
           </div>
       </section>
 
@@ -437,7 +441,7 @@ const OrderConfirmation = () => {
       {/* FOOTER */}
       <footer className="mt-10 text-center">
            <div className="text-gray-600 mb-4">
-              Odoslanie očakávame: <strong>1–2 pracovné dni</strong>
+              Očakávané odoslanie: <strong>1–2 pracovné dni</strong>
            </div>
            <div className="flex justify-center gap-4 flex-wrap">
               <Link to="/" className="px-7 py-3.5 rounded-[10px] font-semibold text-white bg-[#1f7a4d] hover:opacity-90 transition-opacity">
