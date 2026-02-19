@@ -6,7 +6,7 @@ const ProductLabel = ({ label }) => {
   const { title, color, backgroundColor, position } = label;
 
   const positionClasses = {
-    'TOP_LEFT': 'top-12 left-2',
+    'TOP_LEFT': 'top-2 md:top-12 left-2',
     'TOP_RIGHT': 'top-2 right-2',
     'BOTTOM_LEFT': 'bottom-2 left-2',
     'BOTTOM_RIGHT': 'bottom-2 right-2',

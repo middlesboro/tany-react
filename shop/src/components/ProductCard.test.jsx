@@ -1,12 +1,15 @@
+/**
+ * @vitest-environment jsdom
+ */
 import React from 'react';
 import { render, screen } from '@testing-library/react';
+import { test, expect, vi } from 'vitest';
 import ProductCard from './ProductCard';
 import { BrowserRouter } from 'react-router-dom';
-
-// Mock hooks
 import { useCart } from '../context/CartContext';
 import { useModal } from '../context/ModalContext';
 
+// Mock hooks
 vi.mock('../context/CartContext', () => ({
   useCart: vi.fn(),
 }));
@@ -47,7 +50,7 @@ const mockProduct = {
   inWishlist: false,
 };
 
-test('renders wishlist button with left-2 class', () => {
+test('renders wishlist buttons correctly for mobile and desktop', () => {
   useCart.mockReturnValue({ addToCart: vi.fn(), cart: { products: [] } });
   useModal.mockReturnValue({ openLoginModal: vi.fn() });
 
@@ -57,10 +60,25 @@ test('renders wishlist button with left-2 class', () => {
     </BrowserRouter>
   );
 
-  // Find the wishlist button by its title
-  const wishlistButton = screen.getByTitle('Pridať do obľúbených');
-  expect(wishlistButton).toBeInTheDocument();
-  expect(wishlistButton).toHaveClass('absolute');
-  expect(wishlistButton).toHaveClass('top-2');
-  expect(wishlistButton).toHaveClass('left-2');
+  // Find all wishlist buttons by title
+  const wishlistButtons = screen.getAllByTitle('Pridať do obľúbených');
+  expect(wishlistButtons).toHaveLength(2);
+
+  // Identify them by class
+  const desktopButton = wishlistButtons.find(btn => btn.classList.contains('absolute'));
+  const mobileButton = wishlistButtons.find(btn => !btn.classList.contains('absolute'));
+
+  // Desktop checks
+  expect(desktopButton).toBeInTheDocument();
+  expect(desktopButton).toHaveClass('top-2');
+  expect(desktopButton).toHaveClass('left-2');
+  expect(desktopButton).toHaveClass('hidden');
+  expect(desktopButton).toHaveClass('md:block');
+
+  // Mobile checks
+  expect(mobileButton).toBeInTheDocument();
+  expect(mobileButton).toHaveClass('md:hidden');
+  expect(mobileButton).toHaveClass('p-2');
+  // Should verify it is in the flex container? Hard to test structure with just class checks,
+  // but we know it's not absolute.
 });
