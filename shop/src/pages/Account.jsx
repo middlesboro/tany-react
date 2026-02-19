@@ -23,7 +23,9 @@ const Account = () => {
     invoiceAddress: { street: '', city: '', zip: '' },
     deliveryAddress: { street: '', city: '', zip: '' },
     preferredPacketaBranchId: '',
-    preferredBalikovoBranchId: ''
+    preferredPacketaBranchName: '',
+    preferredBalikovoBranchId: '',
+    preferredBalikovoBranchName: ''
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -68,7 +70,8 @@ const Account = () => {
         if (point) {
             setCustomer(prev => ({
                 ...prev,
-                preferredBalikovoBranchId: point.id
+                preferredBalikovoBranchId: point.id,
+                preferredBalikovoBranchName: point.description || point.name || point.address
             }));
         }
     };
@@ -90,7 +93,9 @@ const Account = () => {
             invoiceAddress,
             deliveryAddress,
             preferredPacketaBranchId: data.preferredPacketaBranchId || '',
-            preferredBalikovoBranchId: data.preferredBalikovoBranchId || ''
+            preferredPacketaBranchName: data.preferredPacketaBranchName || '',
+            preferredBalikovoBranchId: data.preferredBalikovoBranchId || '',
+            preferredBalikovoBranchName: data.preferredBalikovoBranchName || ''
         });
       } catch (err) {
         setError('Failed to load customer data.');
@@ -156,7 +161,7 @@ const Account = () => {
   };
 
   const openPacketaWidget = () => {
-      const packetaApiKey = 'XXX XXX XXX96cee6278e535aa508c6be174a4d6d03';
+      const packetaApiKey = '96cee6278e535aa508c6be174a4d6d03';
       const packetaOptions = {
           country: "sk",
           language: "sk",
@@ -169,7 +174,8 @@ const Account = () => {
             if (point) {
                 setCustomer(prev => ({
                     ...prev,
-                    preferredPacketaBranchId: point.id
+                    preferredPacketaBranchId: point.id,
+                    preferredPacketaBranchName: point.name || point.formatedValue
                 }));
             }
           }, packetaOptions);
@@ -438,7 +444,7 @@ const Account = () => {
                    <div className="flex items-center gap-2">
                        <input
                            type="text"
-                           value={customer.preferredPacketaBranchId || ''}
+                           value={customer.preferredPacketaBranchName || customer.preferredPacketaBranchId || ''}
                            readOnly
                            className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline flex-grow bg-gray-100"
                            placeholder="Nevybrané"
@@ -457,7 +463,7 @@ const Account = () => {
                    <div className="flex items-center gap-2">
                        <input
                            type="text"
-                           value={customer.preferredBalikovoBranchId || ''}
+                           value={customer.preferredBalikovoBranchName || customer.preferredBalikovoBranchId || ''}
                            readOnly
                            className="shadow appearance-none border rounded py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline flex-grow bg-gray-100"
                            placeholder="Nevybrané"

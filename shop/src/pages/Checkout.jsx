@@ -207,7 +207,7 @@ const Checkout = () => {
                            ...prev,
                            [initialCarrierId]: {
                                id: profile.preferredPacketaBranchId,
-                               name: "Preferované výdajné miesto"
+                               name: profile.preferredPacketaBranchName || "Preferované výdajné miesto"
                            }
                        }));
                   } else if (carrier.type === 'BALIKOVO' && profile.preferredBalikovoBranchId) {
@@ -215,7 +215,7 @@ const Checkout = () => {
                            ...prev,
                            [initialCarrierId]: {
                                id: profile.preferredBalikovoBranchId,
-                               name: "Preferované výdajné miesto"
+                               name: profile.preferredBalikovoBranchName || "Preferované výdajné miesto"
                            }
                        }));
                   }
