@@ -26,7 +26,7 @@ const OrderConfirmation = () => {
   const [error, setError] = useState(null);
   const [isPaid, setIsPaid] = useState(false);
   const [showPaymentInfo, setShowPaymentInfo] = useState(false);
-  const [verifyingPayment, setVerifyingPayment] = useState(false);
+  const [verifyingPayment, setVerifyingPayment] = useState(verifyPayment === 'besteron');
   const [verificationMessage, setVerificationMessage] = useState('');
 
   useEffect(() => {
@@ -289,7 +289,7 @@ const OrderConfirmation = () => {
                </div>
 
                {/* Payment Info Card if Not Paid */}
-               {showPaymentInfo && (
+               {showPaymentInfo && !verifyingPayment && (
                    <div className="bg-white rounded-[14px] p-5 shadow-[0_6px_20px_rgba(0,0,0,0.05)] border-l-4 border-[#1f7a4d]">
                       <h3 className="text-lg font-bold mb-4 text-[#1f7a4d]">Platba</h3>
 
