@@ -29,6 +29,11 @@ const REASONS = [
   "Doprava zadarmo už od 30€"
 ];
 
+const cleanDescription = (html) => {
+  if (!html) return "Žiadny popis k produktu.";
+  return html.replace(/&nbsp;/g, ' ').replace(/\u00A0/g, ' ');
+};
+
 const StockNotificationForm = ({ productId }) => {
   const [email, setEmail] = useState(getUserEmail() || '');
   const [submitting, setSubmitting] = useState(false);
@@ -713,7 +718,7 @@ const ProductDetail = () => {
             <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Popis</h2>
             <div
                 className="prose prose-green max-w-none text-gray-600 leading-relaxed"
-                dangerouslySetInnerHTML={{ __html: product.description || "Žiadny popis k produktu." }}
+                dangerouslySetInnerHTML={{ __html: cleanDescription(product.description) }}
             />
           </div>
 

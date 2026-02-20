@@ -39,12 +39,16 @@ vi.mock('../context/BreadcrumbContext', () => ({
   useBreadcrumbs: vi.fn()
 }));
 
+vi.mock('../context/CookieConsentContext', () => ({
+  useCookieConsent: () => ({ consent: { marketing: false } })
+}));
+
 // Mock components that might cause issues
-vi.mock('../components/ProductLabel', () => () => null);
-vi.mock('../components/ProductCard', () => () => null);
-vi.mock('../components/ProductJsonLd', () => () => null);
-vi.mock('../components/StarRating', () => () => null);
-vi.mock('../components/AddToCartButton', () => ({ onClick }) => <button onClick={onClick}>Add to Cart</button>);
+vi.mock('../components/ProductLabel', () => ({ default: () => null }));
+vi.mock('../components/ProductCard', () => ({ default: () => null }));
+vi.mock('../components/ProductJsonLd', () => ({ default: () => null }));
+vi.mock('../components/StarRating', () => ({ default: () => null }));
+vi.mock('../components/AddToCartButton', () => ({ default: ({ onClick }) => <button onClick={onClick}>Add to Cart</button> }));
 
 describe('ProductDetail Breadcrumbs', () => {
   const mockSetBreadcrumbs = vi.fn();
