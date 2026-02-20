@@ -195,6 +195,7 @@ const ProductCard = ({ product }) => {
               text={product.quantity <= 0 ? "Vypredané" : "Do košíka"}
               disabled={product.quantity <= 0}
               className="h-10 px-2 flex-grow rounded-sm text-xs"
+              hideTextOnMobile={true}
             />
           </div>
         </div>
