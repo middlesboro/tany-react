@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "Tany.sk - Admin",
+  "name": "Administration module for Tany.sk",
   "icons": [
     {
       "src": "favicon.ico",
