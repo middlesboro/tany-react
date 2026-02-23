@@ -108,7 +108,14 @@ const ProductSearch = () => {
                         </div>
                       </div>
                       <div className="text-sm font-bold text-tany-green whitespace-nowrap">
-                        {product.price ? `${product.price.toFixed(2)} €` : ''}
+                        {product.discountPrice ? (
+                          <div className="flex flex-col items-end leading-tight">
+                            <span className="text-xs text-gray-400 line-through font-normal">{product.price.toFixed(2)} €</span>
+                            <span className="text-red-600">{product.discountPrice.toFixed(2)} €</span>
+                          </div>
+                        ) : (
+                          product.price ? `${product.price.toFixed(2)} €` : ''
+                        )}
                       </div>
                     </button>
                   </li>
