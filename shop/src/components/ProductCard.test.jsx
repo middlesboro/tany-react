@@ -82,3 +82,17 @@ test('renders wishlist buttons correctly for mobile and desktop', () => {
   // Should verify it is in the flex container? Hard to test structure with just class checks,
   // but we know it's not absolute.
 });
+
+test('does not render wishlist buttons when showWishlist is false', () => {
+  useCart.mockReturnValue({ addToCart: vi.fn(), cart: { products: [] } });
+  useModal.mockReturnValue({ openLoginModal: vi.fn() });
+
+  render(
+    <BrowserRouter>
+      <ProductCard product={mockProduct} showWishlist={false} />
+    </BrowserRouter>
+  );
+
+  const wishlistButtons = screen.queryAllByTitle('Pridať do obľúbených');
+  expect(wishlistButtons).toHaveLength(0);
+});
