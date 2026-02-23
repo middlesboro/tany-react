@@ -48,7 +48,7 @@ describe('OrderConfirmation', () => {
     invoiceAddress: { street: 'Main St', city: 'City', zip: '12345' },
     items: [],
     finalPrice: 100,
-    status: 'NEW',
+    status: 'CREATED',
     paymentType: 'CASH_ON_DELIVERY',
     priceBreakDown: {
         items: [],
@@ -130,7 +130,7 @@ describe('OrderConfirmation', () => {
     const besteronOrder = {
         ...mockOrder,
         paymentType: 'BESTERON',
-        status: 'NEW',
+        status: 'CREATED',
         priceBreakDown: {
             items: [],
             totalPrice: 100,

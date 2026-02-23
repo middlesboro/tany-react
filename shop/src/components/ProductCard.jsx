@@ -127,7 +127,7 @@ const ProductCard = ({ product }) => {
           />
         ) : (
            <div className="w-full h-full flex items-center justify-center bg-gray-50 text-gray-300">
-               No Image
+               Obrázok chýba
            </div>
         )}
       </Link>

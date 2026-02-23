@@ -62,7 +62,7 @@ const OrderConfirmation = () => {
 
       } catch (err) {
         console.error(err);
-        setError('Failed to load order details.');
+        setError('Nepodarilo sa načítať detaily objednávky.');
       } finally {
         setLoading(false);
       }
@@ -149,7 +149,7 @@ const OrderConfirmation = () => {
           setVerifyingPayment(true);
           // Only show verifying message if we don't have a final result yet
           if (!verificationMessage) {
-            setVerificationMessage('Verifying payment status...');
+            setVerificationMessage('Overujem stav platby...');
           }
 
           let attempts = 0;
@@ -168,7 +168,7 @@ const OrderConfirmation = () => {
                           setTimeout(pollStatus, 3000);
                       } else {
                           setVerifyingPayment(false);
-                          setVerificationMessage('There was a problem confirming your payment. Please check your email or contact support.');
+                          setVerificationMessage('Nastal problém s potvrdením vašej platby. Skontrolujte si prosím email alebo kontaktujte podporu.');
                       }
                   }
               } catch (err) {
@@ -178,7 +178,7 @@ const OrderConfirmation = () => {
                      setTimeout(pollStatus, 3000);
                   } else {
                      setVerifyingPayment(false);
-                     setVerificationMessage('There was a problem confirming your payment.');
+                     setVerificationMessage('Nastal problém s potvrdením vašej platby.');
                   }
               }
           };
@@ -188,9 +188,9 @@ const OrderConfirmation = () => {
       // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id, verifyPayment]);
 
-  if (loading) return <div className="container mx-auto px-4 py-8">Loading order details...</div>;
+  if (loading) return <div className="container mx-auto px-4 py-8">Načítavam detaily objednávky...</div>;
   if (error) return <div className="container mx-auto px-4 py-8 text-red-600">{error}</div>;
-  if (!order) return <div className="container mx-auto px-4 py-8">Order not found.</div>;
+  if (!order) return <div className="container mx-auto px-4 py-8">Objednávka sa nenašla.</div>;
 
   const getBreakdownItem = (type) => order.priceBreakDown?.items.find(i => i.type === type);
   const getAllBreakdownItems = (type) => order.priceBreakDown?.items.filter(i => i.type === type) || [];
