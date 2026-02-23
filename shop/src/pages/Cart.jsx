@@ -75,7 +75,7 @@ const Cart = () => {
       if (err.status === 404) {
         setDiscountError("Zľavový kód sa nenašiel.");
       } else {
-        setDiscountError(err.message || "Failed to apply discount");
+        setDiscountError(err.message || "Nepodarilo sa uplatniť zľavu");
       }
     } finally {
       setDiscountLoading(false);

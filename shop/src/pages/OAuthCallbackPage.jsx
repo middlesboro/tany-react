@@ -17,12 +17,12 @@ const OAuthCallbackPage = () => {
       const verifier = localStorage.getItem('pkce_verifier');
 
       if (!code) {
-        setError('Authorization code not found.');
+        setError('Autorizačný kód sa nenašiel.');
         return;
       }
 
       if (!verifier) {
-        setError('PKCE verifier not found. Please try logging in again.');
+        setError('PKCE overovač sa nenašiel. Skúste sa prihlásiť znova.');
         return;
       }
 
@@ -43,7 +43,7 @@ const OAuthCallbackPage = () => {
         navigate(redirectPath);
       } catch (err) {
         console.error('Token exchange failed', err);
-        setError('Authentication failed. Please try again.');
+        setError('Prihlásenie zlyhalo. Skúste to prosím znova.');
       }
     };
 
@@ -58,7 +58,7 @@ const OAuthCallbackPage = () => {
             onClick={() => navigate('/')}
             className="text-blue-500 hover:underline"
         >
-            Back to Home
+            Späť na úvod
         </button>
       </div>
     );
@@ -67,7 +67,7 @@ const OAuthCallbackPage = () => {
   return (
     <div className="flex justify-center items-center h-screen flex-col gap-4">
       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-tany-green"></div>
-      <p className="text-gray-600">Finalizing login...</p>
+      <p className="text-gray-600">Dokončujem prihlásenie...</p>
     </div>
   );
 };

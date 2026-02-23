@@ -449,7 +449,7 @@ const ProductDetail = () => {
         }
 
       } catch (err) {
-        setError("Failed to load product details.");
+        setError("Nepodarilo sa načítať detaily produktu.");
         console.error(err);
       } finally {
         setLoading(false);
@@ -507,7 +507,7 @@ const ProductDetail = () => {
   if (loading) {
     return (
       <div className="container mx-auto px-4 py-12 text-center">
-        <div className="animate-pulse text-xl text-gray-500">Loading product...</div>
+        <div className="animate-pulse text-xl text-gray-500">Načítavam produkt...</div>
       </div>
     );
   }
@@ -515,8 +515,8 @@ const ProductDetail = () => {
   if (error || !product) {
     return (
       <div className="container mx-auto px-4 py-12 text-center">
-        <div className="text-tany-red text-xl mb-4">{error || "Product not found"}</div>
-        <Link to="/" className="text-blue-600 hover:underline">Back to Home</Link>
+        <div className="text-tany-red text-xl mb-4">{error || "Produkt sa nenašiel"}</div>
+        <Link to="/" className="text-blue-600 hover:underline">Späť na domov</Link>
       </div>
     );
   }
