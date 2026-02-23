@@ -10,7 +10,7 @@ import { addToWishlist, removeFromWishlist } from '../services/wishlistService';
 import { isAuthenticated } from '../services/authService';
 import { logSelectItem, logAddToCart, logAddToWishlist } from '../utils/analytics';
 
-const ProductCard = ({ product }) => {
+const ProductCard = ({ product, showWishlist = true }) => {
   const { addToCart, cart } = useCart();
   const { openLoginModal, openMessageModal } = useModal();
   const [quantity, setQuantity] = useState(1);
@@ -95,22 +95,24 @@ const ProductCard = ({ product }) => {
             </div>
         )}
 
-        <button
-          onClick={toggleWishlist}
-          className="absolute top-2 left-2 z-20 p-2 rounded-full bg-white/80 hover:bg-white text-red-500 hover:text-red-600 transition-colors hidden md:block"
-          title={inWishlist ? "Odobrať z obľúbených" : "Pridať do obľúbených"}
-        >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              className="h-6 w-6"
-              fill={inWishlist ? "currentColor" : "none"}
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              strokeWidth="2"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-            </svg>
-        </button>
+        {showWishlist && (
+          <button
+            onClick={toggleWishlist}
+            className="absolute top-2 left-2 z-20 p-2 rounded-full bg-white/80 hover:bg-white text-red-500 hover:text-red-600 transition-colors hidden md:block"
+            title={inWishlist ? "Odobrať z obľúbených" : "Pridať do obľúbených"}
+          >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className="h-6 w-6"
+                fill={inWishlist ? "currentColor" : "none"}
+                viewBox="0 0 24 24"
+                stroke="currentColor"
+                strokeWidth="2"
+              >
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+              </svg>
+          </button>
+        )}
 
       <Link
         to={`/produkt/${product.slug}`}
@@ -172,22 +174,24 @@ const ProductCard = ({ product }) => {
              )}
 
             {/* Wishlist Button for Mobile (between Quantity and Add to Cart) */}
-            <button
-              onClick={toggleWishlist}
-              className="p-2 text-red-500 hover:text-red-600 transition-colors md:hidden border border-gray-300 h-10 w-10 flex items-center justify-center"
-              title={inWishlist ? "Odobrať z obľúbených" : "Pridať do obľúbených"}
-            >
-               <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className="h-6 w-6"
-                  fill={inWishlist ? "currentColor" : "none"}
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                  strokeWidth="2"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                </svg>
-            </button>
+            {showWishlist && (
+              <button
+                onClick={toggleWishlist}
+                className="p-2 text-red-500 hover:text-red-600 transition-colors md:hidden border border-gray-300 h-10 w-10 flex items-center justify-center"
+                title={inWishlist ? "Odobrať z obľúbených" : "Pridať do obľúbených"}
+              >
+                 <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill={inWishlist ? "currentColor" : "none"}
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                  >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                  </svg>
+              </button>
+            )}
 
             <AddToCartButton
               onClick={handleAddToCart}

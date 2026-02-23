@@ -731,7 +731,7 @@ const ProductDetail = () => {
           <h2 className="text-2xl font-bold text-gray-800 mb-6">Súvisiace produkty</h2>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-4">
             {relatedProducts.map(product => (
-              <ProductCard key={product.id} product={product} />
+              <ProductCard key={product.id} product={product} showWishlist={false} />
             ))}
           </div>
         </div>
