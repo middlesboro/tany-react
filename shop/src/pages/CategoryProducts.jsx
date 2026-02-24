@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useRef } from 'react';
 import { useParams, useSearchParams } from 'react-router-dom';
 import { getCategories } from '../services/categoryService';
 import { searchProductsByCategory } from '../services/productService';
@@ -11,6 +11,8 @@ import useMediaQuery from '../hooks/useMediaQuery';
 import { serializeFilters, parseFilters } from '../utils/filterUrlUtils';
 import SeoHead from '../components/SeoHead';
 import { logViewItemList } from '../utils/analytics';
+
+const EMPTY_FILTERS = {};
 
 const CategoryProductsContent = () => {
   const { slug } = useParams();
@@ -47,8 +49,10 @@ const CategoryProductsContent = () => {
 
   const selectedFilters = useMemo(() => {
     // Only parse if we have the schema (initialFacets)
-    if (!initialFacets) return {};
-    return parseFilters(q, initialFacets);
+    if (!initialFacets) return EMPTY_FILTERS;
+    const result = parseFilters(q, initialFacets);
+    if (Object.keys(result).length === 0) return EMPTY_FILTERS;
+    return result;
   }, [q, initialFacets]);
 
   // 1. Initialization: Fetch Category and Initial Facets (Schema)
@@ -85,13 +89,20 @@ const CategoryProductsContent = () => {
         setCategory(foundCategory);
 
         // Fetch initial facets (empty search) to get the "Schema" for URL parsing
-        // We use a dummy request
-        const data = await searchProductsByCategory(foundCategory.id, { filterParameters: [], sort: 'BEST_SELLING' }, 0, 'BEST_SELLING', 1);
+        // We use a dummy request ONLY if we have a query parameter to parse
+        const hasQueryParams = !!searchParams.get('q');
 
-        // Always set initialFacets to array (even if empty) to signal loaded state
-        const loadedFacets = data.filterParameters || [];
-        setInitialFacets(loadedFacets);
-        setDisplayFacets(loadedFacets);
+        if (hasQueryParams) {
+          const data = await searchProductsByCategory(foundCategory.id, { filterParameters: [], sort: 'BEST_SELLING' }, 0, 'BEST_SELLING', 1);
+          // Always set initialFacets to array (even if empty) to signal loaded state
+          const loadedFacets = data.filterParameters || [];
+          setInitialFacets(loadedFacets);
+          setDisplayFacets(loadedFacets);
+        } else {
+          // If no query params, we can skip the dummy request and load facets with the main product list
+          setInitialFacets([]);
+          setDisplayFacets([]);
+        }
 
       } catch (err) {
         console.error("Failed to init category", err);
@@ -106,9 +117,25 @@ const CategoryProductsContent = () => {
   }, [slug]);
 
   // 2. Fetch Products whenever criteria change
+  const lastFetchArgs = useRef(null);
+
   useEffect(() => {
     // Only fetch if we have a category and the schema (initialFacets) is loaded (non-null)
     if (!category || initialFacets === null) return;
+
+    // Prevent duplicate calls with same arguments
+    const currentArgs = {
+      categoryId: category.id,
+      filters: selectedFilters,
+      page,
+      sort,
+      size
+    };
+    const argsString = JSON.stringify(currentArgs);
+    if (lastFetchArgs.current === argsString) {
+      return;
+    }
+    lastFetchArgs.current = argsString;
 
     const fetchProducts = async () => {
       setLoadingProducts(true);
@@ -130,6 +157,11 @@ const CategoryProductsContent = () => {
         // Update display facets if provided (to show counts or narrow options)
         if (data.filterParameters) {
             setDisplayFacets(data.filterParameters);
+
+            // If we skipped initial loading (initialFacets is empty), populate it now
+            if (initialFacets.length === 0 && data.filterParameters.length > 0) {
+              setInitialFacets(data.filterParameters);
+            }
         }
       } catch (err) {
         console.error("Failed to fetch products", err);
