@@ -3,8 +3,13 @@ import React, { useState } from 'react';
 const CategoryFilter = ({ filterParameters, selectedFilters, onFilterChange }) => {
   // Initialize state for tracking expanded sections
   const [expandedSections, setExpandedSections] = useState({});
-  // Initialize state for main filter visibility (collapsed by default)
-  const [isOpen, setIsOpen] = useState(true);
+  // Initialize state for main filter visibility (open on desktop, collapsed on mobile)
+  const [isOpen, setIsOpen] = useState(() => {
+    if (typeof window !== 'undefined') {
+      return window.innerWidth >= 768;
+    }
+    return true;
+  });
 
   if (!filterParameters || filterParameters.length === 0) {
     return null;
