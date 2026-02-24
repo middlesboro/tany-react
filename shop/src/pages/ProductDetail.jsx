@@ -397,6 +397,7 @@ const ProductDetail = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       setLoading(true);
+      setRelatedProducts([]);
       try {
         const data = await getProductBySlug(slug);
         setProduct(data);
@@ -440,14 +441,6 @@ const ProductDetail = () => {
         // We can call this regardless, the function checks for consent internally
         logViewItem(data);
 
-        try {
-          const related = await getRelatedProducts(data.id);
-          setRelatedProducts(Array.isArray(related) ? related.slice(0, 5) : []);
-        } catch (relatedErr) {
-          console.error("Failed to load related products", relatedErr);
-          setRelatedProducts([]);
-        }
-
       } catch (err) {
         setError("Nepodarilo sa načítať detaily produktu.");
         console.error(err);
@@ -457,6 +450,32 @@ const ProductDetail = () => {
     };
     fetchProduct();
   }, [slug]);
+
+  useEffect(() => {
+    if (!product?.id) return;
+
+    let isMounted = true;
+
+    const fetchRelated = async () => {
+      try {
+        const related = await getRelatedProducts(product.id);
+        if (isMounted) {
+          setRelatedProducts(Array.isArray(related) ? related.slice(0, 5) : []);
+        }
+      } catch (relatedErr) {
+        if (isMounted) {
+          console.error("Failed to load related products", relatedErr);
+          setRelatedProducts([]);
+        }
+      }
+    };
+
+    fetchRelated();
+
+    return () => {
+      isMounted = false;
+    };
+  }, [product?.id]);
 
   const handleAddToCart = async () => {
     if (!product) return;
