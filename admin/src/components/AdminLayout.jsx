@@ -61,6 +61,7 @@ const AdminLayout = () => {
     return saved !== null ? JSON.parse(saved) : true;
   });
   const [isHovered, setIsHovered] = useState(false);
+  const [isUserMenuOpen, setIsUserMenuOpen] = useState(false);
 
   useEffect(() => {
     localStorage.setItem('admin_sidebar_pinned', JSON.stringify(isPinned));
@@ -103,71 +104,72 @@ const AdminLayout = () => {
   const isSidebarVisible = isPinned || isHovered;
 
   return (
-    <div className="flex min-h-screen relative">
+    <div className="flex min-h-screen relative bg-ps-content-bg font-sans text-ps-text">
       {!isPinned && (
         <div
           className="fixed top-0 left-0 w-4 h-full z-40"
           onMouseEnter={() => setIsHovered(true)}
         />
       )}
+
+      {/* Sidebar */}
       <nav
-        className={`bg-gray-800 text-white p-4 flex flex-col justify-between overflow-y-auto transition-all duration-300 ease-in-out h-screen top-0 flex-shrink-0
+        className={`bg-ps-sidebar text-gray-400 flex flex-col justify-between overflow-y-auto transition-all duration-300 ease-in-out h-screen top-0 flex-shrink-0 border-r border-gray-800
         ${isPinned ? 'sticky w-64' : 'fixed left-0 z-50 w-64 shadow-2xl'}
         ${!isPinned && !isSidebarVisible ? '-translate-x-full' : 'translate-x-0'}`}
         onMouseEnter={() => !isPinned && setIsHovered(true)}
         onMouseLeave={() => !isPinned && setIsHovered(false)}
       >
         <div>
-          <div className="flex justify-between items-center mb-4">
-            <h1 className="text-2xl font-bold">Admin</h1>
-            <button
-              onClick={togglePin}
-              className="text-gray-400 hover:text-white focus:outline-none p-1 rounded hover:bg-gray-700"
-              title={isPinned ? "Unpin sidebar" : "Pin sidebar"}
-            >
-              {isPinned ? (
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M18.75 19.5l-7.5-7.5 7.5-7.5m-6 15L5.25 12l7.5-7.5" />
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M17.593 3.322c1.1.128 1.907 1.077 1.907 2.185V21L12 17.25 4.5 21V5.507c0-1.108.806-2.057 1.907-2.185a48.507 48.507 0 0111.186 0z" />
-                </svg>
-              )}
-            </button>
+          <div className="h-16 flex items-center justify-center bg-gray-900 shadow-md mb-4 px-4">
+             <h1 className="text-xl font-bold text-white tracking-wider uppercase">Admin</h1>
           </div>
-          <ul>
+
+          <ul className="px-2">
             {menuItems.map((item) => (
-              <li key={item.title} className="mb-2">
+              <li key={item.title} className="mb-1">
                 {item.children ? (
-                  <div>
+                  <div className="rounded overflow-hidden">
                     <button
                       onClick={() => toggleGroup(item.title)}
-                      className="flex justify-between items-center w-full text-left hover:text-gray-300 focus:outline-none py-1"
+                      className={`flex justify-between items-center w-full text-left px-3 py-2 text-sm font-medium focus:outline-none transition-colors duration-200
+                        ${expandedGroups[item.title] ? 'bg-gray-800 text-white' : 'hover:bg-gray-800 hover:text-gray-200'}`}
                     >
-                      <span className="font-semibold">{item.title}</span>
-                      <span>{expandedGroups[item.title] ? '−' : '+'}</span>
+                      <span className="flex items-center gap-2">
+                         {/* Placeholder icon */}
+                         <span className="w-1.5 h-1.5 rounded-full bg-gray-500"></span>
+                         {item.title}
+                      </span>
+                      <span className="text-xs">{expandedGroups[item.title] ? '▲' : '▼'}</span>
                     </button>
                     {expandedGroups[item.title] && (
-                      <ul className="pl-4 mt-2 border-l border-gray-600">
-                        {item.children.map((child) => (
-                          <li key={child.path} className="mb-2 last:mb-0">
-                            <Link
-                              to={child.path}
-                              className={`block hover:text-gray-300 ${location.pathname.startsWith(child.path) ? 'text-blue-400 font-bold' : ''}`}
-                            >
-                              {child.title}
-                            </Link>
-                          </li>
-                        ))}
+                      <ul className="bg-gray-900 py-1">
+                        {item.children.map((child) => {
+                          const isActive = location.pathname.startsWith(child.path);
+                          return (
+                            <li key={child.path}>
+                              <Link
+                                to={child.path}
+                                className={`block pl-8 pr-3 py-2 text-sm transition-colors duration-200
+                                  ${isActive ? 'text-ps-primary font-medium bg-gray-800 border-r-4 border-ps-primary' : 'text-gray-500 hover:text-white hover:bg-gray-800'}`}
+                              >
+                                {child.title}
+                              </Link>
+                            </li>
+                          );
+                        })}
                       </ul>
                     )}
                   </div>
                 ) : (
-                  <Link
+                   <Link
                     to={item.path}
-                    className={`block font-semibold hover:text-gray-300 py-1 ${location.pathname.startsWith(item.path) ? 'text-blue-400 font-bold' : ''}`}
+                    className={`flex items-center gap-2 px-3 py-2 text-sm font-medium rounded transition-colors duration-200 mb-1
+                      ${location.pathname.startsWith(item.path)
+                        ? 'bg-ps-primary text-white shadow-md'
+                        : 'hover:bg-gray-800 hover:text-gray-200'}`}
                   >
+                     <span className={`w-1.5 h-1.5 rounded-full ${location.pathname.startsWith(item.path) ? 'bg-white' : 'bg-gray-500'}`}></span>
                     {item.title}
                   </Link>
                 )}
@@ -175,23 +177,75 @@ const AdminLayout = () => {
             ))}
           </ul>
         </div>
-        <div>
-          {userEmail && (
-            <div className="mb-2 text-sm text-gray-400 break-words">
-              {userEmail}
-            </div>
-          )}
-          <button
-            onClick={handleLogout}
-            className="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-          >
-            Logout
-          </button>
-        </div>
       </nav>
-      <main className="flex-1 p-4">
-        <Outlet />
-      </main>
+
+      {/* Main Content Wrapper */}
+      <div className="flex-1 flex flex-col min-w-0">
+        {/* Top Header */}
+        <header className="bg-white shadow-sm h-16 flex items-center justify-between px-6 sticky top-0 z-30">
+          <div className="flex items-center gap-4">
+             <button
+              onClick={togglePin}
+              className="text-gray-500 hover:text-ps-primary focus:outline-none p-1 rounded"
+              title={isPinned ? "Unpin sidebar" : "Pin sidebar"}
+            >
+               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+               </svg>
+            </button>
+             {/* Breadcrumb placeholder or Page Title could go here */}
+          </div>
+
+          <div className="flex items-center gap-6">
+             <a
+              href="/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 text-sm font-medium text-gray-600 hover:text-ps-primary transition-colors"
+             >
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 6H5.25A2.25 2.25 0 003 8.25v10.5A2.25 2.25 0 005.25 21h10.5A2.25 2.25 0 0018 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25" />
+                </svg>
+                <span className="hidden sm:inline">View my shop</span>
+             </a>
+
+             <div className="relative">
+                <button
+                  onClick={() => setIsUserMenuOpen(!isUserMenuOpen)}
+                  onBlur={() => setTimeout(() => setIsUserMenuOpen(false), 200)}
+                  className="flex items-center gap-3 focus:outline-none"
+                >
+                    <div className="text-right hidden sm:block">
+                        <div className="text-sm font-medium text-gray-700">{userEmail}</div>
+                    </div>
+                    <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center text-gray-600">
+                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                          <path strokeLinecap="round" strokeLinejoin="round" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+                        </svg>
+                    </div>
+                </button>
+
+                {isUserMenuOpen && (
+                   <div className="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 border border-gray-100 z-50">
+                      <div className="px-4 py-2 border-b border-gray-100 sm:hidden">
+                        <div className="text-sm font-medium text-gray-900 truncate">{userEmail}</div>
+                      </div>
+                      <button
+                        onClick={handleLogout}
+                        className="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-50 transition-colors"
+                      >
+                         Sign out
+                      </button>
+                   </div>
+                )}
+             </div>
+          </div>
+        </header>
+
+        <main className="flex-1 p-6 overflow-y-auto">
+          <Outlet />
+        </main>
+      </div>
     </div>
   );
 };

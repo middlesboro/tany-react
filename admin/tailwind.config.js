@@ -11,6 +11,11 @@ module.exports = {
         'tany-yellow': '#F7B900',
         'tany-grey': '#f6f6f6',
         'tany-dark-grey': '#333333',
+        'ps-sidebar': '#252932',
+        'ps-content-bg': '#F1F1F1',
+        'ps-primary': '#25B9D7',
+        'ps-primary-hover': '#1E94AB',
+        'ps-text': '#363A41',
       },
       container: {
         center: true,
