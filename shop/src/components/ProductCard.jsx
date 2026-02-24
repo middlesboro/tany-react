@@ -11,9 +11,8 @@ import { isAuthenticated } from '../services/authService';
 import { logSelectItem, logAddToCart, logAddToWishlist } from '../utils/analytics';
 
 const ProductCard = ({ product, showWishlist = true }) => {
-  const { addToCart, cart } = useCart();
+  const { addToCart } = useCart();
   const { openLoginModal, openMessageModal } = useModal();
-  const [quantity, setQuantity] = useState(1);
   const [adding, setAdding] = useState(false);
   const [inWishlist, setInWishlist] = useState(product.inWishlist || false);
   const [wishlistLoading, setWishlistLoading] = useState(false);
@@ -22,27 +21,11 @@ const ProductCard = ({ product, showWishlist = true }) => {
     setInWishlist(product.inWishlist || false);
   }, [product.inWishlist]);
 
-  useEffect(() => {
-    if (cart && cart.products) {
-      // Robust comparison: check both productId and id, using loose equality
-      const cartItem = cart.products.find(item =>
-        (item.productId && item.productId == product.id) ||
-        (item.id && item.id == product.id)
-      );
-
-      if (cartItem) {
-        setQuantity(cartItem.quantity);
-      } else {
-        setQuantity(1);
-      }
-    }
-  }, [cart, product.id]);
-
   const handleAddToCart = async () => {
     setAdding(true);
     try {
-      await addToCart(product.id, quantity);
-      logAddToCart(product, quantity);
+      await addToCart(product.id, 1);
+      logAddToCart(product, 1);
     } catch (error) {
       if (error.status === 400) {
           openMessageModal("Upozornenie", "Pre tento produkt nie je na sklade dostatočné množstvo.");
@@ -162,16 +145,6 @@ const ProductCard = ({ product, showWishlist = true }) => {
 
           {/* Add to Cart Section - Always visible */}
           <div className="w-full flex items-center justify-center gap-2">
-             {product.quantity > 0 && (
-               <input
-                type="number"
-                min="1"
-                value={quantity}
-                onChange={(e) => setQuantity(Math.max(1, parseInt(e.target.value) || 1))}
-                disabled={adding}
-                className="w-10 h-10 border border-gray-300 text-center text-sm focus:border-tany-green focus:outline-none"
-              />
-             )}
 
             {/* Wishlist Button for Mobile (between Quantity and Add to Cart) */}
             {showWishlist && (
@@ -198,8 +171,7 @@ const ProductCard = ({ product, showWishlist = true }) => {
               adding={adding}
               text={product.quantity <= 0 ? "Vypredané" : "Do košíka"}
               disabled={product.quantity <= 0}
-              className="h-10 px-2 flex-grow rounded-sm text-xs"
-              hideTextOnMobile={true}
+              className="h-10 px-1 md:px-2 flex-1 rounded-sm text-[10px] md:text-xs tracking-tight md:tracking-wide"
             />
           </div>
         </div>
