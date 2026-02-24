@@ -78,7 +78,7 @@ const StockNotificationForm = ({ productId }) => {
 
       {error && <div className="text-red-600 text-sm mb-3">{error}</div>}
 
-      <div className="flex gap-2">
+      <div className="flex flex-col sm:flex-row gap-2">
         <input
           type="email"
           value={email}
@@ -692,9 +692,11 @@ const ProductDetail = () => {
                         )
                     )}
                 </div>
-                <div className="text-sm text-gray-500">
-                    {product.externalStock ? 'Odosielam zvyčajne do 3-5 pracovných dní' : 'Odosielame približne do 24 hodín'}
-                </div>
+                {(product.externalStock || product.quantity > 0) && (
+                  <div className="text-sm text-gray-500">
+                      {product.externalStock ? 'Odosielam zvyčajne do 3-5 pracovných dní' : 'Odosielame približne do 24 hodín'}
+                  </div>
+                )}
             </div>
 
             <div className="border-t border-gray-100 pt-8">
