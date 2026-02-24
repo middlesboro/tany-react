@@ -1,6 +1,6 @@
 import React from 'react';
 
-const ProductLabel = ({ label, size = 'small', isCard = true }) => {
+const ProductLabel = ({ label, size = 'small', isCard = true, className = '' }) => {
   if (!label) return null;
 
   const { title, color, backgroundColor, position } = label;
@@ -24,7 +24,7 @@ const ProductLabel = ({ label, size = 'small', isCard = true }) => {
 
   return (
     <span
-      className={`absolute ${positionClasses[position] || 'top-2 left-2'} ${sizeClasses[size]} leading-tight font-bold z-10 rounded shadow-sm`}
+      className={`absolute ${positionClasses[position] || 'top-2 left-2'} ${sizeClasses[size]} leading-tight font-bold z-10 rounded shadow-sm ${className}`}
       style={style}
     >
       {title}
