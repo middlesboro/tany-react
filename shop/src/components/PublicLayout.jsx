@@ -204,7 +204,7 @@ const PublicLayout = () => {
 
         {/* Mobile Menu Overlay */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-white text-gray-800 border-t border-gray-200">
+          <div className="md:hidden bg-white text-gray-800 border-t border-gray-200 max-h-[calc(100vh-64px)] overflow-y-auto">
              <ul className="flex flex-col">
                {displayCategories.map((cat, index) => (
                  <li key={index} className="border-b border-gray-100">
