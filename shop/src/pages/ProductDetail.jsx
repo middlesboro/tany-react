@@ -543,7 +543,7 @@ const ProductDetail = () => {
           {/* Left Column: Image */}
           <div className="flex flex-col bg-white p-8 border-b md:border-b-0 md:border-r border-gray-100 relative">
             {product.productLabels && product.productLabels.map((label, index) => (
-                <ProductLabel key={index} label={label} />
+                <ProductLabel key={index} label={label} size="large" isCard={false} />
             ))}
 
             {product.discountPercentualValue && (
