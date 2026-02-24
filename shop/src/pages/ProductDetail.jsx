@@ -561,12 +561,36 @@ const ProductDetail = () => {
 
           {/* Left Column: Image */}
           <div className="flex flex-col bg-white p-8 border-b md:border-b-0 md:border-r border-gray-100 relative">
+            {/* Wishlist Button */}
+            <button
+                onClick={toggleWishlist}
+                className="absolute top-2 left-2 z-20 p-2 rounded-full bg-white/80 hover:bg-white text-red-500 hover:text-red-600 transition-colors"
+                title={inWishlist ? "Odobrať z obľúbených" : "Pridať do obľúbených"}
+            >
+                <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill={inWishlist ? "currentColor" : "none"}
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    strokeWidth="2"
+                >
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+            </button>
+
             {product.productLabels && product.productLabels.map((label, index) => (
-                <ProductLabel key={index} label={label} size="large" isCard={false} />
+                <ProductLabel
+                    key={index}
+                    label={label}
+                    size="large"
+                    isCard={false}
+                    className={label.position === 'TOP_LEFT' ? '!top-14' : ''}
+                />
             ))}
 
             {product.discountPercentualValue && (
-                <div className="absolute top-10 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 z-10 rounded shadow-sm">
+                <div className="absolute top-24 left-2 bg-red-600 text-white text-xs font-bold px-2 py-1 z-10 rounded shadow-sm">
                     -{product.discountPercentualValue}%
                 </div>
             )}
@@ -615,22 +639,6 @@ const ProductDetail = () => {
           <div className="p-8 flex flex-col">
             <div className="flex justify-between items-start mb-2">
                 <h1 className="text-3xl font-bold text-gray-800 leading-tight mr-4">{product.title}</h1>
-                 <button
-                    onClick={toggleWishlist}
-                    className={`p-2 rounded-full transition-colors flex-shrink-0 ${inWishlist ? 'text-red-500 bg-red-50' : 'text-red-500 hover:text-red-600 hover:bg-gray-50'}`}
-                    title={inWishlist ? "Odobrať z obľúbených" : "Pridať do obľúbených"}
-                >
-                    <svg
-                        xmlns="http://www.w3.org/2000/svg"
-                        className="h-8 w-8"
-                        fill={inWishlist ? "currentColor" : "none"}
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        strokeWidth="2"
-                    >
-                        <path strokeLinecap="round" strokeLinejoin="round" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
-                    </svg>
-                </button>
             </div>
 
             <div className="flex items-center mb-6">
