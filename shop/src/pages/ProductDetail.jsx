@@ -721,8 +721,6 @@ const ProductDetail = () => {
                 dangerouslySetInnerHTML={{ __html: cleanDescription(product.description) }}
             />
           </div>
-
-          <ProductReviews productId={product.id} />
       </div>
 
       {/* Related Products Section */}
@@ -736,6 +734,8 @@ const ProductDetail = () => {
           </div>
         </div>
       )}
+
+        <ProductReviews productId={product.id} />
 
       {/* Full View Modal */}
       {isFullViewOpen && selectedImage && (
