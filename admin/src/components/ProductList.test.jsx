@@ -45,7 +45,7 @@ describe('ProductList', () => {
 
     // Check for new column header "Id"
     const headers = screen.getAllByRole('columnheader');
-    const idHeader = headers.find(h => h.textContent === 'Id');
+    const idHeader = headers.find(h => h.textContent.includes('Id'));
     expect(idHeader).toBeInTheDocument();
 
     // Check for data
@@ -82,7 +82,7 @@ describe('ProductList', () => {
     });
 
     const headers = screen.getAllByRole('columnheader');
-    const idHeader = headers.find(h => h.textContent === 'Id');
+    const idHeader = headers.find(h => h.textContent.includes('Id'));
     fireEvent.click(idHeader);
 
     await waitFor(() => {
