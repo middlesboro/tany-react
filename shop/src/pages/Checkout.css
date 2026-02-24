@@ -262,4 +262,20 @@
         margin-top: 8px;
         border-radius: 4px;
     }
+
+    .checkout-page .option {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .checkout-page .option strong {
+        align-self: flex-end;
+        margin-top: 6px;
+        margin-left: 0;
+    }
+
+    .checkout-page .checkbox-label {
+        flex-direction: row;
+        align-items: center;
+    }
 }
