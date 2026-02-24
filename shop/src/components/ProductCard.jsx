@@ -171,7 +171,7 @@ const ProductCard = ({ product, showWishlist = true }) => {
               adding={adding}
               text={product.quantity <= 0 ? "Vypredané" : "Do košíka"}
               disabled={product.quantity <= 0}
-              className="h-10 px-2 flex-1 rounded-sm text-xs"
+              className="h-10 px-1 md:px-2 flex-1 rounded-sm text-[10px] md:text-xs tracking-tight md:tracking-wide"
             />
           </div>
         </div>

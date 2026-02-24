@@ -35,8 +35,8 @@ vi.mock('./ProductLabel', () => ({
 
 // Mock AddToCartButton to capture clicks and check DOM presence
 vi.mock('./AddToCartButton', () => ({
-  default: ({ onClick, disabled, text }) => (
-    <button data-testid="add-to-cart-btn" onClick={onClick} disabled={disabled}>{text}</button>
+  default: ({ onClick, disabled, text, className }) => (
+    <button data-testid="add-to-cart-btn" onClick={onClick} disabled={disabled} className={className}>{text}</button>
   )
 }));
 
@@ -106,4 +106,9 @@ test('mobile wishlist button is before add to cart button', () => {
   // Or at least they are siblings in that order.
   // Since AddToCartButton renders a <button>, and mobileButton is a <button>, and they are in the same parent.
   expect(mobileButton.nextElementSibling).toBe(addToCartBtn);
+
+  // Verify class names for responsive layout and text sizing
+  expect(addToCartBtn).toHaveClass('flex-1');
+  expect(addToCartBtn).toHaveClass('text-[10px]');
+  expect(addToCartBtn).toHaveClass('tracking-tight');
 });
