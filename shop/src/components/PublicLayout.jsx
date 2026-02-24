@@ -9,6 +9,7 @@ import ProductSearch from './ProductSearch';
 import CategoryTree from './CategoryTree';
 import BlogSlider from './BlogSlider';
 import Breadcrumbs from './Breadcrumbs';
+import MobileCategoryMenu from './MobileCategoryMenu';
 
 const PublicLayout = () => {
   const { cart, customer } = useCart();
@@ -44,17 +45,6 @@ const PublicLayout = () => {
     };
     fetchBlogs();
   }, []);
-
-  // Prepare the display list with "All Products" prepended (for mobile menu - still flat for now or maybe we should use the tree there too?
-  // User only asked for left side tree view. Mobile menu implementation is tricky with tree, keeping it flat for top level for now or I can try to flatten it if needed.
-  // But wait, the previous implementation was only showing top level categories anyway because it was just mapping `categories`.
-  // If `categories` is now a tree, `categories.map` only iterates top level. So the mobile menu will show top level categories, which is acceptable.)
-  const displayCategories = [
-    ...categories.map(cat => ({
-      name: cat.title,
-      path: `/kategoria/${cat.slug}`,
-    }))
-  ];
 
   // Determine if sidebar should be shown (everywhere except /cart and /order and /order/confirmation/*)
   const showSidebar = !['/cart', '/order'].includes(location.pathname) && !location.pathname.startsWith('/order/confirmation');
@@ -205,19 +195,10 @@ const PublicLayout = () => {
         {/* Mobile Menu Overlay */}
         {mobileMenuOpen && (
           <div className="md:hidden bg-white text-gray-800 border-t border-gray-200 max-h-[calc(100vh-64px)] overflow-y-auto">
-             <ul className="flex flex-col">
-               {displayCategories.map((cat, index) => (
-                 <li key={index} className="border-b border-gray-100">
-                   <Link
-                     to={cat.path}
-                     className={`block py-3 px-4 hover:bg-gray-50 hover:text-tany-green ${cat.color || ''} ${cat.highlight ? 'bg-gray-50 font-bold' : ''}`}
-                     onClick={() => setMobileMenuOpen(false)}
-                   >
-                     {cat.name}
-                   </Link>
-                 </li>
-               ))}
-             </ul>
+             <MobileCategoryMenu
+               categories={categories}
+               onLinkClick={() => setMobileMenuOpen(false)}
+             />
           </div>
         )}
       </nav>
