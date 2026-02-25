@@ -8,6 +8,7 @@ const ProductSearch = () => {
   const [results, setResults] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [error, setError] = useState(false);
   const searchRef = useRef(null);
   const navigate = useNavigate();
 
@@ -28,18 +29,22 @@ const ProductSearch = () => {
     const fetchResults = async () => {
       if (query.length >= 3) {
         setIsLoading(true);
+        setError(false);
         try {
           const data = await searchProducts(query);
           setResults(data);
           setShowResults(true);
         } catch (error) {
           console.error("Failed to search products", error);
+          setError(true);
+          setShowResults(true);
         } finally {
           setIsLoading(false);
         }
       } else {
         setResults([]);
         setShowResults(false);
+        setError(false);
       }
     };
 
@@ -82,10 +87,12 @@ const ProductSearch = () => {
         </button>
 
         {/* Results Dropdown */}
-        {showResults && (results.length > 0 || isLoading) && (
+        {showResults && (results.length > 0 || isLoading || error) && (
           <div className="absolute z-50 left-0 right-0 top-full mt-1 bg-white border border-gray-200 shadow-lg rounded-sm max-h-96 overflow-y-auto">
             {isLoading ? (
               <div className="p-4 text-center text-gray-500">Načítavam...</div>
+            ) : error ? (
+              <div className="p-4 text-center text-red-500">Chyba pri vyhľadávaní</div>
             ) : (
               <ul>
                 {results.map((product) => (
@@ -126,7 +133,7 @@ const ProductSearch = () => {
         )}
 
         {/* No Results Message */}
-        {showResults && !isLoading && results.length === 0 && query.length >= 3 && (
+        {showResults && !isLoading && !error && results.length === 0 && query.length >= 3 && (
             <div className="absolute z-50 left-0 right-0 top-full mt-1 bg-white border border-gray-200 shadow-lg rounded-sm p-4 text-center text-gray-500">
                 Žiadne výsledky
             </div>
