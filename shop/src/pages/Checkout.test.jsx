@@ -99,8 +99,14 @@ describe('Checkout Component', () => {
       </BrowserRouter>
     );
 
+    await waitFor(() => {
+        expect(mockUpdateCart).toHaveBeenCalled();
+    });
+    mockUpdateCart.mockClear();
+
     const firstnameInput = screen.getByDisplayValue('John');
     fireEvent.change(firstnameInput, { target: { value: 'Jane' } });
+    fireEvent.blur(firstnameInput);
 
     await waitFor(() => {
         expect(mockUpdateCart).toHaveBeenCalled();
@@ -117,6 +123,11 @@ describe('Checkout Component', () => {
           <Checkout />
         </BrowserRouter>
       );
+
+      await waitFor(() => {
+          expect(mockUpdateCart).toHaveBeenCalled();
+      });
+      mockUpdateCart.mockClear();
 
       const carrier2Radio = screen.getByRole('radio', { name: /Carrier 2/i });
       fireEvent.click(carrier2Radio);
@@ -143,8 +154,14 @@ describe('Checkout Component', () => {
       </BrowserRouter>
     );
 
+    await waitFor(() => {
+        expect(mockUpdateCart).toHaveBeenCalled();
+    });
+    mockUpdateCart.mockClear();
+
     const firstnameInput = screen.getByDisplayValue('John');
     fireEvent.change(firstnameInput, { target: { value: 'Jane' } });
+    fireEvent.blur(firstnameInput);
 
     await waitFor(() => {
         expect(mockUpdateCart).toHaveBeenCalled();

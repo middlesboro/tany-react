@@ -320,14 +320,12 @@ const Checkout = () => {
     };
   }, []);
 
-  useEffect(() => {
-      if (!initialized || !cart) return;
-
+  const prepareCartData = () => {
       const carrierObj = carriers.find(c => c.id === selectedCarrier);
       const currentPickupPoint = pickupPointMap[selectedCarrier];
 
-      const dataToSave = {
-          cartId: cart.cartId,
+      return {
+          cartId: cart?.cartId,
           firstname: customer.firstname,
           lastname: customer.lastname,
           email: customer.email,
@@ -340,12 +338,23 @@ const Checkout = () => {
           selectedPaymentId: selectedPayment,
           selectedPickupPointId: (carrierObj?.type === 'PACKETA' || carrierObj?.type === 'BALIKOVO') ? currentPickupPoint?.id : null,
           selectedPickupPointName: (carrierObj?.type === 'PACKETA' || carrierObj?.type === 'BALIKOVO') ? (currentPickupPoint?.name || currentPickupPoint?.formatedValue) : null,
-          discountForNewsletter: cart.discountForNewsletter
+          discountForNewsletter: cart?.discountForNewsletter
       };
+  };
 
+  const handleBlurUpdate = () => {
+      if (!initialized || !cart) return;
+      const dataToSave = prepareCartData();
+      debouncedUpdate(dataToSave);
+  };
+
+  useEffect(() => {
+      if (!initialized || !cart) return;
+
+      const dataToSave = prepareCartData();
       debouncedUpdate(dataToSave);
 
-  }, [customer, invoiceAddress, deliveryAddress, differentDeliveryAddress, selectedCarrier, selectedPayment, pickupPointMap, note, cart?.cartId, debouncedUpdate, initialized]);
+  }, [differentDeliveryAddress, selectedCarrier, selectedPayment, pickupPointMap, cart?.cartId, debouncedUpdate, initialized]);
 
 
   const handleCustomerChange = (e) => {
@@ -592,7 +601,10 @@ const Checkout = () => {
                     name="firstname"
                     value={customer.firstname}
                     onChange={handleCustomerChange}
-                    onBlur={(e) => validateField(e.target.name, e.target.value)}
+                    onBlur={(e) => {
+                        validateField(e.target.name, e.target.value);
+                        handleBlurUpdate();
+                    }}
                 />
                 {errors.firstname && <div className="error-msg">{errors.firstname}</div>}
               </div>
@@ -603,7 +615,10 @@ const Checkout = () => {
                     name="lastname"
                     value={customer.lastname}
                     onChange={handleCustomerChange}
-                    onBlur={(e) => validateField(e.target.name, e.target.value)}
+                    onBlur={(e) => {
+                        validateField(e.target.name, e.target.value);
+                        handleBlurUpdate();
+                    }}
                 />
                 {errors.lastname && <div className="error-msg">{errors.lastname}</div>}
               </div>
@@ -614,7 +629,10 @@ const Checkout = () => {
                     name="phone"
                     value={customer.phone}
                     onChange={handleCustomerChange}
-                    onBlur={(e) => validateField(e.target.name, e.target.value)}
+                    onBlur={(e) => {
+                        validateField(e.target.name, e.target.value);
+                        handleBlurUpdate();
+                    }}
                 />
                 {errors.phone && <div className="error-msg">{errors.phone}</div>}
               </div>
@@ -625,7 +643,10 @@ const Checkout = () => {
                     name="email"
                     value={customer.email}
                     onChange={handleCustomerChange}
-                    onBlur={(e) => validateField(e.target.name, e.target.value)}
+                    onBlur={(e) => {
+                        validateField(e.target.name, e.target.value);
+                        handleBlurUpdate();
+                    }}
                 />
                 {errors.email && <div className="error-msg">{errors.email}</div>}
                 {!errors.email && warnings.email && <div className="text-green-600 text-xs mt-1">{warnings.email}</div>}
@@ -644,7 +665,10 @@ const Checkout = () => {
                     name="street"
                     value={invoiceAddress.street}
                     onChange={handleInvoiceAddressChange}
-                    onBlur={(e) => validateField('invoice_street', e.target.value)}
+                    onBlur={(e) => {
+                        validateField('invoice_street', e.target.value);
+                        handleBlurUpdate();
+                    }}
                 />
                 {errors.invoice_street && <div className="error-msg">{errors.invoice_street}</div>}
               </div>
@@ -655,7 +679,10 @@ const Checkout = () => {
                     name="city"
                     value={invoiceAddress.city}
                     onChange={handleInvoiceAddressChange}
-                    onBlur={(e) => validateField('invoice_city', e.target.value)}
+                    onBlur={(e) => {
+                        validateField('invoice_city', e.target.value);
+                        handleBlurUpdate();
+                    }}
                 />
                 {errors.invoice_city && <div className="error-msg">{errors.invoice_city}</div>}
               </div>
@@ -666,7 +693,10 @@ const Checkout = () => {
                     name="zip"
                     value={invoiceAddress.zip}
                     onChange={handleInvoiceAddressChange}
-                    onBlur={(e) => validateField('invoice_zip', e.target.value)}
+                    onBlur={(e) => {
+                        validateField('invoice_zip', e.target.value);
+                        handleBlurUpdate();
+                    }}
                 />
                 {errors.invoice_zip && <div className="error-msg">{errors.invoice_zip}</div>}
               </div>
@@ -702,7 +732,10 @@ const Checkout = () => {
                         name="street"
                         value={deliveryAddress.street}
                         onChange={handleDeliveryAddressChange}
-                        onBlur={(e) => validateField('delivery_street', e.target.value)}
+                        onBlur={(e) => {
+                            validateField('delivery_street', e.target.value);
+                            handleBlurUpdate();
+                        }}
                     />
                     {errors.delivery_street && <div className="error-msg">{errors.delivery_street}</div>}
                  </div>
@@ -713,7 +746,10 @@ const Checkout = () => {
                         name="city"
                         value={deliveryAddress.city}
                         onChange={handleDeliveryAddressChange}
-                        onBlur={(e) => validateField('delivery_city', e.target.value)}
+                        onBlur={(e) => {
+                            validateField('delivery_city', e.target.value);
+                            handleBlurUpdate();
+                        }}
                     />
                     {errors.delivery_city && <div className="error-msg">{errors.delivery_city}</div>}
                  </div>
@@ -724,7 +760,10 @@ const Checkout = () => {
                         name="zip"
                         value={deliveryAddress.zip}
                         onChange={handleDeliveryAddressChange}
-                        onBlur={(e) => validateField('delivery_zip', e.target.value)}
+                        onBlur={(e) => {
+                            validateField('delivery_zip', e.target.value);
+                            handleBlurUpdate();
+                        }}
                     />
                     {errors.delivery_zip && <div className="error-msg">{errors.delivery_zip}</div>}
                  </div>
@@ -842,6 +881,7 @@ const Checkout = () => {
                 name="note"
                 value={note}
                 onChange={(e) => setNote(e.target.value)}
+                onBlur={handleBlurUpdate}
                 rows="3"
              />
           </div>
