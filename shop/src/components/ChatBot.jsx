@@ -39,7 +39,7 @@ const ChatBot = () => {
             setView('CONTACT_SUPPORT');
             setSupportStep('MESSAGE');
             setMessages([
-                { type: 'bot', text: 'Ahoj, ako ti môžeme pomôcť?' }
+                { type: 'bot', text: 'Napíšte nám správu a budeme Vás čím skôr kontaktovať.' }
             ]);
         }
     };
@@ -77,23 +77,35 @@ const ChatBot = () => {
             let response;
             if (view === 'ORDER_STATUS') {
                 response = await sendAssistantMessage(userMessage);
+
+                if (response && response.response) {
+                    setMessages(prev => [...prev, { type: 'bot', text: response.response }]);
+                    if (view === 'CONTACT_SUPPORT') {
+                        // Reset support flow after successful submission or keep conversation open?
+                        // For now, let's reset the step to allow new messages or end conversation
+                        setSupportStep('DONE');
+                    }
+                } else {
+                    setMessages(prev => [...prev, { type: 'bot', text: 'Prepáčte, nerozumel som.' }]);
+                }
+
             } else if (view === 'CONTACT_SUPPORT' && supportStep === 'EMAIL') {
                 response = await sendSupportMessage({
                     message: supportData.message,
                     email: userMessage
                 });
+
+                if (response) {
+                    setMessages(prev => [...prev, { type: 'bot', text: 'Ďakujeme za kontaktovanie podpory. Odpovieme vám čo najskôr.' }]);
+                } else {
+                    setMessages(prev => [...prev, {
+                        type: 'bot',
+                        text: 'Nastala chyba pri odosielaní správy. Skúste to prosím znovu alebo neskôr.'
+                    }]);
+                }
             }
 
-            if (response && response.message) {
-                setMessages(prev => [...prev, { type: 'bot', text: response.message }]);
-                if (view === 'CONTACT_SUPPORT') {
-                    // Reset support flow after successful submission or keep conversation open?
-                    // For now, let's reset the step to allow new messages or end conversation
-                    setSupportStep('DONE');
-                }
-            } else {
-                 setMessages(prev => [...prev, { type: 'bot', text: 'Prepáčte, nerozumel som.' }]);
-            }
+
         } catch (error) {
             setMessages(prev => [...prev, { type: 'bot', text: 'Nastala chyba pri komunikácii.' }]);
         } finally {
@@ -150,7 +162,7 @@ const ChatBot = () => {
                         {view === 'MENU' ? (
                             <>
                                 <div className="bg-white p-3 rounded-tl-xl rounded-tr-xl rounded-br-xl rounded-bl-none shadow-sm text-sm text-gray-700 mb-4 inline-block self-start max-w-[85%]">
-                                    Ahoj, som Tany a môžem ti pomôcť s:
+                                    Ahoj, som TanyBot a môžem Vám pomôcť s Vašimi objednávkami, nastavením cookies alebo kontaktovaním podpory. Vyberte si, s čím Vám môžem pomôcť:
                                 </div>
                                 <div className="space-y-2 mt-auto">
                                     <button
