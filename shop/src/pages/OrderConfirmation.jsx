@@ -349,7 +349,7 @@ const OrderConfirmation = () => {
           {/* RIGHT */}
           <div className="space-y-4">
                <div className="bg-white rounded-[14px] p-5 shadow-[0_6px_20px_rgba(0,0,0,0.05)]">
-                  <h3 className="text-lg font-bold mb-4">Osobné a doručovacie údaje</h3>
+                  <h3 className="text-lg font-bold mb-4">Osobné údaje</h3>
                   <div className="text-gray-600 mb-1.5">{order.firstname} {order.lastname}</div>
                   <div className="text-gray-600 mb-1.5">{order.email}</div>
                   <div className="text-gray-600 mb-4">{order.phone}</div>
