@@ -40,6 +40,7 @@ import ScrollToTop from './components/ScrollToTop';
 import LoginModal from './components/LoginModal';
 import MessageModal from './components/MessageModal';
 import CookieConsentBanner from './components/CookieConsentBanner';
+import ChatBot from './components/ChatBot';
 import { HelmetProvider } from 'react-helmet-async';
 import usePageTracking from './hooks/usePageTracking';
 
@@ -61,6 +62,7 @@ function App() {
                 <LoginModal />
                 <MessageModal />
                 <CookieConsentBanner />
+                <ChatBot />
                 <Routes>
                   <Route path="/authentication/success" element={<AuthenticationSuccess />} />
                   <Route path="/magic-link" element={<MagicLinkPage />} />
