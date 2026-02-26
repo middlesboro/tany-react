@@ -162,7 +162,7 @@ const ChatBot = () => {
                         {view === 'MENU' ? (
                             <>
                                 <div className="bg-white p-3 rounded-tl-xl rounded-tr-xl rounded-br-xl rounded-bl-none shadow-sm text-sm text-gray-700 mb-4 inline-block self-start max-w-[85%]">
-                                    Ahoj, som TanyBot a môžem Vám pomôcť s Vašimi objednávkami, nastavením cookies alebo kontaktovaním podpory. Vyberte si, s čím Vám môžem pomôcť:
+                                    Ahoj, som Tany a môžem Vám pomôcť s Vašimi objednávkami, nastavením cookies alebo kontaktovaním podpory. Vyberte si, s čím Vám môžem pomôcť:
                                 </div>
                                 <div className="space-y-2 mt-auto">
                                     <button
