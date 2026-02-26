@@ -54,7 +54,10 @@ export const updateCart = async (cartData) => {
   });
 
   if (!response.ok) {
-    throw new Error('Failed to update cart');
+    const errorData = await response.json().catch(() => ({}));
+    const error = new Error(errorData.message || 'Failed to update cart');
+    error.status = response.status;
+    throw error;
   }
   return response.json();
 };

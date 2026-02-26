@@ -15,6 +15,7 @@ const Checkout = () => {
   const { cart, customer: customerContext, loading, clearCart, updateCart } = useCart();
   const [errors, setErrors] = useState({});
   const [warnings, setWarnings] = useState({});
+  const [apiError, setApiError] = useState(null);
   const { setBreadcrumbs } = useBreadcrumbs();
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -301,7 +302,14 @@ const Checkout = () => {
   const debouncedUpdate = useCallback(
       debounce((data) => {
           if (data.cartId) {
-             updateCart(data).catch(err => console.error("Auto-save failed", err));
+             updateCart(data)
+                .then(() => setApiError(null))
+                .catch(err => {
+                    console.error("Auto-save failed", err);
+                    if (err.status === 400) {
+                        setApiError("Skontrolujte prosím zadané údaje. Niektoré údaje sú nesprávne.");
+                    }
+                });
           }
       }, 1000),
       [updateCart]
@@ -590,6 +598,14 @@ const Checkout = () => {
         {cart && <QuantityChangeNotification changes={cart.quantityChanges} />}
 
         <form onSubmit={handleSubmit} noValidate>
+          {apiError && (
+             <div className="alert-error">
+                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 mr-2" viewBox="0 0 20 20" fill="currentColor">
+                  <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7 4a1 1 0 11-2 0 1 1 0 012 0zm-1-9a1 1 0 00-1 1v4a1 1 0 102 0V6a1 1 0 00-1-1z" clipRule="evenodd" />
+                </svg>
+                {apiError}
+             </div>
+          )}
           {/* Step 1: Osobné údaje */}
           <div className="card">
             <h2><span className="step">1</span> Osobné údaje</h2>
