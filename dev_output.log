@@ -12,3 +12,4 @@ npm warn Unknown project config "always-auth". This will stop working in the nex
 Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
 To eliminate this warning, add "type": "module" to /app/shop/package.json.
 (Use `node --trace-warnings ...` to show where the warning was created)
+3:18:27 PM [vite] (client) hmr update /src/components/ChatBot.jsx, /src/index.css

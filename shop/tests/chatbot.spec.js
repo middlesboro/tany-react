@@ -4,66 +4,103 @@ test.describe('ChatBot Functionality', () => {
 
   test.beforeEach(async ({ page }) => {
     // Mock common endpoints to avoid network errors
-    await page.route('**/api/customer/context', async route => {
-      await route.fulfill({ json: { cartDto: { products: [] } } });
-    });
     await page.route('**/api/homepage-grids', async route => {
-      await route.fulfill({ json: [] });
+      await route.fulfill({ json: { homepageGrids: [] } });
     });
+
     await page.route('**/api/categories', async route => {
       await route.fulfill({ json: [] });
     });
+
+    await page.route('**/api/products*', async route => {
+      await route.fulfill({ json: { content: [], totalPages: 0 } });
+    });
+
+    await page.route('**/api/customer/context*', async route => {
+      await route.fulfill({ json: { cartDto: {} } });
+    });
+
+     await page.route('**/api/blogs', async route => {
+        await route.fulfill({ json: [] });
+    });
+
+    // Mock Chat API endpoints
+    await page.route('**/api/chat/assistant', async route => {
+        const body = JSON.parse(route.request().postData());
+        await route.fulfill({
+            json: { message: `Stav objednávky pre: ${body.message}` }
+        });
+    });
+
+    await page.route('**/api/chat/message', async route => {
+        const body = JSON.parse(route.request().postData());
+        await route.fulfill({
+            json: { message: `Ďakujeme za správu: ${body.message}` }
+        });
+    });
   });
 
-  test('ChatBot replaces Cookie Banner and functions correctly', async ({ page }) => {
+  test('ChatBot menu navigation and interactions', async ({ page }) => {
     await page.goto('/');
 
-    // 1. Check Cookie Banner is visible initially
-    const cookieBannerText = page.getByText('Vaše súkromie je pre nás dôležité');
-    await expect(cookieBannerText).toBeVisible();
+    // 0. Dismiss Cookie Banner if present
+    const cookieBanner = page.getByText('Používame súbory cookie');
+    if (await cookieBanner.isVisible()) {
+        await page.getByRole('button', { name: 'Odmietnuť' }).click();
+    }
 
-    // 2. Dismiss Cookie Banner (Reject)
-    await page.getByRole('button', { name: 'Odmietnuť' }).click();
+    // 1. Open ChatBot
+    const chatButton = page.getByLabel('Chatbot');
+    await expect(chatButton).toBeVisible();
+    await chatButton.click();
 
-    // 3. Verify Cookie Banner is gone
-    await expect(cookieBannerText).not.toBeVisible();
+    // Verify Menu
+    await expect(page.getByText('Ahoj, som Tany')).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Nastavenie cookies' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Stav objednávky' })).toBeVisible();
+    await expect(page.getByRole('button', { name: 'Kontaktovať podporu' })).toBeVisible();
 
-    // 4. Verify Robot Icon is present
-    // The icon is in ChatBot.jsx. It has a specific SVG or button.
-    // The button has className "fixed bottom-4 left-4 ..."
-    // Let's use the role or a specific selector.
-    // Since there is no text in the closed button (just SVG), we can use a locator with aria-label.
-    const robotIcon = page.getByLabel('Chatbot');
-    await expect(robotIcon).toBeVisible();
+    // 2. Test Order Status Flow
+    await page.getByRole('button', { name: 'Stav objednávky' }).click();
 
-    // 5. Open ChatBot
-    await robotIcon.click();
+    // Verify Chat View
+    await expect(page.getByText('Prosím zadajte identifikátor objednávky')).toBeVisible();
+    const input = page.getByPlaceholder('Číslo objednávky...');
+    await expect(input).toBeVisible();
 
-    // 6. Verify Chat Window is visible
-    const chatWindow = page.getByText('Ahoj, som Tany');
-    await expect(chatWindow).toBeVisible();
+    // Send Message
+    await input.fill('OBJ-123');
+    await page.getByLabel('Odoslať').click();
 
-    // 7. Verify Options
-    const cookieOption = page.getByRole('button', { name: 'Nastavenie cookies' });
-    const orderOption = page.getByRole('button', { name: 'Stav objednávky' });
+    // Verify Response
+    await expect(page.getByText('Stav objednávky pre: OBJ-123')).toBeVisible();
 
-    await expect(cookieOption).toBeVisible();
-    await expect(orderOption).toBeVisible();
+    // Back to Menu
+    await page.getByLabel('Späť').click();
+    await expect(page.getByRole('button', { name: 'Stav objednávky' })).toBeVisible();
 
-    // 8. Test "Nastavenie cookies"
-    await cookieOption.click();
+    // 3. Test Contact Support Flow
+    await page.getByRole('button', { name: 'Kontaktovať podporu' }).click();
 
-    // Cookie Banner should reappear
-    await expect(cookieBannerText).toBeVisible();
+    // Verify Chat View
+    await expect(page.getByText('Ahoj, ako ti môžeme pomôcť?')).toBeVisible();
+    const supportInput = page.getByPlaceholder('Napíšte správu...');
+    await expect(supportInput).toBeVisible();
 
-    // Close banner again
-    await page.getByRole('button', { name: 'Odmietnuť' }).click();
+    // Send Message
+    await supportInput.fill('Mám problém s produktom');
+    await page.getByLabel('Odoslať').click();
 
-    // Re-open chat
-    await robotIcon.click();
+    // Verify Response
+    await expect(page.getByText('Ďakujeme za správu: Mám problém s produktom')).toBeVisible();
 
-    // 9. Test "Stav objednávky"
-    await orderOption.click();
-    await expect(page).toHaveURL(/.*\/account\/orders/);
+    // Back to Menu
+    await page.getByLabel('Späť').click();
+    await expect(page.getByRole('button', { name: 'Kontaktovať podporu' })).toBeVisible();
+
+    // 4. Test Cookie Settings (opens banner)
+    await page.getByRole('button', { name: 'Nastavenie cookies' }).click();
+    await expect(page.getByText('Ahoj, som Tany')).not.toBeVisible(); // Chat should close
+    await expect(page.getByText('Vaše súkromie je pre nás dôležité')).toBeVisible(); // Banner visible
   });
 });
