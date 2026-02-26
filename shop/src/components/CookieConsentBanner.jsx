@@ -20,19 +20,7 @@ const CookieConsentBanner = () => {
     }, [consent, isCustomizing]);
 
     if (!showBanner) {
-        // Render the floating "manage cookies" button
-        return (
-            <button
-                onClick={openBanner}
-                className="fixed bottom-4 left-4 z-50 p-3 bg-white rounded-full shadow-lg border border-gray-200 hover:bg-gray-50 transition-colors group"
-                aria-label="Nastavenia cookies"
-                title="Nastavenia cookies"
-            >
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="text-gray-600 group-hover:text-[#1f7a4d]">
-                    <path d="M12 22C17.5228 22 22 17.5228 22 12C22 11.5373 21.3065 11.4608 21.0672 11.8519C20.5634 12.6752 19.6584 13.2353 18.625 13.2353C16.9676 13.2353 15.625 11.8926 15.625 10.2353C15.625 9.20194 16.1851 8.29694 17.0084 7.79308C17.3995 7.55383 17.323 6.86029 16.8603 6.86029C11.3374 6.86029 6.86029 11.3374 6.86029 16.8603C6.86029 17.323 7.55383 17.3995 7.79308 17.0084C8.29694 16.1851 9.20194 15.625 10.2353 15.625C11.8926 15.625 13.2353 16.9676 13.2353 18.625C13.2353 19.6584 12.6752 20.5634 11.8519 21.0672C11.4608 21.3065 11.5373 22 12 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-                </svg>
-            </button>
-        );
+        return null;
     }
 
     const handleSavePreferences = () => {
