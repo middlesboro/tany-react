@@ -14,3 +14,6 @@ To eliminate this warning, add "type": "module" to /app/shop/package.json.
 (Use `node --trace-warnings ...` to show where the warning was created)
 3:18:27 PM [vite] (client) hmr update /src/components/ChatBot.jsx, /src/index.css
 3:26:33 PM [vite] (client) hmr update /src/components/ChatBot.jsx, /src/index.css
+4:37:53 PM [vite] (client) hmr update /src/components/ChatBot.jsx, /src/index.css
+4:38:06 PM [vite] (client) hmr update /src/index.css, /src/components/ChatBot.jsx
+4:38:06 PM [vite] (client) hmr update /src/index.css, /src/components/ChatBot.jsx

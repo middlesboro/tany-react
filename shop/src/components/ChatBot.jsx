@@ -9,6 +9,11 @@ const ChatBot = () => {
     const [messages, setMessages] = useState([]);
     const [inputValue, setInputValue] = useState('');
     const [isLoading, setIsLoading] = useState(false);
+
+    // New state for support flow
+    const [supportStep, setSupportStep] = useState('INIT'); // 'INIT', 'MESSAGE', 'EMAIL'
+    const [supportData, setSupportData] = useState({ message: '', email: '' });
+
     const messagesEndRef = useRef(null);
     const { openBanner } = useCookieConsent();
     const navigate = useNavigate();
@@ -32,6 +37,7 @@ const ChatBot = () => {
             ]);
         } else if (option === 'support') {
             setView('CONTACT_SUPPORT');
+            setSupportStep('MESSAGE');
             setMessages([
                 { type: 'bot', text: 'Ahoj, ako ti môžeme pomôcť?' }
             ]);
@@ -42,6 +48,8 @@ const ChatBot = () => {
         setView('MENU');
         setMessages([]);
         setInputValue('');
+        setSupportStep('INIT');
+        setSupportData({ message: '', email: '' });
     };
 
     const handleSend = async () => {
@@ -50,18 +58,39 @@ const ChatBot = () => {
         const userMessage = inputValue;
         setMessages(prev => [...prev, { type: 'user', text: userMessage }]);
         setInputValue('');
+
+        if (view === 'CONTACT_SUPPORT') {
+            if (supportStep === 'MESSAGE') {
+                setSupportData(prev => ({ ...prev, message: userMessage }));
+                setMessages(prev => [...prev, { type: 'bot', text: 'Ďakujeme. Prosím, zadajte váš email, aby sme vás mohli kontaktovať.' }]);
+                setSupportStep('EMAIL');
+                return;
+            } else if (supportStep === 'EMAIL') {
+                setSupportData(prev => ({ ...prev, email: userMessage }));
+                // Proceed to send with both message and email
+            }
+        }
+
         setIsLoading(true);
 
         try {
             let response;
             if (view === 'ORDER_STATUS') {
                 response = await sendAssistantMessage(userMessage);
-            } else if (view === 'CONTACT_SUPPORT') {
-                response = await sendSupportMessage(userMessage);
+            } else if (view === 'CONTACT_SUPPORT' && supportStep === 'EMAIL') {
+                response = await sendSupportMessage({
+                    message: supportData.message,
+                    email: userMessage
+                });
             }
 
             if (response && response.message) {
                 setMessages(prev => [...prev, { type: 'bot', text: response.message }]);
+                if (view === 'CONTACT_SUPPORT') {
+                    // Reset support flow after successful submission or keep conversation open?
+                    // For now, let's reset the step to allow new messages or end conversation
+                    setSupportStep('DONE');
+                }
             } else {
                  setMessages(prev => [...prev, { type: 'bot', text: 'Prepáčte, nerozumel som.' }]);
             }
@@ -186,7 +215,11 @@ const ChatBot = () => {
                                     value={inputValue}
                                     onChange={(e) => setInputValue(e.target.value)}
                                     onKeyPress={handleKeyPress}
-                                    placeholder={view === 'ORDER_STATUS' ? "Číslo objednávky..." : "Napíšte správu..."}
+                                    placeholder={
+                                        view === 'ORDER_STATUS' ? "Číslo objednávky..." :
+                                        view === 'CONTACT_SUPPORT' && supportStep === 'EMAIL' ? "Váš email..." :
+                                        "Napíšte správu..."
+                                    }
                                     className="flex-1 px-4 py-2 bg-gray-50 border border-gray-200 rounded-full text-sm focus:outline-none focus:ring-2 focus:ring-[#1f7a4d]/20 focus:border-[#1f7a4d]"
                                     autoFocus
                                 />

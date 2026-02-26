@@ -34,9 +34,14 @@ test.describe('ChatBot Functionality', () => {
 
     await page.route('**/api/chat/message', async route => {
         const body = JSON.parse(route.request().postData());
-        await route.fulfill({
-            json: { message: `Ďakujeme za správu: ${body.message}` }
-        });
+        // Verify payload structure
+        if (body.message && body.email) {
+             await route.fulfill({
+                json: { message: `Ďakujeme za správu: ${body.message} od ${body.email}` }
+            });
+        } else {
+            await route.fulfill({ status: 400, json: { message: 'Missing fields' } });
+        }
     });
   });
 
@@ -79,20 +84,29 @@ test.describe('ChatBot Functionality', () => {
     await page.getByLabel('Späť').click();
     await expect(page.getByRole('button', { name: 'Stav objednávky' })).toBeVisible();
 
-    // 3. Test Contact Support Flow
+    // 3. Test Contact Support Flow (Two Steps)
     await page.getByRole('button', { name: 'Kontaktovať podporu' }).click();
 
-    // Verify Chat View
+    // Verify Initial Chat View
     await expect(page.getByText('Ahoj, ako ti môžeme pomôcť?')).toBeVisible();
-    const supportInput = page.getByPlaceholder('Napíšte správu...');
-    await expect(supportInput).toBeVisible();
+    const messageInput = page.getByPlaceholder('Napíšte správu...');
+    await expect(messageInput).toBeVisible();
 
-    // Send Message
-    await supportInput.fill('Mám problém s produktom');
+    // Step 1: Send Message
+    await messageInput.fill('Mám problém s produktom');
     await page.getByLabel('Odoslať').click();
 
-    // Verify Response
-    await expect(page.getByText('Ďakujeme za správu: Mám problém s produktom')).toBeVisible();
+    // Verify Bot asks for Email
+    await expect(page.getByText('Ďakujeme. Prosím, zadajte váš email')).toBeVisible();
+    const emailInput = page.getByPlaceholder('Váš email...');
+    await expect(emailInput).toBeVisible();
+
+    // Step 2: Send Email
+    await emailInput.fill('zakaznik@example.com');
+    await page.getByLabel('Odoslať').click();
+
+    // Verify Final Response
+    await expect(page.getByText('Ďakujeme za správu: Mám problém s produktom od zakaznik@example.com')).toBeVisible();
 
     // Back to Menu
     await page.getByLabel('Späť').click();
