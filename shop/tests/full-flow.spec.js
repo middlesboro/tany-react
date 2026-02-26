@@ -59,82 +59,40 @@ test.describe('Shop Full Flow Tests', () => {
     // Verify at least one product grid is visible
     // We use .first() on the locator, not on the expect result
     const productGrid = page.locator('.grid.grid-cols-2').first();
-    // It might not be visible if no products are returned, so we check if it exists or skip
-    if (await productGrid.count() > 0) {
-        await expect(productGrid).toBeVisible();
-    } else {
-        console.log('Homepage product grid not found, skipping grid visibility check');
-    }
+
+    // Wait for the grid to appear (async fetch) - strict check
+    await expect(productGrid).toBeVisible({ timeout: 10000 });
+
+    // Verify at least one product card is present
+    const firstProduct = productGrid.locator('.group').first();
+    await expect(firstProduct).toBeVisible();
 
     // Verify navigation to "Doprava"
     await page.getByRole('link', { name: 'Doprava' }).first().click();
 
-    // Check if page loaded (even if 404, it means navigation worked)
-    // In this environment, the page might be missing (404), so we don't strictly assert content availability
+    // Check if page loaded - strict check
     const dopravaHeading = page.getByRole('heading', { name: 'Doprava' });
-    if (await dopravaHeading.isVisible()) {
-        await expect(dopravaHeading).toBeVisible();
-    } else {
-        console.log('Doprava page heading not found (possibly 404 or empty content)');
-    }
+    await expect(dopravaHeading).toBeVisible();
   });
 
   test('Search functionality works with dynamic product', async ({ page }) => {
-    // 1. Get a product title from the homepage or fallback to Brands
-    let firstProductCard = page.locator('.grid.grid-cols-2 .p-2').first();
+    // 1. Get a product title from the homepage
+    // We expect the homepage to have products. If not, the test should fail as per requirements.
+    const firstProductCard = page.locator('.grid.grid-cols-2 .group').first();
+    await expect(firstProductCard).toBeVisible({ timeout: 10000 });
 
-    if (await firstProductCard.count() === 0) {
-        console.log('No products on homepage, navigating to Brands...');
-        await page.goto('/ponukane-znacky');
-        const firstBrand = page.locator('a[href*="/kategoria/"]').first();
-        if (await firstBrand.count() > 0) {
-             await firstBrand.click();
-             firstProductCard = page.locator('.grid.grid-cols-2 .p-2, .grid.grid-cols-1 .p-2, .product-card').first();
-        } else {
-             console.log('No brands found either, trying generic search "henna"');
-             // Fallback to generic search
-             const searchInput = page.getByPlaceholder('Hľadať v obchode...');
-             await searchInput.fill('henna');
-             await page.waitForTimeout(1000); // Wait for debounce
-        }
-    }
+    const productTitleElement = firstProductCard.locator('h3').first();
+    const productTitle = await productTitleElement.innerText();
+    console.log(`Searching for product: ${productTitle}`);
 
-    // Determine product title from card if visible, otherwise we already filled "henna" above
-    let productTitle = "henna";
+    // 2. Type into search bar
+    const searchInput = page.getByPlaceholder('Hľadať v obchode...');
+    await searchInput.fill(productTitle.substring(0, 4));
 
-    if (await firstProductCard.count() > 0 && await firstProductCard.first().isVisible()) {
-        const productTitleElement = firstProductCard.locator('h3, .font-bold, a').first();
-        productTitle = await productTitleElement.innerText();
-        console.log(`Searching for product: ${productTitle}`);
-
-        // 2. Type into search bar (if not already done via fallback)
-        const searchInput = page.getByPlaceholder('Hľadať v obchode...');
-        await searchInput.fill(productTitle.substring(0, 4));
-    } else {
-        console.log('Using fallback search term: henna');
-    }
-
-    // 3. Wait for results or no results message or error message
+    // 3. Wait for results - strict check
+    // We expect results because we searched for a product that exists on the homepage
     const resultsDropdown = page.locator('.absolute.z-50 ul');
-    const noResultsMessage = page.getByText('Žiadne výsledky');
-    const errorMessage = page.getByText('Chyba pri vyhľadávaní');
-
-    try {
-        await expect(resultsDropdown.or(noResultsMessage).or(errorMessage)).toBeVisible({ timeout: 5000 });
-    } catch (e) {
-        console.log('Search dropdown, no results, or error message not found');
-        throw e;
-    }
-
-    if (await errorMessage.isVisible()) {
-        console.log('Search returned error (expected if backend is down)');
-        return;
-    }
-
-    if (await noResultsMessage.isVisible()) {
-        console.log('Search returned no results (expected in empty environment)');
-        return;
-    }
+    await expect(resultsDropdown).toBeVisible({ timeout: 5000 });
 
     // 4. Click first result
     const firstResult = resultsDropdown.locator('li button').first();
@@ -150,28 +108,12 @@ test.describe('Shop Full Flow Tests', () => {
 
   test('Complete Checkout Flow (COD/Bank Wire)', async ({ page }) => {
     // 1. Add product to cart
-    let firstProductCard = page.locator('.grid.grid-cols-2 .p-2').first();
+    // Strict check: Homepage must have products
+    const firstProductCard = page.locator('.grid.grid-cols-2 .group').first();
+    await expect(firstProductCard).toBeVisible({ timeout: 10000 });
 
-    if (await firstProductCard.count() === 0) {
-        console.log('No products on homepage for checkout, navigating to Brands...');
-        await page.goto('/ponukane-znacky');
-        const firstBrand = page.locator('a[href*="/kategoria/"]').first();
-        if (await firstBrand.count() > 0) {
-             await firstBrand.click();
-             firstProductCard = page.locator('.grid.grid-cols-2 .p-2, .grid.grid-cols-1 .p-2, .product-card').first();
-        } else {
-            console.log('No brands/products found to checkout.');
-            test.skip('No products available to checkout');
-            return;
-        }
-    }
-
-    if (await firstProductCard.isVisible()) {
-         await firstProductCard.click();
-    } else {
-         test.fail('Product card not visible');
-         return;
-    }
+    // Click on the product image/link to go to detail
+    await firstProductCard.locator('a').first().click();
 
     // Wait for product detail page
     await expect(page.getByRole('button', { name: 'Do košíka' })).toBeVisible();
