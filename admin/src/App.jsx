@@ -11,6 +11,7 @@ import Categories from './pages/Categories';
 import CategoryEdit from './pages/CategoryEdit';
 import Customers from './pages/Customers';
 import CustomerEdit from './pages/CustomerEdit';
+import CustomerMessages from './pages/CustomerMessages';
 import Carts from './pages/Carts';
 import CartDetail from './pages/CartDetail';
 import Orders from './pages/Orders';
@@ -98,6 +99,7 @@ function App() {
               <Route path="customers" element={<Customers />} />
               <Route path="customers/new" element={<CustomerEdit />} />
               <Route path="customers/:id" element={<CustomerEdit />} />
+              <Route path="customer-messages" element={<CustomerMessages />} />
               <Route path="brands" element={<Brands />} />
               <Route path="brands/new" element={<BrandEdit />} />
               <Route path="brands/:id" element={<BrandEdit />} />
