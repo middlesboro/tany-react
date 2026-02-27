@@ -32,6 +32,9 @@ const CustomerMessageList = () => {
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('email')}>
               Email
             </th>
+            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('type')}>
+              Type
+            </th>
              <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('message')}>
               Message
             </th>
@@ -44,6 +47,7 @@ const CustomerMessageList = () => {
                 {msg.createDate ? new Date(msg.createDate).toLocaleString() : ''}
               </td>
               <td className="py-2 px-4 border-b">{msg.email}</td>
+              <td className="py-2 px-4 border-b">{msg.type}</td>
               <td className="py-2 px-4 border-b">{msg.message}</td>
             </tr>
           ))}
