@@ -32,7 +32,7 @@ vi.mock('../context/CartContext', () => ({
 }));
 
 vi.mock('../context/ModalContext', () => ({
-  useModal: () => ({ openLoginModal: vi.fn(), openMessageModal: vi.fn() })
+  useModal: () => ({ openLoginModal: vi.fn(), openMessageModal: vi.fn(), openAddToCartModal: vi.fn() })
 }));
 
 vi.mock('../context/BreadcrumbContext', () => ({

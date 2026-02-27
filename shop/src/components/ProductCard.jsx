@@ -12,7 +12,7 @@ import { logSelectItem, logAddToCart, logAddToWishlist } from '../utils/analytic
 
 const ProductCard = ({ product, showWishlist = true }) => {
   const { addToCart } = useCart();
-  const { openLoginModal, openMessageModal } = useModal();
+  const { openLoginModal, openMessageModal, openAddToCartModal } = useModal();
   const [adding, setAdding] = useState(false);
   const [inWishlist, setInWishlist] = useState(product.inWishlist || false);
   const [wishlistLoading, setWishlistLoading] = useState(false);
@@ -24,8 +24,9 @@ const ProductCard = ({ product, showWishlist = true }) => {
   const handleAddToCart = async () => {
     setAdding(true);
     try {
-      await addToCart(product.id, 1);
+      const response = await addToCart(product.id, 1);
       logAddToCart(product, 1);
+      openAddToCartModal(response);
     } catch (error) {
       if (error.status === 400) {
           openMessageModal("Upozornenie", "Pre tento produkt nie je na sklade dostatočné množstvo.");

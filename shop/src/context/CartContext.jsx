@@ -68,6 +68,7 @@ export const CartProvider = ({ children }) => {
           // Refresh context to show updated cart
           await fetchContext();
       }
+      return newCartId;
     } catch (error) {
       console.error("Failed to add to cart", error);
       throw error; // Re-throw so component can handle it if needed

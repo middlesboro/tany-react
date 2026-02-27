@@ -39,6 +39,7 @@ import { CookieConsentProvider } from './context/CookieConsentContext';
 import ScrollToTop from './components/ScrollToTop';
 import LoginModal from './components/LoginModal';
 import MessageModal from './components/MessageModal';
+import AddToCartModal from './components/AddToCartModal';
 import CookieConsentBanner from './components/CookieConsentBanner';
 import ChatBot from './components/ChatBot';
 import { HelmetProvider } from 'react-helmet-async';
@@ -61,6 +62,7 @@ function App() {
                 <ScrollToTop />
                 <LoginModal />
                 <MessageModal />
+                <AddToCartModal />
                 <CookieConsentBanner />
                 <ChatBot />
                 <Routes>
