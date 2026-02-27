@@ -52,7 +52,7 @@ const mockProduct = {
 
 test('renders wishlist buttons correctly for mobile and desktop', () => {
   useCart.mockReturnValue({ addToCart: vi.fn(), cart: { products: [] } });
-  useModal.mockReturnValue({ openLoginModal: vi.fn() });
+  useModal.mockReturnValue({ openLoginModal: vi.fn(), openAddToCartModal: vi.fn() });
 
   render(
     <BrowserRouter>
@@ -85,7 +85,7 @@ test('renders wishlist buttons correctly for mobile and desktop', () => {
 
 test('does not render wishlist buttons when showWishlist is false', () => {
   useCart.mockReturnValue({ addToCart: vi.fn(), cart: { products: [] } });
-  useModal.mockReturnValue({ openLoginModal: vi.fn() });
+  useModal.mockReturnValue({ openLoginModal: vi.fn(), openAddToCartModal: vi.fn() });
 
   render(
     <BrowserRouter>
@@ -95,4 +95,26 @@ test('does not render wishlist buttons when showWishlist is false', () => {
 
   const wishlistButtons = screen.queryAllByTitle('Pridať do obľúbených');
   expect(wishlistButtons).toHaveLength(0);
+});
+
+test('opens add to cart modal on successful add to cart', async () => {
+    const mockAddToCart = vi.fn().mockResolvedValue({ cartId: '123' });
+    const mockOpenAddToCartModal = vi.fn();
+    useCart.mockReturnValue({ addToCart: mockAddToCart, cart: { products: [] } });
+    useModal.mockReturnValue({ openLoginModal: vi.fn(), openAddToCartModal: mockOpenAddToCartModal, openMessageModal: vi.fn() });
+
+    render(
+        <BrowserRouter>
+            <ProductCard product={mockProduct} />
+        </BrowserRouter>
+    );
+
+    // Find button by text from mocked AddToCartButton
+    const addToCartButton = screen.getByText('Do košíka');
+    addToCartButton.click();
+
+    await vi.waitFor(() => {
+        expect(mockAddToCart).toHaveBeenCalledWith(mockProduct.id, 1);
+        expect(mockOpenAddToCartModal).toHaveBeenCalledWith({ cartId: '123' });
+    });
 });

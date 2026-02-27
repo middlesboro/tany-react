@@ -346,7 +346,7 @@ const ReasonsToBuy = () => (
 const ProductDetail = () => {
   const { slug } = useParams();
   const { addToCart } = useCart();
-  const { openLoginModal, openMessageModal } = useModal();
+  const { openLoginModal, openMessageModal, openAddToCartModal } = useModal();
   const { setBreadcrumbs } = useBreadcrumbs();
   const { consent } = useCookieConsent();
   const [product, setProduct] = useState(null);
@@ -481,9 +481,9 @@ const ProductDetail = () => {
     if (!product) return;
     setAdding(true);
     try {
-      await addToCart(product.id, quantity);
+      const response = await addToCart(product.id, quantity);
       logAddToCart(product, quantity);
-      // Optional: Add a toast notification here
+      openAddToCartModal(response);
     } catch (err) {
       if (err.status === 400) {
         openMessageModal("Upozornenie", "Pre tento produkt nie je na sklade dostatočné množstvo.");
