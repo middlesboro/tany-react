@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useCookieConsent } from '../context/CookieConsentContext';
 import { useNavigate } from 'react-router-dom';
 import { sendAssistantMessage, sendSupportMessage } from '../services/chatService';
+import { linkify } from '../utils/textUtils';
 
 const ChatBot = () => {
     const [isOpen, setIsOpen] = useState(false);
@@ -205,7 +206,7 @@ const ChatBot = () => {
                                             : 'bg-white text-gray-700 self-start rounded-tl-xl rounded-tr-xl rounded-br-xl rounded-bl-none'
                                         }`}
                                     >
-                                        {msg.text}
+                                        {linkify(msg.text, msg.type === 'user' ? "text-white underline hover:text-gray-200" : "text-blue-600 underline hover:text-blue-800")}
                                     </div>
                                 ))}
                                 {isLoading && (
