@@ -156,17 +156,17 @@ const CartItem = ({ item, crossSellProducts }) => {
 
       {/* Cross-Sell Section */}
       {crossSellProducts && crossSellProducts.length > 0 && (
-          <div className="max-w-full mt-3 sm:pl-0">
+          <div className="max-w-full mt-3 sm:pl-0 overflow-hidden">
               <div className="text-xs font-semibold text-gray-500 mb-2">Odporúčame dokúpiť:</div>
               <div className="flex flex-col gap-2">
                   {crossSellProducts.slice(0, 3).map((product) => (
-                      <div key={product.id} className="flex items-center gap-3 bg-gray-50 p-1 rounded-lg border border-gray-100">
+                      <div key={product.id} className="flex items-center gap-2 bg-gray-50 p-1 rounded-lg border border-gray-100">
                           {/* Small Image */}
                           <div className="shrink-0">
                               {product.image ? (
-                                  <img src={product.image} alt={product.title} className="w-8 h-8 object-cover rounded" />
+                                  <img src={product.image} alt={product.title} className="w-7 h-7 object-cover rounded" />
                               ) : (
-                                  <div className="w-8 h-8 bg-gray-200 rounded flex items-center justify-center text-[10px] text-gray-400">Img</div>
+                                  <div className="w-7 h-7 bg-gray-200 rounded flex items-center justify-center text-[10px] text-gray-400">Img</div>
                               )}
                           </div>
 
@@ -184,7 +184,7 @@ const CartItem = ({ item, crossSellProducts }) => {
                           <button
                               onClick={() => handleAddCrossSell(product)}
                               disabled={addingCrossSell === product.id}
-                              className="text-xs font-bold text-[#2f6f4f] border border-[#2f6f4f] hover:bg-[#2f6f4f] hover:text-white px-2 py-0.5 rounded transition-colors whitespace-nowrap"
+                              className="text-[10px] font-bold text-[#2f6f4f] border border-[#2f6f4f] hover:bg-[#2f6f4f] hover:text-white px-1.5 py-0.5 rounded transition-colors whitespace-nowrap"
                           >
                               {addingCrossSell === product.id ? '...' : '+ Pridať'}
                           </button>
