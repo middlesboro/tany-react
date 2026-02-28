@@ -160,34 +160,39 @@ const CartItem = ({ item, crossSellProducts }) => {
               <div className="text-xs font-semibold text-gray-500 mb-2">Odporúčame dokúpiť:</div>
               <div className="flex flex-col gap-2">
                   {crossSellProducts.slice(0, 3).map((product) => (
-                      <div key={product.id} className="flex items-center gap-2 bg-gray-50 p-1 rounded-lg border border-gray-100">
+                      <div key={product.id} className="flex gap-3 items-start sm:items-center bg-gray-50 p-2 rounded-lg border border-gray-100">
                           {/* Small Image */}
                           <div className="shrink-0">
                               {product.image ? (
-                                  <img src={product.image} alt={product.title} className="w-7 h-7 object-cover rounded" />
+                                  <img src={product.image} alt={product.title} className="w-10 h-10 object-cover rounded" />
                               ) : (
-                                  <div className="w-7 h-7 bg-gray-200 rounded flex items-center justify-center text-[10px] text-gray-400">Img</div>
+                                  <div className="w-10 h-10 bg-gray-200 rounded flex items-center justify-center text-[10px] text-gray-400">Img</div>
                               )}
                           </div>
 
-                          {/* Title & Price */}
-                          <div className="flex-1 min-w-0">
-                              <Link to={`/produkt/${product.slug}`} className="text-xs font-medium text-gray-800 hover:text-[#2f6f4f] truncate block" title={product.title}>
-                                  {product.title}
-                              </Link>
-                              <div className="text-[10px] text-gray-500">
-                                  {product.price ? product.price.toFixed(2) : '0.00'} €
+                          {/* Title, Price & Button Wrapper */}
+                          <div className="flex-1 flex flex-col sm:flex-row sm:items-center justify-between min-w-0 gap-2">
+                              {/* Title & Price */}
+                              <div className="flex-1 min-w-0">
+                                  <Link to={`/produkt/${product.slug}`} className="text-xs font-medium text-gray-800 hover:text-[#2f6f4f] break-words whitespace-normal block" title={product.title}>
+                                      {product.title}
+                                  </Link>
+                                  <div className="text-[10px] text-gray-500">
+                                      {product.price ? product.price.toFixed(2) : '0.00'} €
+                                  </div>
+                              </div>
+
+                              {/* Add Button */}
+                              <div className="mt-1 sm:mt-0">
+                                  <button
+                                      onClick={() => handleAddCrossSell(product)}
+                                      disabled={addingCrossSell === product.id}
+                                      className="text-xs font-bold text-[#2f6f4f] border border-[#2f6f4f] hover:bg-[#2f6f4f] hover:text-white px-2 py-1 rounded transition-colors whitespace-nowrap"
+                                  >
+                                      {addingCrossSell === product.id ? '...' : '+ Pridať'}
+                                  </button>
                               </div>
                           </div>
-
-                          {/* Add Button */}
-                          <button
-                              onClick={() => handleAddCrossSell(product)}
-                              disabled={addingCrossSell === product.id}
-                              className="text-[10px] font-bold text-[#2f6f4f] border border-[#2f6f4f] hover:bg-[#2f6f4f] hover:text-white px-1.5 py-0.5 rounded transition-colors whitespace-nowrap"
-                          >
-                              {addingCrossSell === product.id ? '...' : '+ Pridať'}
-                          </button>
                       </div>
                   ))}
               </div>
