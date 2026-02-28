@@ -94,3 +94,21 @@ export const removeDiscount = async (cartId, code) => {
   }
   return response.json();
 };
+
+export const getCrossSellProducts = async (cartId) => {
+    const url = `${API_URL}/cross-sell?cartId=${cartId}`;
+    const response = await authFetch(url, {
+        method: 'GET',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+    });
+
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const error = new Error(errorData.message || 'Failed to fetch cross-sell products');
+        error.status = response.status;
+        throw error;
+    }
+    return response.json();
+};

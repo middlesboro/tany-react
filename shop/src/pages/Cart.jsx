@@ -10,6 +10,7 @@ import './Cart.css';
 import usePageMeta from '../hooks/usePageMeta';
 import { logViewCart, logGenerateLead } from '../utils/analytics';
 import { searchProductsByCategory } from '../services/productService';
+import { getCrossSellProducts } from '../services/cartService';
 
 const UPSELL_CATEGORY_ID = '6be9f7a5-70fd-41f0-b667-be6036ae6441';
 
@@ -22,6 +23,7 @@ const Cart = () => {
   const [discountError, setDiscountError] = useState(null);
   const [discountLoading, setDiscountLoading] = useState(false);
   const [upsellProducts, setUpsellProducts] = useState([]);
+  const [crossSellData, setCrossSellData] = useState({});
 
   useEffect(() => {
     setBreadcrumbs([
@@ -49,6 +51,23 @@ const Cart = () => {
       };
       fetchUpsellProducts();
   }, []);
+
+  useEffect(() => {
+      if (cart && (cart.cartId || cart.id)) {
+          const cartId = cart.cartId || cart.id;
+          getCrossSellProducts(cartId).then(data => {
+              const mapping = {};
+              data.forEach(item => {
+                  if (item.sourceProductId && item.crossSellProducts) {
+                      mapping[item.sourceProductId] = item.crossSellProducts;
+                  }
+              });
+              setCrossSellData(mapping);
+          }).catch(err => {
+              console.error("Failed to fetch cross-sell products", err);
+          });
+      }
+  }, [cart]);
 
   // GA4: Log view_cart
   const viewCartLogged = React.useRef(false);
@@ -157,7 +176,11 @@ const Cart = () => {
            <div>
               <div className="card">
                  {cartItems.map((item) => (
-                    <CartItem key={item.id || item.productId} item={item} />
+                    <CartItem
+                        key={item.id || item.productId}
+                        item={item}
+                        crossSellProducts={crossSellData[item.productId || item.id]}
+                    />
                  ))}
               </div>
            </div>
