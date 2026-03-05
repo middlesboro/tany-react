@@ -613,7 +613,7 @@ const ProductDetail = () => {
             </div>
 
             {product.images && product.images.length > 1 && (
-              <div className="flex gap-2 overflow-x-auto pb-2 justify-center thumbnail-gallery">
+              <div className="flex gap-2 overflow-x-auto pb-2 justify-start md:justify-center thumbnail-gallery">
                 {product.images.map((img, index) => (
                   <button
                     key={index}
