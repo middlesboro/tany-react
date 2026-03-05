@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { getOrders, deleteOrder, getOrder, exportToIsklad } from '../services/orderAdminService';
+import { getOrders, deleteOrder, getOrder, exportToIsklad, patchOrder } from '../services/orderAdminService';
 import { getCarriers } from '../services/carrierAdminService';
 import { getPayments } from '../services/paymentAdminService';
 import SearchSelect from './SearchSelect';
@@ -33,6 +33,10 @@ const OrderList = () => {
 
   const [refreshKey, setRefreshKey] = useState(0);
 
+  const [selectedOrders, setSelectedOrders] = useState([]);
+  const [bulkStatus, setBulkStatus] = useState('');
+  const [isUpdating, setIsUpdating] = useState(false);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -58,6 +62,7 @@ const OrderList = () => {
       if (!ignore) {
         setOrders(data.content);
         setTotalPages(data.totalPages);
+        setSelectedOrders([]); // Clear selection when data changes
       }
     };
     fetchOrders();
@@ -68,6 +73,47 @@ const OrderList = () => {
 
   const refreshOrders = () => {
     setRefreshKey((prev) => prev + 1);
+  };
+
+  const handleSelectAll = (e) => {
+    if (e.target.checked) {
+      setSelectedOrders(orders.map((order) => order.id));
+    } else {
+      setSelectedOrders([]);
+    }
+  };
+
+  const handleSelectOne = (e, id) => {
+    if (e.target.checked) {
+      setSelectedOrders([...selectedOrders, id]);
+    } else {
+      setSelectedOrders(selectedOrders.filter((orderId) => orderId !== id));
+    }
+  };
+
+  const handleBulkStatusUpdate = async () => {
+    if (!bulkStatus) {
+      alert('Please select a status.');
+      return;
+    }
+
+    if (window.confirm(`Are you sure you want to change status to "${ORDER_STATUS_MAPPING[bulkStatus] || bulkStatus}" for ${selectedOrders.length} orders?`)) {
+      setIsUpdating(true);
+      try {
+        await Promise.all(
+          selectedOrders.map((id) => patchOrder(id, { status: bulkStatus }))
+        );
+        alert('Bulk update successful.');
+        setBulkStatus('');
+        setSelectedOrders([]);
+        refreshOrders();
+      } catch (error) {
+        console.error('Bulk update failed:', error);
+        alert('Some updates failed. Check console and refresh to see current states.');
+      } finally {
+        setIsUpdating(false);
+      }
+    }
   };
 
   const handleDelete = async (id) => {
@@ -239,9 +285,42 @@ const OrderList = () => {
         </div>
       </div>
 
+      {selectedOrders.length > 0 && (
+        <div className="bg-blue-50 p-4 mb-4 rounded shadow border border-blue-200 flex items-center gap-4">
+          <span className="font-semibold text-blue-800">{selectedOrders.length} order(s) selected</span>
+          <select
+            value={bulkStatus}
+            onChange={(e) => setBulkStatus(e.target.value)}
+            className="px-3 py-2 border rounded"
+            disabled={isUpdating}
+          >
+            <option value="">Select new status</option>
+            {statusOptions.map((opt) => (
+              <option key={opt.id} value={opt.id}>
+                {opt.name}
+              </option>
+            ))}
+          </select>
+          <button
+            onClick={handleBulkStatusUpdate}
+            disabled={!bulkStatus || isUpdating}
+            className={`px-4 py-2 rounded text-white ${!bulkStatus || isUpdating ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'}`}
+          >
+            {isUpdating ? 'Updating...' : 'Apply Status Change'}
+          </button>
+        </div>
+      )}
+
       <table className="min-w-full bg-white">
         <thead>
           <tr>
+            <th className="py-2 px-4 border-b">
+              <input
+                type="checkbox"
+                onChange={handleSelectAll}
+                checked={orders.length > 0 && selectedOrders.length === orders.length}
+              />
+            </th>
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('orderIdentifier')}>
               Order ID
             </th>
@@ -270,6 +349,13 @@ const OrderList = () => {
         <tbody>
           {orders.map((order) => (
             <tr key={order.id}>
+              <td className="py-2 px-4 border-b text-center">
+                <input
+                  type="checkbox"
+                  checked={selectedOrders.includes(order.id)}
+                  onChange={(e) => handleSelectOne(e, order.id)}
+                />
+              </td>
               <td className="py-2 px-4 border-b">{order.orderIdentifier}</td>
               <td className="py-2 px-4 border-b">
                 {order.customerName}
