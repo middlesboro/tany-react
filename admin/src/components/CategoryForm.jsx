@@ -111,6 +111,32 @@ const CategoryForm = ({ category, handleChange, handleSubmit, categories = [], h
           Default Category
         </label>
       </div>
+      <div className="mb-4 flex items-center">
+        <input
+          type="checkbox"
+          id="active"
+          name="active"
+          checked={category.active !== undefined ? category.active : true}
+          onChange={handleChange}
+          className="mr-2"
+        />
+        <label htmlFor="active" className="text-gray-700 cursor-pointer">
+          Active
+        </label>
+      </div>
+      <div className="mb-4 flex items-center">
+        <input
+          type="checkbox"
+          id="visible"
+          name="visible"
+          checked={category.visible !== undefined ? category.visible : true}
+          onChange={handleChange}
+          className="mr-2"
+        />
+        <label htmlFor="visible" className="text-gray-700 cursor-pointer">
+          Visible
+        </label>
+      </div>
       <div className="mb-4">
         <MultiSearchSelect
           label="Filter Parameters"

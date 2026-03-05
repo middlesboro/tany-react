@@ -19,6 +19,8 @@ const CategoryEdit = () => {
     slug: '',
     parentId: '',
     defaultCategory: false,
+    active: true,
+    visible: true,
     filterParameters: [],
     excludedFilterParameters: [],
   });
@@ -41,6 +43,8 @@ const CategoryEdit = () => {
         const data = await getCategory(id);
         setCategory({
           ...data,
+          active: data.active !== undefined ? data.active : true,
+          visible: data.visible !== undefined ? data.visible : true,
           filterParameters: data.filterParameters || [],
           excludedFilterParameters: data.excludedFilterParameters || [],
         });

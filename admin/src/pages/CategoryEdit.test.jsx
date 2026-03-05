@@ -64,6 +64,27 @@ describe('CategoryEdit', () => {
     expect(checkbox).toBeChecked();
   });
 
+  test('renders active and visible checkboxes and handles change', async () => {
+    await act(async () => {
+      renderWithRouter(<CategoryEdit />);
+    });
+
+    const activeCheckbox = screen.getByLabelText(/Active/i);
+    const visibleCheckbox = screen.getByLabelText(/Visible/i);
+
+    expect(activeCheckbox).toBeInTheDocument();
+    expect(activeCheckbox).toBeChecked(); // Default is true
+
+    expect(visibleCheckbox).toBeInTheDocument();
+    expect(visibleCheckbox).toBeChecked(); // Default is true
+
+    fireEvent.click(activeCheckbox);
+    expect(activeCheckbox).not.toBeChecked();
+
+    fireEvent.click(visibleCheckbox);
+    expect(visibleCheckbox).not.toBeChecked();
+  });
+
   test('submits defaultCategory value', async () => {
     let container;
     await act(async () => {
@@ -83,7 +104,37 @@ describe('CategoryEdit', () => {
     await waitFor(() => {
       expect(categoryAdminService.createCategory).toHaveBeenCalledWith(expect.objectContaining({
         defaultCategory: true,
-        title: 'Test Cat'
+        title: 'Test Cat',
+        active: true,
+        visible: true
+      }));
+    });
+  });
+
+  test('submits un-checked active and visible values', async () => {
+    let container;
+    await act(async () => {
+      const result = renderWithRouter(<CategoryEdit />);
+      container = result.container;
+    });
+
+    const activeCheckbox = screen.getByLabelText(/Active/i);
+    const visibleCheckbox = screen.getByLabelText(/Visible/i);
+
+    fireEvent.click(activeCheckbox);
+    fireEvent.click(visibleCheckbox);
+
+    const titleInput = container.querySelector('input[name="title"]');
+    fireEvent.change(titleInput, { target: { value: 'Test Cat 2' } });
+
+    const saveButton = screen.getByText('Save');
+    fireEvent.click(saveButton);
+
+    await waitFor(() => {
+      expect(categoryAdminService.createCategory).toHaveBeenCalledWith(expect.objectContaining({
+        title: 'Test Cat 2',
+        active: false,
+        visible: false
       }));
     });
   });
