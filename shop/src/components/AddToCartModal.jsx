@@ -38,7 +38,7 @@ const AddToCartModal = () => {
 
   return (
     <div className="fixed inset-0 z-[60] flex items-center justify-center bg-black bg-opacity-50 p-4">
-      <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl relative overflow-hidden flex flex-col max-h-[90vh]">
+      <div className="bg-white rounded-lg shadow-xl w-full max-w-4xl relative overflow-hidden flex flex-col max-h-full">
         {/* Close button */}
         <button
           onClick={closeAddToCartModal}
@@ -49,7 +49,7 @@ const AddToCartModal = () => {
           </svg>
         </button>
 
-        <div className="p-6 border-b border-gray-200">
+        <div className="p-6 border-b border-gray-200 flex-shrink-0">
              <div className="flex items-center text-tany-green mb-4">
                 <svg className="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7"></path></svg>
                 <h2 className="text-xl font-bold">Produkt bol pridaný do košíka</h2>
