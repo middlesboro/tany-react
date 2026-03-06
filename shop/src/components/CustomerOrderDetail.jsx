@@ -32,6 +32,7 @@ const CustomerOrderDetail = ({ orderId, onBack }) => {
 
   const deliveryItem = order.priceBreakDown?.items?.find(i => i.type === 'CARRIER');
   const deliveryPrice = deliveryItem ? deliveryItem.priceWithVat : (order.deliveryPrice || 0);
+  const discountItems = order.priceBreakDown?.items?.filter(i => i.type === 'DISCOUNT') || [];
 
   return (
     <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -114,19 +115,19 @@ const CustomerOrderDetail = ({ orderId, onBack }) => {
       <div className="mb-8">
         <h3 className="text-lg font-bold mb-4">Položky objednávky</h3>
         <div className="overflow-x-auto">
-          <table className="min-w-full leading-normal">
+          <table className="w-full leading-normal">
              <thead>
                <tr>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Produkt</th>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Cena</th>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Množstvo</th>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Spolu</th>
+                 <th className="px-2 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase">Produkt</th>
+                 <th className="px-2 py-3 border-b-2 border-gray-200 bg-gray-100 text-right text-xs font-semibold text-gray-600 uppercase">Cena</th>
+                 <th className="px-2 py-3 border-b-2 border-gray-200 bg-gray-100 text-right text-xs font-semibold text-gray-600 uppercase">Množstvo</th>
+                 <th className="px-2 py-3 border-b-2 border-gray-200 bg-gray-100 text-right text-xs font-semibold text-gray-600 uppercase">Spolu</th>
                </tr>
              </thead>
              <tbody>
                {order.items && order.items.map((item) => (
                  <tr key={item.id}>
-                   <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm flex items-center">
+                   <td className="px-2 py-5 border-b border-gray-200 bg-white text-sm flex items-center">
                      {item.image && (
                        <img src={item.image} alt={item.name} className="w-10 h-10 object-cover rounded mr-4" />
                      )}
@@ -143,7 +144,7 @@ const CustomerOrderDetail = ({ orderId, onBack }) => {
                          )}
                      </div>
                    </td>
-                   <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
+                   <td className="px-2 py-5 border-b border-gray-200 bg-white text-sm text-right">
                      {item.discountPrice ? (
                         <div className="flex flex-col items-end">
                             <span className="text-xs text-gray-400 line-through">{item.price?.toFixed(2)} €</span>
@@ -153,10 +154,10 @@ const CustomerOrderDetail = ({ orderId, onBack }) => {
                         <span>{item.price?.toFixed(2)} €</span>
                      )}
                    </td>
-                   <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
+                   <td className="px-2 py-5 border-b border-gray-200 bg-white text-sm text-right">
                      {item.quantity}
                    </td>
-                   <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right font-bold">
+                   <td className="px-2 py-5 border-b border-gray-200 bg-white text-sm text-right font-bold">
                      {((item.discountPrice || item.price) * item.quantity).toFixed(2)} €
                    </td>
                  </tr>
@@ -180,6 +181,12 @@ const CustomerOrderDetail = ({ orderId, onBack }) => {
                 {deliveryPrice.toFixed(2)} €
              </span>
            </div>
+           {discountItems.map((item, idx) => (
+               <div key={idx} className="flex justify-between py-2 border-b border-gray-100 text-green-600">
+                   <span>{item.name}:</span>
+                   <span className="font-medium">{(item.priceWithVat * (item.quantity || 1)).toFixed(2)} €</span>
+               </div>
+           ))}
            <div className="flex justify-between py-2 border-b border-gray-100">
              <span className="text-gray-600">Cena bez DPH:</span>
              <span className="font-medium">

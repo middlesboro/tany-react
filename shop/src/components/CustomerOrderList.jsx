@@ -42,22 +42,22 @@ const CustomerOrderList = ({ onOrderSelect }) => {
   return (
     <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
       <div className="overflow-x-auto">
-        <table className="min-w-full leading-normal">
+        <table className="w-full leading-normal">
           <thead>
             <tr>
-              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+              <th className="px-2 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase">
                 Číslo objednávky
               </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+              <th className="px-2 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase">
                 Dátum vytvorenia
               </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+              <th className="px-2 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase">
                 Stav
               </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+              <th className="px-2 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase">
                 Cena
               </th>
-              <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+              <th className="px-2 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase">
                 Akcia
               </th>
             </tr>
@@ -65,22 +65,22 @@ const CustomerOrderList = ({ onOrderSelect }) => {
           <tbody>
             {orders.map((order) => (
               <tr key={order.id}>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-nowrap">{order.orderIdentifier}</p>
+                <td className="px-2 py-5 border-b border-gray-200 bg-white text-sm">
+                  <p className="text-gray-900">{order.orderIdentifier}</p>
                 </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-nowrap">{new Date(order.createDate).toLocaleString('sk-SK')}</p>
+                <td className="px-2 py-5 border-b border-gray-200 bg-white text-sm">
+                  <p className="text-gray-900">{new Date(order.createDate).toLocaleString('sk-SK')}</p>
                 </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                <td className="px-2 py-5 border-b border-gray-200 bg-white text-sm">
                   <span className={`relative inline-block px-3 py-1 font-semibold leading-tight text-gray-900`}>
                     <span aria-hidden className="absolute inset-0 bg-gray-200 opacity-50 rounded-full"></span>
                     <span className="relative">{ORDER_STATUS_MAPPING[order.status] || order.status}</span>
                   </span>
                 </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                  <p className="text-gray-900 whitespace-nowrap">{order.finalPrice?.toFixed(2)} €</p>
+                <td className="px-2 py-5 border-b border-gray-200 bg-white text-sm">
+                  <p className="text-gray-900">{order.finalPrice?.toFixed(2)} €</p>
                 </td>
-                <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                <td className="px-2 py-5 border-b border-gray-200 bg-white text-sm">
                   <button
                     onClick={() => onOrderSelect(order.id)}
                     className="text-tany-green hover:text-green-800 font-medium"
