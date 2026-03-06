@@ -1,0 +1,177 @@
+{
+  "body": {
+    "rows": [
+      {
+        "cells": [1],
+        "columns": [
+          {
+            "contents": [
+              {
+                "type": "image",
+                "values": {
+                  "src": {
+                    "url": "https://dummyimage.com/150x100/4CAF50/ffffff.png&text=Logo",
+                    "width": 150,
+                    "height": 100
+                  },
+                  "altText": "Logo"
+                }
+              }
+            ],
+            "values": {}
+          }
+        ],
+        "values": {}
+      },
+      {
+        "cells": [1],
+        "columns": [
+          {
+            "contents": [
+              {
+                "type": "text",
+                "values": {
+                  "text": "<p style=\"text-align: center;\">Ďakujeme, že ste sa pridali do nášho odberu noviniek. Ako odmenu vám posielame zľavu 10% na prvý nákup henna produktov :)</p>"
+                }
+              }
+            ],
+            "values": {}
+          }
+        ],
+        "values": {}
+      },
+      {
+        "cells": [1, 1],
+        "columns": [
+          {
+            "contents": [
+              {
+                "type": "text",
+                "values": {
+                  "text": "<h2 style=\"text-align: center;\">VÁŠ KUPÓN NA ZĽAVU</h2>"
+                }
+              }
+            ],
+            "values": {}
+          },
+          {
+            "contents": [
+              {
+                "type": "text",
+                "values": {
+                  "text": "<div style=\"background-color: #7cb342; padding: 20px; text-align: center;\"><h1 style=\"color: #fbc02d; font-size: 3em; margin: 0;\">- 10%</h1><p style=\"color: white; font-weight: bold;\">Kupón použite na stránke s objednávkou</p><div style=\"background-color: #f5f5f5; padding: 10px; margin-top: 10px; font-weight: bold; font-size: 1.5em; color: black;\">1WU8HJV5</div></div>"
+                }
+              }
+            ],
+            "values": {
+              "backgroundColor": "#7cb342",
+              "padding": "20px"
+            }
+          }
+        ],
+        "values": {}
+      },
+      {
+        "cells": [1],
+        "columns": [
+          {
+            "contents": [
+              {
+                "type": "button",
+                "values": {
+                  "text": "Do obchodu",
+                  "backgroundColor": "#7cb342",
+                  "color": "#ffffff",
+                  "borderRadius": "5px",
+                  "href": {
+                    "name": "web",
+                    "values": {
+                      "href": "#",
+                      "target": "_blank"
+                    }
+                  }
+                }
+              }
+            ],
+            "values": {}
+          }
+        ],
+        "values": {}
+      },
+      {
+        "cells": [1],
+        "columns": [
+          {
+            "contents": [
+              {
+                "type": "text",
+                "values": {
+                  "text": "<h2 style=\"text-align: center; color: #7cb342;\">Ako nás hodnotia naši zákazníci</h2>"
+                }
+              }
+            ],
+            "values": {}
+          }
+        ],
+        "values": {}
+      },
+      {
+        "cells": [1],
+        "columns": [
+          {
+            "contents": [
+              {
+                "type": "image",
+                "values": {
+                  "src": {
+                    "url": "https://dummyimage.com/600x300/e0e0e0/000000.png&text=Heureka+Reviews+Mockup",
+                    "width": 600,
+                    "height": 300
+                  },
+                  "altText": "Reviews Mockup"
+                }
+              }
+            ],
+            "values": {}
+          }
+        ],
+        "values": {}
+      },
+      {
+        "cells": [1, 1],
+        "columns": [
+          {
+            "contents": [
+              {
+                "type": "text",
+                "values": {
+                  "text": "<p><strong>Tany.sk</strong><br>Budatínska 24, Bratislava<br>Slovakia</p>"
+                }
+              }
+            ],
+            "values": {}
+          },
+          {
+            "contents": [
+              {
+                "type": "text",
+                "values": {
+                  "text": "<p style=\"text-align: right; font-size: 0.8em;\">Tento email Vám bol zaslaný, pretože ste prihlásený k odberu noviniek na našej stránke Tany.sk.<br>Neprajete si naďalej dostávať naše emaily?</p><p style=\"text-align: right; font-size: 0.8em;\"><a href=\"#\">To nás mrzí. Odhlásiť sa môžete kliknutím na tento odkaz.</a></p>"
+                }
+              }
+            ],
+            "values": {}
+          }
+        ],
+        "values": {}
+      }
+    ],
+    "values": {
+      "backgroundColor": "#ffffff",
+      "fontFamily": {
+        "label": "Arial",
+        "value": "arial,helvetica,sans-serif"
+      }
+    }
+  }
+}

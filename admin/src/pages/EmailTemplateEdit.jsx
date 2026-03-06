@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getEmailTemplate, createEmailTemplate, updateEmailTemplate } from '../services/emailTemplateAdminService';
 import EmailTemplateForm from '../components/EmailTemplateForm';
 import ErrorAlert from '../components/ErrorAlert';
+import defaultEmailTemplate from '../data/defaultEmailTemplate.json';
 
 const EmailTemplateEdit = () => {
   const { id } = useParams();
@@ -11,7 +12,7 @@ const EmailTemplateEdit = () => {
   const [isLoading, setIsLoading] = useState(!!id);
   const [emailTemplate, setEmailTemplate] = useState({
     name: '',
-    content: '',
+    content: id ? '' : JSON.stringify(defaultEmailTemplate),
     active: false,
   });
 
@@ -82,6 +83,7 @@ const EmailTemplateEdit = () => {
         handleChange={handleChange}
         handleSubmit={handleSubmit}
         handleSaveAndStay={handleSaveAndStay}
+        isNew={!id}
       />
     </div>
   );
