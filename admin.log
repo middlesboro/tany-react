@@ -16,3 +16,4 @@ To eliminate this warning, add "type": "module" to /app/admin/package.json.
 10:14:25 AM [vite] (client) hmr update /src/components/EmailTemplateForm.jsx, /src/index.css
 10:14:36 AM [vite] (client) hmr update /src/pages/EmailTemplateEdit.jsx, /src/index.css
 10:14:42 AM [vite] (client) hmr update /src/pages/EmailTemplateEdit.jsx, /src/index.css
+10:35:58 AM [vite] (client) hmr update /src/components/EmailTemplateForm.jsx, /src/index.css

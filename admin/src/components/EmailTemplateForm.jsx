@@ -47,8 +47,8 @@ const EmailTemplateForm = ({ emailTemplate, handleChange, handleSubmit, handleSa
   };
 
   return (
-    <form onSubmit={onSave} className="bg-white p-6 rounded shadow-md flex flex-col h-[80vh]">
-      <div className="mb-4">
+    <form onSubmit={onSave} className="bg-white p-6 rounded shadow-md flex flex-col h-[calc(100vh-120px)]">
+      <div className="mb-4 flex-none">
         <label className="block text-gray-700 font-bold mb-2">Name</label>
         <input
           type="text"
@@ -60,7 +60,7 @@ const EmailTemplateForm = ({ emailTemplate, handleChange, handleSubmit, handleSa
         />
       </div>
 
-      <div className="mb-4">
+      <div className="mb-4 flex-none">
         <label className="flex items-center">
           <input
             type="checkbox"
@@ -73,12 +73,14 @@ const EmailTemplateForm = ({ emailTemplate, handleChange, handleSubmit, handleSa
         </label>
       </div>
 
-      <div className="mb-4 flex-1">
-        <label className="block text-gray-700 font-bold mb-2">Content</label>
-        <div className="border rounded h-full min-h-[500px]">
+      <div className="flex-1 flex flex-col min-h-0">
+        <label className="block text-gray-700 font-bold mb-2 flex-none">Content</label>
+        <div className="border rounded flex-1 min-h-0 overflow-hidden relative">
           <EmailEditor
             ref={emailEditorRef}
             onReady={onReady}
+            style={{ width: '100%', height: '100%' }}
+            minHeight="100%"
             options={{
               projectId: import.meta.env.VITE_UNLAYER_PROJECT_ID || undefined,
               displayMode: "email",
@@ -88,7 +90,7 @@ const EmailTemplateForm = ({ emailTemplate, handleChange, handleSubmit, handleSa
         </div>
       </div>
 
-      <div className="flex gap-2 mt-4">
+      <div className="flex gap-2 mt-4 flex-none">
         <button type="submit" className="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded">
           Save
         </button>
