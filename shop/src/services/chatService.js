@@ -1,6 +1,6 @@
 export const sendAssistantMessage = async (message) => {
     try {
-        const response = await fetch('/api/chat/assistant', {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}${import.meta.env.VITE_API_URL}/chat/assistant`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -21,7 +21,7 @@ export const sendAssistantMessage = async (message) => {
 
 export const sendSupportMessage = async ({ message, email }) => {
     try {
-        const response = await fetch('/api/chat/message', {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}${import.meta.env.VITE_API_URL}/chat/message`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
