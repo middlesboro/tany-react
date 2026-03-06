@@ -40,7 +40,7 @@ describe('CustomerOrderList Component', () => {
 
     // Wait for loading to finish
     await waitFor(() => {
-        expect(screen.getByText('ORD-123')).toBeInTheDocument();
+        expect(screen.getByText('Objednávka #ORD-123')).toBeInTheDocument();
     });
 
     // Check if prices are rendered
