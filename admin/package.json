@@ -8,6 +8,7 @@
     "@testing-library/user-event": "^13.5.0",
     "react": "^19.2.3",
     "react-dom": "^19.2.3",
+    "react-email-editor": "^1.7.11",
     "react-quill-new": "^3.7.0",
     "web-vitals": "^2.1.4"
   },
