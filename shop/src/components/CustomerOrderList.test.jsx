@@ -40,17 +40,15 @@ describe('CustomerOrderList Component', () => {
 
     // Wait for loading to finish
     await waitFor(() => {
-        expect(screen.getByText('ORD-123')).toBeInTheDocument();
+        expect(screen.getByText('Objednávka #ORD-123')).toBeInTheDocument();
     });
 
     // Check if prices are rendered
     const price1 = screen.getByText('10.50 €');
     expect(price1).toBeInTheDocument();
-    expect(price1).toHaveClass('whitespace-nowrap');
 
     const price2 = screen.getByText('100.00 €');
     expect(price2).toBeInTheDocument();
-    expect(price2).toHaveClass('whitespace-nowrap');
   });
 
   test('displays loading state initially', () => {

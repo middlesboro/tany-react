@@ -32,6 +32,7 @@ const CustomerOrderDetail = ({ orderId, onBack }) => {
 
   const deliveryItem = order.priceBreakDown?.items?.find(i => i.type === 'CARRIER');
   const deliveryPrice = deliveryItem ? deliveryItem.priceWithVat : (order.deliveryPrice || 0);
+  const discountItems = order.priceBreakDown?.items?.filter(i => i.type === 'DISCOUNT') || [];
 
   return (
     <div className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -111,58 +112,48 @@ const CustomerOrderDetail = ({ orderId, onBack }) => {
         </div>
       </div>
 
-      <div className="mb-8">
-        <h3 className="text-lg font-bold mb-4">Položky objednávky</h3>
-        <div className="overflow-x-auto">
-          <table className="min-w-full leading-normal">
-             <thead>
-               <tr>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">Produkt</th>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Cena</th>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Množstvo</th>
-                 <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-right text-xs font-semibold text-gray-600 uppercase tracking-wider">Spolu</th>
-               </tr>
-             </thead>
-             <tbody>
-               {order.items && order.items.map((item) => (
-                 <tr key={item.id}>
-                   <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm flex items-center">
-                     {item.image && (
-                       <img src={item.image} alt={item.name} className="w-10 h-10 object-cover rounded mr-4" />
-                     )}
-                     <div className="flex-1">
-                         {item.slug || item.productSlug ? (
-                           <Link to={`/produkt/${item.slug || item.productSlug}`} className="text-gray-900 hover:text-tany-green hover:underline block">
-                             {item.name}
-                           </Link>
-                         ) : (
-                           <span className="text-gray-900 block">{item.name}</span>
-                         )}
-                         {item.externalStock && (
-                            <div className="text-xs text-tany-green mt-0.5">Skladom u dodávateľa</div>
-                         )}
-                     </div>
-                   </td>
-                   <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
-                     {item.discountPrice ? (
-                        <div className="flex flex-col items-end">
-                            <span className="text-xs text-gray-400 line-through">{item.price?.toFixed(2)} €</span>
-                            <span className="text-red-600 font-bold">{item.discountPrice.toFixed(2)} €</span>
-                        </div>
+      <div className="mb-8 border border-gray-200 rounded-lg p-4 bg-white shadow-sm">
+        <h3 className="text-lg font-bold mb-4 border-b border-gray-100 pb-2">Položky objednávky</h3>
+        <div className="flex flex-col gap-4">
+           {order.items && order.items.map((item) => (
+             <div key={item.id} className="border-b border-gray-100 pb-4 last:border-0 last:pb-0 flex flex-col sm:flex-row gap-4 items-start sm:items-center">
+               <div className="flex items-center gap-4 w-full sm:w-auto flex-1">
+                 {item.image && (
+                   <img src={item.image} alt={item.name} className="w-16 h-16 object-cover rounded" />
+                 )}
+                 <div className="flex-1 min-w-0">
+                     {item.slug || item.productSlug ? (
+                       <Link to={`/produkt/${item.slug || item.productSlug}`} className="text-gray-900 hover:text-tany-green hover:underline font-medium block leading-tight">
+                         {item.name}
+                       </Link>
                      ) : (
-                        <span>{item.price?.toFixed(2)} €</span>
+                       <span className="text-gray-900 font-medium block leading-tight">{item.name}</span>
                      )}
-                   </td>
-                   <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right">
-                     {item.quantity}
-                   </td>
-                   <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm text-right font-bold">
-                     {((item.discountPrice || item.price) * item.quantity).toFixed(2)} €
-                   </td>
-                 </tr>
-               ))}
-             </tbody>
-          </table>
+                     {item.externalStock && (
+                        <div className="text-xs text-tany-green mt-1">Skladom u dodávateľa</div>
+                     )}
+                     <div className="text-sm text-gray-500 mt-1">
+                        Množstvo: {item.quantity}
+                     </div>
+                 </div>
+               </div>
+               <div className="flex flex-row sm:flex-col justify-between items-center sm:items-end w-full sm:w-auto mt-2 sm:mt-0 pt-2 sm:pt-0 border-t border-gray-50 sm:border-0">
+                 <div className="text-sm text-gray-500">
+                   {item.discountPrice ? (
+                      <div className="flex flex-row sm:flex-col gap-2 sm:gap-0 items-center sm:items-end">
+                          <span className="text-xs text-gray-400 line-through">{item.price?.toFixed(2)} € / ks</span>
+                          <span className="text-red-600 font-semibold">{item.discountPrice.toFixed(2)} € / ks</span>
+                      </div>
+                   ) : (
+                      <span>{item.price?.toFixed(2)} € / ks</span>
+                   )}
+                 </div>
+                 <div className="font-bold text-gray-900 ml-4 sm:ml-0 sm:mt-1 text-lg">
+                   {((item.discountPrice || item.price) * item.quantity).toFixed(2)} €
+                 </div>
+               </div>
+             </div>
+           ))}
         </div>
       </div>
 
@@ -180,6 +171,12 @@ const CustomerOrderDetail = ({ orderId, onBack }) => {
                 {deliveryPrice.toFixed(2)} €
              </span>
            </div>
+           {discountItems.map((item, idx) => (
+               <div key={idx} className="flex justify-between py-2 border-b border-gray-100 text-green-600">
+                   <span>{item.name}:</span>
+                   <span className="font-medium">{(item.priceWithVat * (item.quantity || 1)).toFixed(2)} €</span>
+               </div>
+           ))}
            <div className="flex justify-between py-2 border-b border-gray-100">
              <span className="text-gray-600">Cena bez DPH:</span>
              <span className="font-medium">
