@@ -12,6 +12,7 @@ export const initGA = () => {
     // Check if ID is present to avoid errors in dev/test if missing
     if (GA_MEASUREMENT_ID && !ReactGA.isInitialized) {
         ReactGA.initialize(GA_MEASUREMENT_ID);
+        ReactGA.set({ language: 'sk-sk' });
     }
 };
 
