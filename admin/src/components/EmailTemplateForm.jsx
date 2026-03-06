@@ -1,8 +1,9 @@
 import React, { useRef, useEffect } from 'react';
 import EmailEditor from 'react-email-editor';
 
-const EmailTemplateForm = ({ emailTemplate, handleChange, handleSubmit, handleSaveAndStay }) => {
+const EmailTemplateForm = ({ emailTemplate, handleChange, handleSubmit, handleSaveAndStay, isNew }) => {
   const emailEditorRef = useRef(null);
+  const fileInputRef = useRef(null);
 
   const onReady = () => {
     if (emailTemplate.content) {
@@ -46,6 +47,37 @@ const EmailTemplateForm = ({ emailTemplate, handleChange, handleSubmit, handleSa
     handleFormSubmit(e, handleSaveAndStay);
   };
 
+  const handleImportJson = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const content = event.target.result;
+          const design = JSON.parse(content);
+          if (emailEditorRef.current?.editor) {
+            emailEditorRef.current.editor.loadDesign(design);
+          }
+          const fakeEvent = {
+            target: {
+              name: 'content',
+              value: content
+            }
+          };
+          handleChange(fakeEvent);
+        } catch (error) {
+          console.error("Failed to parse imported JSON:", error);
+          alert("Invalid JSON file");
+        }
+      };
+      reader.readAsText(file);
+    }
+  };
+
+  const triggerFileInput = () => {
+    fileInputRef.current?.click();
+  };
+
   return (
     <form onSubmit={onSave} className="bg-white p-6 rounded shadow-md flex flex-col [80vh]">
       <div className="mb-4">
@@ -74,7 +106,27 @@ const EmailTemplateForm = ({ emailTemplate, handleChange, handleSubmit, handleSa
       </div>
 
       <div className="flex-1 flex flex-col min-h-96">
-        <label className="block text-gray-700 font-bold mb-2 flex-none">Content</label>
+        <div className="flex justify-between items-center mb-2 flex-none">
+          <label className="block text-gray-700 font-bold">Content</label>
+          {isNew && (
+            <div>
+              <input
+                type="file"
+                accept=".json"
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+                onChange={handleImportJson}
+              />
+              <button
+                type="button"
+                onClick={triggerFileInput}
+                className="bg-gray-200 hover:bg-gray-300 text-gray-800 text-sm px-3 py-1 rounded shadow"
+              >
+                Import from JSON
+              </button>
+            </div>
+          )}
+        </div>
         <div className="border rounded flex-1 min-h-96 overflow-hidden relative">
           <EmailEditor
             ref={emailEditorRef}
