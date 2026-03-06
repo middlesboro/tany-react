@@ -151,7 +151,7 @@ const CartItem = ({ item, crossSellProducts }) => {
                        onBlur={() => handleUpdate()}
                        onKeyDown={handleKeyDown}
                        disabled={updating}
-                       className="w-12 text-center focus:outline-none disabled:bg-transparent"
+                       className="w-12 sm:!w-12 !py-2 sm:!py-0 !px-0 sm:!h-8 text-center focus:outline-none disabled:bg-transparent border-none"
                        aria-label="Quantity"
                    />
                    <button
