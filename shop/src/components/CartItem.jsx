@@ -15,8 +15,9 @@ const CartItem = ({ item, crossSellProducts }) => {
     setQuantity(item.quantity);
   }, [item.quantity]);
 
-  const handleUpdate = async () => {
-    const newQuantity = parseInt(quantity, 10);
+  const handleUpdate = async (overrideQuantity) => {
+    const val = overrideQuantity !== undefined ? overrideQuantity : quantity;
+    const newQuantity = parseInt(val, 10);
     if (isNaN(newQuantity) || newQuantity < 1) {
        setQuantity(item.quantity);
        return;
@@ -24,6 +25,7 @@ const CartItem = ({ item, crossSellProducts }) => {
 
     if (newQuantity === item.quantity) return;
 
+    setQuantity(newQuantity);
     setUpdating(true);
     try {
       await addToCart(item.productId || item.id, newQuantity);
@@ -36,6 +38,18 @@ const CartItem = ({ item, crossSellProducts }) => {
       setQuantity(item.quantity);
     } finally {
       setUpdating(false);
+    }
+  };
+
+  const increaseQty = () => {
+    const currentQty = parseInt(quantity, 10) || 1;
+    handleUpdate(currentQty + 1);
+  };
+
+  const decreaseQty = () => {
+    const currentQty = parseInt(quantity, 10) || 1;
+    if (currentQty > 1) {
+      handleUpdate(currentQty - 1);
     }
   };
 
@@ -119,18 +133,36 @@ const CartItem = ({ item, crossSellProducts }) => {
             {/* Controls */}
             <div className="mt-3 sm:mt-0 flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto">
                {/* Quantity */}
-               <div>
+               <div className="flex items-center border border-gray-300 rounded">
+                   <button
+                       type="button"
+                       onClick={decreaseQty}
+                       disabled={updating}
+                       className="px-2 py-1 text-gray-600 hover:bg-gray-100 transition disabled:opacity-50"
+                       aria-label="Znížiť množstvo"
+                   >
+                       -
+                   </button>
                    <input
                        type="number"
                        min="1"
                        value={quantity}
                        onChange={(e) => setQuantity(e.target.value)}
-                       onBlur={handleUpdate}
+                       onBlur={() => handleUpdate()}
                        onKeyDown={handleKeyDown}
                        disabled={updating}
-                       className="w-16 text-center"
+                       className="w-12 text-center focus:outline-none disabled:bg-transparent"
                        aria-label="Quantity"
                    />
+                   <button
+                       type="button"
+                       onClick={increaseQty}
+                       disabled={updating}
+                       className="px-2 py-1 text-gray-600 hover:bg-gray-100 transition disabled:opacity-50"
+                       aria-label="Zvýšiť množstvo"
+                   >
+                       +
+                   </button>
                </div>
 
                {/* Total - Desktop Only */}
