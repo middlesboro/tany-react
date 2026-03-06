@@ -42,6 +42,14 @@ const menuItems = [
     ]
   },
   {
+    title: 'Emails',
+    children: [
+      { title: 'Customer Emails', path: '/customer-emails' },
+      { title: 'Email Campaigns', path: '/email-campaigns' },
+      { title: 'Email Templates', path: '/email-templates' },
+    ]
+  },
+  {
     title: 'Pages',
     path: '/pages'
   },

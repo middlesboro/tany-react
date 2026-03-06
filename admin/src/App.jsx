@@ -41,6 +41,12 @@ import CartDiscounts from './pages/CartDiscounts';
 import CartDiscountEdit from './pages/CartDiscountEdit';
 import Wishlists from './pages/Wishlists';
 import IskladInventoryDifferences from './pages/IskladInventoryDifferences';
+import CustomerEmails from './pages/CustomerEmails';
+import CustomerEmailEdit from './pages/CustomerEmailEdit';
+import EmailCampaigns from './pages/EmailCampaigns';
+import EmailCampaignEdit from './pages/EmailCampaignEdit';
+import EmailTemplates from './pages/EmailTemplates';
+import EmailTemplateEdit from './pages/EmailTemplateEdit';
 import { BreadcrumbProvider } from './context/BreadcrumbContext';
 import ScrollToTop from './components/ScrollToTop';
 
@@ -100,6 +106,15 @@ function App() {
               <Route path="customers/new" element={<CustomerEdit />} />
               <Route path="customers/:id" element={<CustomerEdit />} />
               <Route path="customer-messages" element={<CustomerMessages />} />
+              <Route path="customer-emails" element={<CustomerEmails />} />
+              <Route path="customer-emails/new" element={<CustomerEmailEdit />} />
+              <Route path="customer-emails/:id" element={<CustomerEmailEdit />} />
+              <Route path="email-campaigns" element={<EmailCampaigns />} />
+              <Route path="email-campaigns/new" element={<EmailCampaignEdit />} />
+              <Route path="email-campaigns/:id" element={<EmailCampaignEdit />} />
+              <Route path="email-templates" element={<EmailTemplates />} />
+              <Route path="email-templates/new" element={<EmailTemplateEdit />} />
+              <Route path="email-templates/:id" element={<EmailTemplateEdit />} />
               <Route path="brands" element={<Brands />} />
               <Route path="brands/new" element={<BrandEdit />} />
               <Route path="brands/:id" element={<BrandEdit />} />
