@@ -7,6 +7,7 @@ import OAuthCallbackPage from './pages/OAuthCallbackPage';
 import AdminLayout from './components/AdminLayout';
 import Products from './pages/Products';
 import ProductEdit from './pages/ProductEdit';
+import ProductImport from './pages/ProductImport';
 import Categories from './pages/Categories';
 import CategoryEdit from './pages/CategoryEdit';
 import Customers from './pages/Customers';
@@ -98,6 +99,7 @@ function App() {
               <Route path="homepage-grids/:id" element={<HomepageGridEdit />} />
               <Route path="products" element={<Products />} />
               <Route path="products/new" element={<ProductEdit />} />
+              <Route path="products/import" element={<ProductImport />} />
               <Route path="products/:id" element={<ProductEdit />} />
               <Route path="categories" element={<Categories />} />
               <Route path="categories/new" element={<CategoryEdit />} />

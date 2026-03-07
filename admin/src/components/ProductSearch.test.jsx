@@ -18,12 +18,10 @@ const mockProducts = [
 
 describe('ProductSearch', () => {
   beforeEach(() => {
-    vi.useFakeTimers();
     searchProducts.mockResolvedValue(mockProducts);
   });
 
   afterEach(() => {
-    vi.useRealTimers();
     vi.clearAllMocks();
   });
 
@@ -37,15 +35,13 @@ describe('ProductSearch', () => {
     });
 
     const input = screen.getByPlaceholderText('Hľadať v obchode...');
-    fireEvent.change(input, { target: { value: 'Test' } });
 
-    // Advance timers to trigger debounce
     await act(async () => {
-      vi.advanceTimersByTime(1000);
+        fireEvent.change(input, { target: { value: 'Test' } });
     });
 
     await waitFor(() => {
-      expect(searchProducts).toHaveBeenCalledWith('Test');
+        expect(searchProducts).toHaveBeenCalledWith('Test');
     });
 
     const title = await screen.findByText('Test Product');
@@ -57,5 +53,5 @@ describe('ProductSearch', () => {
     // Check if description is NOT present
     const description = screen.queryByText('This is a description');
     expect(description).not.toBeInTheDocument();
-  });
+  }, 10000);
 });
