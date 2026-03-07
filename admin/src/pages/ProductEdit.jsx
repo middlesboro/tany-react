@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { getProduct, createProduct, updateProduct, importProductImages } from '../services/productAdminService';
+import { getProduct, createProduct, updateProduct } from '../services/productAdminService';
 import { getBrands } from '../services/brandAdminService';
 import { getSuppliers } from '../services/supplierAdminService';
 import { getCategories } from '../services/categoryAdminService';
@@ -107,19 +107,8 @@ const ProductEdit = () => {
       const duplicateData = location.state.duplicateProduct;
       setProduct(mapProductToState({ ...duplicateData, images: [] }));
     } else if (location.state?.importedProduct) {
-      const fetchImportedImages = async () => {
-        const importedData = location.state.importedProduct;
-        let images = [];
-        if (importedData.images && importedData.images.length > 0) {
-          try {
-            images = await importProductImages(importedData.images);
-          } catch (err) {
-            console.error('Failed to import images', err);
-          }
-        }
-        setProduct(mapProductToState({ ...importedData, images }));
-      };
-      fetchImportedImages();
+      const importedData = location.state.importedProduct;
+      setProduct(mapProductToState({ ...importedData }));
     }
   }, [id, location.state]);
 

@@ -104,21 +104,6 @@ export const patchProduct = async (id, patchDto) => {
   return response.json();
 };
 
-export const importProductImages = async (urls) => {
-  const response = await authFetch(`${API_ADMIN_URL}/images/import`, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify(urls),
-  });
-  if (!response.ok) {
-    const errorData = await response.json();
-    throw new Error(errorData.message || 'Failed to import product images');
-  }
-  return response.json();
-};
-
 export const uploadProductImages = async (id, files) => {
   const formData = new FormData();
   for (let i = 0; i < files.length; i++) {
