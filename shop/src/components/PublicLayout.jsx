@@ -57,9 +57,10 @@ const PublicLayout = () => {
           {/* Logo */}
           <Link to="/" className="flex-shrink-0 order-1">
             <img
-              src="/tany_logo.png"
+              src="https://ik.imagekit.io/8grotfwks/logo_old.png"
               alt="Tany.sk"
               className="h-12 md:h-14 object-contain"
+              style={{height: '5.5rem'}}
             />
           </Link>
 
