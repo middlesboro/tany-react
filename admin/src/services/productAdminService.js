@@ -64,6 +64,21 @@ export const deleteProduct = async (id) => {
   });
 };
 
+export const importProductFromUrl = async ({ url, brandId, supplierId }) => {
+  const response = await authFetch(`${API_ADMIN_URL}/import-from-url`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ url, brandId, supplierId }),
+  });
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to import product');
+  }
+  return response.json();
+};
+
 export const searchProducts = async (query) => {
   const response = await authFetch(`${API_ADMIN_URL}/search?query=${encodeURIComponent(query)}`);
   return response.json();

@@ -152,7 +152,7 @@ describe('OrderForm', () => {
       </MemoryRouter>
     );
 
-    expect(screen.getByText(/Upozornenie: Niektoré produkty nie sú na sklade/i)).toBeInTheDocument();
+    expect(screen.getByText(/Upozornenie na vypredané produkty:/i)).toBeInTheDocument();
 
     // "Product A" appears in both the warning box and the price breakdown
     const productElements = screen.getAllByText(/Product A/);

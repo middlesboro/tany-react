@@ -11,6 +11,11 @@ const ProductImageManager = ({ productId, images = [], onImagesChange, onUploadS
   const handleUpload = async () => {
     if (!selectedFiles || selectedFiles.length === 0) return;
 
+    if (!productId) {
+      alert("Please save the product first before uploading new images.");
+      return;
+    }
+
     try {
       await uploadProductImages(productId, selectedFiles);
       setSelectedFiles(null);
@@ -27,6 +32,14 @@ const ProductImageManager = ({ productId, images = [], onImagesChange, onUploadS
 
   const handleDelete = async (imageUrl) => {
     if (!window.confirm("Are you sure you want to delete this image?")) return;
+
+    if (!productId) {
+      const newImages = images.filter(img => img !== imageUrl);
+      if (onImagesChange) {
+        onImagesChange(newImages);
+      }
+      return;
+    }
 
     try {
       await deleteProductImage(productId, imageUrl);
@@ -54,29 +67,36 @@ const ProductImageManager = ({ productId, images = [], onImagesChange, onUploadS
       <h2 className="text-xl font-bold mb-4">Product Images</h2>
 
       {/* Upload Section */}
-      <div className="mb-4 flex items-center gap-4">
-        <input
-          id="file-upload"
-          type="file"
-          multiple
-          onChange={handleFileChange}
-          className="block w-full text-sm text-gray-500
-            file:mr-4 file:py-2 file:px-4
-            file:rounded-full file:border-0
-            file:text-sm file:font-semibold
-            file:bg-blue-50 file:text-blue-700
-            hover:file:bg-blue-100"
-        />
-        <button
-          onClick={handleUpload}
-          disabled={!selectedFiles}
-          className={`px-4 py-2 rounded text-white ${
-            !selectedFiles ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
-          }`}
-        >
-          Upload
-        </button>
-      </div>
+      {productId && (
+        <div className="mb-4 flex items-center gap-4">
+          <input
+            id="file-upload"
+            type="file"
+            multiple
+            onChange={handleFileChange}
+            className="block w-full text-sm text-gray-500
+              file:mr-4 file:py-2 file:px-4
+              file:rounded-full file:border-0
+              file:text-sm file:font-semibold
+              file:bg-blue-50 file:text-blue-700
+              hover:file:bg-blue-100"
+          />
+          <button
+            onClick={handleUpload}
+            disabled={!selectedFiles}
+            className={`px-4 py-2 rounded text-white ${
+              !selectedFiles ? 'bg-gray-400 cursor-not-allowed' : 'bg-blue-600 hover:bg-blue-700'
+            }`}
+          >
+            Upload
+          </button>
+        </div>
+      )}
+      {!productId && (
+        <div className="mb-4 text-sm text-gray-500 italic">
+          Please save the product first to upload new images. You can reorder or delete imported images below.
+        </div>
+      )}
 
       {/* Gallery Section */}
       {images && images.length > 0 ? (
