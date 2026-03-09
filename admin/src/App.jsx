@@ -25,6 +25,8 @@ import Pages from './pages/Pages';
 import PageEdit from './pages/PageEdit';
 import Suppliers from './pages/Suppliers';
 import SupplierEdit from './pages/SupplierEdit';
+import SupplierInvoices from './pages/SupplierInvoices';
+import SupplierInvoiceEdit from './pages/SupplierInvoiceEdit';
 import FilterParameters from './pages/FilterParameters';
 import FilterParameterEdit from './pages/FilterParameterEdit';
 import FilterParameterValues from './pages/FilterParameterValues';
@@ -129,6 +131,9 @@ function App() {
               <Route path="suppliers" element={<Suppliers />} />
               <Route path="suppliers/new" element={<SupplierEdit />} />
               <Route path="suppliers/:id" element={<SupplierEdit />} />
+              <Route path="supplier-invoices" element={<SupplierInvoices />} />
+              <Route path="supplier-invoices/new" element={<SupplierInvoiceEdit />} />
+              <Route path="supplier-invoices/:id" element={<SupplierInvoiceEdit />} />
               <Route path="product-labels" element={<ProductLabels />} />
               <Route path="product-labels/new" element={<ProductLabelEdit />} />
               <Route path="product-labels/:id" element={<ProductLabelEdit />} />

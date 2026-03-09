@@ -10,6 +10,7 @@ const menuItems = [
       { title: 'Categories', path: '/categories' },
       { title: 'Brands', path: '/brands' },
       { title: 'Suppliers', path: '/suppliers' },
+      { title: 'Supplier Invoices', path: '/supplier-invoices' },
       { title: 'Product Labels', path: '/product-labels' },
       { title: 'Filter Parameters', path: '/filter-parameters' },
       { title: 'Filter Values', path: '/filter-parameter-values' },
