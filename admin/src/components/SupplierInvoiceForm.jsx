@@ -11,7 +11,7 @@ const SupplierInvoiceForm = ({ invoice, handleChange, handleSubmit, handleSaveAn
           <input
             type="text"
             name="supplierName"
-            value={invoice.supplierName || ''}
+            value={invoice.supplierName ?? ''}
             onChange={handleChange}
             required
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
@@ -25,7 +25,7 @@ const SupplierInvoiceForm = ({ invoice, handleChange, handleSubmit, handleSaveAn
           <input
             type="text"
             name="supplierVatIdentifier"
-            value={invoice.supplierVatIdentifier || ''}
+            value={invoice.supplierVatIdentifier ?? ''}
             onChange={handleChange}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
@@ -38,7 +38,7 @@ const SupplierInvoiceForm = ({ invoice, handleChange, handleSubmit, handleSaveAn
           <input
             type="text"
             name="invoiceNumber"
-            value={invoice.invoiceNumber || ''}
+            value={invoice.invoiceNumber ?? ''}
             onChange={handleChange}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
@@ -51,7 +51,7 @@ const SupplierInvoiceForm = ({ invoice, handleChange, handleSubmit, handleSaveAn
           <input
             type="text"
             name="paymentReference"
-            value={invoice.paymentReference || ''}
+            value={invoice.paymentReference ?? ''}
             onChange={handleChange}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
@@ -65,7 +65,7 @@ const SupplierInvoiceForm = ({ invoice, handleChange, handleSubmit, handleSaveAn
             type="number"
             step="0.01"
             name="priceWithoutVat"
-            value={invoice.priceWithoutVat || ''}
+            value={invoice.priceWithoutVat ?? ''}
             onChange={handleChange}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
@@ -79,7 +79,7 @@ const SupplierInvoiceForm = ({ invoice, handleChange, handleSubmit, handleSaveAn
             type="number"
             step="0.01"
             name="vatValue"
-            value={invoice.vatValue || ''}
+            value={invoice.vatValue ?? ''}
             onChange={handleChange}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
@@ -93,7 +93,7 @@ const SupplierInvoiceForm = ({ invoice, handleChange, handleSubmit, handleSaveAn
             type="number"
             step="0.01"
             name="priceWithVat"
-            value={invoice.priceWithVat || ''}
+            value={invoice.priceWithVat ?? ''}
             onChange={handleChange}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />

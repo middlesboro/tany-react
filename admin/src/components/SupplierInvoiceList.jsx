@@ -61,15 +61,15 @@ const SupplierInvoiceList = () => {
   const handleEditClick = (invoice) => {
     setEditingId(invoice.id);
     setEditFormData({
-      supplierName: invoice.supplierName || '',
-      priceWithVat: invoice.priceWithVat || '',
-      priceWithoutVat: invoice.priceWithoutVat || '',
-      vatValue: invoice.vatValue || '',
+      supplierName: invoice.supplierName ?? '',
+      priceWithVat: invoice.priceWithVat ?? '',
+      priceWithoutVat: invoice.priceWithoutVat ?? '',
+      vatValue: invoice.vatValue ?? '',
       dateCreated: invoice.dateCreated ? invoice.dateCreated.slice(0, 10) : '',
-      supplierVatIdentifier: invoice.supplierVatIdentifier || '',
+      supplierVatIdentifier: invoice.supplierVatIdentifier ?? '',
       taxDate: invoice.taxDate ? invoice.taxDate.slice(0, 10) : '',
-      invoiceNumber: invoice.invoiceNumber || '',
-      paymentReference: invoice.paymentReference || '',
+      invoiceNumber: invoice.invoiceNumber ?? '',
+      paymentReference: invoice.paymentReference ?? '',
     });
   };
 
@@ -95,6 +95,39 @@ const SupplierInvoiceList = () => {
       ...editFormData,
       [name]: value,
     });
+  };
+
+  const handlePredefinedDate = (type) => {
+    const now = new Date();
+    let start, end;
+
+    if (type === 'thisMonth') {
+      start = new Date(now.getFullYear(), now.getMonth(), 1);
+      end = new Date(now.getFullYear(), now.getMonth() + 1, 0);
+    } else if (type === 'lastMonth') {
+      start = new Date(now.getFullYear(), now.getMonth() - 1, 1);
+      end = new Date(now.getFullYear(), now.getMonth(), 0);
+    }
+
+    if (start && end) {
+      const formatDate = (date) => {
+        const d = new Date(date);
+        let month = '' + (d.getMonth() + 1);
+        let day = '' + d.getDate();
+        const year = d.getFullYear();
+
+        if (month.length < 2) month = '0' + month;
+        if (day.length < 2) day = '0' + day;
+
+        return [year, month, day].join('-');
+      };
+
+      setFilter({
+        ...filter,
+        createDateFrom: formatDate(start),
+        createDateTo: formatDate(end),
+      });
+    }
   };
 
   return (
@@ -134,6 +167,22 @@ const SupplierInvoiceList = () => {
               onChange={handleFilterChange}
               className="w-full px-3 py-2 border rounded"
             />
+            <div className="mt-2 flex gap-2">
+              <button
+                type="button"
+                onClick={() => handlePredefinedDate('thisMonth')}
+                className="text-xs bg-gray-200 hover:bg-gray-300 text-gray-800 py-1 px-2 rounded"
+              >
+                This Month
+              </button>
+              <button
+                type="button"
+                onClick={() => handlePredefinedDate('lastMonth')}
+                className="text-xs bg-gray-200 hover:bg-gray-300 text-gray-800 py-1 px-2 rounded"
+              >
+                Last Month
+              </button>
+            </div>
           </div>
         </div>
         <div className="mt-4 flex justify-between">
