@@ -34,7 +34,7 @@ const ProductList = () => {
 
   useEffect(() => {
     const fetchBrands = async () => {
-      const data = await getBrands(0, 'name,asc', 100);
+      const data = await getBrands(0, 'name,asc', 300);
       setBrands(data.content);
     };
     fetchBrands();

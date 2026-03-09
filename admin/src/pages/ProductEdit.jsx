@@ -106,6 +106,9 @@ const ProductEdit = () => {
     } else if (location.state?.duplicateProduct) {
       const duplicateData = location.state.duplicateProduct;
       setProduct(mapProductToState({ ...duplicateData, images: [] }));
+    } else if (location.state?.importedProduct) {
+      const importedData = location.state.importedProduct;
+      setProduct(mapProductToState({ ...importedData }));
     }
   }, [id, location.state]);
 
@@ -172,7 +175,7 @@ const ProductEdit = () => {
         handleSubmit={handleSubmit}
         handleSaveAndStay={handleSaveAndStay}
       />
-      {activeTab === 'main' && id && (
+      {activeTab === 'main' && (id || location.state?.importedProduct || location.state?.duplicateProduct) && (
         <ProductImageManager
           productId={id}
           images={product.images}
