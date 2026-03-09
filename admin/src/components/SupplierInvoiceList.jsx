@@ -77,7 +77,7 @@ const SupplierInvoiceList = () => {
           <div>
             <label className="block text-gray-700">Date From</label>
             <input
-              type="datetime-local"
+              type="date"
               name="createDateFrom"
               value={filter.createDateFrom || ''}
               onChange={handleFilterChange}
@@ -87,7 +87,7 @@ const SupplierInvoiceList = () => {
           <div>
             <label className="block text-gray-700">Date To</label>
             <input
-              type="datetime-local"
+              type="date"
               name="createDateTo"
               value={filter.createDateTo || ''}
               onChange={handleFilterChange}
