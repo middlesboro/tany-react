@@ -702,7 +702,7 @@ const ProductDetail = () => {
                 </div>
                 {(product.externalStock || product.quantity > 0) && (
                   <div className="text-sm text-gray-500">
-                      {product.externalStock ? 'Odosielam zvyčajne do 3-5 pracovných dní' : 'Odosielame približne do 24 hodín'}
+                      {product.externalStock ? 'Odosielam zvyčajne do 3-5 pracovných dní' : 'Odosielame zvyčajne do 24 hodín'}
                   </div>
                 )}
             </div>

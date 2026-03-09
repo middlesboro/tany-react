@@ -70,7 +70,7 @@ describe('ProductDetail Shipping Info', () => {
     categoryService.getCategories.mockResolvedValue([]);
   });
 
-  test('displays "Odosielame približne do 24 hodín" when quantity > 0 and externalStock false', async () => {
+  test('displays "Odosielame zvyčajne do 24 hodín" when quantity > 0 and externalStock false', async () => {
     const mockProduct = {
       id: 'p1',
       title: 'Test Product',
@@ -92,7 +92,7 @@ describe('ProductDetail Shipping Info', () => {
     );
 
     await waitFor(() => {
-      expect(screen.getByText('Odosielame približne do 24 hodín')).toBeInTheDocument();
+      expect(screen.getByText('Odosielame zvyčajne do 24 hodín')).toBeInTheDocument();
     });
   });
 
@@ -122,7 +122,7 @@ describe('ProductDetail Shipping Info', () => {
     });
   });
 
-  test('does NOT display "Odosielame približne do 24 hodín" when quantity = 0 and externalStock false', async () => {
+  test('does NOT display "Odosielame zvyčajne do 24 hodín" when quantity = 0 and externalStock false', async () => {
     const mockProduct = {
       id: 'p1',
       title: 'Test Product',
@@ -146,7 +146,7 @@ describe('ProductDetail Shipping Info', () => {
     await waitFor(() => {
         // We verify that the text is NOT present.
         // screen.queryByText returns null if not found.
-      expect(screen.queryByText('Odosielame približne do 24 hodín')).not.toBeInTheDocument();
+      expect(screen.queryByText('Odosielame zvyčajne do 24 hodín')).not.toBeInTheDocument();
       // Ensure we render the correct state
       expect(screen.getByText('Vypredané')).toBeInTheDocument();
     });

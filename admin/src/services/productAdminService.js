@@ -65,7 +65,7 @@ export const deleteProduct = async (id) => {
 };
 
 export const importProductFromUrl = async ({ url, brandId, supplierId }) => {
-  const response = await authFetch(`${API_ADMIN_URL}/import-from-url`, {
+  const response = await authFetch(`${API_ADMIN_URL}/import/url`, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
