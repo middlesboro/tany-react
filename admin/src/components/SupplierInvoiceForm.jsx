@@ -104,9 +104,9 @@ const SupplierInvoiceForm = ({ invoice, handleChange, handleSubmit, handleSaveAn
             Date Created
           </label>
           <input
-            type="datetime-local"
+            type="date"
             name="dateCreated"
-            value={invoice.dateCreated ? invoice.dateCreated.slice(0, 16) : ''}
+            value={invoice.dateCreated ? invoice.dateCreated.slice(0, 10) : ''}
             onChange={handleChange}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
@@ -117,9 +117,9 @@ const SupplierInvoiceForm = ({ invoice, handleChange, handleSubmit, handleSaveAn
             Tax Date
           </label>
           <input
-            type="datetime-local"
+            type="date"
             name="taxDate"
-            value={invoice.taxDate ? invoice.taxDate.slice(0, 16) : ''}
+            value={invoice.taxDate ? invoice.taxDate.slice(0, 10) : ''}
             onChange={handleChange}
             className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
           />
