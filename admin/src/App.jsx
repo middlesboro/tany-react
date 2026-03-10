@@ -23,6 +23,8 @@ import Blogs from './pages/Blogs';
 import BlogEdit from './pages/BlogEdit';
 import Pages from './pages/Pages';
 import PageEdit from './pages/PageEdit';
+import ContentSnippets from './pages/ContentSnippets';
+import ContentSnippetEdit from './pages/ContentSnippetEdit';
 import Suppliers from './pages/Suppliers';
 import SupplierEdit from './pages/SupplierEdit';
 import SupplierInvoices from './pages/SupplierInvoices';
@@ -125,6 +127,9 @@ function App() {
               <Route path="pages" element={<Pages />} />
               <Route path="pages/new" element={<PageEdit />} />
               <Route path="pages/:id" element={<PageEdit />} />
+              <Route path="content-snippets" element={<ContentSnippets />} />
+              <Route path="content-snippets/new" element={<ContentSnippetEdit />} />
+              <Route path="content-snippets/:id" element={<ContentSnippetEdit />} />
               <Route path="blogs" element={<Blogs />} />
               <Route path="blogs/new" element={<BlogEdit />} />
               <Route path="blogs/:id" element={<BlogEdit />} />

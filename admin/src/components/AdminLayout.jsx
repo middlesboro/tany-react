@@ -55,6 +55,10 @@ const menuItems = [
     path: '/pages'
   },
   {
+    title: 'Content Snippets',
+    path: '/content-snippets'
+  },
+  {
     title: 'Blogs',
     path: '/blogs'
   }
