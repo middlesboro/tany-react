@@ -24,6 +24,13 @@ export const getQuillModules = (type = 'PRODUCT') => ({
 
               const range = this.quill.getSelection(true);
               this.quill.insertEmbed(range.index, 'image', url);
+
+              const redirectUrl = prompt("Enter a redirect URL for this image (leave blank for no link):");
+              if (redirectUrl) {
+                this.quill.setSelection(range.index, 1);
+                this.quill.format('link', redirectUrl);
+                this.quill.setSelection(range.index + 1);
+              }
             } catch (error) {
               console.error('Failed to upload image:', error);
               alert('Failed to upload image. Please try again.');
@@ -84,6 +91,13 @@ export const getQuillModulesTable = (type = 'PRODUCT') => ({
 
               const range = this.quill.getSelection(true);
               this.quill.insertEmbed(range.index, 'image', url);
+
+              const redirectUrl = prompt("Enter a redirect URL for this image (leave blank for no link):");
+              if (redirectUrl) {
+                this.quill.setSelection(range.index, 1);
+                this.quill.format('link', redirectUrl);
+                this.quill.setSelection(range.index + 1);
+              }
             } catch (error) {
               console.error('Failed to upload image:', error);
               alert('Failed to upload image. Please try again.');
