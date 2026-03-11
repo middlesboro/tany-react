@@ -8,6 +8,31 @@ export const quillModules = {
       ['clean']
     ],
     handlers: {
+
+      image: function() {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.click();
+
+        input.onchange = async () => {
+          const file = input.files[0];
+          if (file) {
+            try {
+              const { uploadImage } = await import('../services/productAdminService.js');
+              const data = await uploadImage(file);
+              const url = data.url;
+
+              const range = this.quill.getSelection(true);
+              this.quill.insertEmbed(range.index, 'image', url);
+            } catch (error) {
+              console.error('Failed to upload image:', error);
+              alert('Failed to upload image. Please try again.');
+            }
+          }
+        };
+      },
+
       video: function() {
         let url = prompt("Enter Video URL or Iframe Code:");
         if (url) {
@@ -44,6 +69,30 @@ export const quillModulesTable = {
       ['clean']
     ],
     handlers: {
+
+      image: function() {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.click();
+
+        input.onchange = async () => {
+          const file = input.files[0];
+          if (file) {
+            try {
+              const { uploadImage } = await import('../services/productAdminService.js');
+              const data = await uploadImage(file);
+              const url = data.url;
+
+              const range = this.quill.getSelection(true);
+              this.quill.insertEmbed(range.index, 'image', url);
+            } catch (error) {
+              console.error('Failed to upload image:', error);
+              alert('Failed to upload image. Please try again.');
+            }
+          }
+        };
+      },
       video: function() {
         let url = prompt("Enter Video URL or Iframe Code:");
         if (url) {

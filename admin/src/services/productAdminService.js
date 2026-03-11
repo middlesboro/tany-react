@@ -123,3 +123,20 @@ export const deleteProductImage = async (id, imageUrl) => {
     method: 'DELETE',
   });
 };
+
+export const uploadImage = async (file) => {
+  const formData = new FormData();
+  formData.append('files', file);
+
+  const response = await authFetch(`${API_ADMIN_URL}/image`, {
+    method: 'POST',
+    body: formData,
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Failed to upload image');
+  }
+
+  return response.json();
+};
