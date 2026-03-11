@@ -4,6 +4,7 @@ import { getPageBySlug } from '../services/pageService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 import SeoHead from '../components/SeoHead';
 import NotFound from './NotFound';
+import { restoreIframes } from '../utils/videoUtils';
 
 const PublicPage = () => {
   const { slug } = useParams();
@@ -67,7 +68,7 @@ const PublicPage = () => {
           <h1 className="text-3xl font-bold mb-6 text-gray-800">{page.title}</h1>
           <div
             className="prose text-gray-700"
-            dangerouslySetInnerHTML={{ __html: page.description ? page.description.replace(/&nbsp;|\u00A0/g, ' ') : '' }}
+            dangerouslySetInnerHTML={{ __html: page.description ? restoreIframes(page.description).replace(/&nbsp;|\u00A0/g, ' ') : '' }}
           />
         </>
       )}

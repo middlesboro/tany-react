@@ -4,6 +4,7 @@ import { getCategory, createCategory, updateCategory, getCategories } from '../s
 import { getFilterParameters } from '../services/filterParameterAdminService';
 import CategoryForm from '../components/CategoryForm';
 import ErrorAlert from '../components/ErrorAlert';
+import { restoreIframes } from '../utils/videoUtils';
 
 const CategoryEdit = () => {
   const { id } = useParams();
@@ -41,6 +42,9 @@ const CategoryEdit = () => {
     if (id) {
       const fetchCategory = async () => {
         const data = await getCategory(id);
+        if (data && data.description) {
+            data.description = restoreIframes(data.description);
+        }
         setCategory({
           ...data,
           active: data.active !== undefined ? data.active : true,

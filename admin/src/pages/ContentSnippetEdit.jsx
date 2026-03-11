@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getContentSnippet, createContentSnippet, updateContentSnippet } from '../services/contentSnippetAdminService';
 import ContentSnippetForm from '../components/ContentSnippetForm';
 import ErrorAlert from '../components/ErrorAlert';
+import { restoreIframes } from '../utils/videoUtils';
 
 const ContentSnippetEdit = () => {
   const { id } = useParams();
@@ -19,6 +20,9 @@ const ContentSnippetEdit = () => {
       const fetchContentSnippetData = async () => {
         try {
           const data = await getContentSnippet(id);
+          if (data && data.content) {
+            data.content = restoreIframes(data.content);
+          }
           setContentSnippet(data);
         } catch (err) {
           setError(err.message);
