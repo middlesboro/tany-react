@@ -19,9 +19,8 @@ export const quillModules = {
           const file = input.files[0];
           if (file) {
             try {
-              const { uploadImage } = await import('../services/productAdminService.js');
-              const data = await uploadImage(file);
-              const url = data.url;
+              const { uploadImage } = await import('../services/imageAdminService.js');
+              const url = await uploadImage(file, 'PRODUCT');
 
               const range = this.quill.getSelection(true);
               this.quill.insertEmbed(range.index, 'image', url);
@@ -80,9 +79,8 @@ export const quillModulesTable = {
           const file = input.files[0];
           if (file) {
             try {
-              const { uploadImage } = await import('../services/productAdminService.js');
-              const data = await uploadImage(file);
-              const url = data.url;
+              const { uploadImage } = await import('../services/imageAdminService.js');
+              const url = await uploadImage(file, 'PRODUCT');
 
               const range = this.quill.getSelection(true);
               this.quill.insertEmbed(range.index, 'image', url);
