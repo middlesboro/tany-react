@@ -19,6 +19,7 @@ import { addToWishlist, removeFromWishlist } from '../services/wishlistService';
 import { VAT_RATE } from '../utils/constants';
 import SeoHead from '../components/SeoHead';
 import { logViewItem, logAddToCart, logAddToWishlist, logGenerateLead, logOutOfStockNotify } from '../utils/analytics';
+import { restoreIframes } from '../utils/videoUtils';
 
 const REASONS = [
   "Sme malá Slovenská spoločnosť. Každú objednávku si vážime rovnako a tak k nej aj pristupujeme",
@@ -31,7 +32,7 @@ const REASONS = [
 
 const cleanDescription = (html) => {
   if (!html) return "Žiadny popis k produktu.";
-  return html.replace(/&nbsp;/g, ' ').replace(/\u00A0/g, ' ');
+  return restoreIframes(html).replace(/&nbsp;/g, ' ').replace(/\u00A0/g, ' ');
 };
 
 const StockNotificationForm = ({ productId }) => {

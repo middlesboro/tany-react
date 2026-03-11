@@ -10,6 +10,7 @@ import { getAllProductLabels } from '../services/productLabelAdminService';
 import ProductForm from '../components/ProductForm';
 import ProductImageManager from '../components/ProductImageManager';
 import ErrorAlert from '../components/ErrorAlert';
+import { restoreIframes } from '../utils/videoUtils';
 
 const ProductEdit = () => {
   const { id } = useParams();
@@ -100,6 +101,10 @@ const ProductEdit = () => {
     if (id) {
       const fetchProductData = async () => {
         const data = await getProduct(id);
+        if (data) {
+          if (data.description) data.description = restoreIframes(data.description);
+          if (data.shortDescription) data.shortDescription = restoreIframes(data.shortDescription);
+        }
         setProduct(mapProductToState(data));
       };
       fetchProductData();

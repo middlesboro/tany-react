@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { getPage, createPage, updatePage } from '../services/pageAdminService';
 import PageForm from '../components/PageForm';
 import ErrorAlert from '../components/ErrorAlert';
+import { restoreIframes } from '../utils/videoUtils';
 
 const PageEdit = () => {
   const { id } = useParams();
@@ -21,6 +22,9 @@ const PageEdit = () => {
     if (id) {
       const fetchPageData = async () => {
         const data = await getPage(id);
+        if (data && data.description) {
+            data.description = restoreIframes(data.description);
+        }
         setPage(data);
       };
       fetchPageData();
