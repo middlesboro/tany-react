@@ -358,6 +358,7 @@ const ProductDetail = () => {
   const [adding, setAdding] = useState(false);
   const [selectedImage, setSelectedImage] = useState(null);
   const [isFullViewOpen, setIsFullViewOpen] = useState(false);
+  const [fullScreenImage, setFullScreenImage] = useState(null);
   const [inWishlist, setInWishlist] = useState(false);
   const [wishlistLoading, setWishlistLoading] = useState(false);
 
@@ -598,7 +599,12 @@ const ProductDetail = () => {
 
             <div
               className="relative w-full h-[400px] md:h-[500px] flex items-center justify-center mb-6 cursor-zoom-in"
-              onClick={() => selectedImage && setIsFullViewOpen(true)}
+              onClick={() => {
+                if (selectedImage) {
+                  setFullScreenImage(selectedImage);
+                  setIsFullViewOpen(true);
+                }
+              }}
             >
               {selectedImage ? (
                 <img
@@ -747,8 +753,15 @@ const ProductDetail = () => {
           <div className="mb-10">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Popis</h2>
             <div
-                className="prose prose-green max-w-none text-gray-600 leading-relaxed"
+                className="prose prose-green max-w-none text-gray-600 leading-relaxed [&_img]:cursor-zoom-in"
                 dangerouslySetInnerHTML={{ __html: cleanDescription(product.description) }}
+                onClick={(e) => {
+                  if (e.target.tagName === 'IMG') {
+                    e.preventDefault();
+                    setFullScreenImage(e.target.src);
+                    setIsFullViewOpen(true);
+                  }
+                }}
             />
           </div>
       </div>
@@ -768,20 +781,26 @@ const ProductDetail = () => {
         <ProductReviews productId={product.id} />
 
       {/* Full View Modal */}
-      {isFullViewOpen && selectedImage && (
+      {isFullViewOpen && fullScreenImage && (
         <div
           className="fixed inset-0 z-[100] flex items-center justify-center bg-black bg-opacity-90 p-4"
-          onClick={() => setIsFullViewOpen(false)}
+          onClick={() => {
+            setIsFullViewOpen(false);
+            setFullScreenImage(null);
+          }}
         >
           <div className="relative w-full max-w-5xl h-full flex items-center justify-center">
              <button
                 className="absolute top-4 right-4 text-white hover:text-gray-300 z-50 p-2"
-                onClick={() => setIsFullViewOpen(false)}
+                onClick={() => {
+                  setIsFullViewOpen(false);
+                  setFullScreenImage(null);
+                }}
              >
                 <svg className="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12"></path></svg>
              </button>
              <img
-               src={selectedImage}
+               src={fullScreenImage}
                alt={product.title}
                className="max-w-full max-h-full object-contain"
                onClick={(e) => e.stopPropagation()} // Prevent closing when clicking the image itself
