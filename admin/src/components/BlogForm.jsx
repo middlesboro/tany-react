@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactQuill from 'react-quill-new';
-import { quillModulesTable } from '../utils/quillConfig';
+import { getQuillModulesTable } from '../utils/quillConfig';
 import 'react-quill-new/dist/quill.snow.css';
 
 const BlogForm = ({ blog, handleChange, handleSubmit, handleSaveAndStay }) => {
@@ -78,7 +78,7 @@ const BlogForm = ({ blog, handleChange, handleSubmit, handleSaveAndStay }) => {
           theme="snow"
           value={blog.description}
           onChange={handleQuillChange('description')}
-          modules={quillModulesTable}
+          modules={getQuillModulesTable('BLOG')}
           className="bg-white"
         />
       </div>

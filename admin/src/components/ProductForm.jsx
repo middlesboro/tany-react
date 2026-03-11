@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import ReactQuill from 'react-quill-new';
 import SearchSelect from './SearchSelect';
 import MultiSearchSelect from './MultiSearchSelect';
-import { quillModules } from '../utils/quillConfig';
+import { getQuillModules } from '../utils/quillConfig';
 import 'react-quill-new/dist/quill.snow.css';
 
 const ProductForm = ({
@@ -231,7 +231,7 @@ const ProductForm = ({
           theme="snow"
           value={product.shortDescription}
           onChange={handleQuillChange('shortDescription')}
-          modules={quillModules}
+          modules={getQuillModules('PRODUCT')}
           className="bg-white"
         />
       </div>
@@ -241,7 +241,7 @@ const ProductForm = ({
           theme="snow"
           value={product.description}
           onChange={handleQuillChange('description')}
-          modules={quillModules}
+          modules={getQuillModules('PRODUCT')}
           className="bg-white"
         />
       </div>

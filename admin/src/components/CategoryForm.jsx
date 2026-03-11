@@ -2,7 +2,7 @@ import React from 'react';
 import ReactQuill from 'react-quill-new';
 import SearchSelect from './SearchSelect';
 import MultiSearchSelect from './MultiSearchSelect';
-import { quillModules } from '../utils/quillConfig';
+import { getQuillModules } from '../utils/quillConfig';
 import 'react-quill-new/dist/quill.snow.css';
 
 const CategoryForm = ({ category, handleChange, handleSubmit, categories = [], handleParentChange, filterParameters = [] }) => {
@@ -66,7 +66,7 @@ const CategoryForm = ({ category, handleChange, handleSubmit, categories = [], h
           theme="snow"
           value={category.description || ''}
           onChange={handleQuillChange('description')}
-          modules={quillModules}
+          modules={getQuillModules('CATEGORY')}
           className="bg-white"
         />
       </div>

@@ -1,4 +1,4 @@
-export const quillModules = {
+export const getQuillModules = (type = 'PRODUCT') => ({
   toolbar: {
     container: [
       [{ 'header': [1, 2, false] }],
@@ -20,7 +20,7 @@ export const quillModules = {
           if (file) {
             try {
               const { uploadImage } = await import('../services/imageAdminService.js');
-              const url = await uploadImage(file, 'PRODUCT');
+              const url = await uploadImage(file, type);
 
               const range = this.quill.getSelection(true);
               this.quill.insertEmbed(range.index, 'image', url);
@@ -54,9 +54,9 @@ export const quillModules = {
       }
     }
   }
-};
+});
 
-export const quillModulesTable = {
+export const getQuillModulesTable = (type = 'PRODUCT') => ({
   table: true,
   toolbar: {
     container: [
@@ -80,7 +80,7 @@ export const quillModulesTable = {
           if (file) {
             try {
               const { uploadImage } = await import('../services/imageAdminService.js');
-              const url = await uploadImage(file, 'PRODUCT');
+              const url = await uploadImage(file, type);
 
               const range = this.quill.getSelection(true);
               this.quill.insertEmbed(range.index, 'image', url);
@@ -117,4 +117,4 @@ export const quillModulesTable = {
       }
     }
   }
-};
+});
