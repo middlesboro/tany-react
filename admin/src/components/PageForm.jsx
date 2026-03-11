@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactQuill from 'react-quill-new';
-import { quillModules } from '../utils/quillConfig';
+import { getQuillModules } from '../utils/quillConfig';
 import 'react-quill-new/dist/quill.snow.css';
 
 const PageForm = ({ page, handleChange, handleSubmit, handleSaveAndStay }) => {
@@ -45,7 +45,7 @@ const PageForm = ({ page, handleChange, handleSubmit, handleSaveAndStay }) => {
           theme="snow"
           value={page.description || ''}
           onChange={handleQuillChange('description')}
-          modules={quillModules}
+          modules={getQuillModules('BLOG')} // using BLOG type as fallback for PAGE
           className="bg-white"
         />
       </div>

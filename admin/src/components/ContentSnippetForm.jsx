@@ -1,6 +1,6 @@
 import React from 'react';
 import ReactQuill from 'react-quill-new';
-import { quillModules } from '../utils/quillConfig';
+import { getQuillModules } from '../utils/quillConfig';
 import 'react-quill-new/dist/quill.snow.css';
 
 const ContentSnippetForm = ({ contentSnippet, handleChange, handleSubmit, handleSaveAndStay }) => {
@@ -46,7 +46,7 @@ const ContentSnippetForm = ({ contentSnippet, handleChange, handleSubmit, handle
           theme="snow"
           value={contentSnippet.content || ''}
           onChange={handleQuillChange('content')}
-          modules={quillModules}
+          modules={getQuillModules('SNIPPET')}
           className="bg-white"
         />
       </div>

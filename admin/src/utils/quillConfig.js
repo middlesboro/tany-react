@@ -1,4 +1,4 @@
-export const quillModules = {
+export const getQuillModules = (type = 'PRODUCT') => ({
   toolbar: {
     container: [
       [{ 'header': [1, 2, false] }],
@@ -8,6 +8,30 @@ export const quillModules = {
       ['clean']
     ],
     handlers: {
+
+      image: function() {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.click();
+
+        input.onchange = async () => {
+          const file = input.files[0];
+          if (file) {
+            try {
+              const { uploadImage } = await import('../services/imageAdminService.js');
+              const url = await uploadImage(file, type);
+
+              const range = this.quill.getSelection(true);
+              this.quill.insertEmbed(range.index, 'image', url);
+            } catch (error) {
+              console.error('Failed to upload image:', error);
+              alert('Failed to upload image. Please try again.');
+            }
+          }
+        };
+      },
+
       video: function() {
         let url = prompt("Enter Video URL or Iframe Code:");
         if (url) {
@@ -30,9 +54,9 @@ export const quillModules = {
       }
     }
   }
-};
+});
 
-export const quillModulesTable = {
+export const getQuillModulesTable = (type = 'PRODUCT') => ({
   table: true,
   toolbar: {
     container: [
@@ -44,6 +68,29 @@ export const quillModulesTable = {
       ['clean']
     ],
     handlers: {
+
+      image: function() {
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.click();
+
+        input.onchange = async () => {
+          const file = input.files[0];
+          if (file) {
+            try {
+              const { uploadImage } = await import('../services/imageAdminService.js');
+              const url = await uploadImage(file, type);
+
+              const range = this.quill.getSelection(true);
+              this.quill.insertEmbed(range.index, 'image', url);
+            } catch (error) {
+              console.error('Failed to upload image:', error);
+              alert('Failed to upload image. Please try again.');
+            }
+          }
+        };
+      },
       video: function() {
         let url = prompt("Enter Video URL or Iframe Code:");
         if (url) {
@@ -70,4 +117,4 @@ export const quillModulesTable = {
       }
     }
   }
-};
+});
