@@ -753,10 +753,14 @@ const ProductDetail = () => {
           <div className="mb-10">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Popis</h2>
             <div
-                className="prose prose-green max-w-none text-gray-600 leading-relaxed [&_img]:cursor-zoom-in"
+                className="prose prose-green max-w-none text-gray-600 leading-relaxed [&_img]:cursor-zoom-in [&_a_img]:cursor-pointer"
                 dangerouslySetInnerHTML={{ __html: cleanDescription(product.description) }}
                 onClick={(e) => {
                   if (e.target.tagName === 'IMG') {
+                    const parentAnchor = e.target.closest('a');
+                    if (parentAnchor && parentAnchor.href) {
+                      return; // Let the default link behavior happen
+                    }
                     e.preventDefault();
                     setFullScreenImage(e.target.src);
                     setIsFullViewOpen(true);
