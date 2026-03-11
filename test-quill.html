@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.snow.css" rel="stylesheet">
+  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.0/dist/quill.js"></script>
+</head>
+<body>
+  <div id="editor"></div>
+  <script>
+    var quill = new Quill('#editor', {
+      theme: 'snow',
+      modules: { toolbar: [['link', 'image']] }
+    });
+    quill.insertEmbed(0, 'image', 'http://example.com/img.png');
+    quill.setSelection(0, 1);
+    // Is it possible to add a link over the image? Let's check:
+    quill.format('link', 'http://google.com');
+    console.log(quill.root.innerHTML);
+  </script>
+</body>
+</html>
