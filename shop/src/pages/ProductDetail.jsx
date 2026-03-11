@@ -753,7 +753,7 @@ const ProductDetail = () => {
           <div className="mb-10">
             <h2 className="text-2xl font-bold text-gray-800 mb-6 border-b pb-2">Popis</h2>
             <div
-                className="prose prose-green max-w-none text-gray-600 leading-relaxed [&_img]:cursor-zoom-in [&_a_img]:cursor-pointer"
+                className="prose prose-green max-w-none text-gray-600 leading-relaxed [&_img]:cursor-zoom-in [&_a_img]:cursor-pointer [&_a]:text-blue-600 [&_a]:underline hover:[&_a]:text-blue-800"
                 dangerouslySetInnerHTML={{ __html: cleanDescription(product.description) }}
                 onClick={(e) => {
                   if (e.target.tagName === 'IMG') {
