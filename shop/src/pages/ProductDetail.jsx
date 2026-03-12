@@ -18,6 +18,7 @@ import StarRating from '../components/StarRating';
 import { addToWishlist, removeFromWishlist } from '../services/wishlistService';
 import { VAT_RATE } from '../utils/constants';
 import SeoHead from '../components/SeoHead';
+import { removeDiacritics, customEncode } from '../utils/filterUrlUtils';
 import { logViewItem, logAddToCart, logAddToWishlist, logGenerateLead, logOutOfStockNotify } from '../utils/analytics';
 import { restoreIframes } from '../utils/videoUtils';
 
@@ -647,6 +648,17 @@ const ProductDetail = () => {
             <div className="flex justify-between items-start mb-2">
                 <h1 className="text-3xl font-bold text-gray-800 leading-tight mr-4">{product.title}</h1>
             </div>
+
+            {product.brandName && (
+              <div className="mb-2 mt-[-0.5rem]">
+                <Link
+                  to={`/kategoria/vsetky-produkty?q=Brand-${customEncode(removeDiacritics(product.brandName))}`}
+                  className="text-gray-500 hover:text-tany-green transition-colors font-medium text-sm underline"
+                >
+                  {product.brandName}
+                </Link>
+              </div>
+            )}
 
             <div className="flex items-center mb-6">
                 <StarRating rating={product.averageRating || 0} />
