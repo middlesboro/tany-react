@@ -148,18 +148,6 @@ const ProductList = () => {
             />
           </div>
           <div>
-            <label className="block text-xs font-medium text-gray-500 mb-1">UUID</label>
-            <input
-              type="text"
-              name="id"
-              value={filter.id}
-              onChange={handleFilterChange}
-              onKeyDown={(e) => e.key === 'Enter' && handleFilterSubmit()}
-              placeholder="UUID"
-              className="w-full px-3 py-2 text-sm border border-gray-300 rounded focus:ring-1 focus:ring-ps-primary focus:border-ps-primary"
-            />
-          </div>
-          <div>
             <label className="block text-xs font-medium text-gray-500 mb-1">Price From</label>
             <input
               type="number"
