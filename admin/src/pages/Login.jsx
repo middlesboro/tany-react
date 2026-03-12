@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
-import { requestMagicLink } from '../services/authService';
+import { useLocation, Navigate } from 'react-router-dom';
+import { requestMagicLink, isAuthenticated } from '../services/authService';
 import { useBreadcrumbs } from '../context/BreadcrumbContext';
 
 const Login = ({ isAdmin = false }) => {
@@ -24,6 +24,10 @@ const Login = ({ isAdmin = false }) => {
         setError(location.state.message);
     }
   }, [location.state]);
+
+  if (isAdmin && isAuthenticated()) {
+    return <Navigate to="/carts" replace />;
+  }
 
   const handleSubmit = async (e) => {
     e.preventDefault();
