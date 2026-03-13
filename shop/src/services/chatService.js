@@ -9,7 +9,9 @@ export const sendAssistantMessage = async (message) => {
         });
 
         if (!response.ok) {
-            throw new Error('Network response was not ok');
+            const error = new Error('Network response was not ok');
+            error.status = response.status;
+            throw error;
         }
 
         return await response.json();
@@ -20,22 +22,20 @@ export const sendAssistantMessage = async (message) => {
 };
 
 export const sendSupportMessage = async ({ message, email }) => {
-    try {
-        const response = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}${import.meta.env.VITE_API_URL}/chat/message`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ message, email }),
-        });
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_BASE_URL}${import.meta.env.VITE_API_URL}/chat/message`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message, email }),
+    });
 
-        if (!response.ok) {
-            throw new Error('Network response was not ok');
-        }
-
-        return await response.json();
-    } catch (error) {
-        console.error('Error sending support message:', error);
-        return { message: 'Sorry, something went wrong. Please try again later.' };
+    if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        const error = new Error(errorData.message || 'Network response was not ok');
+        error.status = response.status;
+        throw error;
     }
+
+    return await response.json();
 };

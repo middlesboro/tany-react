@@ -108,7 +108,11 @@ const ChatBot = () => {
 
 
         } catch (error) {
-            setMessages(prev => [...prev, { type: 'bot', text: 'Nastala chyba pri komunikácii.' }]);
+            if (error.status === 400 && view === 'CONTACT_SUPPORT' && supportStep === 'EMAIL') {
+                setMessages(prev => [...prev, { type: 'bot', text: 'Zadaný email je v nesprávnom formáte. Prosím, zadajte platný email.' }]);
+            } else {
+                setMessages(prev => [...prev, { type: 'bot', text: 'Nastala chyba pri komunikácii.' }]);
+            }
         } finally {
             setIsLoading(false);
         }
