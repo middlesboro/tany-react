@@ -68,7 +68,7 @@ const IskladInventoryDifferences = () => {
                 <tr key={diff.productId} className="hover:bg-gray-50">
                   <td className="py-2 px-4 border-b">{diff.productName}</td>
                   <td className="py-2 px-4 border-b font-medium text-red-600">
-                    {diff.dbQuantity}
+                    {diff.dbQuantity} {diff.externalStock ? '(Ext)' : ''}
                   </td>
                   <td className="py-2 px-4 border-b font-medium text-green-600">
                     {diff.iskladQuantity}
