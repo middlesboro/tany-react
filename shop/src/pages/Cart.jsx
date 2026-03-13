@@ -228,7 +228,7 @@ const Cart = () => {
                       </div>
                   )}
 
-                  <div className="mt-4 pt-4 separator">
+                  {/* <div className="mt-4 pt-4 separator">
                       <label className="checkbox-label">
                          <input
                             type="checkbox"
@@ -238,7 +238,7 @@ const Cart = () => {
                          />
                          <span>Odber newslettera (zľava 10%)</span>
                       </label>
-                  </div>
+                  </div> */}
                </div>
 
                <div className="card">
