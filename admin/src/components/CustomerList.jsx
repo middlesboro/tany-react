@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getCustomers, deleteCustomer, searchCustomers } from '../services/customerAdminService';
+import { getCustomers, deleteCustomer } from '../services/customerAdminService';
 import usePersistentTableState from '../hooks/usePersistentTableState';
 
 const CustomerList = () => {
@@ -17,13 +17,7 @@ const CustomerList = () => {
 
   useEffect(() => {
     const fetchCustomers = async () => {
-      let data;
-      const hasSearchFilters = Object.values(appliedFilter).some(val => val && val.trim() !== '');
-      if (hasSearchFilters) {
-        data = await searchCustomers(appliedFilter, page, sort, size);
-      } else {
-        data = await getCustomers(page, sort, size);
-      }
+      const data = await getCustomers(appliedFilter, page, sort, size);
       setCustomers(data.content);
       setTotalPages(data.totalPages);
     };

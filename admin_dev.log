@@ -14,3 +14,5 @@ To eliminate this warning, add "type": "module" to /app/admin/package.json.
 (Use `node --trace-warnings ...` to show where the warning was created)
 4:52:03 PM [vite] (client) hmr update /src/index.css, /src/pages/CustomerEdit.jsx, /src/components/CustomerList.jsx
 4:52:22 PM [vite] (client) hmr update /src/components/CustomerList.jsx, /src/index.css
+6:28:35 PM [vite] (client) hmr update /src/index.css, /src/pages/CustomerEdit.jsx, /src/components/CustomerList.jsx
+6:28:47 PM [vite] (client) hmr update /src/components/CustomerList.jsx, /src/index.css
