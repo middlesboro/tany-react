@@ -7,8 +7,13 @@ export const getCustomers = async (page = 0, sort = 'lastname,asc', size = 20) =
   return response.json();
 };
 
-export const searchCustomers = async (query, page = 0, sort = 'lastname,asc', size = 20) => {
-  const response = await authFetch(`${API_URL}/search?query=${encodeURIComponent(query)}&page=${page}&size=${size}&sort=${sort}`);
+export const searchCustomers = async ({ firstname, lastname, email, phone }, page = 0, sort = 'lastname,asc', size = 20) => {
+  const params = new URLSearchParams({ page, size, sort });
+  if (firstname) params.append('firstname', firstname);
+  if (lastname) params.append('lastname', lastname);
+  if (email) params.append('email', email);
+  if (phone) params.append('phone', phone);
+  const response = await authFetch(`${API_URL}/search?${params.toString()}`);
   return response.json();
 };
 

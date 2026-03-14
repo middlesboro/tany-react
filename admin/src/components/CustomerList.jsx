@@ -10,7 +10,7 @@ const CustomerList = () => {
     sort, handleSort,
     filter, handleFilterChange,
     appliedFilter, handleFilterSubmit, handleClearFilter
-  } = usePersistentTableState('admin_customers_list_state', { query: '' }, 'lastname,asc');
+  } = usePersistentTableState('admin_customers_list_state', { firstname: '', lastname: '', email: '', phone: '' }, 'lastname,asc');
 
   const [customers, setCustomers] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -18,8 +18,9 @@ const CustomerList = () => {
   useEffect(() => {
     const fetchCustomers = async () => {
       let data;
-      if (appliedFilter.query && appliedFilter.query.trim() !== '') {
-        data = await searchCustomers(appliedFilter.query, page, sort, size);
+      const hasSearchFilters = Object.values(appliedFilter).some(val => val && val.trim() !== '');
+      if (hasSearchFilters) {
+        data = await searchCustomers(appliedFilter, page, sort, size);
       } else {
         data = await getCustomers(page, sort, size);
       }
@@ -27,7 +28,7 @@ const CustomerList = () => {
       setTotalPages(data.totalPages);
     };
     fetchCustomers();
-  }, [page, sort, size, appliedFilter.query]);
+  }, [page, sort, size, appliedFilter]);
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this customer?')) {
@@ -38,23 +39,62 @@ const CustomerList = () => {
 
   return (
     <div>
-      <div className="flex mb-4">
+      <div className="flex flex-wrap gap-2 mb-4">
         <input
           type="text"
-          name="query"
-          placeholder="Search customers..."
-          value={filter.query || ''}
+          name="firstname"
+          placeholder="First Name..."
+          value={filter.firstname || ''}
           onChange={handleFilterChange}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               handleFilterSubmit();
             }
           }}
-          className="border border-gray-300 rounded-md px-3 py-2 mr-2 w-full md:w-1/3"
+          className="border border-gray-300 rounded-md px-3 py-2 w-full sm:w-auto"
+        />
+        <input
+          type="text"
+          name="lastname"
+          placeholder="Last Name..."
+          value={filter.lastname || ''}
+          onChange={handleFilterChange}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleFilterSubmit();
+            }
+          }}
+          className="border border-gray-300 rounded-md px-3 py-2 w-full sm:w-auto"
+        />
+        <input
+          type="text"
+          name="email"
+          placeholder="Email..."
+          value={filter.email || ''}
+          onChange={handleFilterChange}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleFilterSubmit();
+            }
+          }}
+          className="border border-gray-300 rounded-md px-3 py-2 w-full sm:w-auto"
+        />
+        <input
+          type="text"
+          name="phone"
+          placeholder="Phone..."
+          value={filter.phone || ''}
+          onChange={handleFilterChange}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleFilterSubmit();
+            }
+          }}
+          className="border border-gray-300 rounded-md px-3 py-2 w-full sm:w-auto"
         />
         <button
           onClick={handleFilterSubmit}
-          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mr-2"
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
         >
           Search
         </button>
