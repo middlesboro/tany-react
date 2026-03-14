@@ -28,7 +28,7 @@ test.describe('ChatBot Functionality', () => {
     await page.route('**/api/chat/assistant', async route => {
         const body = JSON.parse(route.request().postData());
         await route.fulfill({
-            json: { message: `Stav objednávky pre: ${body.message}` }
+            json: { response: `Stav objednávky pre: ${body.message}` }
         });
     });
 
@@ -37,7 +37,7 @@ test.describe('ChatBot Functionality', () => {
         // Verify payload structure
         if (body.message && body.email) {
              await route.fulfill({
-                json: { message: `Ďakujeme za správu: ${body.message} od ${body.email}` }
+                json: { response: `Ďakujeme za kontaktovanie podpory. Odpovieme vám čo najskôr.` }
             });
         } else {
             await route.fulfill({ status: 400, json: { message: 'Missing fields' } });
@@ -88,7 +88,7 @@ test.describe('ChatBot Functionality', () => {
     await page.getByRole('button', { name: 'Kontaktovať podporu' }).click();
 
     // Verify Initial Chat View
-    await expect(page.getByText('Ahoj, ako ti môžeme pomôcť?')).toBeVisible();
+    await expect(page.getByText('Napíšte nám správu a budeme Vás čím skôr kontaktovať.')).toBeVisible();
     const messageInput = page.getByPlaceholder('Napíšte správu...');
     await expect(messageInput).toBeVisible();
 
@@ -97,7 +97,7 @@ test.describe('ChatBot Functionality', () => {
     await page.getByLabel('Odoslať').click();
 
     // Verify Bot asks for Email
-    await expect(page.getByText('Ďakujeme. Prosím, zadajte váš email')).toBeVisible();
+    await expect(page.getByText('Ďakujeme. Prosím, zadajte váš email, aby sme vás mohli kontaktovať.')).toBeVisible();
     const emailInput = page.getByPlaceholder('Váš email...');
     await expect(emailInput).toBeVisible();
 
@@ -106,7 +106,7 @@ test.describe('ChatBot Functionality', () => {
     await page.getByLabel('Odoslať').click();
 
     // Verify Final Response
-    await expect(page.getByText('Ďakujeme za správu: Mám problém s produktom od zakaznik@example.com')).toBeVisible();
+    await expect(page.getByText('Ďakujeme za kontaktovanie podpory. Odpovieme vám čo najskôr.')).toBeVisible();
 
     // Back to Menu
     await page.getByLabel('Späť').click();
