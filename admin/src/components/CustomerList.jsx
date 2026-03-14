@@ -7,20 +7,22 @@ const CustomerList = () => {
   const {
     page, setPage,
     size, setSize,
-    sort, handleSort
-  } = usePersistentTableState('admin_customers_list_state', {}, 'lastname,asc');
+    sort, handleSort,
+    filter, handleFilterChange,
+    appliedFilter, handleFilterSubmit, handleClearFilter
+  } = usePersistentTableState('admin_customers_list_state', { firstname: '', lastname: '', email: '', phone: '' }, 'lastname,asc');
 
   const [customers, setCustomers] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     const fetchCustomers = async () => {
-      const data = await getCustomers(page, sort, size);
+      const data = await getCustomers(appliedFilter, page, sort, size);
       setCustomers(data.content);
       setTotalPages(data.totalPages);
     };
     fetchCustomers();
-  }, [page, sort, size]);
+  }, [page, sort, size, appliedFilter]);
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this customer?')) {
@@ -31,6 +33,73 @@ const CustomerList = () => {
 
   return (
     <div>
+      <div className="flex flex-wrap gap-2 mb-4">
+        <input
+          type="text"
+          name="firstname"
+          placeholder="First Name..."
+          value={filter.firstname || ''}
+          onChange={handleFilterChange}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleFilterSubmit();
+            }
+          }}
+          className="border border-gray-300 rounded-md px-3 py-2 w-full sm:w-auto"
+        />
+        <input
+          type="text"
+          name="lastname"
+          placeholder="Last Name..."
+          value={filter.lastname || ''}
+          onChange={handleFilterChange}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleFilterSubmit();
+            }
+          }}
+          className="border border-gray-300 rounded-md px-3 py-2 w-full sm:w-auto"
+        />
+        <input
+          type="text"
+          name="email"
+          placeholder="Email..."
+          value={filter.email || ''}
+          onChange={handleFilterChange}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleFilterSubmit();
+            }
+          }}
+          className="border border-gray-300 rounded-md px-3 py-2 w-full sm:w-auto"
+        />
+        <input
+          type="text"
+          name="phone"
+          placeholder="Phone..."
+          value={filter.phone || ''}
+          onChange={handleFilterChange}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleFilterSubmit();
+            }
+          }}
+          className="border border-gray-300 rounded-md px-3 py-2 w-full sm:w-auto"
+        />
+        <button
+          onClick={handleFilterSubmit}
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md"
+        >
+          Search
+        </button>
+        <button
+          onClick={handleClearFilter}
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-md"
+        >
+          Clear
+        </button>
+      </div>
+
       <table className="min-w-full bg-white">
         <thead>
           <tr>
@@ -40,6 +109,9 @@ const CustomerList = () => {
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('email')}>
               Email
             </th>
+            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('phone')}>
+              Phone
+            </th>
             <th className="py-2 px-4 border-b">Actions</th>
           </tr>
         </thead>
@@ -48,6 +120,7 @@ const CustomerList = () => {
             <tr key={customer.id}>
               <td className="py-2 px-4 border-b">{customer.firstname} {customer.lastname}</td>
               <td className="py-2 px-4 border-b">{customer.email}</td>
+              <td className="py-2 px-4 border-b">{customer.phone}</td>
               <td className="py-2 px-4 border-b">
                 <Link
                   to={`/customers/${customer.id}`}

@@ -110,6 +110,54 @@ const CustomerForm = ({ customer, handleChange, handleSubmit }) => {
         </div>
       </div>
 
+      <h3 className="text-xl font-bold mb-2 mt-6">Preferred Branches</h3>
+      <div className="grid grid-cols-2 gap-4">
+        <div className="mb-4">
+            <label htmlFor="preferredPacketaBranchId" className="block text-gray-700">Packeta Branch ID</label>
+            <input
+            id="preferredPacketaBranchId"
+            type="text"
+            name="preferredPacketaBranchId"
+            value={customer.preferredPacketaBranchId ?? ''}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded"
+            />
+        </div>
+        <div className="mb-4">
+            <label htmlFor="preferredPacketaBranchName" className="block text-gray-700">Packeta Branch Name</label>
+            <input
+            id="preferredPacketaBranchName"
+            type="text"
+            name="preferredPacketaBranchName"
+            value={customer.preferredPacketaBranchName ?? ''}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded"
+            />
+        </div>
+        <div className="mb-4">
+            <label htmlFor="preferredBalikovoBranchId" className="block text-gray-700">Balíkovo Branch ID</label>
+            <input
+            id="preferredBalikovoBranchId"
+            type="text"
+            name="preferredBalikovoBranchId"
+            value={customer.preferredBalikovoBranchId ?? ''}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded"
+            />
+        </div>
+        <div className="mb-4">
+            <label htmlFor="preferredBalikovoBranchName" className="block text-gray-700">Balíkovo Branch Name</label>
+            <input
+            id="preferredBalikovoBranchName"
+            type="text"
+            name="preferredBalikovoBranchName"
+            value={customer.preferredBalikovoBranchName ?? ''}
+            onChange={handleChange}
+            className="w-full px-3 py-2 border rounded"
+            />
+        </div>
+      </div>
+
       <h3 className="text-xl font-bold mb-2 mt-6">Delivery Address</h3>
       <div className="grid grid-cols-2 gap-4">
         <div className="mb-4">

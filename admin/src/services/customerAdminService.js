@@ -2,8 +2,14 @@ import { authFetch } from '../utils/authFetch';
 
 const API_URL = `${import.meta.env.VITE_BACKEND_BASE_URL}${import.meta.env.VITE_API_URL}/admin/customers`;
 
-export const getCustomers = async (page = 0, sort = 'lastname,asc', size = 20) => {
-  const response = await authFetch(`${API_URL}?page=${page}&size=${size}&sort=${sort}`);
+export const getCustomers = async (filters = {}, page = 0, sort = 'lastname,asc', size = 20) => {
+  const { firstname, lastname, email, phone } = filters;
+  const params = new URLSearchParams({ page, size, sort });
+  if (firstname) params.append('firstname', firstname);
+  if (lastname) params.append('lastname', lastname);
+  if (email) params.append('email', email);
+  if (phone) params.append('phone', phone);
+  const response = await authFetch(`${API_URL}?${params.toString()}`);
   return response.json();
 };
 
