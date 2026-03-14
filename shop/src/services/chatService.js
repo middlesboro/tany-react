@@ -37,5 +37,5 @@ export const sendSupportMessage = async ({ message, email }) => {
         throw error;
     }
 
-    return await response.json();
+    return true;
 };
