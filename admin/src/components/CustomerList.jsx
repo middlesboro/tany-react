@@ -1,26 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import { getCustomers, deleteCustomer } from '../services/customerAdminService';
+import { getCustomers, deleteCustomer, searchCustomers } from '../services/customerAdminService';
 import usePersistentTableState from '../hooks/usePersistentTableState';
 
 const CustomerList = () => {
   const {
     page, setPage,
     size, setSize,
-    sort, handleSort
-  } = usePersistentTableState('admin_customers_list_state', {}, 'lastname,asc');
+    sort, handleSort,
+    filter, handleFilterChange,
+    appliedFilter, handleFilterSubmit, handleClearFilter
+  } = usePersistentTableState('admin_customers_list_state', { query: '' }, 'lastname,asc');
 
   const [customers, setCustomers] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
 
   useEffect(() => {
     const fetchCustomers = async () => {
-      const data = await getCustomers(page, sort, size);
+      let data;
+      if (appliedFilter.query && appliedFilter.query.trim() !== '') {
+        data = await searchCustomers(appliedFilter.query, page, sort, size);
+      } else {
+        data = await getCustomers(page, sort, size);
+      }
       setCustomers(data.content);
       setTotalPages(data.totalPages);
     };
     fetchCustomers();
-  }, [page, sort, size]);
+  }, [page, sort, size, appliedFilter.query]);
 
   const handleDelete = async (id) => {
     if (window.confirm('Are you sure you want to delete this customer?')) {
@@ -31,6 +38,34 @@ const CustomerList = () => {
 
   return (
     <div>
+      <div className="flex mb-4">
+        <input
+          type="text"
+          name="query"
+          placeholder="Search customers..."
+          value={filter.query || ''}
+          onChange={handleFilterChange}
+          onKeyDown={(e) => {
+            if (e.key === 'Enter') {
+              handleFilterSubmit();
+            }
+          }}
+          className="border border-gray-300 rounded-md px-3 py-2 mr-2 w-full md:w-1/3"
+        />
+        <button
+          onClick={handleFilterSubmit}
+          className="bg-blue-500 hover:bg-blue-600 text-white px-4 py-2 rounded-md mr-2"
+        >
+          Search
+        </button>
+        <button
+          onClick={handleClearFilter}
+          className="bg-gray-300 hover:bg-gray-400 text-gray-800 px-4 py-2 rounded-md"
+        >
+          Clear
+        </button>
+      </div>
+
       <table className="min-w-full bg-white">
         <thead>
           <tr>
@@ -40,6 +75,9 @@ const CustomerList = () => {
             <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('email')}>
               Email
             </th>
+            <th className="py-2 px-4 border-b cursor-pointer" onClick={() => handleSort('phone')}>
+              Phone
+            </th>
             <th className="py-2 px-4 border-b">Actions</th>
           </tr>
         </thead>
@@ -48,6 +86,7 @@ const CustomerList = () => {
             <tr key={customer.id}>
               <td className="py-2 px-4 border-b">{customer.firstname} {customer.lastname}</td>
               <td className="py-2 px-4 border-b">{customer.email}</td>
+              <td className="py-2 px-4 border-b">{customer.phone}</td>
               <td className="py-2 px-4 border-b">
                 <Link
                   to={`/customers/${customer.id}`}

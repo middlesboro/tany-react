@@ -7,6 +7,11 @@ export const getCustomers = async (page = 0, sort = 'lastname,asc', size = 20) =
   return response.json();
 };
 
+export const searchCustomers = async (query, page = 0, sort = 'lastname,asc', size = 20) => {
+  const response = await authFetch(`${API_URL}/search?query=${encodeURIComponent(query)}&page=${page}&size=${size}&sort=${sort}`);
+  return response.json();
+};
+
 export const getCustomer = async (id) => {
   const response = await authFetch(`${API_URL}/${id}`);
   return response.json();
